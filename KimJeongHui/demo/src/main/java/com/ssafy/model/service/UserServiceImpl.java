@@ -1,6 +1,6 @@
-package com.ssafy.user.model.service;
+package com.ssafy.model.service;
 
-import com.ssafy.user.model.User;
+import com.ssafy.model.User;
 
 public class UserServiceImpl implements UserService{
 

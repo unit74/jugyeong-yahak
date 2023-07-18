@@ -1,4 +1,4 @@
-package com.ssafy.user.model;
+package com.ssafy.model;
 
 import lombok.*;
 

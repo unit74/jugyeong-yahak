@@ -8,27 +8,23 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+// http://localhost:8080/swagger-ui.html
+// http://localhost:8080/swagger-ui/index.html
 @Configuration
-@EnableSwagger2
 public class SwaggerConfig {
+
+    private ApiInfo swaggerInfo() {
+        return new ApiInfoBuilder().title("야학 API")
+                .description("야학 API 연습").build();
+    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
-                .useDefaultResponseMessages(true)
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ssafy"))
+                .apiInfo(swaggerInfo()).select()
+                .apis(RequestHandlerSelectors.basePackage("com.ssafy.controller"))
                 .paths(PathSelectors.any())
-                .build();
-    }
-
-    public ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("SpringBoot Rest API Documentation")
-                .description("야학 교육 플랫폼")
-                .version("0.1")
                 .build();
     }
 }
