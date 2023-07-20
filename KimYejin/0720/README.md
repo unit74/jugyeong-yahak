@@ -10,13 +10,9 @@ npm i @tensorflow/tfjs @tensorflow-models/handpose
 
 `@tensorflow-models/handpose`: 손 인식에 사용되는 TensorFlow handpose 모델
 
-
-
 ### 2️⃣
 
 `App.jsx`에 라우터 설정 / `index.js`에 <BrowserRouter> 설정
-
-
 
 ```javascript
 import React, { useEffect } from "react";
@@ -78,10 +74,7 @@ const HandDetection = () => {
 };
 
 export default HandDetection;
-
 ```
-
-
 
 ### 3️⃣ 추가 해결 사항
 
@@ -89,12 +82,12 @@ export default HandDetection;
 
 ✔ 궁금한 점이 있을 때 손을 드는 행위를 `손`을 감지하는 것이 괜찮은지 .. 
 
-
-
 ### 구현 결과
 
 ![](C:\Users\SSAFY\AppData\Roaming\marktext\images\2023-07-20-11-54-26-image%20(1).png)
 
 ![](C:\Users\SSAFY\AppData\Roaming\marktext\images\2023-07-20-11-54-19-image.png)
+
+---
 
 
