@@ -15,31 +15,26 @@ npm i @tensorflow/tfjs @tensorflow-models/handpose
 `App.jsx`에 라우터 설정 / `index.js`에 <BrowserRouter> 설정
 
 ```javascript
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as handpose from "@tensorflow-models/handpose";
 import * as tf from "@tensorflow/tfjs";
 
-// HandDetection 컴포넌트
 const HandDetection = () => {
   let model;
-  const camera = React.useRef();
-  const figures = React.useRef();
-  const webcamElement = camera.current;
+  const camera = useRef();
+  const figures = useRef();
 
   const run = async () => {
     model = await handpose.load();
 
-    // 웹캠 설정
-    const webcam = await tf.data.webcam(webcamElement, {
+    const webcam = await tf.data.webcam(camera.current, {
       resizeWidth: 870,
       resizeHeight: 534,
     });
     while (true) {
-      // 이미지 캡쳐
       const img = await webcam.capture();
-      // 모델을 사용하여 손 추정
       const result = await model.estimateHands(img);
-      // 메세지 표시
+
       if (figures.current) {
         figures.current.innerText =
           result.length > 0 ? "궁금한게 있어요✋🏻✋🏻" : "아직 궁금한게 없어요";
@@ -51,16 +46,21 @@ const HandDetection = () => {
     }
   };
 
-  // 컴포넌트가 마운트될 때 실행되는 useEffect 훅
   useEffect(() => {
     if (camera.current) {
-      run();
+      (async function start() {
+        await run();
+      })();
     }
   }, [camera.current]);
 
+  const styles = {
+    fontSize: "24px",
+  };
+
   return (
     <>
-      <div ref={figures}></div>
+      <div ref={figures} style={styles}></div>
       <video
         autoPlay
         playsInline
@@ -68,6 +68,7 @@ const HandDetection = () => {
         ref={camera}
         width="870"
         height="534"
+        onLoadedMetadata={(e) => e.target.play()}
       />
     </>
   );
@@ -89,5 +90,13 @@ export default HandDetection;
 ![](C:\Users\SSAFY\AppData\Roaming\marktext\images\2023-07-20-11-54-19-image.png)
 
 ---
+
+`HandDetection`이라는 메인 컴포넌트를 만들고 `useEffect`와 `useRef`를 사용하여 웹캠과 TensorFlow.js 연동을 처리했다. 모션 인식 과정은 TensorFlow.js의 `handpose` 모델을 이용해 웹캠 영상을 분석하고 손 위치와 움직임을 결과로 반환했다. 이 결과를 따라서 텍스트를 업데이트하여 손 영역에 따른 반응을 구현했다. 
+
+웹캠에서 구동시킨거라 openvidu에서는 어떻게 인식할 수 있을지에 대한 부분은 아직 많은 고민이 필요하다. 내일부터 이 부분에 대해서 추가로 살펴볼 예정이다.
+
+
+
+
 
 
