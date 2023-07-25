@@ -4,6 +4,8 @@ import axios from "axios";
 import React, { Component } from "react";
 import "./App.css";
 import UserVideoComponent from "./UserVideoComponent";
+// import * as tf from "@tensorflow/tfjs";
+import * as tmPose from "@teachablemachine/pose";
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:5000/";
@@ -20,6 +22,10 @@ class App extends Component {
       mainStreamManager: undefined, // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
       publisher: undefined,
       subscribers: [],
+      isHandUp: false,
+      URL: "https://teachablemachine.withgoogle.com/models/WYUv57bAF/",
+      webcam: null, // 웹캠
+      model: undefined,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -76,7 +82,8 @@ class App extends Component {
 
   joinSession() {
     // --- 1) Get an OpenVidu object ---
-
+    this.setmodel();
+    this.init();
     this.OV = new OpenVidu();
 
     // --- 2) Init a session ---
@@ -370,6 +377,53 @@ class App extends Component {
       }
     );
     return response.data; // The token
+  }
+
+  async setmodel() {
+    const modelURL = `${this.state.URL}model.json`;
+    const metadataURL = `${this.state.URL}metadata.json`;
+
+    console.log(modelURL);
+
+    this.setState({
+      model: await tmPose.load(modelURL, metadataURL),
+    });
+  }
+
+  async init() {
+    const size = 200;
+    const flip = true; // whether to flip the webcam
+    this.setState({ webcam: new tmPose.Webcam(size, size, flip) });
+    console.log(tmPose);
+    console.log(this.state.webcam);
+    await this.state.webcam.setup(); // request access to the webcam
+    await this.state.webcam.play();
+    window.requestAnimationFrame(this.loop);
+  }
+
+  async loop(timestamp) {
+    this.state.webcam.update(); // update the webcam frame
+    await this.predict();
+    window.requestAnimationFrame(this.loop);
+  }
+
+  async predict() {
+    // Prediction #1: run input through posenet
+    // estimatePose can take in an image, video or canvas html element
+    const { pose, posenetOutput } = await this.state.model.estimatePose(this.state.webcam.canvas);
+    // Prediction 2: run input through teachable machine classification model
+    const prediction = await this.state.model.predict(posenetOutput);
+
+    console.log(prediction[1].probability.toFixed(2));
+
+    if (prediction[1].probability.toFixed(2) == "100%") {
+      this.setState((isHandUp = ture));
+    } else {
+      this.setState((isHandUp = false));
+    }
+
+    // finally draw the poses
+    // drawPose(pose);
   }
 }
 
