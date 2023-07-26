@@ -393,21 +393,26 @@ class App extends Component {
   // }
 
   async componentDidMount() {
+    window.addEventListener("beforeunload", this.onbeforeunload);
+
     const modelURL = `${this.state.URL}model.json`;
     const metadataURL = `${this.state.URL}metadata.json`;
 
     console.log(modelURL);
 
-    this.setState({
-      model: await tmPose.load(modelURL, metadataURL),
-    });
+    const model = await tmPose.load(modelURL, metadataURL);
+    this.setState({ model });
+
     // Initialize webcam and call init() function
     const size = 200;
     const flip = true;
-    this.setState({ webcam: new tmPose.Webcam(size, size, flip) });
+    const webcam = new tmPose.Webcam(size, size, flip);
 
-    await this.init();
+    this.setState({ webcam }, async () => {
+      await this.init();
+    });
   }
+
 
   async init() {
     // const size = 200;
@@ -421,10 +426,13 @@ class App extends Component {
   }
 
   async loop(timestamp) {
-    this.state.webcam.update(); // update the webcam frame
-    await this.predict();
-    window.requestAnimationFrame(this.loop);
+    if (this.state.webcam) {
+      this.state.webcam.update(); // update the webcam frame
+      await this.predict();
+    }
+    window.requestAnimationFrame(this.loop.bind(this));
   }
+
 
   async predict() {
     // Prediction #1: run input through posenet
