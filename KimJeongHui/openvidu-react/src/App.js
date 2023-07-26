@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import "./App.css";
 import UserVideoComponent from "./UserVideoComponent";
-// import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs";
 import * as tmPose from "@teachablemachine/pose";
 
 const APPLICATION_SERVER_URL =
@@ -35,6 +35,8 @@ class App extends Component {
     this.handleChangeUserName = this.handleChangeUserName.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.loop = this.loop.bind(this);
+    this.predict = this.predict.bind(this);
   }
 
   componentDidMount() {
@@ -82,8 +84,8 @@ class App extends Component {
 
   joinSession() {
     // --- 1) Get an OpenVidu object ---
-    this.setmodel();
-    this.init();
+    // this.setmodel();
+    // this.init();
     this.OV = new OpenVidu();
 
     // --- 2) Init a session ---
@@ -322,7 +324,7 @@ class App extends Component {
               ) : null}
               {this.state.subscribers.map((sub, i) => (
                 <div
-                  key={sub.id}
+                  // key={sub.id}
                   className="stream-container col-md-6 col-xs-6"
                   onClick={() => this.handleMainVideoStream(sub)}
                 >
@@ -379,7 +381,18 @@ class App extends Component {
     return response.data; // The token
   }
 
-  async setmodel() {
+  // async setmodel() {
+  //   const modelURL = `${this.state.URL}model.json`;
+  //   const metadataURL = `${this.state.URL}metadata.json`;
+
+  //   console.log(modelURL);
+
+  //   this.setState({
+  //     model: await tmPose.load(modelURL, metadataURL),
+  //   });
+  // }
+
+  async componentDidMount() {
     const modelURL = `${this.state.URL}model.json`;
     const metadataURL = `${this.state.URL}metadata.json`;
 
@@ -388,14 +401,20 @@ class App extends Component {
     this.setState({
       model: await tmPose.load(modelURL, metadataURL),
     });
+    // Initialize webcam and call init() function
+    const size = 200;
+    const flip = true;
+    this.setState({ webcam: new tmPose.Webcam(size, size, flip) });
+
+    await this.init();
   }
 
   async init() {
-    const size = 200;
-    const flip = true; // whether to flip the webcam
-    this.setState({ webcam: new tmPose.Webcam(size, size, flip) });
-    console.log(tmPose);
-    console.log(this.state.webcam);
+    // const size = 200;
+    // const flip = true; // whether to flip the webcam
+    // this.setState({ webcam: new tmPose.Webcam(size, size, flip) });
+    // console.log(tmPose);
+    // console.log(this.state.webcam);
     await this.state.webcam.setup(); // request access to the webcam
     await this.state.webcam.play();
     window.requestAnimationFrame(this.loop);
@@ -413,15 +432,13 @@ class App extends Component {
     const { pose, posenetOutput } = await this.state.model.estimatePose(this.state.webcam.canvas);
     // Prediction 2: run input through teachable machine classification model
     const prediction = await this.state.model.predict(posenetOutput);
-
-    console.log(prediction[1].probability.toFixed(2));
-
-    if (prediction[1].probability.toFixed(2) == "100%") {
-      this.setState((isHandUp = ture));
-    } else {
-      this.setState((isHandUp = false));
-    }
-
+    console.log(prediction);
+    // console.log(prediction[1].probability.toFixed(2));
+    // if (prediction[1].probability.toFixed(2) == "100%") {
+    //   this.setState((isHandUp = ture));
+    // } else {
+    //   this.setState((isHandUp = false));
+    // }
     // finally draw the poses
     // drawPose(pose);
   }
