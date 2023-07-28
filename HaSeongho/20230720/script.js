@@ -52,11 +52,12 @@ async function start() {
 
 // 얼굴 기초데이터를 초기화 한다.
 function loadLabeledImage() {
-    const labels = ['seongho', 'lee', 'haha']
+    const labels = [ 'lee']
     return Promise.all(
         labels.map(async label => {
             const description = []
-            const img = await faceapi.fetchImage('known/' + label + '.png')
+            //https://s3.ap-northeast-2.amazonaws.com/s3-hotsix/lee.png
+            const img = await faceapi.fetchImage('https://s3.ap-northeast-2.amazonaws.com/s3-hotsix/' + label + '.png')
             const detections = await faceapi.detectSingleFace(img)
                                 .withFaceLandmarks()
                                 .withFaceDescriptor()
