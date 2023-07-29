@@ -11,7 +11,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class WebRestController {
     private final Environment env;
-
+    //test
     @GetMapping("/profile")
     public String getProfile(){
         return Arrays.stream(env.getActiveProfiles()).findFirst().orElse("");
