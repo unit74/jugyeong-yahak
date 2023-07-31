@@ -11,14 +11,17 @@
 }
 
 .header b {
-  font-size: calc(var(--font-size-xl) * 1.5);
+  font-weight: 600;
   line-height: 60px;
   font-family: var(--font-roboto);
   color: #424242;
   margin-left: 1vw;
+  padding-right: 4%;
+  white-space: nowrap;
 }
+
 .header span {
-  font-weight: 800;
+  font-weight: 700;
   font-size: 50px;
   margin-left: 1vw;
 }
@@ -32,11 +35,19 @@
 .header .logout {
   background-color: var(--color-orange);
   color: var(--color-white);
-  padding: 10px 27px;
   border-radius: var(--br-16xl);
   font-weight: 600;
   cursor: pointer;
   border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  /* 크기 설정 */
+  padding: 15px 35px;
+  font-size: 25px;
+}
+
+.logout:hover {
+  background-color: #ffd700;
 }
 
 .left {
@@ -47,8 +58,5 @@
 .right {
   display: flex;
   align-items: center;
-}
-
-@media (max-width: 768px) {
-  /* Adjust styles for smaller screens */
+  margin-right: 1%;
 }
