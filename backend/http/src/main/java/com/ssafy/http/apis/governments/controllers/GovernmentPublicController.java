@@ -1,7 +1,9 @@
 package com.ssafy.http.apis.governments.controllers;
 
-import com.ssafy.http.apis.governments.dtos.GovernmentRegisterDto;
-import com.ssafy.http.support.utils.ApiResponseUtil;
+import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
+
+import com.ssafy.http.apis.governments.requests.GovernmentRegisterRequest;
+import com.ssafy.http.support.codes.SuccessCode;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +17,8 @@ public class GovernmentPublicController {
 
     @PostMapping
     public ResponseEntity<?> registerGovernment(
-        @Valid @RequestBody GovernmentRegisterDto governmentRegisterDto) {
-        System.out.println(governmentRegisterDto);
+        @Valid @RequestBody GovernmentRegisterRequest governmentRegisterDto) {
 
-        return ApiResponseUtil.createSuccessResponse("회원 가입에 성공하였습니다.");
+        return createSuccessResponse(SuccessCode.REQUEST_SUCCESS, "회원 가입에 성공하였습니다.");
     }
 }
