@@ -1,23 +1,24 @@
+import React from "react";
 import styles from "./i-pad-pro117.module.css";
+import TeacherHeader from "./TeacherHeader";
 
 const IPadPro117 = () => {
   return (
     <div className={styles.ipadPro117}>
-      <header className={styles.header}>
-        <b>김나연 봉사자님</b>
+      <TeacherHeader />
+      <div className={styles.bannerContainer}>
         <img
-          className={styles.arcticonskanjiStudy}
+          className={styles.bannerImage}
           alt=""
-          src="/arcticonskanjistudy.svg"
+          src="/rectangle-4220@2x.png"
         />
-        <span>주경야학</span>
-        <button className={styles.logout}>Logout</button>
-      </header>
-      <img className={styles.bannerImage} alt="" src="/rectangle-4220@2x.png" />
-      <section className={styles.welcome}>
-        <b>👋🏻 김나연 님, 안녕하세요!</b>
-        <span>주경야학과 함께라면, 언제 어디서든 야학 봉사가 가능합니다!</span>
-      </section>
+        <section className={styles.welcome}>
+          <b>👋🏻 김나연 님, 안녕하세요!</b>
+          <span style={{ display: "block", textAlign: "center" }}>
+            주경야학과 함께라면, 언제 어디서든 야학 봉사가 가능합니다!
+          </span>
+        </section>
+      </div>
       <section className={styles.question}>
         <p>
           어떤 <span className={styles.emphasis}>업무</span>를 도와드릴까요?
@@ -31,11 +32,12 @@ const IPadPro117 = () => {
             <p>시작하기</p>
           </div>
           <img
-            className={styles.optionIcon}
+            className={`${styles.optionIcon} ${styles.enlargedIcon}`}
             alt=""
-            src="/twemojiwomanteacher.svg"
+            src="../../assets/images/teach.png"
           />
         </article>
+
         <article className={styles.option}>
           <div className={styles.optionImage}></div>
           <div className={styles.optionText}>
