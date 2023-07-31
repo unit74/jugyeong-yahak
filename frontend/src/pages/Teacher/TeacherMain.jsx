@@ -9,7 +9,7 @@ const TeacherMain = () => {
   const [userName, setUserName] = useState(""); // userName state 추가
 
   const handleClick_1 = () => {
-    navigate("/teacher-live");
+    navigate("/teacher-theme");
   };
 
   const handleClick_2 = () => {
