@@ -1,0 +1,15 @@
+spring:
+  config:
+    import:
+      - classpath:/application-db.yml
+      - classpath:/application-redis.yml
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8080
