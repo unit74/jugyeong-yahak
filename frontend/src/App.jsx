@@ -14,6 +14,9 @@ import TeacherMain from "./pages/Teacher/TeacherMain";
 import TeacherLive from "./pages/Teacher/TeacherLive";
 import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
+import TeacherTheme from "./pages/Teacher/TeacherTheme";
+
+import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 function App() {
   return (
@@ -29,10 +32,12 @@ function App() {
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-live" element={<TeacherLive />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
+        <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route
           path="/teacher-studentprogress"
           element={<TeacherStudentProgress />}
         />
+        <Route path="/carousel" element={<ThemeCarousel />} />
       </Routes>
     </>
   );
