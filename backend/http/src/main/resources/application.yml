@@ -1,4 +1,7 @@
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   config:
     import:
       - classpath:/application-db.yml
@@ -8,9 +11,6 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
 
 OPENVIDU_URL: http://i9E206.p.ssafy.io:5443/
 OPENVIDU_SECRET: ssafy
