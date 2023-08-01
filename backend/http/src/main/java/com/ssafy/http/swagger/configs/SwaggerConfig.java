@@ -1,7 +1,9 @@
 package com.ssafy.http.swagger.configs;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -18,19 +20,35 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.OAS_30).securityContexts(
-                                                       Arrays.asList(securityContext()))
-                                                   .securitySchemes(Arrays.asList(apiKey()))
-                                                   .select()
-                                                   .apis(RequestHandlerSelectors.any())
-                                                   .paths(PathSelectors.any())
-                                                   .build();
+        return new Docket(DocumentationType.OAS_30)
+            .consumes(getConsumeContentTypes())
+            .produces(getProduceContentTypes())
+            .securityContexts(
+                Arrays.asList(securityContext()))
+            .securitySchemes(Arrays.asList(apiKey()))
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.any())
+            .build();
     }
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
                               .securityReferences(defaultAuth())
                               .build();
+    }
+
+    private Set<String> getConsumeContentTypes() {
+        Set<String> consumes = new HashSet<>();
+        consumes.add("application/json;charset=UTF-8");
+        consumes.add("application/x-www-form-urlencoded");
+        return consumes;
+    }
+
+    private Set<String> getProduceContentTypes() {
+        Set<String> produces = new HashSet<>();
+        produces.add("application/json;charset=UTF-8");
+        return produces;
     }
 
     private List<SecurityReference> defaultAuth() {
