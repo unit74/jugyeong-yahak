@@ -65,5 +65,3 @@ docker build -t nginx-react:0.1 .
 # 도커 컨테이너를 이용한 프론트엔드 배포
 docker run --name nginx_react -d -p 3000:80 nginx-react:0.1
 ```
-
- 
