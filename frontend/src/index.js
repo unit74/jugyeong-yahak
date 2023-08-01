@@ -3,14 +3,22 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+// Router셋팅
 import { BrowserRouter } from 'react-router-dom';
+
+// redux 셋팅
+// import { Provider } from 'react-redux';
+// import { store } from "./redux/store/store.js";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
+    {/* <Provider store={store}> */}
     <React.StrictMode>
       <App />
     </React.StrictMode>
+    {/* </Provider> */}
   </BrowserRouter>
 );
 
