@@ -1,7 +1,6 @@
 package com.ssafy.http.apis.members.controllers;
 
 import com.ssafy.http.apis.members.services.MemberService;
-import com.ssafy.http.apis.members.services.S3ImageUploadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class MemberPublicController {
 
     private final MemberService memberService;
     @PostMapping(value="/public/{government}/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String memberLogin(@PathVariable String government, @RequestParam(value="image") MultipartFile image) throws URISyntaxException {
+    public String memberLogin(@PathVariable String government, @RequestParam(value="image") MultipartFile image) throws URISyntaxException, IOException {
 
         System.out.println("로그인 요청 받음");
         System.out.println(government);
