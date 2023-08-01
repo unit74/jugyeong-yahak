@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.ReissueReLoginException;
+import com.ssafy.http.exception.WrongParameterException;
 import com.ssafy.http.support.codes.ErrorCode;
 import com.ssafy.http.support.responses.ErrorResponse;
 import java.io.IOException;
@@ -118,6 +119,12 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<?> handleReissueReLoginException(CustomException ex) {
         log.error("ReissueReLoginException", ex);
         return createErrorResponse(ErrorCode.UNAUTHORIZED_ERROR, ex.getMessage());
+    }
+
+    @ExceptionHandler(WrongParameterException.class)
+    protected ResponseEntity<?> handleWrongParameterException(CustomException ex) {
+        log.error("WrongParameterException", ex);
+        return createErrorResponse(ErrorCode.BAD_REQUEST_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
