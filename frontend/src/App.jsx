@@ -18,6 +18,7 @@ import StudentReviewWord from "./pages/Student/StudentReviewWord";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
+import WritingCamTest from "./pages/Student/WritingCamTest";
 
 // Teacher
 import TeacherMain from "./pages/Teacher/TeacherMain";
@@ -43,6 +44,11 @@ function App() {
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
 
+        <Route path="/teachermain" element={<TeacherMain />} />
+        {/* 나머지 라우터 여기에 설계할 것 */}
+        <Route path="governmentmain" element={<GovernmentMainPage />} />
+        <Route path="governmentmain/studyclasspage" element={<StudyClassPage />} />
+        {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-live" element={<TeacherLive />} />
@@ -59,6 +65,11 @@ function App() {
           path="governmentmain/studyclasspage"
           element={<StudyClassPage />}
         />
+
+
+        <Route path="/writing-cam-test" element={<WritingCamTest />} />
+
+
       </Routes>
     </>
   );
