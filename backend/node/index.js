@@ -8,6 +8,7 @@ faceapi.env.monkeyPatch({ Canvas, Image }); //node에서 canvas 사용 가능
 
 const app = express();
 
+//훅테스트
 app.use( //req에서 file 찾기 위해 설정
     fileUpload({
       useTempFiles: true,
