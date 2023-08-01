@@ -7,6 +7,7 @@ spring:
       - classpath:/application-db.yml
       - classpath:/application-jwt.yml
       - classpath:/application-redis.yml
+      - classpath:/application-s3.yml
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,6 +15,9 @@ spring:
 
 OPENVIDU_URL: http://i9E206.p.ssafy.io:5443/
 OPENVIDU_SECRET: ssafy
+
+
+
 
 server:
   port: 8080
