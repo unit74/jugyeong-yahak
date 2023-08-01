@@ -11,5 +11,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+OPENVIDU_URL: http://i9E206.p.ssafy.io:5443/
+OPENVIDU_SECRET: ssafy
+
 server:
   port: 8080
+  ssl:
+    enabled: false
+
