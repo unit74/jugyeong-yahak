@@ -2,15 +2,21 @@ package com.ssafy.http.apis.members.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.support.codes.SuccessCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/private/members")
@@ -27,8 +33,24 @@ public class MemberPrivateController {
             studentDetailResponse);
     }
 
-    @GetMapping("/students/{classId}")
-    public ResponseEntity<?> getStudentsClass(@PathVariable Long classId) {
-        return null;
+    @GetMapping("/students/classes/{classId}")
+    public ResponseEntity<?> getClassStudents(@PathVariable Long classId) {
+        List<StudentDetailResponse> studentDetailResponses = memberService.getClassStudents(
+            classId);
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "반 학생들을 전체조회 하였습니다.",
+            studentDetailResponses);
+
+    }
+
+    @PostMapping(value = "/students/register", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> registerStudent(
+        @RequestPart StudentRegisterRequest studentRegisterRequest,
+        @RequestPart MultipartFile faceImage) {
+        System.out.println(studentRegisterRequest);
+        System.out.println(faceImage);
+
+        return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "학생을 등록하였습니다.");
     }
 }
