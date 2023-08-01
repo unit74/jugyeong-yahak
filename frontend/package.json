@@ -9,11 +9,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
-<<<<<<< HEAD
     "canvas-confetti": "^1.6.0",
-=======
     "google-vision-api-client": "^0.0.3",
->>>>>>> 3a964bd89bf906489c8c4fba5219cbab932ad717
     "react": "^18.2.0",
     "react-cloud-vision-api": "^0.3.0",
     "react-dom": "^18.2.0",
@@ -26,10 +23,7 @@
     "redux-thunk": "^2.4.2",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.0.5",
-<<<<<<< HEAD
-=======
     "tesseract.js": "^4.1.1",
->>>>>>> 3a964bd89bf906489c8c4fba5219cbab932ad717
     "web-vitals": "^2.1.4"
   },
   "scripts": {

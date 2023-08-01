@@ -1,21 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudentSpeakingVideo.module.css";
+import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 
 // 예시영상 페이지
 export default function StudentSpeakingVideo() {
-  const navigate = useNavigate();
+  const navigateToRecordDictation = useCallback((navigate) => {
+    navigate("/review-word");
+  }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/review-word");
-    }, 10000); // 10초
-
-    // 언마운트 됐을시 타이머 클리어
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [navigate]);
+  useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
 
   return (
     <div className={styles.main}>
