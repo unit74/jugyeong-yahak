@@ -1,0 +1,33 @@
+// StudentReviewTheme
+
+import React, { useEffect } from "react";
+import styles from "./StudentReviewTheme.module.css";
+import { useNavigate } from "react-router-dom";
+
+const StudentReviewTheme = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/speaking-video");
+    }, 10000); // 10초
+
+    // 언마운트 됐을시 타이머 클리어
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [navigate]);
+
+  return (
+    <div className={styles.main}>
+      <div className={styles.square}>
+        <div className={styles.theme}>
+          <b className={styles.b}>📖 오늘의 주제 📖</b>
+          {/*  */}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StudentReviewTheme;
