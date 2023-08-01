@@ -23,7 +23,7 @@ public class StudentDetailResponse {
     private String address;
     private String faceImageUrl;
     private String firstResponder;
-    private String tabletNo;
+    private Long tabletNo;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

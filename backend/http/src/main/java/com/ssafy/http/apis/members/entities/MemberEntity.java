@@ -54,7 +54,7 @@ public class MemberEntity {
     private String firstResponder;
 
     @Column(nullable = true)
-    private String tabletNo;
+    private Long tabletNo;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -66,7 +66,7 @@ public class MemberEntity {
     public MemberEntity(Long id, Long governmentId, Long classId, RoleEntity role,
         String statusCode,
         String name, String phone, String address, String faceImageUrl, String firstResponder,
-        String tabletNo, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        Long tabletNo, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.governmentId = governmentId;
         this.classId = classId;
