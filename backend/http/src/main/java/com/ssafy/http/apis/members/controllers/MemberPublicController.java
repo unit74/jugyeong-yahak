@@ -1,4 +1,4 @@
-package com.ssafy.http.apis.member.controllers;
+package com.ssafy.http.apis.members.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

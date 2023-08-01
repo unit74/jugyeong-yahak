@@ -1,7 +1,10 @@
-package com.ssafy.http.support.messages;
+package com.ssafy.http.support.codes;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+
+@Getter
 @AllArgsConstructor
 public enum SuccessCode {
     REQUEST_SUCCESS(200, "REQUEST SUCCESS"),
