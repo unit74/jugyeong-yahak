@@ -51,6 +51,8 @@ dependencies {
 //    // 헬스 체크
 //    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // S3 관련 의존성 추가
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
