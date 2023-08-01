@@ -48,8 +48,8 @@ dependencies {
     // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
 
-    // 헬스 체크
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    // 헬스 체크
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 }
 
