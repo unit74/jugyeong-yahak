@@ -1,11 +1,13 @@
+// npm install react-cloud-vision-api --save
+
 import React, { useEffect, useRef } from 'react';
 
-// npm install react-cloud-vision-api --save
 
 function WritingCamTest() {
   let videoRef = useRef(null);
   let photoRef = useRef(null);
 
+  // 사용자의 웹캠에 접근 및 실행
   const getUserCamera = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -22,6 +24,7 @@ function WritingCamTest() {
       });
   };
 
+  // 사용자의 웹캠 화면을 캡쳐
   const takePicture = () => {
     let width = 500;
     let height = width / (6 / 4);
@@ -34,10 +37,11 @@ function WritingCamTest() {
     let ctx = photo.getContext('2d');
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
 
-    // 이미지를 base64로 인코딩합니다.
+    // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL('image/jpeg');
-    console.log('Captured Image (Base64):', capturedImageBase64);
+  
 
+    // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
     const vision = require('react-cloud-vision-api')
     vision.init({auth: 'AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4'})
     const req = new vision.Request({
@@ -46,13 +50,17 @@ function WritingCamTest() {
       }),
       features: [
         new vision.Feature('TEXT_DETECTION', 4),
-        new vision.Feature('LABEL_DETECTION', 10),
-      ]
+      ],
+      imageContext: {
+        languageHints: ['ko'],
+      },
     })
 
+    // 응답받은 단어를 StudentAns에 저장
     vision.annotate(req).then((res) => {
         // handling response
-        console.log(JSON.stringify(res.responses))
+        const StudentAns = res.responses[0]['textAnnotations'][0]['description']
+        console.log(StudentAns)
       }, (e) => {
         console.log('Error: ', e)
       })
@@ -63,22 +71,21 @@ function WritingCamTest() {
   useEffect(() => {
     getUserCamera();
 
-    // 1초마다 takePicture 함수를 호출하도록 설정
-    const intervalId = setInterval(takePicture, 10000);
+    // 5초마다 자동으로 사진찍음 -> 절대 주석 해제 하지 마시오!!!!!!!!!!
+    // const intervalId = setInterval(takePicture, 5000);
 
-    // 컴포넌트가 언마운트될 때 타이머를 정리
-    return () => clearInterval(intervalId);
+    // // 컴포넌트가 언마운트될 때 타이머를 정리 
+    // return () => clearInterval(intervalId);
   }, []);
 
 
-        
 
   return (
     <div className='container'>
-      <h1>selfie App in React.js</h1>
-      hello world
       <video className='container' ref={videoRef}></video>
-      <canvas ref={photoRef}></canvas>
+      <canvas ref={photoRef}  style={{ display: 'none' }}></canvas>
+      {/* 나의 API 할당량 보호를 위해 테스트 시에는 버튼을 눌러서 캡쳐함 */}
+      <button onClick={takePicture}>클릭해서 캡쳐하기</button>
     </div>
   );
 }
