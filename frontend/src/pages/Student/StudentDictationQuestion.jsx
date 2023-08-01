@@ -1,13 +1,14 @@
 import React, { useCallback } from "react";
-import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
+import styles from "./StudentDictationQuestion.module.css";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 
-export default function StudentMain() {
+// 예시영상 페이지
+export default function StudentDictationQuestion() {
   const navigate = useNavigate();
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/review-theme");
+    navigate("dictation-answer");
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
@@ -15,14 +16,10 @@ export default function StudentMain() {
   return (
     <div className={styles.main}>
       <div className={styles.square}>
-        <div className={styles.greeting}>
-          <b className={styles.b}>👋🏻 김나연 님, 안녕하세요!</b>
-        </div>
-        {/*  */}
-        <div className={styles.time}>
-          <b className={styles.b2}>지금은</b>
-          <b className={styles.b3}>혼자 학습</b>
-          <b className={styles.b4}>시간</b>
+        <div className={styles.theme}>
+          {/*  */}
+
+          <p>받아쓰기 문제 보여주자</p>
         </div>
       </div>
     </div>

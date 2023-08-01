@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 
-const Nav = () => {  
-  const [show, setShow] = useState("true");
+const Nav = () => {
+    const [show, setShow] = useState("true");
 
-  return (
-    <NavWrapper show={show}>
-        <Logo>
-            <img
-              src=""
-              alt="주경야학 Logo"
-              onClick={()=>(window.location.href = "/governmentmain")} />
-        </Logo>
+    return (
+        <NavWrapper show={show}>
+            <Logo>
+                <img
+                    src=""
+                    alt="주경야학 Logo"
+                    onClick={() => (window.location.href = "/governmentmain")} />
+            </Logo>
 
-        <Login>Login</Login>
+            <Login>Login</Login>
 
-    </NavWrapper>
-  )
+        </NavWrapper>
+    )
 }
 
 export default Nav
