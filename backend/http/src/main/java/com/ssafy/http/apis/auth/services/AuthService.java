@@ -25,7 +25,6 @@ public class AuthService {
 
     private final String SERVER = "Server";
 
-    // 로그인: 인증 정보 저장 및 비어 토큰 발급
     @Transactional
     public TokenDto login(GovernmentLoginRequest governmentLoginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken =
