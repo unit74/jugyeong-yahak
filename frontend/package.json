@@ -5,6 +5,9 @@
   "dependencies": {
     "@google-cloud/vision": "^3.1.4",
     "@jjunyjjuny/react-carousel": "^1.1.2",
+    "@sashido/teachablemachine-node": "^1.2.2",
+    "@teachablemachine/image": "^0.8.5",
+    "@tensorflow/tfjs": "^4.10.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
