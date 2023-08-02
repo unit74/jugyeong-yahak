@@ -22,15 +22,18 @@ public class S3ImageUploadService {
   private String bucket;
 
   // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
-  public String uploadImage(Long governmentId, MultipartFile faceImage) throws IOException {
+  public String uploadImage(String folder, String uuid, String fileType, MultipartFile faceImage)
+      throws IOException {
     File uploadFile = convert(faceImage)
         .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
 
-    return upload(uploadFile, governmentId);
+    return upload(folder, uuid, fileType, uploadFile);
   }
 
-  private String upload(File uploadFile, Long dirName) {
-    String fileName = dirName + "/" + uploadFile.getName();
+  private String upload(String folder, String uuid, String fileType, File uploadFile) {
+
+    String fileName = folder + "/" + uuid + fileType;
+
     String uploadImageUrl = putS3(uploadFile, fileName);
 
     removeNewFile(uploadFile);  // 로컬에 생성된 File 삭제 (MultipartFile -> File 전환 하며 로컬에 파일 생성됨)

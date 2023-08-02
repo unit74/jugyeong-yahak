@@ -7,7 +7,6 @@ import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.apis.members.services.S3ImageUploadService;
 import com.ssafy.http.support.codes.SuccessCode;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -48,15 +47,15 @@ public class MemberPrivateController {
 
   @PostMapping(value = "/{governmentId}/register", consumes = {MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
-  public String registerStudent(
+  public ResponseEntity<?> registerMember(
       @PathVariable Long governmentId,
       @RequestPart StudentRegisterRequest studentRegisterRequest,
-      @RequestPart MultipartFile faceImage) throws IOException {
-    System.out.println("이미지 등록 요청 받음");
-    System.out.println(governmentId);
+      @RequestPart MultipartFile faceImage) {
+    System.out.println("학생 등록 요청 받음");
 
-    String fileName = imageUploadService.uploadImage(governmentId, faceImage);
-    return fileName;
+    memberService.registerStudents(governmentId, faceImage, studentRegisterRequest);
+
+    return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
 
 }
