@@ -8,7 +8,7 @@ export default function StudentDictationQuestion() {
   const navigate = useNavigate();
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("dictation-answer");
+    navigate("/dictation-answer");
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초

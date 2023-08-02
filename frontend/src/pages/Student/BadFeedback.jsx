@@ -23,8 +23,8 @@ export default function StudentReviewWord() {
         <div className={styles.theme}>
           {" "}
           <div className={styles.feedback}>
-            <b className={styles.b}>다시 도전</b>
             <img src={bad} alt="bad_img" />
+            <b className={styles.b}>다시 도전</b>
           </div>
         </div>
       </div>

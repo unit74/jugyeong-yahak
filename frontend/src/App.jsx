@@ -48,14 +48,15 @@ function App() {
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
+
         <Route path="/dictation-main" element={<StudentDictationMain />} />
-        <Route path="/record-dictation" element={<StudentDictationAnswer />} />
+        <Route path="/dictation-video" element={<StudentDictationVideo />} />
         <Route
           path="/dictation-question"
           element={<StudentDictationQuestion />}
         />
-        <Route path="/dictation-answer" element={<StudentDictationVideo />} />
-        <Route path="/dictation-main" element={<StudentDictationMain />} />
+        <Route path="/record-dictation" element={<StudentDictationAnswer />} />
+
         <Route path="/diary" element={<StudentDiary />} />
 
         {/* 나머지 라우터 여기에 설계할 것 */}
