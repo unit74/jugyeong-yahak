@@ -27,11 +27,12 @@ public class ThemeService {
         return themeRepository.findById(themeId);
     }
 
-    public Optional<WordEntity> getWord(Long id) {
-        return wordRepository.findById(id);
+    public ArrayList<WordEntity> getWordList() {
+        return wordRepository.findAll();
     }
 
-    public Optional<WordEntity> getFirstWord(Long themeId) {
-        return wordRepository.findTop1ByThemeId(themeId);
+    public ArrayList<WordEntity> getWords(Long themeId) {
+        return wordRepository.findByThemeId(themeId);
     }
+
 }

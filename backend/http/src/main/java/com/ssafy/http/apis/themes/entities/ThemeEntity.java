@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +36,13 @@ public class ThemeEntity {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Transient
+    private List<WordEntity> wordList;
+
+    public void setWordList(List<WordEntity> wordList) {
+        this.wordList = wordList;
+    }
 
     @Builder
     public ThemeEntity(Long id, String theme, String themeImageUrl, String situation, String situationJournal,
