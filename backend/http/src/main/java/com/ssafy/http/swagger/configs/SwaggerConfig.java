@@ -34,8 +34,8 @@ public class SwaggerConfig {
 
     private SecurityContext securityContext() {
         return SecurityContext.builder()
-                              .securityReferences(defaultAuth())
-                              .build();
+                .securityReferences(defaultAuth())
+                .build();
     }
 
     private Set<String> getConsumeContentTypes() {

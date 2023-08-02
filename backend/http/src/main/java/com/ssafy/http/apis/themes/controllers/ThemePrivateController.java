@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/private/themes")
+@RequestMapping("/api/v1/themes")
 @RequiredArgsConstructor
 public class ThemePrivateController {
 
