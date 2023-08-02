@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./StudentDictationAnswer.module.css";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 
-// 예시영상 페이지
+// OCR 페이지
 export default function StudentDictationAnswer() {
   const navigate = useNavigate();
 
