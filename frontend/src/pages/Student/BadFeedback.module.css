@@ -39,14 +39,13 @@
 }
 
 .feedback img {
-  opacity: 0.3;
   position: absolute;
   object-fit: cover;
-  width: 150%;
+  width: 100%;
+  transform: translate(0%, -15%);
 }
 
 .b {
-  top: 0;
   left: 0;
   line-height: 36px;
   display: inline-block;
@@ -56,4 +55,5 @@
   font-weight: bolder;
   font-size: calc(6vw + 2.5vh); /* 반응형 */
   z-index: 1;
+  transform: translate(0%, 580%);
 }
