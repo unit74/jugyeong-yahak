@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -17,13 +16,13 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping(value = "/subscribe/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable Long id) {
-        return lectureService.subscribe(id);
+    @GetMapping(value = "/subscribe/{teacherId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable Long teacherId) {
+        return lectureService.subscribe(teacherId);
     }
 
-    @PostMapping("/send-data/{id}")
-    public void sendData(@PathVariable Long id) {
-        lectureService.notify(id, "data");
+    @GetMapping("/convert/page/{number}")
+    public void sendData(@PathVariable Long number) {
+        lectureService.convertPage(1L, number);
     }
 }
