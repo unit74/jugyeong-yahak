@@ -1,0 +1,76 @@
+package com.ssafy.http.apis.themes.controllers;
+
+import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
+
+import com.ssafy.http.apis.themes.entities.ThemeEntity;
+import com.ssafy.http.apis.themes.entities.WordEntity;
+import com.ssafy.http.apis.themes.services.ThemeService;
+import com.ssafy.http.support.codes.SuccessCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/v1/themes")
+@RequiredArgsConstructor
+public class ThemePrivateController {
+
+    private final static char[] choseong = {'ㄱ', 'ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'};
+
+    private final ThemeService themeService;
+
+    @GetMapping("/list")    // 테마 리스트 반환
+    public ResponseEntity<?> getThemeList() {
+
+        ArrayList<Object[]> themeList = themeService.getThemeList();
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, themeList);
+    }
+
+    @GetMapping("/{themeId}")   // 선택된 테마 내용 반환
+    public ResponseEntity<?> getTheme(@PathVariable("themeId") Long themeId) {
+
+        Optional<ThemeEntity> theme = themeService.getTheme(themeId);
+
+        ArrayList<WordEntity> words = themeService.getWords(themeId);
+
+        theme.get().setWordList(words);
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, theme.get());
+    }
+
+    @GetMapping("/choseong")
+    public ResponseEntity<?> startChoseong() {
+
+        ArrayList<String> choseongList = new ArrayList<>();
+
+        for(int i = 0 ; i < 5 ; i++) {
+            choseongList.add(String.valueOf(choseong[(int)(Math.random() * 13)]) + String.valueOf(choseong[(int)(Math.random() * 13)]));
+        }
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, choseongList);
+    }
+
+    @GetMapping("/{themeId}/reasoning")
+    public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
+
+        ArrayList<WordEntity> words = themeService.getWords(themeId);
+
+        Collections.shuffle(words);
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, words);
+    }
+
+
+
+
+}
