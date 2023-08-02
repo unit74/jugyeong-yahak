@@ -8,17 +8,17 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
 // redux 셋팅
-// import { Provider } from 'react-redux';
-// import { store } from "./redux/store/store.js";
+import { Provider } from 'react-redux';
+import store from './store'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
     <React.StrictMode>
       <App />
     </React.StrictMode>
-    {/* </Provider> */}
+    </Provider>
   </BrowserRouter>
 );
 
