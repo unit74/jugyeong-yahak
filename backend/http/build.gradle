@@ -8,7 +8,7 @@ group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '11'
+    sourceCompatibility = 'VERSION_11'
 }
 
 configurations {
@@ -37,12 +37,22 @@ dependencies {
 
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
+    implementation group: 'io.openvidu', name: 'openvidu-java-client', version: '2.28.0'
+
+//    // 헬스 체크
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // S3 관련 의존성 추가
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
