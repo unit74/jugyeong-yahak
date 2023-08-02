@@ -19,6 +19,7 @@ import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
 import WritingCamTest from "./pages/Student/WritingCamTest";
+import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
 import StudentDictationMain from "./pages/Student/StudentDictationMain";
 import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
 import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
@@ -84,6 +85,7 @@ function App() {
         />
 
         <Route path="/writing-cam-test" element={<WritingCamTest />} />
+        <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} />
       </Routes>
     </>
   );
