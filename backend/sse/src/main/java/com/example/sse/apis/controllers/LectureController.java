@@ -19,19 +19,19 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping(value = "/subscribe/{teacherId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter subscribe(@PathVariable Long teacherId) {
-        return lectureService.subscribe(teacherId);
+    @GetMapping(value = "/subscribe/{classId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter subscribe(@PathVariable Long classId) {
+        return lectureService.subscribe(classId);
     }
 
-    @PostMapping("/convert/page/{teacherId}/{number}")
-    public void convertPage(@PathVariable Long teacherId, @PathVariable Long number) {
-        lectureService.convertPage(teacherId, number);
+    @PostMapping("/convert/page/{classId}/{number}")
+    public void convertPage(@PathVariable Long classId, @PathVariable Long number) {
+        lectureService.convertPage(classId, number);
     }
 
-    @PostMapping("/mouse/pointer/{teacherId}")
-    public void moveMouseCursor(@PathVariable Long teacherId,
+    @PostMapping("/mouse/pointer/{classId}")
+    public void moveMouseCursor(@PathVariable Long classId,
         @RequestBody MoveMouseRequest moveMouseRequest) {
-        lectureService.moveMousePointer(teacherId, moveMouseRequest);
+        lectureService.moveMousePointer(classId, moveMouseRequest);
     }
 }
