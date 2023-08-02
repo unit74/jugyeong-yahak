@@ -1,6 +1,8 @@
 import "./App.css";
 import React, { useEffect } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Provider } from 'react-redux';
+import store from './store'; // Redux Store를 import 해야 함
 
 // pages
 // Common
@@ -36,7 +38,7 @@ import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 function App() {
   return (
-    <>
+    <Provider store={store}>
       <Routes>
         {/* Common */}
         <Route path="*" element={<NotFound />} />
@@ -87,7 +89,7 @@ function App() {
         <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} />
       </Routes>
-    </>
+    </Provider>
   );
 }
 
