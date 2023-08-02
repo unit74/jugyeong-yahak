@@ -32,8 +32,8 @@ export default function StudentReviewWord() {
         <div className={styles.theme}>
           {" "}
           <div className={styles.feedback}>
-            <b className={styles.b}>잘하셨어요!</b>
             <img src={good} alt="good_img" />
+            <b className={styles.b}>잘하셨어요!</b>
           </div>
         </div>
       </div>
