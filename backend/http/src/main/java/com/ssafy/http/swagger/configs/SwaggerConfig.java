@@ -19,8 +19,8 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        Server serverLocal = new Server("local", "http://i9e206.p.ssafy.io:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server testServer = new Server("test", "https://i9e206.p.ssafy.io", "for testing", Collections.emptyList(), Collections.emptyList());
+        Server serverLocal = new Server("local", "http://localhost:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
+        Server testServer = new Server("server", "https://i9e206.p.ssafy.io", "for server usages", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal, testServer)
             .consumes(getConsumeContentTypes())
