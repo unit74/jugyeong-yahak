@@ -1,6 +1,5 @@
 package com.ssafy.http.apis.members.controllers;
 
-<<<<<<< HEAD
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
@@ -45,9 +44,9 @@ public class MemberPrivateController {
     @PostMapping(value = "/{government}/register", consumes = {MediaType.APPLICATION_JSON_VALUE,
         MediaType.MULTIPART_FORM_DATA_VALUE})
     public String registerStudent(
-        @PathVariable Long government,
+        @PathVariable String government,
         @RequestPart StudentRegisterRequest studentRegisterRequest,
-        @RequestPart MultipartFile faceImage) {
+        @RequestPart MultipartFile faceImage) throws IOException {
         System.out.println("이미지 등록 요청 받음");
         System.out.println(government);
 
