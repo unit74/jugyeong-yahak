@@ -2,6 +2,7 @@ package com.example.sse.apis.services;
 
 import com.example.sse.apis.repositories.EmitterRepository;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -31,22 +32,26 @@ public class LectureService {
         return emitter;
     }
 
+    public void moveMousePointer(Long teacherId, Object event) {
+        sendToClient(teacherId, "mouse", event);
+    }
+
     public void convertPage(Long teacherId, Object event) {
         sendToClient(teacherId, "page", event);
     }
 
     private void sendToClient(Long id, String name, Object data) {
-        SseEmitter emitter = emitterRepository.get(id);
-        if (emitter != null) {
+        List<SseEmitter> emitters = emitterRepository.get(id);
+        emitters.forEach(emitter -> {
             try {
                 emitter.send(SseEmitter.event()
-                                       .id(String.valueOf(id))
+//                                       .id(String.valueOf(id))
                                        .name(name)
                                        .data(data));
             } catch (IOException exception) {
                 emitterRepository.deleteById(id);
                 emitter.completeWithError(exception);
             }
-        }
+        });
     }
 }
