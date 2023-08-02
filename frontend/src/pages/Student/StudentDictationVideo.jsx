@@ -8,7 +8,7 @@ export default function StudentSpeakingVideo() {
   const navigate = useNavigate();
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("dictation-question");
+    navigate("/dictation-question");
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
@@ -19,7 +19,7 @@ export default function StudentSpeakingVideo() {
         <div className={styles.theme}>
           {/*  */}
 
-          <p>예시 영상 </p>
+          <p>받아쓰기 예시 영상 </p>
           <p>영상 끝나는 시간에 맞춰 setTimeout 설정 시간 변경해야함 </p>
         </div>
       </div>
