@@ -35,9 +35,9 @@ public class MemberService {
     StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
 
     studentDetailResponse.of(memberRepository.findById(studentId)
-        .orElseThrow(
-            () -> new WrongParameterException(
-                ErrorCode.BAD_REQUEST_ERROR)));
+                                             .orElseThrow(
+                                                 () -> new WrongParameterException(
+                                                     ErrorCode.BAD_REQUEST_ERROR)));
 
     return studentDetailResponse;
   }
@@ -63,7 +63,8 @@ public class MemberService {
 
     MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType, governmentId);
 
-    String folder = memberEntity.getGovernmentId().toString();
+    String folder = memberEntity.getGovernmentId()
+                                .toString();
     String uuid = memberEntity.getUuid();
 
     memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
@@ -100,5 +101,13 @@ public class MemberService {
 
     memberEntity.encodePassword(passwordEncoder);
     memberRepository.save(memberEntity);
+  }
+
+  public Long getClassId(Long id) {
+    MemberEntity memberEntity = memberRepository.findById(id)
+                                                .orElseThrow(() -> new WrongParameterException(
+                                                    ErrorCode.BAD_REQUEST_ERROR));
+
+    return memberEntity.getClassId();
   }
 }
