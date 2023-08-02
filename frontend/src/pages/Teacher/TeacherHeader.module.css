@@ -1,0 +1,62 @@
+.header {
+  position: relative;
+  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0));
+  height: 7.5vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 2vw;
+  justify-content: space-between;
+  padding-right: 2vw;
+}
+
+.header b {
+  font-weight: 600;
+  line-height: 60px;
+  font-family: var(--font-roboto);
+  color: #424242;
+  margin-left: 1vw;
+  padding-right: 4%;
+  white-space: nowrap;
+}
+
+.header span {
+  font-weight: 700;
+  font-size: 50px;
+  margin-left: 1vw;
+}
+.header img {
+  width: 3vw;
+  height: 3vw;
+  overflow: hidden;
+  margin-right: 1vw;
+}
+
+.header .logout {
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  border-radius: var(--br-16xl);
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  /* 크기 설정 */
+  padding: 15px 35px;
+  font-size: 25px;
+}
+
+.logout:hover {
+  background-color: #ffd700;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  margin-right: 1%;
+}
