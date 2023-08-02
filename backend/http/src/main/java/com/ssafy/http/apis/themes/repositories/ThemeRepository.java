@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ThemeRepository extends JpaRepository<ThemeEntity, Long> {
 
-    @Query("select w.id, w.theme from themes w")
+    @Query("select w.id, w.theme, w.themeImageUrl from themes w")
     ArrayList<Object[]> findAllColumns();
 
     Optional<ThemeEntity> findById(Long themeId);
