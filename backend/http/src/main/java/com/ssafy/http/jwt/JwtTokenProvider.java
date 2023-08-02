@@ -17,6 +17,7 @@ import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,11 +33,18 @@ public class JwtTokenProvider implements InitializingBean {
 
     private final UserDetailsService userDetailsService;
     private final RedisService redisService;
-    private static final String EMAIL_KEY = "email";
-    private String secretKey = "SSAFY9thLeeDongKyuAndKimChangHyeokTripTubeSSAFY9thLeeDongKyuAndKimChangHyeokTripTube";
+    private static final String ID_KEY = "identification";
+    private static final String AUTHORITIES_KEY = "role";
+
+    @Value("${jwt.secret.key}")
+    private String secretKey;
     private static Key signingKey;
-    private final Long accessTokenValidTime = 30 * 60 * 1000L; // 30 minutes
-    private final Long refreshTokenValidTime = 7 * 24 * 60 * 60 * 1000L; // 1 week
+
+    @Value("${jwt.valid-time.access}")
+    private Long accessTokenValidTime;// 30 minutes
+
+    @Value("${jwt.valid-time.refresh}")
+    private Long refreshTokenValidTime;// 1 week
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -48,7 +56,7 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     @Transactional
-    public TokenDto createToken(String email) {
+    public TokenDto createToken(String identification, String authorities) {
         Long now = System.currentTimeMillis();
 
         String accessToken = Jwts.builder()
@@ -56,7 +64,8 @@ public class JwtTokenProvider implements InitializingBean {
                                  .setHeaderParam("alg", "HS512")
                                  .setExpiration(new Date(now + accessTokenValidTime))
                                  .setSubject("access-token")
-                                 .claim(EMAIL_KEY, email)
+                                 .claim(ID_KEY, identification)
+                                 .claim(AUTHORITIES_KEY, authorities)
                                  .signWith(signingKey, SignatureAlgorithm.HS512)
                                  .compact();
 
@@ -84,10 +93,10 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        String email = getClaims(token).get(EMAIL_KEY)
-                                       .toString();
+        String identification = getClaims(token).get(ID_KEY)
+                                                .toString();
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(identification);
         return new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
     }

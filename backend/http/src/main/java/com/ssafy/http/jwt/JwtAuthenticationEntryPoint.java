@@ -1,5 +1,6 @@
 package com.ssafy.http.jwt;
 
+import com.ssafy.http.support.codes.ErrorCode;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         AuthenticationException authException) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
-        response.sendError(401, "잘못된 접근입니다.");
+        response.sendError(ErrorCode.FORBIDDEN_ERROR.getStatus(),
+            ErrorCode.FORBIDDEN_ERROR.getMessage());
     }
 }
