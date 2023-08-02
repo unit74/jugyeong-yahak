@@ -3,6 +3,7 @@ package com.ssafy.http.apis.members.services;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
+import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.WrongParameterException;
@@ -65,7 +66,29 @@ public class MemberService {
     String folder = memberEntity.getGovernmentId().toString();
     String uuid = memberEntity.getUuid();
 
-    memberRepository.findMemberEntityByUuid(memberEntity.getUuid())
+    memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
+        .ifPresent((student) -> new RegisterIdentificationException(
+            ErrorCode.ID_ALREADY_USE));
+
+    try {
+      s3ImageUploadService.uploadImage(folder, uuid, imageType, faceImage);
+    } catch (IOException e) {
+      new RegisterIdentificationException(ErrorCode.IO_ERROR);
+    }
+
+    memberEntity.encodePassword(passwordEncoder);
+    memberRepository.save(memberEntity);
+  }
+
+  public void registerTeachers(Long governmentId, MultipartFile faceImage,
+      TeacherRegisterRequest teacherRegisterRequest) {
+
+    MemberEntity memberEntity = teacherRegisterRequest.toEntity(url, imageType, governmentId);
+
+    String folder = memberEntity.getGovernmentId().toString();
+    String uuid = memberEntity.getUuid();
+
+    memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
         .ifPresent((student) -> new RegisterIdentificationException(
             ErrorCode.ID_ALREADY_USE));
 
