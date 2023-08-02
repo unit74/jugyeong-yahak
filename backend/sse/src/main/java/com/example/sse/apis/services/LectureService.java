@@ -25,19 +25,19 @@ public class LectureService {
         return emitter;
     }
 
-    public SseEmitter subscribe(Long teacherId) {
-        SseEmitter emitter = createEmitter(teacherId);
+    public SseEmitter subscribe(Long classId) {
+        SseEmitter emitter = createEmitter(classId);
 
-        sendToClient(teacherId, "connect", "EventStream Created. [id=" + teacherId + "]");
+        sendToClient(classId, "connect", "EventStream Created. [id=" + classId + "]");
         return emitter;
     }
 
-    public void moveMousePointer(Long teacherId, Object event) {
-        sendToClient(teacherId, "mouse", event);
+    public void moveMousePointer(Long classId, Object event) {
+        sendToClient(classId, "mouse", event);
     }
 
-    public void convertPage(Long teacherId, Object event) {
-        sendToClient(teacherId, "page", event);
+    public void convertPage(Long classId, Object event) {
+        sendToClient(classId, "page", event);
     }
 
     private void sendToClient(Long id, String name, Object data) {
