@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
 @RestController
-@RequestMapping("/api/v1/private/classes")
+@RequestMapping("/api/v1/classes")
 public class ClassPrivateController {
 
     private ClassService classService;
 
-    @GetMapping("/list")    // 테마 리스트 반환
+    @GetMapping("/list")
     public ResponseEntity<?> getClassList() {
 
         Long governmentId = classService.getGovernmentId(SecurityUtil.getLoginUserId()).get().getGovernmentId();
