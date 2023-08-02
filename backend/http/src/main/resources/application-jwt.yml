@@ -1,0 +1,6 @@
+jwt:
+  secret:
+    key: SSAFY9thSecondSemesterHotHotHotHotHotHotTeam1stProjectAboutYaHakSecretKeyforJwtTokenProviderthiskeymustnotbeleaked
+  valid-time:
+    access: 1800000
+    refresh: 604800000
