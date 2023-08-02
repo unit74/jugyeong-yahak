@@ -1,26 +1,52 @@
 package com.ssafy.http.support.utils;
 
-import com.ssafy.http.support.dtos.ApiResponseDto;
+import com.ssafy.http.support.codes.ErrorCode;
+import com.ssafy.http.support.codes.SuccessCode;
+import com.ssafy.http.support.responses.ErrorResponse;
+import com.ssafy.http.support.responses.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 public class ApiResponseUtil {
 
-    public static <T> ResponseEntity<ApiResponseDto<T>> createSuccessResponse(String message,
-        T data) {
-        ApiResponseDto<T> apiResponse = new ApiResponseDto<>(HttpStatus.OK.value(), message, data);
-        return ResponseEntity.ok(apiResponse);
+    // ErrorResponse 를 만들어서 리턴하는 메서드
+    public static ResponseEntity<ErrorResponse> createErrorResponse(ErrorCode code) {
+        return new ResponseEntity<>(ErrorResponse.of(code), HttpStatus.valueOf(code.getStatus()));
     }
 
-    public static <T> ResponseEntity<ApiResponseDto<T>> createSuccessResponse(String message) {
-        return createSuccessResponse(message, null);
+    public static ResponseEntity<ErrorResponse> createErrorResponse(ErrorCode code, String reason) {
+        return new ResponseEntity<>(ErrorResponse.of(code, reason),
+            HttpStatus.valueOf(code.getStatus()));
     }
 
-    public static <T> ResponseEntity<ApiResponseDto<T>> createErrorResponse(HttpStatus status,
+    public static ResponseEntity<ErrorResponse> createErrorResponse(ErrorCode code,
+        BindingResult bindingResult) {
+        return new ResponseEntity<>(ErrorResponse.of(code, bindingResult),
+            HttpStatus.valueOf(code.getStatus()));
+    }
+
+    // SuccessResponse 를 만들어서 리턴하는 메서드
+    public static <T> ResponseEntity<SuccessResponse<T>> createSuccessResponse(SuccessCode code) {
+        return new ResponseEntity<>(SuccessResponse.ofStatus(code),
+            HttpStatus.valueOf(code.getStatus()));
+    }
+
+    public static <T> ResponseEntity<SuccessResponse<T>> createSuccessResponse(SuccessCode code,
         String message) {
-        ApiResponseDto<T> apiResponse = new ApiResponseDto<>(status.value(),
-            message, null);
-        return ResponseEntity.status(status)
-                             .body(apiResponse);
+        return new ResponseEntity<>(SuccessResponse.ofStatusAndMessage(code, message),
+            HttpStatus.valueOf(code.getStatus()));
+    }
+
+    public static <T> ResponseEntity<SuccessResponse<T>> createSuccessResponse(SuccessCode code,
+        T data) {
+        return new ResponseEntity<>(SuccessResponse.ofStatusAndData(code, data),
+            HttpStatus.valueOf(code.getStatus()));
+    }
+
+    public static <T> ResponseEntity<SuccessResponse<T>> createSuccessResponse(SuccessCode code,
+        String message, T data) {
+        return new ResponseEntity<>(SuccessResponse.ofStatusAndMessageAndData(code, message, data),
+            HttpStatus.valueOf(code.getStatus()));
     }
 }
