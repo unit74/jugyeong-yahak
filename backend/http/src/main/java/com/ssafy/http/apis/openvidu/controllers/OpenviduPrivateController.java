@@ -1,6 +1,6 @@
 package com.ssafy.http.apis.openvidu.controllers;
 
-import com.ssafy.http.apis.openvidu.services.OpenviduService;
+import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class OpenviduPrivateController {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    private OpenviduService openviduService;
+    private MemberService memberService;
 
     /**
      * @param params The Session properties
@@ -45,42 +45,42 @@ public class OpenviduPrivateController {
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
 
-    /**
-     * @param sessionId The Session in which to create the Connection
-     * @param params    The Connection properties
-     * @return The Token associated to the Connection
-     */
-    @PostMapping("{sessionId}/connections")
-    public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
-                                                   @RequestBody(required = false) Map<String, Object> params)
-            throws OpenViduJavaClientException, OpenViduHttpException {
-        Session session = openvidu.getActiveSession(sessionId);
-        if (session == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
-        Connection connection = session.createConnection(properties);
-
-        System.out.println(connection.getToken());
-        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
-    }
-
 //    /**
+//     * @param sessionId The Session in which to create the Connection
+//     * @param params    The Connection properties
 //     * @return The Token associated to the Connection
 //     */
-//    @PostMapping("/connections")
-//    public ResponseEntity<String> createConnection()
+//    @PostMapping("{sessionId}/connections")
+//    public ResponseEntity<String> createConnection(@PathVariable("sessionId") String sessionId,
+//                                                   @RequestBody(required = false) Map<String, Object> params)
 //            throws OpenViduJavaClientException, OpenViduHttpException {
-//
-//        Optional<Long> sessionId = openviduService.getSessionId(SecurityUtil.getLoginUserId());
-//
-//        Session session = openvidu.getActiveSession(String.valueOf(sessionId));
+//        Session session = openvidu.getActiveSession(sessionId);
 //        if (session == null) {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //        }
-//        Connection connection = session.createConnection();
+//        ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+//        Connection connection = session.createConnection(properties);
 //
+//        System.out.println(connection.getToken());
 //        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
 //    }
+
+    /**
+     * @return The Token associated to the Connection
+     */
+    @PostMapping("/connections")
+    public ResponseEntity<String> createConnection()
+            throws OpenViduJavaClientException, OpenViduHttpException {
+
+        Long sessionId = memberService.getClassId(SecurityUtil.getLoginUserId());
+
+        Session session = openvidu.getActiveSession(String.valueOf(sessionId));
+        if (session == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Connection connection = session.createConnection();
+
+        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+    }
 
 }
