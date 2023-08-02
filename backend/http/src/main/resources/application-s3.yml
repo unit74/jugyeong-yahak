@@ -1,0 +1,13 @@
+# AWS asscessKey, secretKey
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAQA26AAQR54OU4JW6
+      secretKey: 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
+    stack:
+      auto: false
+    s3:
+      bucket: s3-hotsix # -- AWS S3 Service bucket
+      url: https://s3-hotsix.s3.ap-northeast-2.amazonaws.com/
+    region:
+      static: ap-northeast-2
