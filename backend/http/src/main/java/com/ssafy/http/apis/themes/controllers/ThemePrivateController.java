@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/themes")
 @RequiredArgsConstructor
 public class ThemePrivateController {
+
+    private final static char[] choseong = {'ㄱ', 'ㄴ','ㄷ','ㄹ','ㅁ','ㅂ','ㅅ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'};
 
     private final ThemeService themeService;
 
@@ -45,31 +48,27 @@ public class ThemePrivateController {
         return createSuccessResponse(SuccessCode.SELECT_SUCCESS, theme.get());
     }
 
-    @GetMapping("/word")   // 단어들 확인 test용
-    public ResponseEntity<?> getWord() {
+    @GetMapping("/choseong")
+    public ResponseEntity<?> startChoseong() {
 
-        ArrayList<WordEntity> wordlist = themeService.getWordList();
+        ArrayList<String> choseongList = new ArrayList<>();
 
-        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, wordlist);
+        for(int i = 0 ; i < 5 ; i++) {
+            choseongList.add(String.valueOf(choseong[(int)(Math.random() * 13)]) + String.valueOf(choseong[(int)(Math.random() * 13)]));
+        }
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, choseongList);
     }
 
-//    @GetMapping("/{themeId}/reasoning/{wordId}")
-//    public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId,
-//                                            @PathVariable("wordId") Long wordId) {
-//
-//        Optional<WordEntity> word = themeService.getWord(themeId,wordId);
-//
-//        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, word.get());
-//    }
+    @GetMapping("/{themeId}/reasoning")
+    public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
 
-//    @GetMapping("/{themeId}/reasoning/{wordId}")
-//    public ResponseEntity<?> startChoseong(@PathVariable("themeId") Long themeId,
-//                                            @PathVariable("wordId") Long wordId) {
-//
-////        char CHoseong
-//
-//        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, word.get());
-//    }
+        ArrayList<WordEntity> words = themeService.getWords(themeId);
+
+        Collections.shuffle(words);
+
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, words);
+    }
 
 
 
