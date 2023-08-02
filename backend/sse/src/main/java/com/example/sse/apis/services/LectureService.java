@@ -24,24 +24,24 @@ public class LectureService {
         return emitter;
     }
 
-    public SseEmitter subscribe(Long userId) {
-        SseEmitter emitter = createEmitter(userId);
+    public SseEmitter subscribe(Long teacherId) {
+        SseEmitter emitter = createEmitter(teacherId);
 
-        sendToClient(userId, "EventStream Created. [userId=" + userId + "]");
+        sendToClient(teacherId, "connect", "EventStream Created. [id=" + teacherId + "]");
         return emitter;
     }
 
-    public void notify(Long userId, Object event) {
-        sendToClient(userId, event);
+    public void convertPage(Long teacherId, Object event) {
+        sendToClient(teacherId, "page", event);
     }
 
-    private void sendToClient(Long id, Object data) {
+    private void sendToClient(Long id, String name, Object data) {
         SseEmitter emitter = emitterRepository.get(id);
         if (emitter != null) {
             try {
                 emitter.send(SseEmitter.event()
                                        .id(String.valueOf(id))
-                                       .name("sse")
+                                       .name(name)
                                        .data(data));
             } catch (IOException exception) {
                 emitterRepository.deleteById(id);
