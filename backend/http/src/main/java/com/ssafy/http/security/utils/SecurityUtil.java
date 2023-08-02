@@ -1,5 +1,6 @@
 package com.ssafy.http.security.utils;
 
+import com.ssafy.http.security.services.CustomUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -18,9 +19,9 @@ public class SecurityUtil {
                                                 .getAuthentication()
                                                 .getPrincipal();
 
-//        if (principal instanceof CustomUserDetails) {
-//            return ((CustomUserDetails) principal).getUserId();
-//        }
+        if (principal instanceof CustomUserDetails) {
+            return ((CustomUserDetails) principal).getUserId();
+        }
 
         return null;
     }
