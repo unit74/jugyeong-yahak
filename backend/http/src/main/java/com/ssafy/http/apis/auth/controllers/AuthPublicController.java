@@ -48,4 +48,11 @@ public class AuthPublicController {
                                                             "Bearer " + tokenDto.getAccessToken())
                                                         .build()));
     }
+
+    @PostMapping("/students/login")
+    public ResponseEntity<?> studentLogin() {
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(SuccessResponse.ofStatusAndMessage(SuccessCode.REQUEST_SUCCESS,
+                                 "로그인에 성공하였습니다."));
+    }
 }
