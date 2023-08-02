@@ -9,8 +9,6 @@ spring:
       - classpath:/application-redis.yml
       - classpath:/application-s3.yml
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
 
 OPENVIDU_URL: http://i9E206.p.ssafy.io:5443/
