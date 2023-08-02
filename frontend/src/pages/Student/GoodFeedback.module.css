@@ -39,10 +39,9 @@
 }
 
 .feedback img {
-  opacity: 0.3;
   position: absolute;
   object-fit: cover;
-  width: 150%;
+  width: 80%;
 }
 
 .b {
