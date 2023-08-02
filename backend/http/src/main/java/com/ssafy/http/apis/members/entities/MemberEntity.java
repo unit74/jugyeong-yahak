@@ -68,6 +68,7 @@ public class MemberEntity {
   @Column(nullable = false)
   private LocalDateTime updatedAt;
 
+  @Builder
   public MemberEntity(Long id, Long governmentId, Long classId, RoleEntity role, String statusCode,
       String uuid, String password, String name, String phone, String address, String faceImageUrl,
       String firstResponder, Long tabletNo, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -88,7 +89,7 @@ public class MemberEntity {
     this.updatedAt = updatedAt;
   }
 
-  @Builder
+
 
   @PrePersist
   public void createTimeStamps() {
