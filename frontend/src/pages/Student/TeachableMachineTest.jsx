@@ -9,7 +9,7 @@ export default function TeachableMachine() {
   let photoRef = useRef(null);
 
   // Teachable Machine 모델 불러오기
-  const modelURL = 'https://teachablemachine.withgoogle.com/models/3aGvYcpsq/';
+  const modelURL = 'https://teachablemachine.withgoogle.com/models/4jyssp3L6/';
   const modelMetadataURL = modelURL + 'metadata.json';
 
   let model, webcam, maxPredictions;
@@ -57,7 +57,7 @@ export default function TeachableMachine() {
     // 캡쳐가 이루어지고 shouldTakePicture가 true인 경우에만 takePicture 함수 실행
     if (shouldTakePicture === true) {
       setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
-      const notebookClass = prediction.find((p) => p.className === '공책들었음');
+      const notebookClass = prediction.find((p) => p.className === 1);
       if (notebookClass && notebookClass.probability >= 0.97) {
         takePicture();
         }
@@ -111,8 +111,6 @@ export default function TeachableMachine() {
   useEffect(() => {
     setupWebcam();
     initTeachableMachine();
-    // photoRef를 설정하는 부분을 useEffect 내에서 처리
-    photoRef.current = document.createElement('canvas');
   }, []);
 
   return (
