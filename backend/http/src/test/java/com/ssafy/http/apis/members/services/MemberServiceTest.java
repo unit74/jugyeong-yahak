@@ -50,7 +50,7 @@ public class MemberServiceTest {
                                        .address("Test Address")
                                        .faceImageUrl("TestImageUrl")
                                        .firstResponder("FirstResponder")
-                                       .tabletNo("TabletNo")
+                                       .tabletNo(1L)
                                        .createdAt(LocalDateTime.now())
                                        .updatedAt(LocalDateTime.now())
                                        .build();
