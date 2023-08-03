@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./ThemeCarousel.module.css";
 
+// axios !!!!!!!!!
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllThemes } from '../../store/actions/allThemesAction';
+import { setSelectedTheme } from '../../store/actions/setSelectedThemeAction';
+
 const TopicSlider = () => {
+  // axios !!!!!!!!!
+  // 테마 리스트 조회
+  const dispatch = useDispatch();
+  const allThemes = useSelector((state) => state.allThemesState.allThemes);
+  const selectedTheme = useSelector((state) => state.selectedTheme);
+  
+  const setSelctedTheme = (id) => {
+    dispatch(setSelectedTheme(id));
+  };
+
   const settings = {
     dots: true,
     infinite: true,
@@ -37,51 +52,36 @@ const TopicSlider = () => {
         },
       },
     ],
-  };
+  }; 
+  
+  useEffect(() => {
+    // axios !!!!!!!!!
+    // allThemes가 비어있을 때만 API 요청을 보냅니다.
+    if (allThemes.length === 0) {
+      dispatch(fetchAllThemes());
+    }
+    return () => {
+    };
+  }, );
+  
+  console.log(allThemes)
 
   return (
     <div className={styles.topicsContainer}>
       <Slider {...settings} className={styles.slider}>
-        <div className={styles.topicBox}>
-          <img alt="" src="/school.jfif" />
-          <div>학교</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/market.jpg" />
-          <div>시장</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/cook.jfif" />
-          <div>요리</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/family.jpg" />
-          <div>가족</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/cleaning.jfif" />
-          <div>청소</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/seniorzone.jfif" />
-          <div>경로당</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/train.jfif" />
-          <div>기차여행</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/hospital.jpg" />
-          <div>병원</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/center.jpg" />
-          <div>행정복지센터</div>
-        </div>
-        <div className={styles.topicBox}>
-          <img alt="" src="/bank.jpg" />
-          <div>은행</div>
-        </div>
+      <div>
+        {allThemes.map((themeObj, index) => (
+          <div 
+          onClick={() => setSelctedTheme(themeObj.id)}
+          key={index} 
+          className={styles.topicBox}
+          >
+          <img alt="" src={themeObj.themeImageUrl} />
+            <div>{themeObj.theme}</div>
+            <div>{themeObj.id}</div>
+          </div>
+        ))}
+      </div>
       </Slider>
     </div>
   );
