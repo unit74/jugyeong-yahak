@@ -1,6 +1,5 @@
-package com.ssafy.http.apis.themes.entities;
+package com.ssafy.http.apis.classes.entities;
 
-import com.ssafy.http.apis.themes.responses.WordDetailResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,29 +7,24 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name = "themes")
-public class ThemeEntity {
+@Entity(name = "classes")
+public class ClassEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
-    private String theme;
+    private long governmentId;
 
     @Column(nullable = false)
-    private String themeImageUrl;
+    private String className;
 
     @Column(nullable = false)
-    private String situation;
-
-    @Column(nullable = false)
-    private String situationJournal;
+    private LocalDateTime lectureTime;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -38,21 +32,12 @@ public class ThemeEntity {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @Transient
-    private List<WordDetailResponse> wordList;
-
-    public void setWordList(List<WordDetailResponse> wordList) {
-        this.wordList = wordList;
-    }
-
     @Builder
-    public ThemeEntity(Long id, String theme, String themeImageUrl, String situation, String situationJournal,
-                       LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ClassEntity(Long id, Long governmentId, String className, LocalDateTime lectureTime, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.theme = theme;
-        this.themeImageUrl = themeImageUrl;
-        this.situation = situation;
-        this.situationJournal = situationJournal;
+        this.governmentId = governmentId;
+        this.className = className;
+        this.lectureTime = lectureTime;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

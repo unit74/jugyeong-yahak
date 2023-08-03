@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentRegisterRequest {
+public class TeacherRegisterRequest {
 
   //@NotNull
   private Long governmentId;
@@ -39,11 +39,7 @@ public class StudentRegisterRequest {
   @NotEmpty
   private String address;
 
-  @NotNull
-  @NotEmpty
-  private String firstResponder;
-
-  @NotNull
+  //@NotNull
   private Long tabletNo;
 
   public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId) {
@@ -53,13 +49,13 @@ public class StudentRegisterRequest {
         .governmentId(governmentId)
         .classId(classId)
         .role(RoleEntity.builder()
-            .role(Role.STUDENT)
+            .role(Role.TEACHER)
             .build())
         .statusCode(statusCode)
         .name(name)
         .phone(phone)
         .address(address)
-        .firstResponder(firstResponder)
+        //.firstResponder(firstResponder)
         .tabletNo(tabletNo)
         .uuid(uuid)
         .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
