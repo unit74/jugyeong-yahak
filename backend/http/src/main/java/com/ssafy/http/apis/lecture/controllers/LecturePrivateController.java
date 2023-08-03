@@ -12,6 +12,6 @@ public class LecturePrivateController {
 
     @GetMapping(value = "/start", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<?> startLecture() {
-
+        return null;
     }
 }
