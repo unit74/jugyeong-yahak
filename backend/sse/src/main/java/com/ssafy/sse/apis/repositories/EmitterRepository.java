@@ -1,7 +1,5 @@
 package com.ssafy.sse.apis.repositories;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +22,8 @@ public class EmitterRepository {
                 .remove(streamId);
     }
 
-    public List<SseEmitter> get(Long classId) {
-        List<SseEmitter> classUsers = new ArrayList<>();
-        emitters.get(classId)
-                .forEach((userId, emitter) -> {
-                    classUsers.add(emitter);
-                });
-
-        return classUsers;
+    public Map<String, SseEmitter> get(Long classId) {
+        return emitters.get(classId);
     }
 
     public SseEmitter get(Long classId, String streamId) {
