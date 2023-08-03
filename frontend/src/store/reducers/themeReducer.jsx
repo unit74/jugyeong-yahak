@@ -1,9 +1,10 @@
-// src/store/reducers/wordsReducer.js
+// src/store/reducers/themeReducer.js
 
 import { FETCH_THEME_SUCCESS } from '../actions/types';
 
 const initialState = {
-  themeData: [],
+  themeData: null,
+  wordsList: null,
 };
 
 const themeReducer = (state = initialState, action) => {
@@ -11,7 +12,8 @@ const themeReducer = (state = initialState, action) => {
     case FETCH_THEME_SUCCESS:
       return {
         ...state,
-        themeData: action.payload,
+        themeData: action.payload[0],
+        wordsList: action.payload[1],
       };
     default:
       return state;
