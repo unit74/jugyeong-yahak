@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as tmImage from '@teachablemachine/image';
+import React, { useEffect, useRef, useState } from "react";
+import * as tmImage from "@teachablemachine/image";
 
 export default function TeachableMachine() {
   const [predictions, setPredictions] = useState([]);
   const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
+  const [logCount, setLogCount] = useState(0);
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
 
   // Teachable Machine 모델 불러오기
-  const modelURL = 'https://teachablemachine.withgoogle.com/models/4jyssp3L6/';
-  const modelMetadataURL = modelURL + 'metadata.json';
+  const modelURL = "https://teachablemachine.withgoogle.com/models/4jyssp3L6/";
+  const modelMetadataURL = modelURL + "metadata.json";
 
   let model, webcam, maxPredictions;
 
@@ -30,7 +31,7 @@ export default function TeachableMachine() {
 
   // Teachable Machine init 함수
   const initTeachableMachine = async () => {
-    model = await tmImage.load(modelURL + 'model.json', modelMetadataURL);
+    model = await tmImage.load(modelURL + "model.json", modelMetadataURL);
     maxPredictions = model.getTotalClasses();
 
     const flip = true; // 웹캠 화면 반전 여부 설정
@@ -45,7 +46,11 @@ export default function TeachableMachine() {
   const loop = async () => {
     webcam.update(); // 웹캠 프레임 업데이트
     await predict(); // 이미지 예측 실행
-    window.requestAnimationFrame(loop);
+
+    // logCount가 50 미만일 때만 loop 함수를 다시 호출합니다.
+    if (logCount < 100) {
+      window.requestAnimationFrame(loop);
+    }
   };
 
   // 웹캠으로부터 가져온 이미지를 모델로 예측
@@ -57,29 +62,30 @@ export default function TeachableMachine() {
     // 캡쳐가 이루어지고 shouldTakePicture가 true인 경우에만 takePicture 함수 실행
     if (shouldTakePicture === true) {
       setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
-      const notebookClass = prediction.find((p) => p.className === 1);
-      if (notebookClass && notebookClass.probability >= 0.97) {
+      const notebookClass = prediction.find((p) => p.className === "1");
+      if (notebookClass && notebookClass.probability === 1 && logCount < 50) {
         takePicture();
-        }
+      }
     }
   };
-  
+
   // 사용자의 웹캠 화면을 캡쳐
   const takePicture = () => {
+    let video = videoRef.current;
+    let photo = photoRef.current;
     let width = 500;
     let height = width / (6 / 4);
-    let photo = photoRef.current;
-    let video = videoRef.current;
-  
+
     photo.width = width;
     photo.height = height;
-  
-    let ctx = photo.getContext('2d');
+
+    let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
 
     // 캡쳐한 이미지를 base64로 인코딩합니다.
-    let capturedImageBase64 = photo.toDataURL('image/jpeg');
-  
+    let capturedImageBase64 = photo.toDataURL("image/jpeg");
+    console.log("OO");
+    setLogCount((prevCount) => prevCount + 1); // logCount 상태 업데이트
 
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
     // const vision = require('react-cloud-vision-api')
@@ -94,19 +100,17 @@ export default function TeachableMachine() {
     //   imageContext: {
     //     languageHints: ['ko'],
     //   },
-  //   })
+    //   })
 
-  //   // 응답받은 단어를 StudentAns에 저장
-  //   vision.annotate(req).then((res) => {
-  //       // handling response
-  //       const StudentAns = res.responses[0]['textAnnotations'][0]['description']
-  //       console.log(StudentAns)
-  //     }, (e) => {
-  //       console.log('Error: ', e)
-  //     })
+    //   // 응답받은 단어를 StudentAns에 저장
+    //   vision.annotate(req).then((res) => {
+    //       // handling response
+    //       const StudentAns = res.responses[0]['textAnnotations'][0]['description']
+    //       console.log(StudentAns)
+    //     }, (e) => {
+    //       console.log('Error: ', e)
+    //     })
   };
-
-
 
   useEffect(() => {
     setupWebcam();
@@ -114,16 +118,23 @@ export default function TeachableMachine() {
   }, []);
 
   return (
-    <div className='webcam-container'>
+    <div className="webcam-container">
       {/* 웹캠 화면을 보여주는 video 요소 */}
-      <video className='container' ref={videoRef}></video>
+      <video
+        className="container"
+        ref={videoRef}
+        style={{ width: "100%", maxWidth: "600px" }}
+      ></video>
       {/* 클래스 레이블을 표시하는 부분 */}
       <div id="label-container">
         {predictions.map((p, index) => (
           <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
         ))}
       </div>
-      <canvas ref={photoRef} ></canvas>
+      <canvas
+        ref={photoRef}
+        style={{ width: "100%", maxWidth: "600px" }}
+      ></canvas>
       <button onClick={takePicture}>클릭해서 캡쳐하기</button>
     </div>
   );
