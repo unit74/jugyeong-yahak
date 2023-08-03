@@ -1,4 +1,4 @@
-package com.example.sse.apis.repositories;
+package com.ssafy.sse.apis.repositories;
 
 import java.util.ArrayList;
 import java.util.List;

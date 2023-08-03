@@ -1,4 +1,4 @@
-package com.example.sse.apis.requests;
+package com.ssafy.sse.apis.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
