@@ -1,4 +1,4 @@
-package com.example.sse;
+package com.ssafy.sse;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
