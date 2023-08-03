@@ -1,9 +1,17 @@
 import React from "react";
-// 학생 라이브 
+import styles from "./StudentLive.module.css";
+
+// 학생 라이브
+// 근데 오픈비두 이식하면 또 바뀔듯....
 export default function StudentLive() {
   // 함수, 변수 정의부분
 
-
   // 태그 생성부분
-  return <div>학생 라이브 입니다</div>;
+  return (
+    <div className={styles.main}>
+      <div className={styles.square}>
+        <div className={styles.time}></div>
+      </div>
+    </div>
+  );
 }
