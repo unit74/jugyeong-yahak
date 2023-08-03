@@ -1,4 +1,4 @@
-package com.example.sse.security.configs;
+package com.ssafy.sse.security.configs;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,8 +14,6 @@ import org.springframework.web.cors.CorsUtils;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    private final String[] AUTH_BLACK_LIST = {"/api/v1/private/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,12 +43,9 @@ public class SecurityConfig {
 
             .and()
             .authorizeRequests()
-            .antMatchers(AUTH_BLACK_LIST)
-            .authenticated()
             .anyRequest()
             .permitAll();
 
         return http.build();
     }
-
 }
