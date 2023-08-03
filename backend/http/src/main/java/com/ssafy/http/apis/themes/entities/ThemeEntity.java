@@ -1,5 +1,6 @@
 package com.ssafy.http.apis.themes.entities;
 
+import com.ssafy.http.apis.themes.responses.WordDetailResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,9 +39,9 @@ public class ThemeEntity {
     private LocalDateTime updatedAt;
 
     @Transient
-    private List<WordEntity> wordList;
+    private List<WordDetailResponse> wordList;
 
-    public void setWordList(List<WordEntity> wordList) {
+    public void setWordList(List<WordDetailResponse> wordList) {
         this.wordList = wordList;
     }
 

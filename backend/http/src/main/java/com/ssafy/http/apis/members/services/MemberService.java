@@ -110,4 +110,12 @@ public class MemberService {
 
     return memberEntity.getClassId();
   }
+
+  public Long getGovernmentId(Long id) {
+    MemberEntity memberEntity = memberRepository.findById(id)
+            .orElseThrow(() -> new WrongParameterException(
+                    ErrorCode.BAD_REQUEST_ERROR));
+
+    return memberEntity.getGovernmentId();
+  }
 }
