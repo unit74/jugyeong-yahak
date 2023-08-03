@@ -13,8 +13,13 @@ import GovernmentMainPage from "./pages/Government/MainPage";
 import StudyClassPage from "./pages/Government/ClassPage";
 
 //Student
+// Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
+import WordsListComponent from "./pages/Student/WordsListComponent";
+
+
+
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
 import StudentReviewWord from "./pages/Student/StudentReviewWord";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
@@ -28,13 +33,19 @@ import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
 import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
 import StudentDiary from "./pages/Student/StudentDiary";
 
+// Student_실시간 강의
+import StudentLive from "./pages/Student/StudentLive";
+
 // Teacher
+// Teacher_기타
 import TeacherMain from "./pages/Teacher/TeacherMain";
-import TeacherLive from "./pages/Teacher/TeacherLive";
 import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
 import TeacherTheme from "./pages/Teacher/TeacherTheme";
 import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
+
+// Teacher_실시간 강의
+import TeacherLive from "./pages/Teacher/TeacherLive";
 
 function App() {
   return (
@@ -44,14 +55,18 @@ function App() {
         <Route path="*" element={<NotFound />} />
 
         {/* Student */}
+        {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/words-list" element={<WordsListComponent />} />
+
+
+
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
-
         <Route path="/dictation-main" element={<StudentDictationMain />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
         <Route
@@ -59,19 +74,14 @@ function App() {
           element={<StudentDictationQuestion />}
         />
         <Route path="/record-dictation" element={<StudentDictationAnswer />} />
-
         <Route path="/diary" element={<StudentDiary />} />
 
-        {/* 나머지 라우터 여기에 설계할 것 */}
-        <Route path="governmentmain" element={<GovernmentMainPage />} />
-        <Route
-          path="governmentmain/studyclasspage"
-          element={<StudyClassPage />}
-        />
+        {/* 학생 실시간 강의 */}
+        <Route path="/student-live" element={<StudentLive />} />
+
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
         <Route path="/teacher-main" element={<TeacherMain />} />
-        <Route path="/teacher-live" element={<TeacherLive />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route
@@ -79,15 +89,21 @@ function App() {
           element={<TeacherStudentProgress />}
         />
         <Route path="/carousel" element={<ThemeCarousel />} />
-        {/* 나머지 라우터 여기에 설계할 것 */}
-        <Route path="governmentmain" element={<GovernmentMainPage />} />
+
+        {/* 교사 실시간 강의 */}
+        {/* <Route path="/teacher-live" element={<TeacherLive />} /> */}
+
+
+        {/* 지자체 */}
+        {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
         <Route
           path="governmentmain/studyclasspage"
           element={<StudyClassPage />}
-        />
+        /> */}
 
-        <Route path="/writing-cam-test" element={<WritingCamTest />} />
-        <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} />
+        {/* 테스트 컴포넌트 */}
+        {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
+        <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
       </Routes>
     </Provider>
   );

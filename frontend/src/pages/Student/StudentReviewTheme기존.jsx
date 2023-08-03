@@ -1,8 +1,9 @@
-import React, {useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTheme } from '../../store/actions/themeAction';
 
 const StudentReviewTheme = () => {
 
@@ -16,6 +17,8 @@ const StudentReviewTheme = () => {
   // 이동할 다음 페이지 결정
   const moveToNextPage = () => {
     const daysPassed = (timeNow - lastVisited) / (1000 * 60 * 60 * 24); // 초를 일 단위로 변환
+
+    // 일주일이 지났는지 확인해서 경로 반환
     if (daysPassed >= 7) {
       localStorage.setItem("lastVisitedSpeakingVideo", timeNow.toISOString());
       return "/speaking-video";
@@ -24,31 +27,36 @@ const StudentReviewTheme = () => {
     }
   };
 
-  // API요청 결과를 담을 변수
-  const [themeTitle, setThemeTitle] = useState(null);
-  const [themeImg, setThemeImg] = useState(null);
-  const [themeSituation, setThemeSituation] = useState(null);
+  // 테마 하나 상세 조회
+  const dispatch = useDispatch();
+  const themeData = useSelector((state) => state.themeState.themeData);
+  const wordsList = useSelector((state) => state.themeState.wordsList);
 
   useEffect(() => {
-    axios.get('https://i9e206.p.ssafy.io/api/v1/themes/8')
-    .then(response => {
-      setThemeTitle(response.data.data.theme);
-      setThemeImg(response.data.data.themeImageUrl);
-      setThemeSituation(response.data.data.situation);
-    })
-    .catch(error => console.error(`Error: ${error}`));
+    dispatch(fetchTheme());
+
+    // 10초 후 다음 페이지로 이동
+    // const timer = setTimeout(() => {
+    //   navigate(moveToNextPage());
+    // }, 10000); // 10초
+
+    // 컴포넌트가 언마운트될 때 타이머 클리어
+    return () => {
+      // clearTimeout(timer);
+    };
   }, []);
-  console.log(themeTitle)
+
+  // themes 상태 사용 예시
+  console.log(themeData)
+
 
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 📖</b>
-           <h1>{themeTitle}</h1>
-           <h2>{themeSituation}</h2>
-           <img src={themeImg} alt="" />
-       </div>
+          
+        </div>
       </div>
     </div>
   );
