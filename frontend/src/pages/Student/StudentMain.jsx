@@ -1,19 +1,23 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 
 export default function StudentMain() {
   const navigate = useNavigate();
+  const [fade, setFade] = useState(false);
 
-  const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/review-theme");
-  }, []);
+  const navigateToRecordDictation = useCallback(() => {
+    setFade(true);
+    setTimeout(() => {
+      navigate("/review-theme");
+    }, 1000); // fadeout 후 이동
+  }, [navigate]);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
 
   return (
-    <div className={styles.main}>
+    <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>👋🏻 김나연 님, 안녕하세요!</b>
