@@ -2,7 +2,7 @@ package com.ssafy.sse.apis.services;
 
 import com.ssafy.sse.apis.repositories.EmitterRepository;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -45,14 +45,14 @@ public class LectureService {
     }
 
     private void sendToClients(Long classId, String streamId, String name, Object data) {
-        List<SseEmitter> emitters = emitterRepository.get(classId);
-        emitters.forEach(emitter -> {
+        Map<String, SseEmitter> emitters = emitterRepository.get(classId);
+        emitters.forEach((id, emitter) -> {
             try {
                 emitter.send(SseEmitter.event()
                                        .name(name)
                                        .data(data));
             } catch (IOException exception) {
-                emitterRepository.deleteById(classId, streamId);
+                emitterRepository.deleteById(classId, id);
                 emitter.completeWithError(exception);
             }
         });
