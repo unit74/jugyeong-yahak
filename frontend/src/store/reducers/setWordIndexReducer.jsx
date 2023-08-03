@@ -2,7 +2,7 @@
 import { SET_WORD_INDEX } from '../actions/types';
 
 const initialState = {
-  wordIndex:0,
+  wordIndex:1,
   // Add other initial state properties if needed
 };
 

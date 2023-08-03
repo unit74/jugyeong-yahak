@@ -8,9 +8,9 @@ export const fetchTheme = () => async (dispatch) => {
     const themeId = Math.floor(Math.random() * 10) + 1;
 
     const response = await axios.get(`https://i9e206.p.ssafy.io/api/v1/themes/8`);
+    
     const themeData = response.data.data; // 테마정보
-    const wordsList = response.data.data.wordList; // 단어 5개 정보
-
+    const wordsList = response.data.data.wordList; // 단어 5개 정
 
     dispatch({
       type: FETCH_THEME_SUCCESS,
