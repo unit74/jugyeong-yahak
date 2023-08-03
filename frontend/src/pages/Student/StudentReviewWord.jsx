@@ -45,7 +45,7 @@ export default function StudentReviewWord() {
 
     // 언마운트 됐을시 타이머 클리어
     return () => {
-      clearTimeout(timer);
+      // clearTimeout(timer);
     };
   }, [navigate]);
 

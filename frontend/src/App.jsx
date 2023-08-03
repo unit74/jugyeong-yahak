@@ -44,6 +44,7 @@ import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 // Teacher_실시간 강의
 import TeacherLive from "./pages/Teacher/TeacherLive";
+import FaceLogin from "./pages/Common/FaceLogin";
 
 function App() {
   return (
@@ -99,6 +100,7 @@ function App() {
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
+        <Route path="/facetest" element={<FaceLogin />} />
       </Routes>
     </Provider>
   );
