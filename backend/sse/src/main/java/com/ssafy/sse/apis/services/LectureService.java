@@ -19,8 +19,6 @@ public class LectureService {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
         emitterRepository.save(classId, streamId, emitter);
 
-        System.out.println("Connections : " + emitterRepository.get(classId));
-
         emitter.onCompletion(() -> emitterRepository.deleteById(classId, streamId));
         emitter.onTimeout(() -> emitterRepository.deleteById(classId, streamId));
 
@@ -30,7 +28,7 @@ public class LectureService {
     public SseEmitter subscribe(Long classId, String streamId) {
         SseEmitter emitter = createEmitter(classId, streamId);
 
-        sendToClients(classId, streamId, "connect", "EventStream Created. [id=" + classId + "]");
+        sendToClients(classId, streamId, "connect", "EventStream Created. [class=" + classId + "]");
         return emitter;
     }
 
