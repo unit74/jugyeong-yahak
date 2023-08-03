@@ -15,31 +15,31 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/sse/v1")
 @RequiredArgsConstructor
 public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping(value = "private/sse/subscribe/{classId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/private/subscribe/{classId}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@RequestHeader("Authorization") String accessToken,
         @PathVariable Long classId) {
         return lectureService.subscribe(classId, accessToken);
     }
 
-    @PostMapping("sse/convert/page/{userId}/to/{classId}/{number}")
+    @PostMapping("/convert/page/{userId}/to/{classId}/{number}")
     public void convertPage(@PathVariable Long userId, @PathVariable Long classId,
         @PathVariable Long number) {
         lectureService.convertPage(classId, userId, number);
     }
 
-    @PostMapping("sse/mouse/pointer/{userId}/to/{classId}")
+    @PostMapping("/mouse/pointer/{userId}/to/{classId}")
     public void moveMouseCursor(@PathVariable Long userId, @PathVariable Long classId,
         @RequestBody MoveMouseRequest moveMouseRequest) {
         lectureService.moveMousePointer(classId, userId, moveMouseRequest);
     }
 
-    @PostMapping("sse/mic/control/{userId}/to/{classId}")
+    @PostMapping("/mic/control/{userId}/to/{classId}")
     public void micControl(@PathVariable Long userId, @PathVariable Long classId,
         @RequestBody MicControlRequest micControlRequest) {
         System.out.println(micControlRequest);
