@@ -5,10 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MicControlRequest {
+@NoArgsConstructor
+public class ConvertPageRequest {
 
-    private Long userId;
-    private Boolean status;
+    private Long classId;
+    private String streamId;
+    private Long number;
 }
