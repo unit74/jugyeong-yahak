@@ -49,9 +49,9 @@ public class ThemePrivateController {
 
         List<WordDetailResponse> words = wordService.getWords(id);
 
-//        themeEntity.setWordList(words);
+        themeEntity.setWordList(words);
 
-        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.", words);
+        return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.", themeEntity);
     }
 
     @GetMapping("/choseong")
