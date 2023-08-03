@@ -27,15 +27,14 @@ const StudentReviewTheme = () => {
       return "/review-word";
     }
   };
+
   // 테마 하나 상세 조회
   const dispatch = useDispatch();
   const themeData = useSelector((state) => state.themeState.themeData);
-
-
+  const wordsList = useSelector((state) => state.themeState.wordsList);
 
   useEffect(() => {
-    if (themeData.length === 0) {
-      // words가 비어있을 때만 API 요청을 보냅니다.
+    if (!themeData || !wordsList) {
       dispatch(fetchTheme());
     }
     // 10초 후 다음 페이지로 이동
@@ -47,20 +46,31 @@ const StudentReviewTheme = () => {
     return () => {
       // clearTimeout(timer);
     };
-  }, [navigate, lastVisited]);
+  }, []);
 
   // themes 상태 사용 예시
-  const themeName = themeData.theme
-  const themeImg = themeData.themeImgageUrl
-  console.log(themeData.theme)
   console.log(themeData)
+  // const themeName = themeData.theme
+  // const themeImg = themeData.themeImageUrl
+  // const themeSituation = themeData.situation
+
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 📖</b>
-          <h1>{themeName}</h1>
-          <img src={themeImg} alt="" />
+            {themeData && wordsList ? (
+            <>
+              {/* 데이터가 있는 경우 UI 렌더링 */}
+              <h1>{themeData.theme}</h1>
+              <h3>{themeData.situation}</h3>
+              <img src={themeData.themeImageUrl} alt="" />
+
+            </>
+          ) : (
+            // 데이터가 없는 경우 로딩 표시 등을 렌더링
+            <div>Loading...</div>
+          )}
         </div>
       </div>
     </div>
