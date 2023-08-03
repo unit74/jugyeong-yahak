@@ -68,7 +68,6 @@ export default function TeachableMachine() {
 
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
-
     // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL("image/jpeg");
     console.log("OO");
