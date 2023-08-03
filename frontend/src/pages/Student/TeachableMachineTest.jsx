@@ -3,7 +3,7 @@ import * as tmImage from '@teachablemachine/image';
 
 export default function TeachableMachine() {
   const [predictions, setPredictions] = useState([]);
-  const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
+  const [gotPicture, setGotPicture] = useState(false); // 캡쳐 여부를 나타내는 상태 변수
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
@@ -53,14 +53,11 @@ export default function TeachableMachine() {
     const prediction = await model.predict(webcam.canvas);
     setPredictions(prediction);
 
-    // 예측 결과를 확인하여 공책을 들었으면 캡쳐
-    // 캡쳐가 이루어지고 shouldTakePicture가 true인 경우에만 takePicture 함수 실행
-    if (shouldTakePicture === true) {
-      setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
-      const notebookClass = prediction.find((p) => p.className === 1);
-      if (notebookClass && notebookClass.probability >= 0.97) {
+    const notebookClass = prediction.find((p) => p.className === '1');
+    if (notebookClass && notebookClass.probability == 1) {
+      if (gotPicture === false){
         takePicture();
-        }
+      }
     }
   };
   
@@ -70,40 +67,41 @@ export default function TeachableMachine() {
     let height = width / (6 / 4);
     let photo = photoRef.current;
     let video = videoRef.current;
-  
+    
     photo.width = width;
     photo.height = height;
-  
+    
     let ctx = photo.getContext('2d');
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
-
     // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL('image/jpeg');
-  
+    console.log('찍었어요')
+    // .then(() => setGotPicture(true))
+    
 
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
-    // const vision = require('react-cloud-vision-api')
-    // vision.init({auth: 'AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4'})
-    // const req = new vision.Request({
-    //   image: new vision.Image({
-    //     base64: capturedImageBase64,
-    //   }),
-    //   features: [
-    //     new vision.Feature('TEXT_DETECTION', 4),
-    //   ],
-    //   imageContext: {
-    //     languageHints: ['ko'],
-    //   },
-  //   })
+    const vision = require('react-cloud-vision-api')
+    vision.init({auth: 'AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4'})
+    const req = new vision.Request({
+      image: new vision.Image({
+        base64: capturedImageBase64,
+      }),
+      features: [
+        new vision.Feature('TEXT_DETECTION', 4),
+      ],
+      imageContext: {
+        languageHints: ['ko'],
+      },
+    })
 
-  //   // 응답받은 단어를 StudentAns에 저장
-  //   vision.annotate(req).then((res) => {
-  //       // handling response
-  //       const StudentAns = res.responses[0]['textAnnotations'][0]['description']
-  //       console.log(StudentAns)
-  //     }, (e) => {
-  //       console.log('Error: ', e)
-  //     })
+    // 응답받은 단어를 StudentAns에 저장
+    vision.annotate(req).then((res) => {
+        // handling response
+        const StudentAns = res.responses[0]['textAnnotations'][0]['description']
+        console.log(StudentAns)
+      }, (e) => {
+        console.log('Error: ', e)
+      })
   };
 
 
@@ -123,7 +121,7 @@ export default function TeachableMachine() {
           <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
         ))}
       </div>
-      <canvas ref={photoRef} ></canvas>
+      <canvas ref={photoRef} width={500} ></canvas>
       <button onClick={takePicture}>클릭해서 캡쳐하기</button>
     </div>
   );

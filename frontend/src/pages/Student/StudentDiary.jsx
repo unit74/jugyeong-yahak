@@ -23,7 +23,7 @@ export default function StudentDiary() {
     navigate("/good-feedback"); // 피드백 다시 연결 필요
   }, []);
 
-  // useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
+  useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
 
   useEffect(() => {
     dispatch(fetchTheme());

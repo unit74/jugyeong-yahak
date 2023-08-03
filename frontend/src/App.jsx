@@ -69,7 +69,7 @@ function App() {
           path="/dictation-question"
           element={<StudentDictationQuestion />}
         />
-        <Route path="/record-dictation" element={<StudentDictationAnswer />} />
+        <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
 
         {/* 학생 실시간 강의 */}

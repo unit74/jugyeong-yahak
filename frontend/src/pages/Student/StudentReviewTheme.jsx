@@ -40,6 +40,7 @@ const StudentReviewTheme = () => {
       return "/review-word";
     }
   };
+  
 
   useEffect(() => {
     // 10초 후 다음 페이지로 이동
@@ -59,16 +60,21 @@ const StudentReviewTheme = () => {
   const [themeSituation, setThemeSituation] = useState(null);
 
   useEffect(() => {
-    axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
-      .then((response) => {
-        setThemeTitle(response.data.data.theme);
-        setThemeImg(response.data.data.themeImageUrl);
-        setThemeSituation(response.data.data.situation);
-      })
-      .catch((error) => console.error(`Error: ${error}`));
+    axios.get('https://i9e206.p.ssafy.io/api/v1/themes/8')
+    .then(response => {
+      setThemeTitle(response.data.data.theme);
+      setThemeImg(response.data.data.themeImageUrl);
+      setThemeSituation(response.data.data.situation);
+    })
+    .catch(error => console.error(`Error: ${error}`));
+    // 10초 후 다음 페이지로 이동
+    const timer = setTimeout(() => {
+      navigate(moveToNextPage());
+    }, 10000); // 10초
+    return () => {
+      // clearTimeout(timer);
+    };
   }, []);
-  console.log(themeTitle);
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
