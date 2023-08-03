@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as tmImage from "@teachablemachine/image";
+import Predictor from "../Common/Predictor";
 
 export default function TeachableMachine() {
-  const [predictions, setPredictions] = useState([]);
   const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
-  const [logCount, setLogCount] = useState(0);
+  const [webcam, setWebcam] = useState(null); // Predictor에서 초기화 안된 상태로 넘어가서 Predictor 자체는 렌더링 되지만,
+  const [model, setModel] = useState(null); // webcam이나 model이 prop되지 않음
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
@@ -13,7 +14,7 @@ export default function TeachableMachine() {
   const modelURL = "https://teachablemachine.withgoogle.com/models/4jyssp3L6/";
   const modelMetadataURL = modelURL + "metadata.json";
 
-  let model, webcam, maxPredictions;
+  let maxPredictions;
 
   // 웹캠 세팅
   const setupWebcam = async () => {
@@ -31,43 +32,29 @@ export default function TeachableMachine() {
 
   // Teachable Machine init 함수
   const initTeachableMachine = async () => {
-    model = await tmImage.load(modelURL + "model.json", modelMetadataURL);
-    maxPredictions = model.getTotalClasses();
+    const loadmodel = await tmImage.load(
+      modelURL + "model.json",
+      modelMetadataURL
+    ); // model에서 const loadmodel로 바꾸고
+    setModel(loadmodel); // 스테이트 저장
+    // maxPredictions = model.getTotalClasses();
 
     const flip = true; // 웹캠 화면 반전 여부 설정
-    webcam = new tmImage.Webcam(200, 200, flip); // 웹캠 화면 크기 설정
-    await webcam.setup(); // 웹캠 접근 권한 요청 및 설정
-    await webcam.play(); // 웹캠 시작
-
-    window.requestAnimationFrame(loop);
+    const initializedWebcam = new tmImage.Webcam(200, 200, flip); // 웹캠 화면 크기 설정 // 마찬가지로 webcam에서 const ~~로 바꾸고 저장
+    await initializedWebcam.setup(); // 웹캠 접근 권한 요청 및 설정
+    await initializedWebcam.play(); // 웹캠 시작
+    setWebcam(initializedWebcam);
   };
 
   // 계속 이미지 가져와
-  const loop = async () => {
-    webcam.update(); // 웹캠 프레임 업데이트
-    await predict(); // 이미지 예측 실행
+  // const loop = async () => {
+  //   webcam.update(); // 웹캠 프레임 업데이트
 
-    // logCount가 50 미만일 때만 loop 함수를 다시 호출합니다.
-    if (logCount < 100) {
-      window.requestAnimationFrame(loop);
-    }
-  };
-
-  // 웹캠으로부터 가져온 이미지를 모델로 예측
-  const predict = async () => {
-    const prediction = await model.predict(webcam.canvas);
-    setPredictions(prediction);
-
-    // 예측 결과를 확인하여 공책을 들었으면 캡쳐
-    // 캡쳐가 이루어지고 shouldTakePicture가 true인 경우에만 takePicture 함수 실행
-    if (shouldTakePicture === true) {
-      setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
-      const notebookClass = prediction.find((p) => p.className === "1");
-      if (notebookClass && notebookClass.probability === 1 && logCount < 50) {
-        takePicture();
-      }
-    }
-  };
+  //   // logCount가 3 미만일 때만 loop 함수를 다시 호출합니다.
+  //   if (logCount < 3) {
+  //     window.requestAnimationFrame(loop);
+  //   }
+  // };
 
   // 사용자의 웹캠 화면을 캡쳐
   const takePicture = () => {
@@ -85,7 +72,8 @@ export default function TeachableMachine() {
     // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL("image/jpeg");
     console.log("OO");
-    setLogCount((prevCount) => prevCount + 1); // logCount 상태 업데이트
+    // logCount 상태 업데이트
+    // console.log(logCount);
 
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
     // const vision = require('react-cloud-vision-api')
@@ -126,11 +114,19 @@ export default function TeachableMachine() {
         style={{ width: "100%", maxWidth: "600px" }}
       ></video>
       {/* 클래스 레이블을 표시하는 부분 */}
-      <div id="label-container">
-        {predictions.map((p, index) => (
-          <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
-        ))}
-      </div>
+
+      {webcam && model ? ( // webcam이랑 model이 초기화 안되면 Predictor는 안보여 줄거야
+        <Predictor
+          webcam={webcam}
+          model={model}
+          shouldTakePicture={shouldTakePicture}
+          setShouldTakePicture={setShouldTakePicture}
+          takePicture={takePicture}
+        />
+      ) : (
+        <div>Loading...</div> // 로딩창 보여줄게
+      )}
+
       <canvas
         ref={photoRef}
         style={{ width: "100%", maxWidth: "600px" }}

@@ -1,8 +1,8 @@
 import "./App.css";
 import React, { useEffect } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Provider } from 'react-redux';
-import store from './store'; // Redux Store를 import 해야 함
+import { Provider } from "react-redux";
+import store from "./store"; // Redux Store를 import 해야 함
 
 // pages
 // Common
@@ -17,8 +17,6 @@ import StudyClassPage from "./pages/Government/ClassPage";
 import StudentMain from "./pages/Student/StudentMain";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import WordsListComponent from "./pages/Student/WordsListComponent";
-
-
 
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
 import StudentReviewWord from "./pages/Student/StudentReviewWord";
@@ -60,8 +58,6 @@ function App() {
         <Route path="/review-theme" element={<StudentReviewTheme />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
-
-
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
@@ -93,7 +89,6 @@ function App() {
         {/* 교사 실시간 강의 */}
         {/* <Route path="/teacher-live" element={<TeacherLive />} /> */}
 
-
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
         <Route
@@ -102,8 +97,11 @@ function App() {
         /> */}
 
         {/* 테스트 컴포넌트 */}
-        {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
-        <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
+        {/* <Route path="/writing-cam-test" element={<WritingCamTest />} /> */}
+        <Route
+          path="/TeachableMachineTest"
+          element={<TeachableMachineTest />}
+        />
       </Routes>
     </Provider>
   );
