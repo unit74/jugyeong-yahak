@@ -11,6 +11,7 @@ import com.ssafy.http.support.codes.ErrorCode;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,9 +36,9 @@ public class MemberService {
     StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
 
     studentDetailResponse.of(memberRepository.findById(studentId)
-                                             .orElseThrow(
-                                                 () -> new WrongParameterException(
-                                                     ErrorCode.BAD_REQUEST_ERROR)));
+        .orElseThrow(
+            () -> new WrongParameterException(
+                ErrorCode.BAD_REQUEST_ERROR)));
 
     return studentDetailResponse;
   }
@@ -61,11 +62,12 @@ public class MemberService {
   public void registerStudents(Long governmentId, MultipartFile faceImage,
       StudentRegisterRequest studentRegisterRequest) {
 
-    MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType, governmentId);
+    String uuid = UUID.randomUUID().toString();
+
+    MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType, governmentId, uuid);
 
     String folder = memberEntity.getGovernmentId()
-                                .toString();
-    String uuid = memberEntity.getUuid();
+        .toString();
 
     memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
         .ifPresent((student) -> new RegisterIdentificationException(
@@ -105,16 +107,16 @@ public class MemberService {
 
   public Long getClassId(Long id) {
     MemberEntity memberEntity = memberRepository.findById(id)
-                                                .orElseThrow(() -> new WrongParameterException(
-                                                    ErrorCode.BAD_REQUEST_ERROR));
+        .orElseThrow(() -> new WrongParameterException(
+            ErrorCode.BAD_REQUEST_ERROR));
 
     return memberEntity.getClassId();
   }
 
   public Long getGovernmentId(Long id) {
     MemberEntity memberEntity = memberRepository.findById(id)
-            .orElseThrow(() -> new WrongParameterException(
-                    ErrorCode.BAD_REQUEST_ERROR));
+        .orElseThrow(() -> new WrongParameterException(
+            ErrorCode.BAD_REQUEST_ERROR));
 
     return memberEntity.getGovernmentId();
   }
