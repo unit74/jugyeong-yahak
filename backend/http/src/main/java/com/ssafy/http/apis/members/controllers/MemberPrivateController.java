@@ -73,4 +73,11 @@ public class MemberPrivateController {
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
 
+  @GetMapping("/key")
+  public ResponseEntity<?> getMemberPrimaryKey() {
+    Long id = SecurityUtil.getLoginUserId();
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "유저의 PK를 조회하였습니다.", id);
+  }
+
 }
