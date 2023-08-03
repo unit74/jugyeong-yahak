@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,9 @@ public class LectureService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
 
     private final EmitterRepository emitterRepository;
+
+    @Value("${http.server.url}")
+    private String HTTP_SERVER_URL;
 
     private SseEmitter createEmitter(Long classId, Long userId) {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
@@ -49,7 +53,7 @@ public class LectureService {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.exchange(
-            "https://i9e206.p.ssafy.io/api/v1/private/members/key",
+            HTTP_SERVER_URL + "/api/v1/private/members/key",
             HttpMethod.GET, entity,
             String.class);
 
