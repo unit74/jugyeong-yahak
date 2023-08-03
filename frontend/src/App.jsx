@@ -14,38 +14,38 @@ import StudyClassPage from "./pages/Government/ClassPage";
 
 //Student
 // Student_혼자학습
-import StudentMain from "./pages/StudentReview/StudentMain";
-import StudentReviewTheme from "./pages/StudentReview/StudentReviewTheme";
-import WordCurriculum from "./pages/StudentReview/WordCurriculum";
+import StudentMain from "./pages/Student/StudentMain";
+import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
+import WordsListComponent from "./pages/Student/WordsListComponent";
 
 
 
-// import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
-// import StudentReviewWord from "./pages/Student/StudentReviewWord";
-// import StudentRecordWord from "./pages/Student/StudentRecordWord";
-// import GoodFeedback from "./pages/Student/GoodFeedback";
-// import BadFeedback from "./pages/Student/BadFeedback";
-// import WritingCamTest from "./pages/Student/WritingCamTest";
-// import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
-// import StudentDictationMain from "./pages/Student/StudentDictationMain";
-// import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
-// import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
-// import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
-// import StudentDiary from "./pages/Student/StudentDiary";
+import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
+import StudentReviewWord from "./pages/Student/StudentReviewWord";
+import StudentRecordWord from "./pages/Student/StudentRecordWord";
+import GoodFeedback from "./pages/Student/GoodFeedback";
+import BadFeedback from "./pages/Student/BadFeedback";
+import WritingCamTest from "./pages/Student/WritingCamTest";
+import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
+import StudentDictationMain from "./pages/Student/StudentDictationMain";
+import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
+import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
+import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
+import StudentDiary from "./pages/Student/StudentDiary";
 
-// // Student_실시간 강의
-// import StudentLive from "./pages/Student/StudentLive";
+// Student_실시간 강의
+import StudentLive from "./pages/Student/StudentLive";
 
-// // Teacher
-// // Teacher_기타
-// import TeacherMain from "./pages/Teacher/TeacherMain";
-// import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
-// import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
-// import TeacherTheme from "./pages/Teacher/TeacherTheme";
-// import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
+// Teacher
+// Teacher_기타
+import TeacherMain from "./pages/Teacher/TeacherMain";
+import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
+import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
+import TeacherTheme from "./pages/Teacher/TeacherTheme";
+import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
-// // Teacher_실시간 강의
-// import TeacherLive from "./pages/Teacher/TeacherLive";
+// Teacher_실시간 강의
+import TeacherLive from "./pages/Teacher/TeacherLive";
 
 function App() {
   return (
@@ -58,10 +58,10 @@ function App() {
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
-        <Route path="/word-curriculum" element={<WordCurriculum />} />
+        <Route path="/words-list" element={<WordsListComponent />} />
 
 
-{/* 
+
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
@@ -74,21 +74,21 @@ function App() {
           element={<StudentDictationQuestion />}
         />
         <Route path="/record-dictation" element={<StudentDictationAnswer />} />
-        <Route path="/diary" element={<StudentDiary />} /> */}
+        <Route path="/diary" element={<StudentDiary />} />
 
         {/* 학생 실시간 강의 */}
-        {/* <Route path="/student-live" element={<StudentLive />} /> */}
+        <Route path="/student-live" element={<StudentLive />} />
 
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
-        {/* <Route path="/teacher-main" element={<TeacherMain />} />
+        <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route
           path="/teacher-studentprogress"
           element={<TeacherStudentProgress />}
         />
-        <Route path="/carousel" element={<ThemeCarousel />} /> */}
+        <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
         {/* <Route path="/teacher-live" element={<TeacherLive />} /> */}
