@@ -95,3 +95,18 @@
   -webkit-text-stroke-color: yellow;
   /* -webkit-text-stroke: 3px #fff100; */
 }
+
+/*  fadeout */
+
+.fadeOut {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 5;
+  }
+  to {
+    opacity: 0;
+  }
+}
