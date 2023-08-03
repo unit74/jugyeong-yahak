@@ -11,7 +11,7 @@ const allThemesReducer = (state = initialState, action) => {
     case FETCH_ALLTHEMES_SUCCESS:
       return {
         ...state,
-        alThemes: action.payload,
+        allThemes: action.payload,
       };
     default:
       return state;
