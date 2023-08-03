@@ -46,9 +46,8 @@ public class AuthService {
 
     //사용자 이미지 파일, S3의 디렉토리, 파일명
     String uuid = faceLoginService.faceLogin(loginImage, governmentId, labels);
-    // 사용자의 UUID를 얻어옴
 
-    //UUID로 해당 사용자 얻어옴
+    //UUID로 MemberEntity
     MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).get();
 
     System.out.println(member);
@@ -58,7 +57,8 @@ public class AuthService {
     }
 
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(member.getId(), member.getPassword());
+        new UsernamePasswordAuthenticationToken(member.getId() + " " + member.getRole().getRole(),
+            member.getUuid());
 
     Authentication authentication = authenticationManagerBuilder.getObject()
         .authenticate(authenticationToken);
@@ -67,11 +67,12 @@ public class AuthService {
 
     return generateToken(SERVER, authentication.getName(), getAuthorities(authentication));
   }
-
+  
   @Transactional
   public TokenDto login(GovernmentLoginRequest governmentLoginRequest) {
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(governmentLoginRequest.getIdentification(),
+        new UsernamePasswordAuthenticationToken(
+            governmentLoginRequest.getIdentification() + " " + "ROLE_GOVERNMENT",
             governmentLoginRequest.getPassword());
 
     Authentication authentication = authenticationManagerBuilder.getObject()
