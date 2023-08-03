@@ -7,6 +7,7 @@ import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.apis.members.services.S3ImageUploadService;
+import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,13 @@ public class MemberPrivateController {
     memberService.registerTeachers(governmentId, faceImage, teacherRegisterRequest);
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
+  }
+
+  @GetMapping("/key")
+  public ResponseEntity<?> getMemberPrimaryKey() {
+    Long id = SecurityUtil.getLoginUserId();
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "유저의 PK를 조회하였습니다.", id);
   }
 
 }
