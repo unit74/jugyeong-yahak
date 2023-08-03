@@ -48,13 +48,16 @@ export default function StudentRecordWord() {
     setSpeechWord(transcript);
   }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
 
+  const removeSpaces = (str) => str.replace(/\s/g, ''); // 공백 제거 함수
 
+  const normalizedDebounceTerm = removeSpaces(debounceTerm);
+  
   useEffect(() => { // debounceterm이 바뀌면 이거 실행할거야
     if (debounceTerm) {
-      if (debounceTerm === '가시') { // '가시' 여기다가 문제
-        navigate("/good-feedback");  // navigate로 이동 정답 페이지 이동
+      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) { // '가시' 여기다가 문제
+        navigate("/good-feedback",  { state :{ course: "reading" }});  // navigate로 이동 정답 페이지 이동
       } else {
-        navigate("/bad-feedback");  // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+        navigate("/bad-feedback", { state :{ course: "reading" }});  // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
     }
   }, [debounceTerm, navigate]); 

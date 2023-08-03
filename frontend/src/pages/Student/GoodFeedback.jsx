@@ -1,23 +1,29 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./GoodFeedback.module.css";
 import good from "../../assets/images/good_feedback.png";
 import confetti from "canvas-confetti";
 
 //단어읽기 문제 표시 페이지
-export default function StudentReviewWord() {
-  //   const navigate = useNavigate();
+export default function GoodFeedback() {
+  const location = useLocation();
+  const course = location.state.course;
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (course === 'reading') {
+        navigate('/dictation-main');
+      } else if (course === 'writing') {
+        navigate('/diary');
+      }
+    }, 10000); // 10초
 
-  //   useEffect(() => {
-  //     const timer = setTimeout(() => {
-  //       navigate("/record-word");
-  //     }, 10000); // 10초
-
-  //     // 언마운트 됐을시 타이머 클리어
-  //     return () => {
-  //       clearTimeout(timer);
-  //     };
-  //   }, [navigate]);
+    // 언마운트 될 시 타이머 클리어
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [course, navigate]);
 
   // 컨페티효과
   confetti({
