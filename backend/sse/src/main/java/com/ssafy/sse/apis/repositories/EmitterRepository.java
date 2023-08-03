@@ -12,16 +12,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RequiredArgsConstructor
 public class EmitterRepository {
 
-    private final Map<Long, Map<Long, SseEmitter>> emitters = new ConcurrentHashMap<>(); // { classId, users }
+    private final Map<Long, Map<String, SseEmitter>> emitters = new ConcurrentHashMap<>(); // { classId, users }
 
-    public void save(Long classId, Long userId, SseEmitter emitter) {
+    public void save(Long classId, String streamId, SseEmitter emitter) {
         emitters.computeIfAbsent(classId, k -> new ConcurrentHashMap<>())
-                .put(userId, emitter);
+                .put(streamId, emitter);
     }
 
-    public void deleteById(Long classId, Long userId) {
+    public void deleteById(Long classId, String streamId) {
         emitters.get(classId)
-                .remove(userId);
+                .remove(streamId);
     }
 
     public List<SseEmitter> get(Long classId) {
@@ -32,5 +32,10 @@ public class EmitterRepository {
                 });
 
         return classUsers;
+    }
+
+    public SseEmitter get(Long classId, String streamId) {
+        return emitters.get(classId)
+                       .get(streamId);
     }
 }

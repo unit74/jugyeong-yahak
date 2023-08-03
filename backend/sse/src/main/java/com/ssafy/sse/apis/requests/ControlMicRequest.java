@@ -5,12 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class MoveMouseRequest {
+@AllArgsConstructor
+public class ControlMicRequest {
 
     private Long classId;
     private String streamId;
-    private Long x;
-    private Long y;
+    private Boolean status;
 }
