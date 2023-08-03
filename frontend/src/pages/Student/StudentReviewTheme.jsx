@@ -23,6 +23,7 @@ const StudentReviewTheme = () => {
       return "/review-word";
     }
   };
+  
 
   // API요청 결과를 담을 변수
   const [themeTitle, setThemeTitle] = useState(null);
@@ -37,8 +38,14 @@ const StudentReviewTheme = () => {
       setThemeSituation(response.data.data.situation);
     })
     .catch(error => console.error(`Error: ${error}`));
+    // 10초 후 다음 페이지로 이동
+    const timer = setTimeout(() => {
+      navigate(moveToNextPage());
+    }, 10000); // 10초
+    return () => {
+      // clearTimeout(timer);
+    };
   }, []);
-  console.log(themeTitle)
 
   return (
     <div className={styles.main}>

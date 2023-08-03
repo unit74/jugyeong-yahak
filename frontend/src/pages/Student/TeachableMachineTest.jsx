@@ -3,7 +3,7 @@ import * as tmImage from '@teachablemachine/image';
 
 export default function TeachableMachine() {
   const [predictions, setPredictions] = useState([]);
-  const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
+  // const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
@@ -53,14 +53,14 @@ export default function TeachableMachine() {
     const prediction = await model.predict(webcam.canvas);
     setPredictions(prediction);
 
+    const notebookClass = prediction.find((p) => p.className === '1');
+    if (notebookClass && notebookClass.probability === 1) {
+      takePicture();
     // 예측 결과를 확인하여 공책을 들었으면 캡쳐
     // 캡쳐가 이루어지고 shouldTakePicture가 true인 경우에만 takePicture 함수 실행
-    if (shouldTakePicture === true) {
-      setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
-      const notebookClass = prediction.find((p) => p.className === 1);
-      if (notebookClass && notebookClass.probability >= 0.97) {
-        takePicture();
-        }
+    // if (shouldTakePicture === true) {
+    //   // setShouldTakePicture(false); // 캡쳐가 이루어진 후에는 shouldTakePicture를 false로 설정하여 다음에 실행되지 않도록 함
+    //   }
     }
   };
   
@@ -70,15 +70,16 @@ export default function TeachableMachine() {
     let height = width / (6 / 4);
     let photo = photoRef.current;
     let video = videoRef.current;
-  
+    
     photo.width = width;
     photo.height = height;
-  
+    
     let ctx = photo.getContext('2d');
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
-
+    
     // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL('image/jpeg');
+    console.log('찍었어요')
   
 
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄

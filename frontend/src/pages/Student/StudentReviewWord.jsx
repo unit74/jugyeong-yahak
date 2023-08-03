@@ -19,14 +19,14 @@ export default function StudentReviewWord() {
 
   useEffect(() => {
     dispatch(fetchTheme())
-    // const timer = setTimeout(() => {
-    //   navigate("/record-word");
-    // }, 10000); // 10초
+    const timer = setTimeout(() => {
+      navigate("/record-word");
+    }, 10000); // 10초
 
     
     // 언마운트 됐을시 타이머 클리어
     return () => {
-      // clearTimeout(timer);
+      clearTimeout(timer);
     };
   }, [navigate]);
   
