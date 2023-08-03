@@ -12,15 +12,16 @@ const ImageClassification = () => {
       const model = await tmImage.load(modelURL + "model.json", modelURL + "metadata.json");
       return model;
     };
-
+  
     model().then((loadedModel) => {
       // 웹캠으로부터 이미지 캡쳐하여 분류 실행
       const webcam = new tmImage.Webcam(200, 200); // 웹캠 화면 크기 설정 (원하는 크기로 변경 가능)
       webcam.setup().then(() => {
         webcam.play();
+        videoRef.current.srcObject = webcam.stream; // 이 부분이 추가됨
         window.requestAnimationFrame(loop);
       });
-
+  
       const loop = async () => {
         webcam.update();
         await predict(loadedModel, webcam.canvas);
@@ -28,6 +29,15 @@ const ImageClassification = () => {
       };
     });
   }, []);
+  
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.onloadedmetadata = (e) => {
+        videoRef.current.play();
+      };
+    }
+  }, []);
+  
 
   const predict = async (model, imgElement) => {
     const prediction = await model.predict(imgElement);
