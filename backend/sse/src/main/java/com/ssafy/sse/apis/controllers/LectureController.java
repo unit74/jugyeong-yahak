@@ -1,7 +1,9 @@
 package com.ssafy.sse.apis.controllers;
 
-import com.ssafy.sse.apis.requests.MicControlRequest;
+import com.ssafy.sse.apis.requests.ControlMicRequest;
+import com.ssafy.sse.apis.requests.ConvertPageRequest;
 import com.ssafy.sse.apis.requests.MoveMouseRequest;
+import com.ssafy.sse.apis.responses.MoveMouseResponse;
 import com.ssafy.sse.apis.services.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -27,22 +29,25 @@ public class LectureController {
         return lectureService.subscribe(classId, accessToken);
     }
 
-    @PostMapping("/convert/page/{userId}/to/{classId}/{number}")
-    public void convertPage(@PathVariable Long userId, @PathVariable Long classId,
-        @PathVariable Long number) {
-        lectureService.convertPage(classId, userId, number);
+    @PostMapping("/convert/page")
+    public void convertPage(@RequestBody ConvertPageRequest convertPageRequest) {
+        lectureService.convertPage(convertPageRequest.getClassId(),
+            convertPageRequest.getStreamId(), convertPageRequest.getNumber());
     }
 
-    @PostMapping("/mouse/pointer/{userId}/to/{classId}")
-    public void moveMouseCursor(@PathVariable Long userId, @PathVariable Long classId,
-        @RequestBody MoveMouseRequest moveMouseRequest) {
-        lectureService.moveMousePointer(classId, userId, moveMouseRequest);
+    @PostMapping("/mouse/pointer")
+    public void moveMouseCursor(@RequestBody MoveMouseRequest moveMouseRequest) {
+        lectureService.moveMousePointer(moveMouseRequest.getClassId(),
+            moveMouseRequest.getStreamId(), MoveMouseResponse.builder()
+                                                             .x(moveMouseRequest.getX())
+                                                             .y(
+                                                                 moveMouseRequest.getY())
+                                                             .build());
     }
 
     @PostMapping("/mic/control/{userId}/to/{classId}")
-    public void micControl(@PathVariable Long userId, @PathVariable Long classId,
-        @RequestBody MicControlRequest micControlRequest) {
-        System.out.println(micControlRequest);
-        lectureService.micControl(classId, userId, micControlRequest);
+    public void controlMic(@RequestBody ControlMicRequest controlMicRequest) {
+        lectureService.controlMic(controlMicRequest.getClassId(), controlMicRequest.getStreamId(),
+            controlMicRequest.getStatus());
     }
 }
