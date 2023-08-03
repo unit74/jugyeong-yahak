@@ -15,10 +15,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "members")
+@ToString
 public class MemberEntity {
 
   @Id
@@ -32,7 +35,8 @@ public class MemberEntity {
   private Long classId;
 
   @ManyToOne
-  @JoinColumn(name = "roles", nullable = false)
+  //@JoinColumn(name = "roles", nullable = false)
+  @JoinColumn(name = "role", nullable = false)
   private RoleEntity role;
 
   @Column(nullable = false)
@@ -89,8 +93,6 @@ public class MemberEntity {
     this.updatedAt = updatedAt;
   }
 
-
-
   @PrePersist
   public void createTimeStamps() {
     updatedAt = LocalDateTime.now();
@@ -100,5 +102,9 @@ public class MemberEntity {
   @PreUpdate
   public void updateTimeStamps() {
     updatedAt = LocalDateTime.now();
+  }
+
+  public void encodePassword(PasswordEncoder passwordEncoder) {
+    password = passwordEncoder.encode(uuid);
   }
 }
