@@ -12,8 +12,8 @@ const themeReducer = (state = initialState, action) => {
     case FETCH_THEME_SUCCESS:
       return {
         ...state,
-        themeData: action.payload[0],
-        wordsList: action.payload[1],
+        themeData: action.payload.themeData,
+        wordsList: action.payload.wordsList,
       };
     default:
       return state;
