@@ -7,7 +7,6 @@ import { fetchTheme } from '../../store/actions/themeAction';
 
 const StudentReviewTheme = () => {
 
-  
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
@@ -34,9 +33,8 @@ const StudentReviewTheme = () => {
   const wordsList = useSelector((state) => state.themeState.wordsList);
 
   useEffect(() => {
-    if (!themeData || !wordsList) {
-      dispatch(fetchTheme());
-    }
+    dispatch(fetchTheme());
+
     // 10초 후 다음 페이지로 이동
     // const timer = setTimeout(() => {
     //   navigate(moveToNextPage());
@@ -50,27 +48,14 @@ const StudentReviewTheme = () => {
 
   // themes 상태 사용 예시
   console.log(themeData)
-  // const themeName = themeData.theme
-  // const themeImg = themeData.themeImageUrl
-  // const themeSituation = themeData.situation
+
 
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 📖</b>
-            {themeData && wordsList ? (
-            <>
-              {/* 데이터가 있는 경우 UI 렌더링 */}
-              <h1>{themeData.theme}</h1>
-              <h3>{themeData.situation}</h3>
-              <img src={themeData.themeImageUrl} alt="" />
-
-            </>
-          ) : (
-            // 데이터가 없는 경우 로딩 표시 등을 렌더링
-            <div>Loading...</div>
-          )}
+          
         </div>
       </div>
     </div>
