@@ -21,7 +21,7 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping(value = "/private/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(Long classId, String streamId) {
         return lectureService.subscribe(classId, streamId);
     }
