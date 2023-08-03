@@ -25,6 +25,7 @@ public class LectrueService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        return restTemplate.postForEntity(uri, SseEmitter.class);
+        return null;
+//        return restTemplate.postForEntity(uri, SseEmitter.class);
     }
 }
