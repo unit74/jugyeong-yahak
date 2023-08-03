@@ -24,3 +24,79 @@
   width: 85%;
   height: 90%;
 }
+
+/*  */
+.theme {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  max-width: 100%;
+  padding: 0 20px; /* 좌우 패딩 추가 */
+}
+
+.imageSituationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10%;
+}
+
+.imageContainer {
+  margin-right: 12px;
+  margin-left: 8px;
+}
+
+.imageContainer img {
+  width: 30vw;
+}
+
+.imageSituationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10%;
+}
+
+.situationText {
+  margin-left: 12px;
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(3.5vw + 2vh); /* 반응형 */
+  /* 밑줄 */
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* fade */
+.fadeIn {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+.fadeOut {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
