@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MicControlRequest {
+@NoArgsConstructor
+public class ControlMicRequest {
+
+    private Long classId;
     private String streamId;
     private Boolean status;
 }
