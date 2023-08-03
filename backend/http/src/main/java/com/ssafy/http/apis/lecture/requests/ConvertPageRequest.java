@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class MousePointerRequest {
-    private Long x;
-    private Long y;
+@NoArgsConstructor
+public class ConvertPageRequest {
+
+    private Long classId;
+    private String streamId;
+    private Long number;
 }
