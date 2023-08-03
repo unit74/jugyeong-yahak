@@ -1,5 +1,6 @@
 package com.ssafy.http.jwt;
 
+import com.ssafy.http.support.codes.ErrorCode;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         AccessDeniedException accessDeniedException) throws IOException {
 
         response.setCharacterEncoding("utf-8");
-        response.sendError(403, "권한이 없습니다.");
+        response.sendError(ErrorCode.UNAUTHORIZED_ERROR.getStatus(),
+            ErrorCode.UNAUTHORIZED_ERROR.getMessage());
     }
 }
