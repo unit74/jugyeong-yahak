@@ -49,7 +49,7 @@ public class LectureService {
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<String> response = restTemplate.exchange(
-            "http://localhost:8080/api/v1/private/members/key",
+            "https://i9e206.p.ssafy.io/api/v1/private/members/key",
             HttpMethod.GET, entity,
             String.class);
 
