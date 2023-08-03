@@ -1,11 +1,10 @@
 package com.ssafy.http.apis.lecture.controllers;
 
-import com.ssafy.http.apis.lecture.requests.MicControlRequest;
-import com.ssafy.http.apis.lecture.requests.MousePointerRequest;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.ssafy.http.apis.lecture.requests.ControlMicRequest;
+import com.ssafy.http.apis.lecture.requests.ConvertPageRequest;
+import com.ssafy.http.apis.lecture.requests.MoveMouseRequest;
+import com.ssafy.http.apis.lecture.services.LectureService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,19 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/private/lecture")
+@RequiredArgsConstructor
 public class LecturePrivateController {
 
-    @GetMapping("/convert/page/{number}")
-    public void convertPage(@PathVariable Long number) {
+    private final LectureService lectureService;
+
+    @PostMapping("/convert/page")
+    public void convertPage(@RequestBody ConvertPageRequest convertPageRequest) {
+        lectureService.convertPage(convertPageRequest);
     }
 
     @PostMapping("/mouse/pointer")
-    public void moveMouseCursor(@RequestBody MousePointerRequest mousePointerRequest) {
+    public void moveMouseCursor(@RequestBody MoveMouseRequest moveMouseRequest) {
+        lectureService.moveMousePointer(moveMouseRequest);
     }
 
     @PostMapping("/mic/control")
-    public void micControl(@RequestBody MicControlRequest micControlRequest) {
-
-
+    public void controlMic(@RequestBody ControlMicRequest controlMicRequest) {
+        lectureService.controlMic(controlMicRequest);
     }
+
 }
