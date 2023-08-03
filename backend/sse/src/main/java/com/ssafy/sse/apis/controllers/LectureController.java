@@ -42,7 +42,7 @@ public class LectureController {
                                                              .build());
     }
 
-    @PostMapping("/mic/control/{userId}/to/{classId}")
+    @PostMapping("/mic/control")
     public void controlMic(@RequestBody ControlMicRequest controlMicRequest) {
         lectureService.controlMic(controlMicRequest.getClassId(), controlMicRequest.getStreamId(),
             controlMicRequest.getStatus());
