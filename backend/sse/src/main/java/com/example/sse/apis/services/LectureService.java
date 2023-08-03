@@ -15,33 +15,42 @@ public class LectureService {
 
     private final EmitterRepository emitterRepository;
 
-    private SseEmitter createEmitter(Long id) {
+    private SseEmitter createEmitter(Long classId, Long userId) {
         SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
-        emitterRepository.save(id, emitter);
+        emitterRepository.save(classId, userId, emitter);
 
-        emitter.onCompletion(() -> emitterRepository.deleteById(id));
-        emitter.onTimeout(() -> emitterRepository.deleteById(id));
+        System.out.println("Connections : " + emitterRepository.get(classId));
+
+        emitter.onCompletion(() -> emitterRepository.deleteById(classId, userId));
+        emitter.onTimeout(() -> emitterRepository.deleteById(classId, userId));
 
         return emitter;
     }
 
-    public SseEmitter subscribe(Long classId) {
-        SseEmitter emitter = createEmitter(classId);
+    public SseEmitter subscribe(Long classId, Long userId) {
+        SseEmitter emitter = createEmitter(classId, userId);
 
-        sendToClient(classId, "connect", "EventStream Created. [id=" + classId + "]");
+        sendToClient(classId, userId, "connect", "EventStream Created. [id=" + classId + "]");
         return emitter;
     }
 
-    public void moveMousePointer(Long classId, Object event) {
-        sendToClient(classId, "mouse", event);
+    public void micControl(Long classId, Long userId, Object event) {
+        sendToClient(classId, userId, "mic", event);
     }
 
-    public void convertPage(Long classId, Object event) {
-        sendToClient(classId, "page", event);
+    public void moveMousePointer(Long classId, Long userId, Object event) {
+        sendToClient(classId, userId, "mouse", event);
     }
 
-    private void sendToClient(Long id, String name, Object data) {
-        List<SseEmitter> emitters = emitterRepository.get(id);
+    public void convertPage(Long classId, Long userId, Object event) {
+        sendToClient(classId, userId, "page", event);
+    }
+
+    private void sendToClient(Long classId, Long userId, String name, Object data) {
+        List<SseEmitter> emitters = emitterRepository.get(classId);
+        System.out.println(classId);
+        System.out.println(name);
+        System.out.println(emitters);
         emitters.forEach(emitter -> {
             try {
                 emitter.send(SseEmitter.event()
@@ -49,7 +58,7 @@ public class LectureService {
                                        .name(name)
                                        .data(data));
             } catch (IOException exception) {
-                emitterRepository.deleteById(id);
+                emitterRepository.deleteById(classId, userId);
                 emitter.completeWithError(exception);
             }
         });
