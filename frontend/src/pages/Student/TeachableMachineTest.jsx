@@ -54,6 +54,9 @@ export default function TeachableMachine() {
   const takePicture = () => {
     let video = videoRef.current;
     let photo = photoRef.current;
+
+    if (!photo) return; // photoRef.current가 없으면 함수를 종료
+
     let width = 500;
     let height = width / (6 / 4);
 
@@ -106,9 +109,10 @@ export default function TeachableMachine() {
 
   useEffect(() => {
     if (studentAns) {
-      console.log(studentAns)
-      if (studentAns === wordsList[wordIndex]?.word) { // '가시' 여기다가 문제
-        navigate("/good-feedback",  { state :{ course: "writing" }});  // navigate로 이동 정답 페이지 이동
+      console.log(studentAns);
+      if (studentAns === wordsList[wordIndex]?.word) {
+        // '가시' 여기다가 문제
+        navigate("/good-feedback", { state: { course: "writing" } }); // navigate로 이동 정답 페이지 이동
       } else {
         navigate("/bad-feedback", { state: { course: "writing" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
