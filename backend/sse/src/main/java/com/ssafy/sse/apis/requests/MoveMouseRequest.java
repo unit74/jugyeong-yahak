@@ -1,4 +1,4 @@
-package com.example.sse.apis.requests;
+package com.ssafy.sse.apis.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MoveMouseRequest {
 
-    Long x;
-    Long y;
+    private Long classId;
+    private String streamId;
+    private Long x;
+    private Long y;
 }
