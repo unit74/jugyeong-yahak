@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from "react";
 import styles from "./StudentMain.module.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
-import Audio from "../Common/Audio";
 
 export default function StudentMain() {
   const navigate = useNavigate();
@@ -11,24 +10,17 @@ export default function StudentMain() {
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
     setTimeout(() => {
-      navigate("/review-theme");
+      navigate("/");
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
-  useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
+  useTimeoutCallback(navigateToRecordDictation, 15000); // 10초
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
-          <b className={styles.b}>👋🏻 김나연 님, 안녕하세요!</b>
-        </div>
-        {/*  */}
-        <Audio path={"sS_Mp_Bank"} />
-        <div className={styles.time}>
-          <b className={styles.b2}>지금은</b>
-          <b className={styles.b3}>혼자 학습</b>
-          <b className={styles.b4}>시간</b>
+          <b className={styles.b}>오늘 공부 끝</b>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 import { SET_WORD_INDEX } from '../actions/types';
 
 const initialState = {
-  wordIndex:1,
+  wordIndex:0,
   // Add other initial state properties if needed
 };
 
@@ -11,7 +11,7 @@ const setWordIndexReducer = (state = initialState, action) => {
     case SET_WORD_INDEX:
       return {
         ...state,
-        wordIndex: action.payload,
+        wordIndex: state.wordIndex + 1,
       };
     // Add other cases for different actions if needed
     default:
@@ -19,4 +19,4 @@ const setWordIndexReducer = (state = initialState, action) => {
   }
 };
 
-export default setWordIndexReducer
+export default setWordIndexReducer;

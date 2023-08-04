@@ -6,6 +6,8 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
+import friends from "../../assets/images/friends.png";
+
 // 예시영상 페이지
 export default function StudentDiary() {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ export default function StudentDiary() {
     "";
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/good-feedback"); // 피드백 다시 연결 필요
+    navigate("/good-feedback", { state: { course: "diary" } }); // 피드백 다시 연결 필요
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
@@ -41,6 +43,7 @@ export default function StudentDiary() {
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
+          {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedDiary}</b>
         </div>
       </div>
