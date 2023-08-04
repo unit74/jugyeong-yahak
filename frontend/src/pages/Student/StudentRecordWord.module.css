@@ -27,51 +27,27 @@
 
 /*  */
 .theme {
-  position: absolute;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  transform: translateX(-50%);
-  white-space: nowrap;
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 16px; /* 패딩 추가 */
+}
+
+.wordimg {
   max-width: 100%;
-  padding: 0 20px; /* 좌우 패딩 추가 */
-}
-
-.imageSituationContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10%;
-}
-
-.imageContainer {
-  margin-right: 12px;
-  margin-left: 8px;
-}
-
-.imageContainer img {
-  width: 30vw;
-}
-
-.imageSituationContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10%;
+  max-height: 80%; /* max-height 추가 */
+  height: auto;
+  object-fit: contain; /* 이미지 비율 유지 */
+  margin-left: 10%;
 }
 
 .situationText {
-  margin-left: 12px;
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
-  font-size: calc(3.5vw + 2vh); /* 반응형 */
-  /* 밑줄 */
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
+  font-size: calc(2.5vw + 2vh); /* 반응형 */
+  margin-right: 10%;
 }
 
 /* fade */
