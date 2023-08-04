@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-export default function Predictor ({ webcam, model, shouldTakePicture, setShouldTakePicture, takePicture, logCount}) {
+export default function Predictor ({ webcam, model, shouldTakePicture, takePicture, logCount}) {
     const [predictions, setPredictions] = useState([]);
 
     const predict = async () => {
@@ -49,18 +49,6 @@ export default function Predictor ({ webcam, model, shouldTakePicture, setShould
           clearTimeout(predictTimeout);
         };
       }, [webcam, model, shouldTakePicture, logCount]);
-
-      // 1초간격 호출
-      // useEffect(() => {
-      //   const loop = async () => {
-      //     if (!webcam) return; 
-      //     webcam.update();
-      //     await predict();
-      //     setTimeout(loop, 1000);  // 1초 간격으로 loop 함수 호출
-      //   };
-      
-      //   loop();
-      // }, [webcam, model, shouldTakePicture]);
       
 
       return (
