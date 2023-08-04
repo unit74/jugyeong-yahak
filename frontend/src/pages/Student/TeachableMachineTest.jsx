@@ -1,12 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as tmImage from "@teachablemachine/image";
 import Predictor from "../Common/Predictor";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTheme } from "../../store/actions/themeAction";
 
 export default function TeachableMachine() {
   const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
   const [webcam, setWebcam] = useState(null); // Predictor에서 초기화 안된 상태로 넘어가서 Predictor 자체는 렌더링 되지만,
   const [model, setModel] = useState(null); // webcam이나 model이 prop되지 않음
-
+  const [studentAns, setStudentAns] = useState(''); // webcam이나 model이 prop되지 않음
+  
   let videoRef = useRef(null);
   let photoRef = useRef(null);
 
@@ -46,15 +50,6 @@ export default function TeachableMachine() {
     setWebcam(initializedWebcam);
   };
 
-  // 계속 이미지 가져와
-  // const loop = async () => {
-  //   webcam.update(); // 웹캠 프레임 업데이트
-
-  //   // logCount가 3 미만일 때만 loop 함수를 다시 호출합니다.
-  //   if (logCount < 3) {
-  //     window.requestAnimationFrame(loop);
-  //   }
-  // };
 
   // 사용자의 웹캠 화면을 캡쳐
   const takePicture = () => {
@@ -70,39 +65,55 @@ export default function TeachableMachine() {
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
     // 캡쳐한 이미지를 base64로 인코딩합니다.
     let capturedImageBase64 = photo.toDataURL("image/jpeg");
-    console.log("OO");
-    // logCount 상태 업데이트
-    // console.log(logCount);
 
+    // 변경예정) 백에 capturedImageBase64담아서 axios요청 -> 변환된 단어 받아서 StudentAns에 저장
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
-    // const vision = require('react-cloud-vision-api')
-    // vision.init({auth: 'AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4'})
-    // const req = new vision.Request({
-    //   image: new vision.Image({
-    //     base64: capturedImageBase64,
-    //   }),
-    //   features: [
-    //     new vision.Feature('TEXT_DETECTION', 4),
-    //   ],
-    //   imageContext: {
-    //     languageHints: ['ko'],
-    //   },
-    //   })
+    const vision = require('react-cloud-vision-api')
+    vision.init({auth: 'AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4'})
+    const req = new vision.Request({
+      image: new vision.Image({
+        base64: capturedImageBase64,
+      }),
+      features: [
+        new vision.Feature('TEXT_DETECTION', 4),
+      ],
+      imageContext: {
+        languageHints: ['ko'],
+      },
+      })
 
-    //   // 응답받은 단어를 StudentAns에 저장
-    //   vision.annotate(req).then((res) => {
-    //       // handling response
-    //       const StudentAns = res.responses[0]['textAnnotations'][0]['description']
-    //       console.log(StudentAns)
-    //     }, (e) => {
-    //       console.log('Error: ', e)
-    //     })
+      // 응답받은 단어를 StudentAns에 저장
+      vision.annotate(req).then((res) => {
+          // handling response
+          setStudentAns(res.responses[0]['textAnnotations'][0]['description']);
+          console.log(studentAns)
+        }, (e) => {
+          console.log('Error: ', e)
+        })
   };
 
   useEffect(() => {
+    dispatch(fetchTheme());
     setupWebcam();
     initTeachableMachine();
   }, []);
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const wordsList = useSelector((state) => state.themeState.wordsList) || [];
+  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+
+  
+  useEffect(() => { 
+    if (studentAns) {
+      if (studentAns === wordsList[wordIndex]?.word) { // '가시' 여기다가 문제
+        navigate("/good-feedback",  { state :{ course: "writing" }});  // navigate로 이동 정답 페이지 이동
+      } else {
+        navigate("/bad-feedback", { state :{ course: "writing" }});  // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+      }
+    }
+  }, [studentAns, navigate]);
 
   return (
     <div className="webcam-container">
@@ -123,14 +134,13 @@ export default function TeachableMachine() {
           takePicture={takePicture}
         />
       ) : (
-        <div>Loading...</div> // 로딩창 보여줄게
+        <div>Loading...</div> // 로딩컴포넌트 보여줄게
       )}
 
       <canvas
         ref={photoRef}
-        style={{ width: "100%", maxWidth: "600px" }}
+        style={{ width: "100%", maxWidth: "600px"}}
       ></canvas>
-      <button onClick={takePicture}>클릭해서 캡쳐하기</button>
     </div>
   );
 }
