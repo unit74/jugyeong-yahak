@@ -1,6 +1,9 @@
 package com.ssafy.http.apis.openvidu.controllers;
 
+import com.ssafy.http.apis.members.services.MemberService;
+import com.ssafy.http.security.utils.SecurityUtil;
 import io.openvidu.java.client.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.Optional;
 
-@CrossOrigin(origins = "*")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/openvidu")
 public class OpenviduPrivateController {
 
@@ -27,11 +31,13 @@ public class OpenviduPrivateController {
         this.openvidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
+    private MemberService memberService;
+
     /**
      * @param params The Session properties
      * @return The Session ID
      */
-    @PostMapping("/")
+    @PostMapping("/sessions")
     public ResponseEntity<String> initializeSession(@RequestBody(required = false) Map<String, Object> params)
             throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = SessionProperties.fromJson(params).build();
@@ -58,6 +64,23 @@ public class OpenviduPrivateController {
         System.out.println(connection.getToken());
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
-    
+
+//    /**
+//     * @return The Token associated to the Connection
+//     */
+//    @PostMapping("/connections")
+//    public ResponseEntity<String> createConnection()
+//            throws OpenViduJavaClientException, OpenViduHttpException {
+//
+//        Long sessionId = memberService.getClassId(SecurityUtil.getLoginUserId());
+//
+//        Session session = openvidu.getActiveSession(String.valueOf(sessionId));
+//        if (session == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        Connection connection = session.createConnection();
+//
+//        return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
+//    }
 
 }
