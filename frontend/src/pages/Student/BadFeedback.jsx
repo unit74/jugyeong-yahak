@@ -16,7 +16,7 @@ export default function StudentReviewWord() {
       } else if (course === 'writing') {
         navigate('/dictation-question');
       }
-    }, 10000); // 10초
+    }, 5000); // 10초
 
     // 언마운트 될 시 타이머 클리어
     return () => {
