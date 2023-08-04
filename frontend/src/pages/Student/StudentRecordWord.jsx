@@ -46,16 +46,18 @@ export default function StudentRecordWord() {
     setSpeechWord(transcript);
   }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
 
-  const removeSpaces = (str) => str.replace(/\s/g, ''); // 공백 제거 함수
+  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
 
   const normalizedDebounceTerm = removeSpaces(debounceTerm);
-  
-  useEffect(() => { // debounceterm이 바뀌면 이거 실행할거야
+
+  useEffect(() => {
+    // debounceterm이 바뀌면 이거 실행할거야
     if (debounceTerm) {
-      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) { // '가시' 여기다가 문제
-        navigate("/good-feedback",  { state :{ course: "reading" }});  // navigate로 이동 정답 페이지 이동
+      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
+        // '가시' 여기다가 문제
+        navigate("/good-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
       } else {
-        navigate("/bad-feedback", { state :{ course: "reading" }});  // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
     }
   }, [debounceTerm, navigate]);
@@ -67,18 +69,19 @@ export default function StudentRecordWord() {
   return (
     <div className={styles.main}>
       <div className={styles.square}>
+        <b>글자를 읽어 보아요</b>
         <div className={styles.theme}>
-          <div className={styles.imageSituationContainer}>
-            <div className={styles.imageContainer}>
-              <img
-                src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
-                alt=""
-              />
-            </div>
-            <h1 className={styles.situationText}>
-              {wordsList.length > 0 && wordsList[wordIndex].word}
-            </h1>
-          </div>
+          <img
+            className={styles.wordimg}
+            src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
+            alt=""
+          />
+
+          <h1 className={styles.situationText}>
+            {wordsList.length > 0 && wordsList[wordIndex].word}
+          </h1>
+        </div>
+        <div className={styles.microphone}>
           <p>Microphone: {listening ? "녹음중" : "마이크 꺼짐"}</p>
           <p>{transcript}</p>
         </div>
