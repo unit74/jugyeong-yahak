@@ -15,7 +15,7 @@ export default function TeachableMachine() {
   let photoRef = useRef(null);
 
   // Teachable Machine 모델 불러오기
-  const modelURL = "https://teachablemachine.withgoogle.com/models/4jyssp3L6/";
+  const modelURL = "https://teachablemachine.withgoogle.com/models/bMosIyCjm/";
   const modelMetadataURL = modelURL + "metadata.json";
 
   let maxPredictions;
@@ -106,9 +106,9 @@ export default function TeachableMachine() {
 
   useEffect(() => {
     if (studentAns) {
-      if (studentAns === wordsList[wordIndex]?.word) {
-        // '가시' 여기다가 문제
-        navigate("/good-feedback", { state: { course: "writing" } }); // navigate로 이동 정답 페이지 이동
+      console.log(studentAns)
+      if (studentAns === wordsList[wordIndex]?.word) { // '가시' 여기다가 문제
+        navigate("/good-feedback",  { state :{ course: "writing" }});  // navigate로 이동 정답 페이지 이동
       } else {
         navigate("/bad-feedback", { state: { course: "writing" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
