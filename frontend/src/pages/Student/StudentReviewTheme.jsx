@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Audio from "../Common/Audio";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
@@ -40,7 +41,6 @@ const StudentReviewTheme = () => {
       return "/review-word";
     }
   };
-  
 
   useEffect(() => {
     // 10초 후 다음 페이지로 이동
@@ -60,13 +60,14 @@ const StudentReviewTheme = () => {
   const [themeSituation, setThemeSituation] = useState(null);
 
   useEffect(() => {
-    axios.get('https://i9e206.p.ssafy.io/api/v1/themes/8')
-    .then(response => {
-      setThemeTitle(response.data.data.theme);
-      setThemeImg(response.data.data.themeImageUrl);
-      setThemeSituation(response.data.data.situation);
-    })
-    .catch(error => console.error(`Error: ${error}`));
+    axios
+      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .then((response) => {
+        setThemeTitle(response.data.data.theme);
+        setThemeImg(response.data.data.themeImageUrl);
+        setThemeSituation(response.data.data.situation);
+      })
+      .catch((error) => console.error(`Error: ${error}`));
     // 10초 후 다음 페이지로 이동
     const timer = setTimeout(() => {
       navigate(moveToNextPage());
@@ -78,6 +79,7 @@ const StudentReviewTheme = () => {
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
+      <Audio path={"sS_RW_LW"} />
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
