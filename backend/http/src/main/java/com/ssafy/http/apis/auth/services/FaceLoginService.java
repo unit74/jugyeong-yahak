@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FaceLoginService {
+
+  @Value("${NODE_SERVER_URL}")
+  private String NODE_SERVER_URL;
 
   public String faceLogin(MultipartFile faceImage, Long governmentId, String[] labels) {
 
@@ -43,7 +47,7 @@ public class FaceLoginService {
     HttpEntity<LinkedMultiValueMap<String, Object>> request
         = new HttpEntity<>(params, headers);
 
-    String nodeUrl = "http://localhost:3000/check-face";
+    String nodeUrl = NODE_SERVER_URL;
 
     RestTemplate rest = new RestTemplate();
 
@@ -73,7 +77,7 @@ public class FaceLoginService {
       }
       return Optional.of(convertFile);
     }
-    
+
     removeNewFile(convertFile);
 
     return Optional.empty();
