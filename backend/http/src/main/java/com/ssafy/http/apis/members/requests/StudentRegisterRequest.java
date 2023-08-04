@@ -3,7 +3,6 @@ package com.ssafy.http.apis.members.requests;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
-import java.util.UUID;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -46,11 +45,11 @@ public class StudentRegisterRequest {
   @NotNull
   private Long tabletNo;
 
-  public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId) {
-    String uuid = UUID.randomUUID().toString();
-
+  public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId,
+      String uuid) {
     return MemberEntity.builder()
         .governmentId(governmentId)
+        .password(uuid)
         .classId(classId)
         .role(RoleEntity.builder()
             .role(Role.STUDENT)
