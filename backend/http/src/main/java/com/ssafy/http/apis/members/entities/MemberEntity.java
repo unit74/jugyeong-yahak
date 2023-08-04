@@ -105,6 +105,6 @@ public class MemberEntity {
   }
 
   public void encodePassword(PasswordEncoder passwordEncoder) {
-    password = passwordEncoder.encode(uuid);
+    password = passwordEncoder.encode(password);
   }
 }
