@@ -23,5 +23,18 @@
   backdrop-filter: blur(100px);
   width: 85%;
   height: 90%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 /* 여기까지 공통 */
+
+/*  */
+.image {
+  max-width: 100%; /* Prevent image from overflowing its container */
+  max-height: 90%; /* Prevent image from overflowing its container */
+  display: block; /* Ensure image is a block element for centering */
+  margin: 0 auto; /* Center the image horizontally inside the square */
+  object-fit: contain; /* Resize the image proportionally while keeping all of its content visible */
+}

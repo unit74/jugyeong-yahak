@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./StudentRecordWord.module.css";
+import styles from "./StudentReviewWord.module.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
@@ -10,7 +10,7 @@ import { fetchTheme } from "../../store/actions/themeAction";
 
 import { useDebounce } from "../Common/hooks/useDebounce";
 
-export default function StudentRecordWord() {
+export default function StudentReviewWord() {
   // axios !!!!!!!!!
   // 단어 조회
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ export default function StudentRecordWord() {
     if (debounceTerm) {
       if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
         // '가시' 여기다가 문제
-        navigate("/good-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
+        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
       } else {
         navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
@@ -70,19 +70,15 @@ export default function StudentRecordWord() {
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          <div className={styles.imageSituationContainer}>
-            <div className={styles.imageContainer}>
-              <img
-                src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
-                alt=""
-              />
-            </div>
-            <h1 className={styles.situationText}>
-              {wordsList.length > 0 && wordsList[wordIndex].word}
-            </h1>
-          </div>
-          <p>Microphone: {listening ? "녹음중" : "마이크 꺼짐"}</p>
-          <p>{transcript}</p>
+          <img
+            className={styles.wordimg}
+            src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
+            alt=""
+          />
+
+          <h1 className={styles.situationText}>
+            {wordsList.length > 0 && wordsList[wordIndex].word}
+          </h1>
         </div>
       </div>
     </div>
