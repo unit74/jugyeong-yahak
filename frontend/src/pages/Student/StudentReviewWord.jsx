@@ -47,7 +47,6 @@ export default function StudentRecordWord() {
   }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
 
   const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
-
   const normalizedDebounceTerm = removeSpaces(debounceTerm);
 
   useEffect(() => {
@@ -61,6 +60,12 @@ export default function StudentRecordWord() {
       }
     }
   }, [debounceTerm, navigate]);
+
+
+    // 언마운트 됐을시 타이머 클리어
+    return () => {
+      // clearTimeout(timer);
+    };
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;
