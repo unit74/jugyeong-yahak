@@ -40,12 +40,10 @@
 }
 
 .wordimg {
-  position: fixed;
-  max-width: 100%;
-  max-height: 90%;
+  width: 40vw;
+  object-fit: cover;
   height: auto;
   object-fit: contain;
-  margin-left: 15%;
   right: 53%;
 }
 
@@ -69,4 +67,8 @@
   align-items: center;
   bottom: 30%;
   right: 22%;
+}
+
+.volume {
+  font-size: calc(3vw + 2vh);
 }
