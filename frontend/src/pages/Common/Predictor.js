@@ -10,19 +10,10 @@ export default function Predictor ({ webcam, model, shouldTakePicture, setShould
         const prediction = await model.predict(webcam.canvas);
         setPredictions(prediction);
         
-        // 예측 결과를 확인하여 공책을 들었으면 캡쳐
-        if (shouldTakePicture === true) {  // 타이머 초기화 하면 굳이 이 조건문이 필요할까?
-          setShouldTakePicture(false);
-          const notebookClass = prediction.find((p) => p.className === "1");
-          console.log("Probability:", notebookClass.probability);
-          let takenCount = 0;
-          if (notebookClass && notebookClass.probability >= 0.98) {
-            // 캡쳐 로직 추가
-            takePicture();  // 여기에서 takePicture 함수 실행
-            takenCount++;
-            console.log("takenCount:", takenCount);
-            setShouldTakePicture(false); // 이후에는 실행되지 않도록 함
-          }
+        const notebookClass = prediction.find((p) => p.className === "1");
+        if (notebookClass && notebookClass.probability >= 0.998) {
+          // 캡쳐 로직 추가
+          takePicture();  // 여기에서 takePicture 함수 실행
         }
       };
     
