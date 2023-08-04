@@ -31,6 +31,8 @@ import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
 import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
 import StudentDiary from "./pages/Student/StudentDiary";
 
+import StudentDone from "./pages/Student/StudentDone";
+
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
 
@@ -71,6 +73,7 @@ function App() {
         />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
+        <Route path="/student-done" element={<StudentDone />} />
 
         {/* 학생 실시간 강의 */}
         <Route path="/student-live" element={<StudentLive />} />
