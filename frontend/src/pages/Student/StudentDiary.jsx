@@ -22,7 +22,7 @@ export default function StudentDiary() {
     "";
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/good-feedback"); // 피드백 다시 연결 필요
+    navigate("/good-feedback",  { state :{ course: "diary" }}); // 피드백 다시 연결 필요
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
