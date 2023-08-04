@@ -14,7 +14,6 @@ export default function StudentReviewWord() {
   // axios !!!!!!!!!
   // 단어 조회
   const dispatch = useDispatch();
-
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
 
@@ -40,27 +39,24 @@ export default function StudentReviewWord() {
 
     // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
     return () => clearTimeout(timer);
-  }, []); // 빈 의존성 배열로 인해 컴포넌트가 마운트될 때만 effect가 실행됩니다.
+  }, []); 
 
   useEffect(() => {
     setSpeechWord(transcript);
   }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
 
-  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
-
-  const normalizedDebounceTerm = removeSpaces(debounceTerm);
-
   useEffect(() => {
-    // debounceterm이 바뀌면 이거 실행할거야
-    if (debounceTerm) {
-      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
-        // '가시' 여기다가 문제
-        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
-      } else {
-        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
-      }
-    }
-  }, [debounceTerm, navigate]);
+
+    dispatch(fetchTheme());
+    const timer = setTimeout(() => {
+      navigate("/record-word");
+    }, 10000); // 10초
+
+    // 언마운트 됐을시 타이머 클리어
+    return () => {
+      // clearTimeout(timer);
+    };
+  }, [navigate]);
 
   if (!browserSupportsSpeechRecognition) {
     return <span>Browser doesn't support speech recognition.</span>;

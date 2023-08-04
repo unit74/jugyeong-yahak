@@ -14,7 +14,7 @@ export default function StudentReviewWord() {
       if (course === 'reading') {
         navigate('/review-word');
       } else if (course === 'writing') {
-        navigate('/diary');
+        navigate('/dictation-question');
       }
     }, 10000); // 10초
 
