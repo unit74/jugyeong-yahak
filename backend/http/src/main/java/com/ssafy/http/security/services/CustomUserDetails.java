@@ -1,6 +1,7 @@
 package com.ssafy.http.security.services;
 
 import com.ssafy.http.apis.governments.entities.GovernmentEntity;
+import com.ssafy.http.apis.members.entities.MemberEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,51 +9,76 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
-    private GovernmentEntity governmentEntity;
+  private GovernmentEntity governmentEntity;
+  private MemberEntity memberEntity;
 
-    public CustomUserDetails(GovernmentEntity governmentEntity) {
-        this.governmentEntity = governmentEntity;
+  public CustomUserDetails(GovernmentEntity governmentEntity) {
+    this.governmentEntity = governmentEntity;
+  }
+
+  public CustomUserDetails(MemberEntity memberEntity) {
+    this.memberEntity = memberEntity;
+  }
+
+  public Long getUserId() {
+    if (governmentEntity != null) {
+      return governmentEntity.getId();
     }
 
-    public Long getUserId() {
-        return governmentEntity.getId();
+    return memberEntity.getId();
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+    if (governmentEntity != null) {
+      authorities.add(() -> governmentEntity.getRole()
+          .getRole());
+    } else {
+      authorities.add(() -> memberEntity.getRole()
+          .getRole());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> governmentEntity.getRole()
-                                              .getRole());
-        return authorities;
+    return authorities;
+  }
+
+  @Override
+  public String getPassword() {
+    if (governmentEntity != null) {
+      return governmentEntity.getPassword();
+    }
+    return memberEntity.getPassword();
+
+  }
+
+  @Override
+  public String getUsername() {
+    if (governmentEntity != null) {
+      return governmentEntity.getIdentification();
     }
 
-    @Override
-    public String getPassword() {
-        return governmentEntity.getPassword();
-    }
+    return String.valueOf(memberEntity.getId());
 
-    @Override
-    public String getUsername() {
-        return governmentEntity.getIdentification();
-    }
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }
