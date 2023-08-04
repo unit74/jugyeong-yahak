@@ -34,7 +34,7 @@ export default function StudentRecordWord() {
   useEffect(() => {
     dispatch(fetchTheme());
     const timer = setTimeout(() => {
-      SpeechRecognition.startListening();
+      SpeechRecognition.startListening({ continuous: true });
       // console.log("마운트 5초뒤 speech 함수가 실행되었습니다.");
     }, 800); // 800ms = 0.8초  노인 반응 속도논문 평균 0.846초이니까 먼저 녹음 시작
     // 5초 동안 녹음 지속
