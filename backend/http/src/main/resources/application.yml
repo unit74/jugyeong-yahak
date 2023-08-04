@@ -10,7 +10,6 @@ spring:
       - classpath:/application-s3.yml
       - classpath:/application-openvidu.yml
       - classpath:/application-sse.yml
-      - classpath:/application-http.yml
   jpa:
     show-sql: true
 
