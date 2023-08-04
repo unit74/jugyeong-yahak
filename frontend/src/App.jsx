@@ -31,6 +31,8 @@ import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
 import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
 import StudentDiary from "./pages/Student/StudentDiary";
 
+import StudentDone from "./pages/Student/StudentDone";
+
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
 
@@ -44,6 +46,7 @@ import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 // Teacher_실시간 강의
 import TeacherLive from "./pages/Teacher/TeacherLive";
+import FaceLogin from "./pages/Common/FaceLogin";
 
 function App() {
   return (
@@ -71,6 +74,7 @@ function App() {
         />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
+        <Route path="/student-done" element={<StudentDone />} />
 
         {/* 학생 실시간 강의 */}
         <Route path="/student-live" element={<StudentLive />} />
@@ -99,6 +103,7 @@ function App() {
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
+        <Route path="/facetest" element={<FaceLogin />} />
       </Routes>
     </Provider>
   );
