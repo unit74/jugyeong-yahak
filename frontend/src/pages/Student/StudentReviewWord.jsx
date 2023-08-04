@@ -5,7 +5,6 @@ import styles from "./StudentReviewWord.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
-
 export default function StudentReviewWord() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
