@@ -8,11 +8,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -30,12 +32,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext()
                                      .setAuthentication(authentication);
+                log.debug("Save authentication in SecurityContextHolder.");
             }
         } catch (IncorrectClaimException e) {
             SecurityContextHolder.clearContext();
+            log.debug("Invalid JWT token");
             response.sendError(403);
         } catch (UsernameNotFoundException e) {
             SecurityContextHolder.clearContext();
+            log.debug("Can't find user.");
             response.sendError(403);
         }
 
