@@ -9,6 +9,7 @@ spring:
       - classpath:/application-redis.yml
       - classpath:/application-s3.yml
       - classpath:/application-openvidu.yml
+      - classpath:/application-sse.yml
   jpa:
     show-sql: true
 
