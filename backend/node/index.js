@@ -31,7 +31,8 @@ async function getDescriptorsFromDB(tempImage, labels, folder) {
 
      // DB 얼굴과 라벨을 매칭합니다.
     const labeledFaceDescriptors = await loadLabeledImage(labels, folder);
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+    //유사도 낮을수록 엄격 -> 원래 0.6 => 일론머스크, 김민재, 이강인 있었는데, 박지성 로그인됨
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.4); 
 
     // 사진에서 얼굴을 식별합니다.
     const detections = await faceapi.detectAllFaces(image)
@@ -51,19 +52,15 @@ app.post("/check-face", async (req, res) => {
     //let image = req.body.Face.tempFilePath; //이미지가 null이면 죽는다 -> 따로 체크 해줘야할듯
     const {imageUrl} = req.body;
 
-    console.log(imageUrl); //undifiend
-
     const obj = JSON.parse(JSON.stringify(req.body)); // req.body = [object: null prototype] { title: 'product' }
 
     console.log(obj);
 
     const cleanedUrl = obj.face.slice(1, -1);
 
-    console.log("-------------------");
 
     const labels = JSON.parse(obj.labels);
 
-    console.log(labels);
 
     const folder = JSON.parse(obj.folder);
     
@@ -78,8 +75,14 @@ function loadLabeledImage(labels, folder) {
     labels.map(async label => {
       const description = [];
       
+      console.log("loadImage전까지 오는지?");
+      
+      console.log("https://s3.ap-northeast-2.amazonaws.com/s3-hotsix/"+folder+"/"+label+".png");
+
       const img = await canvas.loadImage("https://s3.ap-northeast-2.amazonaws.com/s3-hotsix/"+folder+"/"+label+".png");
       
+      console.log("왔나?" + label);
+
       const detections = await faceapi.detectSingleFace(img)
         .withFaceLandmarks()
         .withFaceDescriptor();
