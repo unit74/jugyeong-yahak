@@ -9,16 +9,16 @@ export default function GoodFeedback() {
   const location = useLocation();
   const course = location.state.course;
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (course === 'reading') {
-        navigate('/dictation-main');
-      } else if (course === 'writing') {
-        navigate('/diary');
-      } else if (course === 'diary') {
-        navigate('/student-done');
-      } 
+      if (course === "reading") {
+        navigate("/dictation-main");
+      } else if (course === "writing") {
+        navigate("/diary");
+      } else if (course === "diary") {
+        navigate("/student-done");
+      }
     }, 10000); // 10초
 
     // 언마운트 될 시 타이머 클리어

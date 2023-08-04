@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
 import { useDebounce } from "../Common/hooks/useDebounce";
+import speak from "../../assets/images/speak.png";
 
 export default function StudentRecordWord() {
   // axios !!!!!!!!!
@@ -80,10 +81,10 @@ export default function StudentRecordWord() {
             <h1 className={styles.situationText}>
               {wordsList.length > 0 && wordsList[wordIndex].word}
             </h1>
-            <div className={styles.microphone}>
-              <p>Microphone: {listening ? "녹음중" : "마이크 꺼짐"}</p>
-              <p>{transcript}</p>
-            </div>
+          </div>
+          <div className={styles.microphone}>
+            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
+            <p>{transcript}</p>
           </div>
         </div>
       </div>
