@@ -22,7 +22,7 @@ public class LectureService {
         HttpEntity<ControlMicRequest> request = new HttpEntity<>(controlMicRequest);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                                      .path("/convert/page")
+                                      .path("/mic/control")
                                       .build()
                                       .toUri();
 
@@ -48,7 +48,7 @@ public class LectureService {
         HttpEntity<ConvertPageRequest> request = new HttpEntity<>(convertPageRequest);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                                      .path("/mic/control")
+                                      .path("/convert/page")
                                       .build()
                                       .toUri();
 
