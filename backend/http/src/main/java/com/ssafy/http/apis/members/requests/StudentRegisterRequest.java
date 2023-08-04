@@ -14,50 +14,54 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StudentRegisterRequest {
 
-    @NotNull
-    private Long governmentId;
+  //@NotNull
+  private Long governmentId;
 
-    @NotNull
-    private Long classId;
+  //@NotNull
+  private Long classId;
 
-    @NotNull
-    private Long role;
+  //private Long role;
 
-    @NotNull
-    @NotEmpty
-    private String statusCode;
+  @NotNull
+  @NotEmpty
+  private String statusCode;
 
-    @NotNull
-    @NotEmpty
-    private String name;
+  @NotNull
+  @NotEmpty
+  private String name;
 
-    @NotNull
-    @NotEmpty
-    private String phone;
+  @NotNull
+  @NotEmpty
+  private String phone;
 
-    @NotNull
-    @NotEmpty
-    private String address;
+  @NotNull
+  @NotEmpty
+  private String address;
 
-    @NotNull
-    @NotEmpty
-    private String firstResponder;
+  @NotNull
+  @NotEmpty
+  private String firstResponder;
 
-    private Long tabletNo;
+  @NotNull
+  private Long tabletNo;
 
-    public MemberEntity toEntity() {
-        return MemberEntity.builder()
-                           .governmentId(governmentId)
-                           .classId(classId)
-                           .role(RoleEntity.builder()
-                                           .role(Role.STUDENT)
-                                           .build())
-                           .statusCode(statusCode)
-                           .name(name)
-                           .phone(phone)
-                           .address(address)
-                           .firstResponder(firstResponder)
-                           .tabletNo(tabletNo)
-                           .build();
-    }
+  public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId,
+      String uuid) {
+    return MemberEntity.builder()
+        .governmentId(governmentId)
+        .password(uuid)
+        .classId(classId)
+        .role(RoleEntity.builder()
+            .role(Role.STUDENT)
+            .build())
+        .statusCode(statusCode)
+        .name(name)
+        .phone(phone)
+        .address(address)
+        .firstResponder(firstResponder)
+        .tabletNo(tabletNo)
+        .uuid(uuid)
+        .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
+        .build();
+  }
 }
