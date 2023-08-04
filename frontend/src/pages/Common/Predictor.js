@@ -10,8 +10,8 @@ export default function Predictor ({ webcam, model, shouldTakePicture, setShould
         const prediction = await model.predict(webcam.canvas);
         setPredictions(prediction);
         
-        const notebookClass = prediction.find((p) => p.className === "1");
-        if (notebookClass && notebookClass.probability >= 0.998) {
+        const notebookClass = prediction.find((p) => p.className === "ok");
+        if (notebookClass && notebookClass.probability >= 0.9) {
           // 캡쳐 로직 추가
           takePicture();  // 여기에서 takePicture 함수 실행
         }
@@ -30,9 +30,9 @@ export default function Predictor ({ webcam, model, shouldTakePicture, setShould
         };
         
         const predictLoop = async () => { // 동작맞추는 함수를 겁나 많이 불러대니까 분리해서 호출하자
-          if (webcam && model && logCount < 4) {
+          if (webcam && model && logCount < 30) {
             logCount++;  // 이걸로 고친거면 따로 컴포넌트 만들 필요가 없나?
-            // console.log("logCount:", logCount);
+            console.log("logCount:", logCount);
             await predict();
             predictTimeout = setTimeout(predictLoop, 2000);  // 1초 간격으로 predictLoop 함수 호출
           } else {
