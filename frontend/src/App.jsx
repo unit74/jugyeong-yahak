@@ -97,8 +97,11 @@ function App() {
         /> */}
 
         {/* 테스트 컴포넌트 */}
-        {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
-        <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
+        {/* <Route path="/writing-cam-test" element={<WritingCamTest />} /> */}
+        <Route
+          path="/TeachableMachineTest"
+          element={<TeachableMachineTest />}
+        />
       </Routes>
     </Provider>
   );
