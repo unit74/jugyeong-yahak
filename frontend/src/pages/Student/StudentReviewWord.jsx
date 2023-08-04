@@ -39,14 +39,13 @@ export default function StudentReviewWord() {
 
     // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
     return () => clearTimeout(timer);
-  }, []); 
+  }, []);
 
   useEffect(() => {
     setSpeechWord(transcript);
   }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
 
   useEffect(() => {
-
     dispatch(fetchTheme());
     const timer = setTimeout(() => {
       navigate("/record-word");
