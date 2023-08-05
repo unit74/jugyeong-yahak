@@ -47,3 +47,7 @@
   white-space: pre-wrap;
   /* color: #ff403c; */
 }
+
+.square * {
+  user-select: none;
+}
