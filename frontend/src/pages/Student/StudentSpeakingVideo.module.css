@@ -24,3 +24,6 @@
   width: 85%;
   height: 90%;
 }
+.square * {
+  user-select: none;
+}
