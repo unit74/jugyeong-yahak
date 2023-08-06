@@ -17,7 +17,7 @@ public class FcmConfig {
 
     @PostConstruct
     public void initialize() throws IOException {
-        String firebaseConfigPath = "firebase/FCM_service_key.json";
+        String firebaseConfigPath = "FCM_service_key.json";
         ClassPathResource resource = new ClassPathResource(firebaseConfigPath);
 
         try (InputStream is = resource.getInputStream()) {
