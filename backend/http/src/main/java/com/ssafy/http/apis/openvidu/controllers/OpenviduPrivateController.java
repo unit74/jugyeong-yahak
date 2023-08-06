@@ -1,5 +1,6 @@
 package com.ssafy.http.apis.openvidu.controllers;
 
+import com.ssafy.http.apis.fcm.services.FcmService;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import io.openvidu.java.client.*;
@@ -32,6 +33,7 @@ public class OpenviduPrivateController {
     }
 
     private MemberService memberService;
+    private FcmService fcmService;
 
     /**
      * @param params The Session properties
@@ -42,6 +44,10 @@ public class OpenviduPrivateController {
             throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openvidu.createSession(properties);
+
+        // 방이 만들어지면서 fcm 알림을 보내주면 될듯
+        // fcmService.sendMessages(Long.parseLong(session.getSessionId()));
+
         return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
     }
 
@@ -65,6 +71,7 @@ public class OpenviduPrivateController {
         return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
     }
 
+    // 알람을 받으면 바로 connections 실행할 수 있게 해주면 됨, 이거 써야됨 위에꺼는 openvidu랑 연결 잘되는지 확인할려고 쓰고 있음
 //    /**
 //     * @return The Token associated to the Connection
 //     */

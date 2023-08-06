@@ -1,23 +1,23 @@
 package com.ssafy.http.apis.classes.controllers;
 
-import com.ssafy.http.apis.classes.entities.ClassEntity;
 import com.ssafy.http.apis.classes.responses.ClassDetailResponse;
 import com.ssafy.http.apis.classes.services.ClassService;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
 @RestController
 @RequestMapping("/api/v1/classes")
+@RequiredArgsConstructor
 public class ClassPrivateController {
 
     private ClassService classService;
