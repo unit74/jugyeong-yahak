@@ -1,7 +1,9 @@
 package com.ssafy.http.apis.auth.controllers;
 
+import com.ssafy.http.apis.auth.dtos.MemberLoginDto;
 import com.ssafy.http.apis.auth.requests.GovernmentLoginRequest;
 import com.ssafy.http.apis.auth.responses.GovernmentLoginResponse;
+import com.ssafy.http.apis.auth.responses.MemberLoginResponse;
 import com.ssafy.http.apis.auth.services.AuthService;
 import com.ssafy.http.jwt.dtos.TokenDto;
 import com.ssafy.http.support.codes.SuccessCode;
@@ -53,22 +55,14 @@ public class AuthPublicController {
                 .build()));
   }
 
-//  @PostMapping("/students/login")
-//  public ResponseEntity<?> studentLogin() {
-//    return ResponseEntity.status(HttpStatus.OK)
-//        .body(SuccessResponse.ofStatusAndMessage(SuccessCode.REQUEST_SUCCESS,
-//            "로그인에 성공하였습니다."));
-//  }
 
   @PostMapping(value = "/{governmentId}/login", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<?> memberLogin(@PathVariable Long governmentId,
-      //@RequestParam(value = "image") MultipartFile image) {
       @RequestPart MultipartFile image) {
 
-    System.out.println("로그인 요청 받음");
-    System.out.println(governmentId);
+    MemberLoginDto memberLoginDto = authService.memberLogin(image, governmentId);
 
-    TokenDto tokenDto = authService.memberLogin(image, governmentId);
+    TokenDto tokenDto = memberLoginDto.getToken();
 
     // RT 저장
     HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
@@ -81,9 +75,14 @@ public class AuthPublicController {
         .status(HttpStatus.OK)
         .header(HttpHeaders.SET_COOKIE, httpCookie.toString())
         .body(SuccessResponse.ofStatusAndMessageAndData(SuccessCode.REQUEST_SUCCESS,
-            "로그인에 성공하였습니다.", GovernmentLoginResponse.builder()
+            "로그인에 성공하였습니다.", MemberLoginResponse.builder()
                 .token(
                     "Bearer " + tokenDto.getAccessToken())
+                .info(MemberLoginResponse.Info.builder()
+                    .classId(memberLoginDto.getClassId())
+                    .role(memberLoginDto.getRole())
+                    .name(memberLoginDto.getName())
+                    .build())
                 .build()));
   }
 
