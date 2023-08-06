@@ -1,5 +1,6 @@
 package com.ssafy.http.apis.auth.services;
 
+import com.ssafy.http.apis.auth.dtos.MemberLoginDto;
 import com.ssafy.http.apis.auth.requests.GovernmentLoginRequest;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
@@ -33,8 +34,8 @@ public class AuthService {
 
   private final String SERVER = "Server";
 
-  @Transactional
-  public TokenDto memberLogin(MultipartFile loginImage, Long governmentId) {
+  @Transactional //회원 로그인
+  public MemberLoginDto memberLogin(MultipartFile loginImage, Long governmentId) {
 
     List<MemberEntity> members = memberRepository.findUuidByGovernmentId(
         governmentId);//uuid 리스트 가져오기
@@ -50,8 +51,6 @@ public class AuthService {
     //UUID로 MemberEntity
     MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).get();
 
-    System.out.println(member);
-
     if (member == null) { //null이다 -> 사용자 발견하지 못한 것
       new RegisterIdentificationException(ErrorCode.NOT_FOUND_ERROR);
     }
@@ -65,10 +64,15 @@ public class AuthService {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    return generateToken(SERVER, authentication.getName(), getAuthorities(authentication));
+    //응답 객체 생성
+    MemberLoginDto loginDto = new MemberLoginDto();
+    loginDto.of(
+        generateToken(SERVER, authentication.getName(), getAuthorities(authentication)), member);
+
+    return loginDto;
   }
-  
-  @Transactional
+
+  @Transactional //지자체 로그인
   public TokenDto login(GovernmentLoginRequest governmentLoginRequest) {
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
