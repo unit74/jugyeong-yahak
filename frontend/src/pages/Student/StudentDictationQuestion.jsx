@@ -19,7 +19,7 @@ export default function StudentDictationQuestion() {
     navigate("/dictation-answer");
   }, []);
 
-  useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
+  useTimeoutCallback(navigateToRecordDictation, 17000); // 10초
 
   useEffect(() => {
     dispatch(fetchTheme());
@@ -41,6 +41,9 @@ export default function StudentDictationQuestion() {
           src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
           alt=""
         />
+        <h1 className={styles.situationText}>
+        {wordsList.length > 0 && wordsList[wordIndex].word}
+        </h1>
       </div>
     </div>
   );
