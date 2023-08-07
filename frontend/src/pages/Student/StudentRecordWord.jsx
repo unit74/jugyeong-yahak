@@ -12,60 +12,77 @@ import { useDebounce } from "../Common/hooks/useDebounce";
 import speak from "../../assets/images/speak.png";
 
 export default function StudentRecordWord() {
-  // axios !!!!!!!!!
-  // 단어 조회
+  // DB에 저장된 단어 가져오기
   const dispatch = useDispatch();
-
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
 
+  // 음성인식 관련
   const {
-    transcript, // 말이 변환된 글자!!!!!!!
+    transcript,
     listening,
-    // resetTranscript,
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-  const [speechWord, setSpeechWord] = useState("");
-  const navigate = useNavigate();
-  const debounceTerm = useDebounce(speechWord, 3000); // speechWord가 끝나면 3초 후에 정답 처리를 위해
-  // 오답처리나 정답 처리를 바로 하지 않기 위해서
 
-  useEffect(() => {
-    dispatch(fetchTheme());
-    const timer = setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
-      // console.log("마운트 5초뒤 speech 함수가 실행되었습니다.");
-    }, 800); // 800ms = 0.8초  노인 반응 속도논문 평균 0.846초이니까 먼저 녹음 시작
-    // 5초 동안 녹음 지속
+    useEffect(() => {
+      dispatch(fetchTheme());
+      
+      const startListeningWithDelay = (delay) => {
+        return setTimeout(() => {
+          SpeechRecognition.startListening();
+        }, delay);
+      };
+      
+      // 첫번째 음성인식 시작
+      const timer1 = startListeningWithDelay(800); 
+      
+      // 5초 후 두번째 음성인식 시작
+      const timer2 = startListeningWithDelay(5800); 
+      
+      // 10초 후 세번째 음성인식 시작
+      const timer3 = startListeningWithDelay(10800); 
+      
+      return () => {
+        // 워드 리스트 빈배열로 바꿔줭
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
+    }, []);
+    
+    // 녹음된 답변들을 저장할 배열
+    const [recordedTranscripts, setRecordedTranscripts] = useState([]);
+    const debounceTerm = useDebounce(transcript, 3000);
 
-    // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
-    return () => clearTimeout(timer);
-  }, []); // 빈 의존성 배열로 인해 컴포넌트가 마운트될 때만 effect가 실행됩니다.
+    // 들은 정답의 공백을 없앰
+    const removeSpaces = (str) => str.replace(/\s/g, "");
+    const normalizedDebounceTerm = removeSpaces(debounceTerm);
 
-  useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
-
-  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
-
-  const normalizedDebounceTerm = removeSpaces(debounceTerm);
-
-  useEffect(() => {
-    // debounceterm이 바뀌면 이거 실행할거야
-    if (debounceTerm) {
-      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
-        // '가시' 여기다가 문제
-        navigate("/good-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
+    useEffect(() => {
+      if (debounceTerm) { 
+          setRecordedTranscripts(prev => [...prev, normalizedDebounceTerm]);
+          console.log("녹음됨!")
       } else {
-        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+          // 아무것도 녹음되지 않았을 때 공백을 배열에 추가
+          setRecordedTranscripts(prev => [...prev, ""]);
+          console.log("녹음되지 않음!")
       }
-    }
-  }, [debounceTerm, navigate]);
+  }, [debounceTerm]);
+  
+    const navigate = useNavigate();
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
+    useEffect(() => {
+        console.log(recordedTranscripts);
+        if (recordedTranscripts.length === 5) {
+          if (recordedTranscripts.some(transcript => transcript === wordsList[wordIndex]?.word)) {
+            navigate("/good-feedback", { state: { course: "reading" } });
+          } else {
+            navigate("/bad-feedback", { state: { course: "reading" } });
+          }
+        }
+    }, [recordedTranscripts, navigate]);
+
 
   return (
     <div className={styles.main}>
