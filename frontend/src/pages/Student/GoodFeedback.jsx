@@ -19,7 +19,7 @@ export default function GoodFeedback() {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (course === "reading") {
-        navigate("/dictation-main");
+        navigate("/dictation-question");
       } else if (course === "writing" && wordIndex < 5) {
         dispatch(setWordIndex());
         navigate("/review-word");
