@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import UserVideoComponent from "../../components/UserVideoComponent";
-import axios from "axios";
-import { OpenVidu } from "openvidu-browser";
+import UserVideoComponent from '../../components/UserVideoComponent';
+import axios from 'axios';
+import { OpenVidu } from 'openvidu-browser';
 
 export default function TeacherLive() {
   const { state } = useLocation();
@@ -12,45 +12,51 @@ export default function TeacherLive() {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
 
-  const mySessionId = clazz.no;
-  const myUserName = "교사 이름";
+  const [mySession, setMySession] = useState(null);
 
-  const BASE_URL = "https://i9e206.p.ssafy.io";
+  const openVidu = new OpenVidu();
+  const mySessionId = clazz.no;
+  const myUserName = '교사 이름';
+
+  const BASE_URL = 'https://i9e206.p.ssafy.io';
   // const BASE_URL = "http://localhost:8080";
 
-  const openViduRef = useRef(new OpenVidu());  // Use useRef to persist the instance
-  const mySessionRef = useRef(null);
   useEffect(() => {
     joinSession();
-    
+
     return () => {
       leaveSession();
     };
   }, []);
 
   const joinSession = () => {
-    mySessionRef.current = openViduRef.current.initSession();
-    console.log("조인 세션 접속");
+    const session = openVidu.initSession();
+    console.log('조인 세션 접속 ' + session);
 
-    mySessionRef.current.on('streamCreated', (event) => {
-      const subscriber = mySessionRef.current.subscribe(event.stream, undefined);
+    session.on('streamCreated', (event) => {
+      const subscriber = session.subscribe(event.stream, undefined);
 
-      setSubscribers(prevSubscribers => [...prevSubscribers, subscriber]);
+      setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
     });
 
-    mySessionRef.current.on('streamDestroyed', (event) => {
+    session.on('streamDestroyed', (event) => {
       deleteSubscriber(event.stream.streamManager);
     });
 
-    mySessionRef.current.on('exception', (exception) => {
+    session.on('exception', (exception) => {
       console.warn(exception);
     });
 
+    session.on('signal:userChanged', (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+    });
+
     getToken().then((token) => {
-      mySessionRef.current
+      session
         .connect(token, { clientData: myUserName })
         .then(async () => {
-          let publisher = await openViduRef.current.initPublisherAsync(undefined, {
+          let publisher = await openVidu.initPublisherAsync(undefined, {
             audioSource: undefined,
             videoSource: undefined,
             publishAudio: true,
@@ -58,10 +64,9 @@ export default function TeacherLive() {
             resolution: '640x480',
             frameRate: 30,
             insertMode: 'APPEND',
-            mirror: false,
           });
 
-          mySessionRef.current.publish(publisher);
+          session.publish(publisher);
 
           setMainStreamManager(publisher);
           setPublisher(publisher);
@@ -70,17 +75,18 @@ export default function TeacherLive() {
           console.log('There was an error connecting to the session:', error.code, error.message);
         });
     });
+
+    setMySession(session);
   };
 
   const leaveSession = async () => {
-    if (mySessionRef.current) {
+    if (mySession && mySession.connection) {
       try {
-        await mySessionRef.current.disconnect();
-        console.log("세션 종료");
+        await mySession.disconnect();
       } catch (error) {
-        console.error("Error while disconnecting session:", error);
+        console.error('Error while disconnecting session:', error);
       }
-      mySessionRef.current = null;
+      setMySession(null);
     }
   };
 
@@ -92,7 +98,7 @@ export default function TeacherLive() {
   const createSession = async (sessionId) => {
     const response = await axios.post(
       BASE_URL + '/api/v1/openvidu/sessions',
-      { customSessionId: sessionId + "" },
+      { customSessionId: sessionId + '' },
       {
         headers: { 'Content-Type': 'application/json' },
       }
@@ -101,41 +107,67 @@ export default function TeacherLive() {
   };
 
   const createToken = async (sessionId) => {
-    const response = await axios.post(
-      BASE_URL + '/api/v1/openvidu/' + sessionId + '/connections',
-      {
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const response = await axios.post(BASE_URL + '/api/v1/openvidu/' + sessionId + '/connections', {
+      headers: { 'Content-Type': 'application/json' },
+    });
     return response.data; // The token
   };
 
   const deleteSubscriber = (streamManager) => {
-    setSubscribers(prevSubscribers => prevSubscribers.filter(sub => sub !== streamManager));
+    setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
+  };
+
+  const sendSignalUserChanged = (data) => {
+    const signalOptions = {
+      data: JSON.stringify(data),
+      type: 'userChanged',
+    };
+
+    mySession.signal(signalOptions);
   };
 
   return (
     <div>
       <h1>{clazz.name} 라이브 중 입니다.</h1>
-      <div id="video-container" className="col-md-6">
-        <div className="teacher-video">
-          {publisher !== undefined ? (
-            <UserVideoComponent streamManager={publisher} />
-          ) : null}
+      <div
+        id='video-container'
+        style={{
+          display: 'inline-block',
+          width: '100px',
+          height: '100px',
+        }}
+      >
+        <div>
+          {publisher !== undefined ? <UserVideoComponent streamManager={publisher} /> : null}
         </div>
-        <div className="students-container">
-          {subscribers !== undefined ? subscribers.map((sub, i) => (
-            <div
-              key={i}
-              className="stream-container col-md-3 col-xs-3"
-            >
-              <span>{sub.id}</span>
-              <UserVideoComponent streamManager={sub} />
-            </div>
-          )) : null}
+        <div>
+          {subscribers !== undefined
+            ? subscribers.map((sub, i) => (
+                <div key={i} className='stream-container col-md-6 col-xs-6'>
+                  <span>{sub.id}</span>
+                  <UserVideoComponent streamManager={sub} />
+                </div>
+              ))
+            : null}
         </div>
+      </div>
+
+      <div>
+        <button
+          onClick={() => {
+            sendSignalUserChanged({ isAudioAction: false });
+          }}
+        >
+          Signal 보내보기
+        </button>
+        <button
+          onClick={() => {
+            leaveSession();
+          }}
+        >
+          종료해보기
+        </button>
       </div>
     </div>
   );
-  
 }
