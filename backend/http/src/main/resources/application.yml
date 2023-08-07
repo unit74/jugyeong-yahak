@@ -1,15 +1,19 @@
 spring:
-  config:
-    import:
-      - classpath:/application-db.yml
-      - classpath:/application-redis.yml
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  config:
+    import:
+      - classpath:/application-db.yml
+      - classpath:/application-jwt.yml
+      - classpath:/application-redis.yml
+      - classpath:/application-s3.yml
+      - classpath:/application-openvidu.yml
+      - classpath:/application-sse.yml
+  jpa:
+    show-sql: true
 
 server:
   port: 8080
+  ssl:
+    enabled: false
