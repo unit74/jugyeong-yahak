@@ -15,6 +15,7 @@
     "axios": "^1.4.0",
     "canvas-confetti": "^1.6.0",
     "google-vision-api-client": "^0.0.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.31.0",
     "react": "^18.2.0",
     "react-cloud-vision-api": "^0.3.0",
     "react-dom": "^18.2.0",
