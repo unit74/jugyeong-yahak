@@ -76,7 +76,7 @@ public class MemberService {
     try {
       s3ImageUploadService.uploadImage(folder, uuid, imageType, faceImage);
     } catch (IOException e) {
-      new RegisterIdentificationException(ErrorCode.IO_ERROR);
+      throw new RegisterIdentificationException(ErrorCode.IO_ERROR);
     }
 
     memberEntity.encodePassword(passwordEncoder);
@@ -98,7 +98,7 @@ public class MemberService {
     try {
       s3ImageUploadService.uploadImage(folder, uuid, imageType, faceImage);
     } catch (IOException e) {
-      new RegisterIdentificationException(ErrorCode.IO_ERROR);
+      throw new RegisterIdentificationException(ErrorCode.IO_ERROR);
     }
 
     memberEntity.encodePassword(passwordEncoder);
