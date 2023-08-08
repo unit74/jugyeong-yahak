@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentRequest {
-
-  @NotNull
-  @NotEmpty
+  
   private Long classId;
 
   //private Long role;
