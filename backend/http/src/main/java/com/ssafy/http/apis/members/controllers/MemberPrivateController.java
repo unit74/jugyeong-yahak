@@ -47,7 +47,7 @@ public class MemberPrivateController {
 
   }
 
-  @PostMapping(value = "/students/register/{governmentId}", consumes = {
+  @PostMapping(value = "/students/register/{governmentId}", consumes = { //학생 회원가입
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
@@ -61,7 +61,7 @@ public class MemberPrivateController {
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
 
-  @PostMapping(value = "/teachers/register/{governmentId}", consumes = {
+  @PostMapping(value = "/teachers/register/{governmentId}", consumes = { //강사 회원가입
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerTeacher(
