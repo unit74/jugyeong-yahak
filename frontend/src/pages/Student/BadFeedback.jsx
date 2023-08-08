@@ -8,13 +8,14 @@ export default function StudentReviewWord() {
   const location = useLocation();
   const course = location.state.course;
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (course === 'reading') {
-        navigate('/review-word');
-      } else if (course === 'writing') {
-        navigate('/dictation-question');
+      // 다시 도전 없애기
+      if (course === "reading") {
+        //   navigate('/review-word');
+        // } else if (course === 'writing') {
+        navigate("/dictation-question");
       }
     }, 5000); // 10초
 
@@ -31,7 +32,7 @@ export default function StudentReviewWord() {
           {" "}
           <div className={styles.feedback}>
             <img src={bad} alt="bad_img" />
-            <b className={styles.b}>다시 도전</b>
+            <b className={styles.b}>아쉬워요.</b>
           </div>
         </div>
       </div>
