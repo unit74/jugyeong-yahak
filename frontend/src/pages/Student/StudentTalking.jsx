@@ -1,47 +1,63 @@
-import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./StudentRecordWord.module.css";
+import React, { useState, useEffect } from "react";
+
+import { useDebounce } from "../Common/hooks/useDebounce";
+import styles from "./StudentDiary.module.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { Configuration, OpenAIApi } from "openai";
+import axios from 'axios';
 
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTheme } from "../../store/actions/themeAction";
-
-import { useDebounce } from "../Common/hooks/useDebounce";
-import speak from "../../assets/images/speak.png";
 
 export default function StudentTalking() {
+  // 변수
+  const [generatedText, setGeneratedText] = useState('');
+  const [speechWord, setSpeechWord] = useState('');
+  const debounceTerm = useDebounce(speechWord, 2000);
+
+  // 음성 인식
   const {
-    transcript, // 말이 변환된 글자!!!!!!!
+    transcript, 
     listening,
-    // resetTranscript,
-    browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
-
-  const [speechWord, setSpeechWord] = useState("");
-  const navigate = useNavigate();
-  const debounceTerm = useDebounce(speechWord, 3000); // speechWord가 끝나면 3초 후에 정답 처리를 위해
-  // 오답처리나 정답 처리를 바로 하지 않기 위해서
-
+  
+  // useEffect
+  // 1. 마운트 후 0.8초 뒤 녹음 시작
   useEffect(() => {
     const timer = setTimeout(() => {
       SpeechRecognition.startListening({ continuous: true });
-      // console.log("마운트 5초뒤 speech 함수가 실행되었습니다.");
-    }, 800); // 800ms = 0.8초  노인 반응 속도논문 평균 0.846초이니까 먼저 녹음 시작
-    // 5초 동안 녹음 지속
-
-    // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
+    }, 800); 
     return () => clearTimeout(timer);
-  }, []); // 빈 의존성 배열로 인해 컴포넌트가 마운트될 때만 effect가 실행됩니다.
-
+  }, []);
+  
   useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
+    setSpeechWord(transcript); 
+  }, [transcript]);
 
-  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
-  const normalizedDebounceTerm = removeSpaces(debounceTerm);
 
+
+  async function generateText() {
+    const configuration = new Configuration({
+      apiKey: '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',
+    });
+    const openai = new OpenAIApi(configuration);
+  
+    try {
+      const response = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: `다음 내용을 4줄짜리 짧은 일기로 만들어줘 : ${debounceTerm}`, // 원하는 프롬프트로 수정
+        max_tokens: 7,
+        temperature: 0,
+      });
+  
+      const generatedText = response.data.choices[0].text;
+      console.log("Generated Text:", generatedText);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  
+  }
 
 
   return (
@@ -53,6 +69,12 @@ export default function StudentTalking() {
           <div className={styles.microphone}>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p>{transcript}</p>
+
+            <button onClick={generateText}>Generate Text</button>
+            <div>
+              <h1>완성된 일기</h1>
+              {generatedText}
+            </div>
           </div>
         </div>
       </div>

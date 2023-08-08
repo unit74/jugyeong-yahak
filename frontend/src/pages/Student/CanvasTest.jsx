@@ -1,9 +1,7 @@
 import React,  { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 import CanvasDraw from "react-canvas-draw";
 import html2canvas from "html2canvas";
-import saveAs from "file-saver";
 import styles from "./CanvasTest.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
