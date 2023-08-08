@@ -135,13 +135,9 @@
     0 3px 5px rgba(0, 0, 0, 0.1);
   transform: perspective(1000px) rotateY(-17deg);
   transition: transform 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 0 2px 2px 0;
+  background-color: rgba(255, 255, 255, 0.974);
+  border-radius: 0 25px 25px 0;
   margin: 0 10px;
-}
-
-.book:hover {
-  transform: perspective(1000px) rotateY(-7deg) scale(1.05);
 }
 
 /* 수정된 book 클래스 끝 */
@@ -160,4 +156,27 @@
 }
 .book5 {
   background-color: #bff596;
+}
+
+.bounceIn {
+  animation: bounceIn 1s infinite;
+}
+
+@keyframes bounceIn {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  40% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  60% {
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px);
+  }
 }
