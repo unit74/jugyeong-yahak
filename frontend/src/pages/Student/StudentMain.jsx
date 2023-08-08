@@ -24,7 +24,6 @@ export default function StudentMain() {
           <b className={styles.b}>👋🏻 김나연 님, 안녕하세요!</b>
         </div>
         {/*  */}
-        <Audio path={"sS_Mp_Bank"} />
         <div className={styles.time}>
           <b className={styles.b2}>지금은</b>
           <b className={styles.b3}>혼자 학습</b>
