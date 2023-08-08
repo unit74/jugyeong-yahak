@@ -87,7 +87,7 @@ function App() {
         <Route path='/carousel' element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
-        <Route path='/teacher-live' element={<TeacherLive />} />
+        <Route path='/teacher-live/*' element={<TeacherLive />} />
 
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
