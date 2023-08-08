@@ -72,10 +72,7 @@ function App() {
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-main" element={<StudentDictationMain />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route
-          path="/dictation-question"
-          element={<StudentDictationQuestion />}
-        />
+        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -90,10 +87,7 @@ function App() {
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
-        <Route
-          path="/teacher-studentprogress"
-          element={<TeacherStudentProgress />}
-        />
+        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
