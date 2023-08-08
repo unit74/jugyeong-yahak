@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "KoPubWorld Batang Bold";
+    src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+  }
+  
+  .canvas{
+    width: 100%;
+    height: 100%;
+  }
+  
