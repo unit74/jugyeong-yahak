@@ -13,10 +13,25 @@ export default function StudentBook() {
     appearActive: styles.bounceIn,
   };
 
-  const bookStyle = {
-    transform: "perspective(1000px) rotateY(-17deg)",
-  };
+  const bookStyle = (status) => {
+    let baseStyle = {
+      transform: "perspective(1000px) rotateY(-17deg)",
+    };
 
+    if (status === 5) {
+      return {
+        ...baseStyle,
+        boxShadow: "0 0 20px rgba(255,255,255,0.9)", // 불켜
+      };
+    } else if (status === 0) {
+      return {
+        ...baseStyle,
+        opacity: 0.5, // 불꺼
+      };
+    }
+
+    return baseStyle;
+  };
   useEffect(() => {
     // 일단 인증정보 그냥 넣어둠
     axios
@@ -38,14 +53,23 @@ export default function StudentBook() {
         <div className={styles.books}>
           <b className={styles.greeting}>현재 공부</b>
           {book.map((sub, i) => (
-            <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
+            <CSSTransition
+              in={true}
+              appear
+              timeout={5000}
+              classNames={bookAnimationClassNames}
+            >
               <div
                 id={`book${i + 1}`}
                 className={`${styles.book} ${styles[`book${i + 1}`]}`}
-                style={bookStyle}
+                style={bookStyle(sub.status)}
               >
                 {sub.themeName + "  :  "}
-                {sub.status === 0 ? "시작 안함" : sub.status === 5 ? "완료됨" : "공부 중"}
+                {sub.status === 0
+                  ? "시작 안함"
+                  : sub.status === 5
+                  ? "완료됨"
+                  : "공부 중"}
               </div>
             </CSSTransition>
           ))}
