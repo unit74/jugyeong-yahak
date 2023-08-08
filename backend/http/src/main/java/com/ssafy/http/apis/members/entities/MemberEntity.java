@@ -67,6 +67,9 @@ public class MemberEntity {
   private Long tabletNo;
 
   @Column(nullable = false)
+  private Integer gender;
+
+  @Column(nullable = false)
   private LocalDateTime createdAt;
 
   @Column(nullable = false)
@@ -75,8 +78,10 @@ public class MemberEntity {
   @Builder
   public MemberEntity(Long id, Long governmentId, Long classId, RoleEntity role, String statusCode,
       String uuid, String password, String name, String phone, String address, String faceImageUrl,
-      String firstResponder, Long tabletNo, LocalDateTime createdAt, LocalDateTime updatedAt) {
+      String firstResponder, Long tabletNo, LocalDateTime createdAt, LocalDateTime updatedAt,
+      Integer gender) {
     this.id = id;
+    this.gender = gender;
     this.governmentId = governmentId;
     this.classId = classId;
     this.role = role;
