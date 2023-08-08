@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import OpenViduVideoComponent from "./OvVideo";
 import "./UserVideo.css";
 
