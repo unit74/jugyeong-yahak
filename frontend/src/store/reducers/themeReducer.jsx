@@ -1,6 +1,6 @@
 // src/store/reducers/themeReducer.js
 
-import { FETCH_THEME_SUCCESS } from '../actions/types';
+import { FETCH_THEME_SUCCESS } from "../actions/types";
 
 const initialState = {
   themeData: null,
@@ -17,7 +17,6 @@ const themeReducer = (state = initialState, action) => {
       };
     default:
       return state;
-      
   }
 };
 
