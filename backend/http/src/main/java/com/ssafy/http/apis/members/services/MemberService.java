@@ -2,9 +2,10 @@ package com.ssafy.http.apis.members.services;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
+import com.ssafy.http.apis.members.requests.StudentRequest;
 import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
+import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.WrongParameterException;
 import com.ssafy.http.support.codes.ErrorCode;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -31,6 +33,23 @@ public class MemberService {
   private String url;
 
   private String imageType = ".png";
+
+  @Transactional
+  public StudentDetailResponse updateStudent(Long studentId,
+      StudentRequest studentRequest) {
+    StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
+
+    MemberEntity studentEntity = memberRepository.findMemberEntityById(studentId).orElseThrow(
+        () -> new CustomException(ErrorCode.IO_ERROR)
+    );
+
+    studentEntity = studentRequest.toEntityForUpdate(studentEntity);
+    memberRepository.save(studentEntity);
+
+    studentDetailResponse.of(studentEntity);
+
+    return studentDetailResponse;
+  }
 
   public StudentDetailResponse getStudentDetail(Long studentId) {
     StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
@@ -60,11 +79,12 @@ public class MemberService {
   }
 
   public void registerStudents(Long governmentId, MultipartFile faceImage,
-      StudentRegisterRequest studentRegisterRequest) {
+      StudentRequest studentRequest) {
 
     String uuid = UUID.randomUUID().toString();
 
-    MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType, governmentId, uuid);
+    MemberEntity memberEntity = studentRequest.toEntityForRegister(url, imageType,
+        governmentId, uuid);
 
     String folder = memberEntity.getGovernmentId()
         .toString();
