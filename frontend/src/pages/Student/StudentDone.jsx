@@ -20,7 +20,7 @@ export default function StudentMain() {
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
-          <b className={styles.b}>오늘 공부 끝</b>
+          <b className={styles.b}>여기는 책장</b>
         </div>
       </div>
     </div>
