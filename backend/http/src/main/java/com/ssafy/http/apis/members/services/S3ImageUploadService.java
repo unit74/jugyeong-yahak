@@ -71,6 +71,8 @@ public class S3ImageUploadService {
       return Optional.of(convertFile);
     }
 
+    removeNewFile(convertFile);
+
     return Optional.empty();
   }
 }
