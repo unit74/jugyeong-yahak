@@ -2,7 +2,7 @@ package com.ssafy.http.apis.members.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
+import com.ssafy.http.apis.members.requests.StudentRequest;
 import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.services.MemberService;
@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,17 @@ public class MemberPrivateController {
 
   private final S3ImageUploadService imageUploadService;
   private final MemberService memberService;
+
+  @PutMapping(value = "/students/{studentId}")
+  public ResponseEntity<?> updateStudent(@PathVariable Long studentId,
+      @RequestPart StudentRequest studentRequest) {
+
+    StudentDetailResponse studentDetailResponse = memberService.updateStudent(studentId,
+        studentRequest);
+
+    return createSuccessResponse(SuccessCode.UPDATE_SUCCESS, "학생 데이터 수정하였습니다.",
+        studentDetailResponse);
+  }
 
   @GetMapping("/students/{studentId}")
   public ResponseEntity<?> getStudentDetail(@PathVariable Long studentId) {
@@ -52,11 +64,11 @@ public class MemberPrivateController {
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
       @PathVariable Long governmentId,
-      @RequestPart StudentRegisterRequest studentRegisterRequest,
+      @RequestPart StudentRequest studentRequest,
       @RequestPart MultipartFile faceImage) {
     System.out.println("학생 등록 요청 받음");
 
-    memberService.registerStudents(governmentId, faceImage, studentRegisterRequest);
+    memberService.registerStudents(governmentId, faceImage, studentRequest);
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
@@ -73,6 +85,7 @@ public class MemberPrivateController {
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
+
 
   @GetMapping("/key")
   public ResponseEntity<?> getMemberPrimaryKey() {
