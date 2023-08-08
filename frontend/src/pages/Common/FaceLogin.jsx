@@ -78,7 +78,7 @@ export default function FaceLogin() {
     var pixel = ctx.getImageData(0, 0, photo.width, photo.height);
     var data = pixel.data;
     console.log(data);
-    login(data);
+    login(new ImageData(data, photo.width, photo.height));
   };
 
   const login = (data) => {
@@ -88,6 +88,7 @@ export default function FaceLogin() {
       .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, { image: data })
       .then((response) => {
         console.log("login 성공");
+        console.log(response);
       })
       .catch((error) => console.error(`Error: ${error}`));
   };
