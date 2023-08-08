@@ -75,17 +75,33 @@ export default function FaceLogin() {
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
 
-    var pixel = ctx.getImageData(0, 0, photo.width, photo.height);
-    var data = pixel.data;
-    console.log(data);
-    login(new ImageData(data, photo.width, photo.height));
+    const pngDataURL = photo.toDataURL("image/png");
+    console.log(pngDataURL);
+    // var pixel = ctx.getImageData(0, 0, photo.width, photo.height);
+    // var data = pixel.data;
+    // const imageBlob = new Blob([data], { type: "image/jpeg" });
+    // // console.log(imageBlob);
+    // const form = new FormData();
+    // form.append("image", imageBlob, "image.jpg"); // 'image.jpg' is the desired filename
+    // console.log(form);
+    login(pngDataURL);
   };
 
   const login = (data) => {
+    console.log(data);
     const governmentId = 4;
 
     axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, { image: data })
+      .post(
+        `https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`,
+        { image: data },
+        {
+          headers: {
+            accept: "*/*",
+            "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+          },
+        }
+      )
       .then((response) => {
         console.log("login 성공");
         console.log(response);
