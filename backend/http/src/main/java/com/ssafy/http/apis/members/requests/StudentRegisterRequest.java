@@ -45,6 +45,9 @@ public class StudentRegisterRequest {
   @NotNull
   private Long tabletNo;
 
+  @NotNull
+  private Integer gender;
+
   public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId,
       String uuid) {
     return MemberEntity.builder()
@@ -62,6 +65,7 @@ public class StudentRegisterRequest {
         .tabletNo(tabletNo)
         .uuid(uuid)
         .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
+        .gender(gender)
         .build();
   }
 }
