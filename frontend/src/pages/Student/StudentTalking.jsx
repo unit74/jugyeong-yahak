@@ -6,8 +6,7 @@ import styles from "./StudentDiary.module.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { Configuration, OpenAIApi } from "openai";
-import axios from 'axios';
+import { Configuration, OpenAIApi } from "openai";;
 
 
 export default function StudentTalking() {
@@ -15,6 +14,7 @@ export default function StudentTalking() {
   const [generatedText, setGeneratedText] = useState('');
   const [speechWord, setSpeechWord] = useState('');
   const debounceTerm = useDebounce(speechWord, 2000);
+  const [isGenerating, setIsGenerating] = useState(false); 
 
   // 음성 인식
   const {
@@ -31,33 +31,43 @@ export default function StudentTalking() {
     return () => clearTimeout(timer);
   }, []);
   
+  // 2. transcript를 speechWord에 저장
   useEffect(() => {
     setSpeechWord(transcript); 
   }, [transcript]);
 
+  //함수
 
+  // 1. API요청 함수
+  const generateText = async () => {
+    if (!isGenerating) {
+      setIsGenerating(true);
 
-  async function generateText() {
-    const configuration = new Configuration({
-      apiKey: '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',
-    });
-    const openai = new OpenAIApi(configuration);
-  
-    try {
-      const response = await openai.createCompletion({
-        model: "text-davinci-003",
-        prompt: `다음 내용을 4줄짜리 짧은 일기로 만들어줘 : ${debounceTerm}`, // 원하는 프롬프트로 수정
-        max_tokens: 7,
-        temperature: 0,
-      });
-  
-      const generatedText = response.data.choices[0].text;
-      console.log("Generated Text:", generatedText);
-    } catch (error) {
-      console.error("Error:", error);
+      try {
+        const apiKey = '';
+
+        const configuration = new Configuration({
+          apiKey: apiKey,
+        });
+        const openai = new OpenAIApi(configuration);
+
+        const response = await openai.createChatCompletion({
+          model: "gpt-3.5-turbo",
+          messages: [
+            {"role": "system", "content": "네 문장으로 짧게, 할머니가 쓴 일기처럼 작성해줘."},
+            {role: "user", content: debounceTerm}
+          ],
+        });
+
+        const generatedMessage = response.data.choices[0].message.content;
+        setGeneratedText(generatedMessage);
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        setIsGenerating(false);
+      }
     }
-  
-  }
+  };
 
 
   return (
