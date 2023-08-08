@@ -1,6 +1,5 @@
 package com.ssafy.http.apis.members.responses;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StudentDetailResponse {
 
   private Long id;
