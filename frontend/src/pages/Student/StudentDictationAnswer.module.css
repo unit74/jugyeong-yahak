@@ -30,14 +30,6 @@
 }
 /* 여기까지 공통 */
 
-.container {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: 80vw;
-  margin: 0 auto;
-}
-
 .square * {
   user-select: none;
 }
