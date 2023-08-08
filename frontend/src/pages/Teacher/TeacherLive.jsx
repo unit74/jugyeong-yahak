@@ -1,173 +1,468 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import UserVideoComponent from '../../components/UserVideoComponent';
-import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import { OpenVidu } from "openvidu-browser";
+import { Route, Routes } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
-export default function TeacherLive() {
-  const { state } = useLocation();
-  const { clazz } = state;
+import axios from "axios";
+import React, { Component } from "react";
+// import "./TeacherLive.module.css";
+import UserVideoComponent from "../../components/UserVideoComponent";
+import About from "./sample/About";
+import Home from "./sample/Home";
+const BASE_URL = "https://i9e206.p.ssafy.io";
 
-  const [mainStreamManager, setMainStreamManager] = useState(undefined);
-  const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
+function TeacherLive() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  return <OpenViduSession state={location.state} navigate={navigate} />;
+}
 
-  const [mySession, setMySession] = useState(null);
+class OpenViduSession extends Component {
+  constructor(props) {
+    super(props);
 
-  const openVidu = new OpenVidu();
-  const mySessionId = clazz.no;
-  const myUserName = '교사 이름';
-
-  const BASE_URL = 'https://i9e206.p.ssafy.io';
-  // const BASE_URL = "http://localhost:8080";
-
-  useEffect(() => {
-    joinSession();
-
-    return () => {
-      leaveSession();
+    this.state = {
+      navigate: props.navigate,
+      clazz: props.state.clazz,
+      mySessionId: props.state.clazz.no,
+      myUserName: "교사 이름",
+      session: undefined,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+      trace: false,
+      mouse: { x: null, y: null },
+      mic: true,
     };
-  }, []);
 
-  const joinSession = () => {
-    const session = openVidu.initSession();
-    console.log('조인 세션 접속 ' + session);
+    this.joinSession = this.joinSession.bind(this);
+    this.leaveSession = this.leaveSession.bind(this);
+    this.handleChangeSessionId = this.handleChangeSessionId.bind(this);
+    this.handleChangeUserName = this.handleChangeUserName.bind(this);
+    this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
+    this.onbeforeunload = this.onbeforeunload.bind(this);
+    this.handleConnect = this.handleConnect.bind(this);
+    this.updateMousePosition = this.updateMousePosition.bind(this);
+    this.handlePageMove = this.handlePageMove.bind(this);
+  }
 
-    session.on('streamCreated', (event) => {
-      const subscriber = session.subscribe(event.stream, undefined);
+  componentDidMount() {
+    this.login(); // 일단 여기서 임시로 로그인
+    this.joinSession();
+    window.addEventListener("mousemove", this.updateMousePosition);
+    window.addEventListener("beforeunload", this.onbeforeunload);
+  }
 
-      setSubscribers((prevSubscribers) => [...prevSubscribers, subscriber]);
+  componentWillUnmount() {
+    window.removeEventListener("mousemove", this.updateMousePosition);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
+  }
+
+  onbeforeunload(event) {
+    this.leaveSession();
+  }
+
+  handleChangeSessionId(e) {
+    this.setState({
+      mySessionId: e.target.value,
     });
+  }
 
-    session.on('streamDestroyed', (event) => {
-      deleteSubscriber(event.stream.streamManager);
+  handleChangeUserName(e) {
+    this.setState({
+      myUserName: e.target.value,
     });
+  }
 
-    session.on('exception', (exception) => {
-      console.warn(exception);
-    });
-
-    session.on('signal:userChanged', (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data);
-    });
-
-    getToken().then((token) => {
-      session
-        .connect(token, { clientData: myUserName })
-        .then(async () => {
-          let publisher = await openVidu.initPublisherAsync(undefined, {
-            audioSource: undefined,
-            videoSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
-            resolution: '640x480',
-            frameRate: 30,
-            insertMode: 'APPEND',
-          });
-
-          session.publish(publisher);
-
-          setMainStreamManager(publisher);
-          setPublisher(publisher);
-        })
-        .catch((error) => {
-          console.log('There was an error connecting to the session:', error.code, error.message);
-        });
-    });
-
-    setMySession(session);
-  };
-
-  const leaveSession = async () => {
-    if (mySession && mySession.connection) {
-      try {
-        await mySession.disconnect();
-      } catch (error) {
-        console.error('Error while disconnecting session:', error);
-      }
-      setMySession(null);
+  handleMainVideoStream(stream) {
+    if (this.state.mainStreamManager !== stream) {
+      this.setState({
+        mainStreamManager: stream,
+      });
     }
-  };
+  }
 
-  const getToken = async () => {
-    const sessionId = await createSession(mySessionId);
-    return await createToken(sessionId);
-  };
+  deleteSubscriber(streamManager) {
+    let subscribers = this.state.subscribers;
+    let index = subscribers.indexOf(streamManager, 0);
+    if (index > -1) {
+      subscribers.splice(index, 1);
+      this.setState({
+        subscribers: subscribers,
+      });
+    }
+  }
 
-  const createSession = async (sessionId) => {
-    const response = await axios.post(
-      BASE_URL + '/api/v1/openvidu/sessions',
-      { customSessionId: sessionId + '' },
+  joinSession() {
+    this.OV = new OpenVidu();
+
+    this.setState(
       {
-        headers: { 'Content-Type': 'application/json' },
+        session: this.OV.initSession(),
+      },
+      () => {
+        var mySession = this.state.session;
+
+        mySession.on("streamCreated", (event) => {
+          var subscriber = mySession.subscribe(event.stream, undefined);
+          var subscribers = this.state.subscribers;
+          subscribers.push(subscriber);
+
+          this.setState({
+            subscribers: subscribers,
+          });
+        });
+
+        mySession.on("streamDestroyed", (event) => {
+          this.deleteSubscriber(event.stream.streamManager);
+        });
+
+        mySession.on("exception", (exception) => {
+          console.warn(exception);
+        });
+
+        this.getToken().then((token) => {
+          mySession
+            .connect(token, { clientData: this.state.myUserName })
+            .then(async () => {
+              let publisher = await this.OV.initPublisherAsync(undefined, {
+                audioSource: undefined,
+                videoSource: undefined,
+                publishAudio: true,
+                publishVideo: true,
+                resolution: "640x480",
+                frameRate: 30,
+                insertMode: "APPEND",
+                mirror: false,
+              });
+
+              mySession.publish(publisher);
+
+              this.setState(
+                {
+                  mainStreamManager: publisher,
+                  publisher: publisher,
+                },
+                () => {
+                  this.handleConnect();
+                }
+              );
+            })
+            .catch((error) => {
+              console.log(
+                "There was an error connecting to the session:",
+                error.code,
+                error.message
+              );
+            });
+        });
       }
     );
-    return response.data; // The sessionId
-  };
+  }
 
-  const createToken = async (sessionId) => {
-    const response = await axios.post(BASE_URL + '/api/v1/openvidu/' + sessionId + '/connections', {
-      headers: { 'Content-Type': 'application/json' },
+  leaveSession() {
+    const mySession = this.state.session;
+
+    if (mySession) {
+      mySession.disconnect();
+    }
+
+    this.OV = null;
+    this.setState({
+      session: undefined,
+      mainStreamManager: undefined,
+      publisher: undefined,
+      subscribers: [],
+      trace: false,
+      mouse: { x: null, y: null },
+      mic: true,
     });
-    return response.data; // The token
-  };
+  }
 
-  const deleteSubscriber = (streamManager) => {
-    setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== streamManager));
-  };
-
-  const sendSignalUserChanged = (data) => {
-    const signalOptions = {
-      data: JSON.stringify(data),
-      type: 'userChanged',
+  handleConnect() {
+    const eventSourceInitDict = {
+      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
     };
 
-    mySession.signal(signalOptions);
-  };
+    const sse = new EventSourcePolyfill(
+      `${BASE_URL}/sse/v1/subscribe?streamId=${this.state.publisher.stream.connection.connectionId}&classId=${this.state.mySessionId}`,
+      eventSourceInitDict
+    );
 
-  return (
-    <div>
-      <h1>{clazz.name} 라이브 중 입니다.</h1>
-      <div
-        id='video-container'
-        style={{
-          display: 'inline-block',
-          width: '100px',
-          height: '100px',
-        }}
-      >
-        <div>
-          {publisher !== undefined ? <UserVideoComponent streamManager={publisher} /> : null}
-        </div>
-        <div>
-          {subscribers !== undefined
-            ? subscribers.map((sub, i) => (
-                <div key={i} className='stream-container col-md-6 col-xs-6'>
+    sse.addEventListener("connect", (e) => {
+      const { data: receivedConnectData } = e;
+      console.log("Connected! ", receivedConnectData);
+    });
+
+    sse.addEventListener("page", (e) => {
+      const { data: receivedPageNo } = e;
+      this.handlePageMove(receivedPageNo);
+    });
+
+    sse.addEventListener("mic", (e) => {
+      const { data: receivedMicStatus } = e;
+      this.setState({
+        mic: receivedMicStatus,
+      });
+    });
+
+    sse.addEventListener("mouse", (e) => {
+      const { data: receivedMousePointer } = e;
+      this.setState({
+        mouse: JSON.parse(receivedMousePointer),
+      });
+    });
+
+    alert(`Connected`);
+  }
+
+  updateMousePosition(e) {
+    this.handleMousePointerRequest(e.clientX, e.clientY);
+  }
+
+  handlePageMove(page) {
+    if (page === "1") this.state.navigate("/teacher-live");
+    else if (page === "2") this.state.navigate("/teacher-live/about");
+  }
+
+  render() {
+    const mySessionId = this.state.mySessionId;
+    const myUserName = this.state.myUserName;
+    const clazz = this.state.clazz;
+
+    return (
+      <div className="container">
+        <h1>{clazz.name} 라이브 중입니다.</h1>
+        {this.state.session !== undefined ? (
+          <div id="session">
+            <div id="session-header">
+              <h1 id="session-title">{mySessionId}</h1>
+              <input
+                className="btn btn-large btn-danger"
+                type="button"
+                id="buttonLeaveSession"
+                onClick={this.leaveSession}
+                value="Leave session"
+              />
+              <input
+                className="btn btn-large btn-success"
+                type="button"
+                id="buttonSwitchCamera"
+                onClick={this.switchCamera}
+                value="Switch Camera"
+              />
+            </div>
+
+            {this.state.mainStreamManager !== undefined ? (
+              <div
+                id="main-video"
+                style={{
+                  display: "inline-block",
+                  width: "200px",
+                  height: "200px",
+                }}
+              >
+                <div>교사 : {myUserName}님</div>
+                <UserVideoComponent streamManager={this.state.mainStreamManager} />
+              </div>
+            ) : null}
+            <div id="video-container" className="col-md-6">
+              {this.state.publisher !== undefined ? (
+                <div
+                  className="stream-container"
+                  style={{
+                    display: "inline-block",
+                    width: "200px",
+                    height: "200px",
+                  }}
+                  onClick={() => this.handleMainVideoStream(this.state.publisher)}
+                >
+                  <div>본인</div>
+                  <UserVideoComponent streamManager={this.state.publisher} />
+                </div>
+              ) : null}
+              {this.state.subscribers.map((sub, i) => (
+                <div
+                  key={sub.id}
+                  style={{
+                    display: "inline-block",
+                    width: "200px",
+                    height: "200px",
+                  }}
+                  className="stream-container"
+                  onClick={() => this.handleMainVideoStream(sub)}
+                >
+                  <input
+                    type="checkbox"
+                    onChange={(e) => {
+                      this.handleMicControlRequest(
+                        sub.stream.connection.connectionId,
+                        e.target.checked
+                      );
+                    }}
+                  />
                   <span>{sub.id}</span>
                   <UserVideoComponent streamManager={sub} />
                 </div>
-              ))
-            : null}
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        <hr></hr>
+        <div>
+          {/* 페이지 변경 시작 */}
+          <button onClick={() => this.handlePageMoveRequest(1)}>
+            Home 페이지로 이동 변경 요청
+          </button>
+          <button onClick={() => this.handlePageMoveRequest(2)}>
+            About 페이지로 이동 변경 요청
+          </button>
+          {/* 페이지 변경 끝 */}
+
+          {/* 마우스 트레킹 시작 */}
+          <div>
+            <label>마우스 트레이싱 : </label>
+            <input
+              type="checkbox"
+              onChange={(e) => {
+                this.setState({
+                  trace: e.target.checked,
+                });
+              }}
+            />
+          </div>
+          {/* 마우스 트레킹 끝 */}
+        </div>
+        <hr></hr>
+        <div>
+          <h1>실시간 정보들</h1>
+          <div>
+            Mouse : {this.state.mouse.x} {this.state.mouse.y}
+          </div>
+          <div>
+            Mic : <input type="checkbox" disabled={true} checked={this.state.mic === "true"} />
+          </div>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
         </div>
       </div>
+    );
+  }
 
-      <div>
-        <button
-          onClick={() => {
-            sendSignalUserChanged({ isAudioAction: false });
-          }}
-        >
-          Signal 보내보기
-        </button>
-        <button
-          onClick={() => {
-            leaveSession();
-          }}
-        >
-          종료해보기
-        </button>
-      </div>
-    </div>
-  );
+  async login() {
+    await axios
+      .post(`${BASE_URL}/api/v1/auth/governments/login`, {
+        // 지자체 로그인으로 우선 테스트
+        identification: "string", // 아이디 비밀번호가 실제로 string/string임..
+        password: "string",
+      })
+      .then(function (response) {
+        const data = response.data.data;
+
+        localStorage.setItem("token", data.token);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  async getToken() {
+    const sessionId = await this.createSession(this.state.mySessionId);
+    return await this.createToken(sessionId);
+  }
+
+  async createSession(sessionId) {
+    const response = await axios.post(
+      BASE_URL + "/api/v1/openvidu/sessions",
+      { customSessionId: sessionId + "" },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  }
+
+  async createToken(sessionId) {
+    const response = await axios.post(
+      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    return response.data;
+  }
+
+  async handlePageMoveRequest(pageNo) {
+    await axios
+      .post(
+        `${BASE_URL}/api/v1/private/lecture/convert/page`,
+        {
+          classId: this.state.mySessionId,
+          streamId: this.state.publisher.stream.connection.connectionId,
+          number: pageNo,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(function (response) {})
+      .catch(function (error) {
+        console.log("error", error);
+      });
+  }
+
+  async handleMicControlRequest(target, status) {
+    await axios
+      .post(
+        `${BASE_URL}/api/v1/private/lecture/mic/control`,
+        {
+          classId: this.state.mySessionId,
+          streamId: target,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(function (response) {})
+      .catch(function (error) {
+        console.log("error", error);
+      });
+  }
+
+  async handleMousePointerRequest(x, y) {
+    if (!this.state.trace) {
+      return;
+    }
+
+    await axios
+      .post(
+        `${BASE_URL}/api/v1/private/lecture/mouse/pointer`,
+        {
+          classId: this.state.mySessionId,
+          streamId: this.state.publisher.stream.connection.connectionId,
+          x: x,
+          y: y,
+        },
+        {
+          headers: {
+            Authorization: `${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then(function (response) {})
+      .catch(function (error) {
+        console.log("error", error);
+      });
+  }
 }
+
+export default TeacherLive;
