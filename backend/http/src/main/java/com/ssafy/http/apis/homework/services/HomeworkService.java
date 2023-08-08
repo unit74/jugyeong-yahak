@@ -1,6 +1,5 @@
 package com.ssafy.http.apis.homework.services;
 
-import com.ssafy.http.apis.homework.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.homework.responses.LibraryResponse;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
@@ -14,8 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class HomeworkService {
-
-  private final HomeworkHistoryRepository homeworkHistoryRepository;
+  
   private final MemberRepository memberRepository;
   private final EntityManager em;
 
