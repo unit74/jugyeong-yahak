@@ -53,3 +53,6 @@
   margin-right: 10%;
   margin-bottom: 10%;
 }
+.square * {
+  user-select: none;
+}

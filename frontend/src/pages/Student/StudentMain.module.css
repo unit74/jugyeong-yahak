@@ -110,3 +110,7 @@
     opacity: 0;
   }
 }
+
+.square * {
+  user-select: none;
+}
