@@ -79,7 +79,6 @@ const StudentReviewTheme = () => {
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
-      <Audio path={"sS_RW_LW"} />
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
