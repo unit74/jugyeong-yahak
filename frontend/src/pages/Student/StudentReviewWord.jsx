@@ -5,12 +5,13 @@ import styles from "./StudentReviewWord.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
+
 export default function StudentReviewWord() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
-
+  
   useEffect(() => {
     dispatch(fetchTheme());
     const timer = setTimeout(() => {
@@ -23,6 +24,8 @@ export default function StudentReviewWord() {
     };
   }, [navigate]);
 
+  console.log(wordsList)
+  console.log(wordIndex)
   return (
     <div className={styles.main}>
       <div className={styles.square}>
