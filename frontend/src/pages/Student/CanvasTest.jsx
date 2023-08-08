@@ -56,35 +56,40 @@ export default function CanvasTest() {
     }
   };
 
-    
-    // useEffect
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  // useEffect
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      // 1. 정답 체크를 위해 현재 단어를 불러온다.
-      dispatch(fetchTheme());
+  useEffect(() => {
+    // 1. 정답 체크를 위해 현재 단어를 불러온다.
+    dispatch(fetchTheme());
 
-      // 2. OCR 결과가 들어오면, 정답과 비교하여 피드백해줌
-      if (studentAns) {
-        if (studentAns === wordsList[wordIndex]?.word) {
-          navigate("/good-feedback", { state: { course: "writing" } }); 
-        } else {
-          navigate("/bad-feedback", { state: { course: "writing" } }); 
-        }
+    // 2. OCR 결과가 들어오면, 정답과 비교하여 피드백해줌
+    if (studentAns) {
+      if (studentAns === wordsList[wordIndex]?.word) {
+        navigate("/good-feedback", { state: { course: "writing" } }); 
+      } else {
+        navigate("/bad-feedback", { state: { course: "writing" } }); 
       }
-    }, [studentAns]);
+    }
+  }, [studentAns]);
 
-  // 태그 생성부분
+  // DOM
   return (
     <div>
         <h1>캔버스 테스트</h1>
-          <CanvasDraw ref={canvasRef} />
-          <button onClick={handleClear}>그림 삭제</button>
-          <button onClick={handleDownload}>다운로드</button>
+          <CanvasDraw 
+          ref={canvasRef}
+          brushRadius={5}
+          lazyRadius={12}
+          canvasWidth={1800}
+          canvasHeight={800} />
+          
+          <button onClick={handleClear}>모두 지우기</button>
+          <button onClick={handleDownload}>다 적었어요</button>
           <h1 className={styles.situationText}>
               {studentAns}
-            </h1>
+          </h1>
     </div>
   );
 }
