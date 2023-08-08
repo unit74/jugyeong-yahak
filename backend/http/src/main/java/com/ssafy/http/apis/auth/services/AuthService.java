@@ -4,11 +4,9 @@ import com.ssafy.http.apis.auth.dtos.MemberLoginDto;
 import com.ssafy.http.apis.auth.requests.GovernmentLoginRequest;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.jwt.JwtTokenProvider;
 import com.ssafy.http.jwt.dtos.TokenDto;
 import com.ssafy.http.redis.services.RedisService;
-import com.ssafy.http.support.codes.ErrorCode;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,14 +47,12 @@ public class AuthService {
     String uuid = faceLoginService.faceLogin(loginImage, governmentId, labels);
 
     //UUID로 MemberEntity
-    MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).get();
-
-    if (member == null) { //null이다 -> 사용자 발견하지 못한 것
-      new RegisterIdentificationException(ErrorCode.NOT_FOUND_ERROR);
-    }
+    MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).orElseThrow(
+        () -> new IllegalArgumentException("사람을 찾지 못했습니다"));
 
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(member.getId() + " " + member.getRole().getRole(),
+        new UsernamePasswordAuthenticationToken(
+            member.getId() + " " + member.getRole().getRole(),
             member.getUuid());
 
     Authentication authentication = authenticationManagerBuilder.getObject()
