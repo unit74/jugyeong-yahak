@@ -12,12 +12,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentRegisterRequest {
-
-  //@NotNull
-  private Long governmentId;
-
-  //@NotNull
+public class StudentRequest {
+  
   private Long classId;
 
   //private Long role;
@@ -48,8 +44,9 @@ public class StudentRegisterRequest {
   @NotNull
   private Integer gender;
 
-  public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId,
+  public MemberEntity toEntityForRegister(String urlPrefix, String urlPostfix, Long governmentId,
       String uuid) {
+
     return MemberEntity.builder()
         .governmentId(governmentId)
         .password(uuid)
@@ -68,4 +65,27 @@ public class StudentRegisterRequest {
         .gender(gender)
         .build();
   }
+
+  public MemberEntity toEntityForUpdate(MemberEntity entity) {
+
+    return MemberEntity.builder()
+        .id(entity.getId())
+        .governmentId(entity.getGovernmentId())
+        .password(entity.getPassword())
+        .classId(classId)
+        .role(RoleEntity.builder()
+            .role(Role.STUDENT)
+            .build())
+        .statusCode(statusCode)
+        .name(name)
+        .phone(phone)
+        .address(address)
+        .firstResponder(firstResponder)
+        .tabletNo(tabletNo)
+        .uuid(entity.getUuid())
+        .faceImageUrl(entity.getFaceImageUrl())
+        .gender(entity.getGender())
+        .build();
+  }
 }
+
