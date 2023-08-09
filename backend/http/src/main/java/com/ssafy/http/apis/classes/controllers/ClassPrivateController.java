@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,19 +40,17 @@ public class ClassPrivateController {
   }
 
 
-  @GetMapping("/list") //교사가 속한 반 전체 조회
-  public ResponseEntity<?> getGovernmentClasses() {
-
-    //Long governmentId = memberService.getGovernmentId(SecurityUtil.getLoginUserId());
+  @GetMapping
+  public ResponseEntity<?> getClasses() {
 
     List<ClassDetailResponse> classDetailResponses = classService.getClassList(
-        SecurityUtil.getLoginUserId());
+        SecurityUtil.getLoginUserId(), SecurityUtil.getLoginUserRole());
 
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "지자체가 만든 반을 전체조회 하였습니다.",
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "반을 전체조회 하였습니다.",
         classDetailResponses);
   }
 
-  @DeleteMapping("/one")
+  @DeleteMapping
   public ResponseEntity<?> deleteClass(@RequestBody Map<String, Long> requestData) {
 
     if (requestData.get("id") == null) {
@@ -62,31 +61,32 @@ public class ClassPrivateController {
 
     return createSuccessResponse(SuccessCode.DELETE_SUCCESS,
         requestData.get("id") + " 반을 삭제하였습니다.",
-        classService.getClassList(SecurityUtil.getLoginUserId())
+        classService.getClassList(SecurityUtil.getLoginUserId(), SecurityUtil.getLoginUserRole())
     );
   }
 
-  @PutMapping("/one")
+  @PutMapping
   public ResponseEntity<?> putClass(@RequestBody ClassRequest classrequest) {
-    //SecurityUtil.getLoginUserId()
-    classService.updateClass(classrequest, 4L);
+
+    classService.updateClass(classrequest, SecurityUtil.getLoginUserId());
 
     System.out.println("여기까지 오나?");
 
     //204라서 response가 안보임
     return createSuccessResponse(SuccessCode.UPDATE_SUCCESS,
         " 반을 수정하였습니다.",
-        classService.getClassList(SecurityUtil.getLoginUserId()) //상세 보기로 변경할 예정?
+        classService.getClassList(SecurityUtil.getLoginUserId(), SecurityUtil.getLoginUserRole())
+        //상세 보기로 변경할 예정?
     );
   }
 
-  @PostMapping("/one")
-  public ResponseEntity<?> getClassDetails(@RequestBody Map<String, Long> requestData) {
-    if (requestData.get("id") == null) {
+  @PostMapping("/{classId}")
+  public ResponseEntity<?> getClassDetails(@PathVariable Long classId) {
+    if (classId == null) {
       return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
     }
 
-    ClassDetailResponse classDetailResponse = classService.selectOne(requestData.get("id"));
+    ClassDetailResponse classDetailResponse = classService.selectOne(classId);
 
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS,
         classDetailResponse.getId() + " 반을 상세 조회하였습니다.",

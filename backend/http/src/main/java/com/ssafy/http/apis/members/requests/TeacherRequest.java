@@ -3,7 +3,6 @@ package com.ssafy.http.apis.members.requests;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
-import java.util.UUID;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,15 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherRegisterRequest {
-
-  //@NotNull
-  private Long governmentId;
+public class TeacherRequest {
 
   //@NotNull
   private Long classId;
-
-  //private Long role;
 
   @NotNull
   @NotEmpty
@@ -39,14 +33,19 @@ public class TeacherRegisterRequest {
   @NotEmpty
   private String address;
 
-  //@NotNull
+  @NotNull
+  @NotEmpty
+  private Integer gender;
+
+  @NotNull
   private Long tabletNo;
 
-  public MemberEntity toEntity(String urlPrefix, String urlPostfix, Long governmentId) {
-    String uuid = UUID.randomUUID().toString();
+  public MemberEntity toEntityForRegister(String urlPrefix, String urlPostfix, Long governmentId,
+      String uuid) {
 
     return MemberEntity.builder()
         .governmentId(governmentId)
+        .password(uuid)
         .classId(classId)
         .role(RoleEntity.builder()
             .role(Role.TEACHER)
@@ -55,10 +54,30 @@ public class TeacherRegisterRequest {
         .name(name)
         .phone(phone)
         .address(address)
-        //.firstResponder(firstResponder)
         .tabletNo(tabletNo)
         .uuid(uuid)
         .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
+        .gender(gender)
+        .build();
+  }
+
+  public MemberEntity toEntityForUpdate(MemberEntity memberEntity) {
+
+    return MemberEntity.builder()
+        .governmentId(memberEntity.getGovernmentId())
+        .password(memberEntity.getPassword())
+        .classId(classId)
+        .role(RoleEntity.builder()
+            .role(Role.TEACHER)
+            .build())
+        .statusCode(statusCode)
+        .name(name)
+        .phone(phone)
+        .address(address)
+        .tabletNo(tabletNo)
+        .uuid(memberEntity.getUuid())
+        .faceImageUrl(memberEntity.getFaceImageUrl())
+        .gender(memberEntity.getGender())
         .build();
   }
 }
