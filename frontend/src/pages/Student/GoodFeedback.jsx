@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./GoodFeedback.module.css";
 import good from "../../assets/images/good_feedback.png";
 import confetti from "canvas-confetti";
+import TTS from "../Common/TTS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setWordIndex } from "../../store/actions/setWordIndexAction";
@@ -14,17 +15,37 @@ export default function GoodFeedback() {
   const course = (location.state && location.state.course) || "";
   const navigate = useNavigate();
 
+  const [msg, setMsg] = useState(null);
+
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (course === "reading") {
-        navigate("/dictation-question");
+        ttsMaker("이제 받아쓰기를 해볼까요?", 0);
+        setTimeout(() => {
+          navigate("/dictation-question");
+        }, 2000);
       } else if (course === "writing" && wordIndex < 5) {
-        dispatch(setWordIndex());
-        navigate("/review-word");
+        ttsMaker("다른 단어를 배워볼까요?", 0);
+        setTimeout(() => {
+          dispatch(setWordIndex());
+          navigate("/review-word");
+        }, 2000);
       } else if (course === "writing" && wordIndex === 5) {
-        navigate("/student-talking");
+        ttsMaker("이제 일기를 써볼까요?", 0);
+        setTimeout(() => {
+          navigate("/diary");
+        }, 2000);
       } else if (course === "diary") {
         navigate("/student-done");
       }
@@ -52,6 +73,17 @@ export default function GoodFeedback() {
             <img src={good} alt="good_img" />
             <b className={styles.b}>잘하셨어요!</b>
           </div>
+          {/* {course === "reading" ? (
+            <TTS message={"이제 받아쓰기를 해볼까요?"} />
+          ) : course === "writing" ? (
+            <TTS message={"이제 일기를 써볼까요?"} />
+          ) : (
+            ""
+          )} */}
+          {msg && (
+            // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
+            <TTS message={msg} />
+          )}
         </div>
       </div>
     </div>
