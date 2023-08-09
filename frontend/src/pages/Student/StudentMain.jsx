@@ -11,11 +11,6 @@ export default function StudentMain() {
   const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
   const [msg, setMsg] = useState(null);
 
-  // useEffect(() => {
-  //   const data = localStorage.getItem("userInfo");
-  //   console.log(data);
-  // }, []);
-
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -26,27 +21,9 @@ export default function StudentMain() {
   };
 
   useEffect(() => {
-    // ttsMaker(`${userInfo.name}님, 안녕하세요!`).then(() => {
-    //   ttsMaker("지금은 혼자 학습 시간입니다.");
-    // });
-
     ttsMaker(`${userInfo.name}님, 안녕하세요!`, 0);
     ttsMaker("지금은 혼자 학습 시간입니다.", 3500);
-
-    // const runTTS = async () => {
-    //   await ttsMaker(`${userInfo.name}님, 안녕하세요!`, 0);
-    //   await ttsMaker("지금은 혼자 학습 시간입니다.", 3500);
-    //   // 여기에 더 많은 메시지 처리를 추가할 수 있음
-    // };
-
-    // runTTS();
-
-    // setTimeout(() => {
-    //   setMsg(`지금은 혼자 학습 시간입니다.`);
-    // }, 1500);
   }, []);
-
-  // const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
@@ -64,10 +41,7 @@ export default function StudentMain() {
           <b className={styles.b}>
             👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
           </b>
-          {msg && (
-            // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
-            <TTS message={msg} />
-          )}
+          {msg && <TTS message={msg} />}
         </div>
         {/*  */}
         <div className={styles.time}>
