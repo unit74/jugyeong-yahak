@@ -1,28 +1,25 @@
-import React,  { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ReactDOM from "react-dom";
 import CanvasDraw from "react-canvas-draw";
 import html2canvas from "html2canvas";
-import saveAs from "file-saver";
 import styles from "./CanvasTest.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
 export default function CanvasTest() {
   // 변수
-  const canvasRef = useRef(null) //캔버스
+  const canvasRef = useRef(null); //캔버스
   const [studentAns, setStudentAns] = useState(""); //인식한 텍스트
   const wordsList = useSelector((state) => state.themeState.wordsList) || []; // 단어 목록
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex); // 현재 차례
 
-
   // 함수
   // 1. 그림 전체 지우기
   const handleClear = () => {
-    if(canvasRef.current) {
-      canvasRef.current.clear()
+    if (canvasRef.current) {
+      canvasRef.current.clear();
     }
-  }
+  };
 
   // 2. 그림 캡쳐 후 OCR
   const handleDownload = async () => {
@@ -43,7 +40,7 @@ export default function CanvasTest() {
           languageHints: ["ko"],
         },
       });
-    
+
       // 응답받은 단어를 StudentAns에 저장
       vision.annotate(req).then(
         (res) => {
@@ -67,29 +64,34 @@ export default function CanvasTest() {
     // 2. OCR 결과가 들어오면, 정답과 비교하여 피드백해줌
     if (studentAns) {
       if (studentAns === wordsList[wordIndex]?.word) {
-        navigate("/good-feedback", { state: { course: "writing" } }); 
+        navigate("/good-feedback", { state: { course: "writing" } });
       } else {
-        navigate("/bad-feedback", { state: { course: "writing" } }); 
+        navigate("/bad-feedback", { state: { course: "writing" } });
       }
     }
   }, [studentAns]);
 
   // DOM
   return (
-    <div>
-        <h1>캔버스 테스트</h1>
-          <CanvasDraw 
-          ref={canvasRef}
-          brushRadius={5}
-          lazyRadius={12}
-          canvasWidth={1800}
-          canvasHeight={800} />
-          
-          <button onClick={handleClear}>모두 지우기</button>
-          <button onClick={handleDownload}>다 적었어요</button>
-          <h1 className={styles.situationText}>
-              {studentAns}
-          </h1>
+    <div className={styles.canvasContainer}>
+      <h1 className={styles.centeredHeading}>여기에 적어 보아요</h1>
+      <CanvasDraw
+        className={styles.canvasDraw} // Apply the new style class
+        ref={canvasRef}
+        brushRadius={5}
+        lazyRadius={12}
+        canvasWidth={1200}
+        canvasHeight={800}
+      />
+      <div className={styles.buttonContainer}>
+        <button className={styles.clearButton} onClick={handleClear}>
+          모두 지우기
+        </button>
+        <button className={styles.downloadButton} onClick={handleDownload}>
+          다 적었어요
+        </button>
+        <h1 className={styles.situationText}>{studentAns}</h1>
+      </div>
     </div>
   );
 }
