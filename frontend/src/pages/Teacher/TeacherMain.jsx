@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 const TeacherMain = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState(""); // userName state 추가
+  // const [userName, setUserName] = useState(""); // userName state 추가
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleClick_1 = () => {
     navigate("/teacher-theme");
@@ -24,13 +26,9 @@ const TeacherMain = () => {
     <div className={styles.ipadPro117}>
       <TeacherHeader />
       <div className={styles.bannerContainer}>
-        <img
-          className={styles.bannerImage}
-          alt=""
-          src="../../rectangle-4220@2x.png"
-        />
+        <img className={styles.bannerImage} alt="" src="../../rectangle-4220@2x.png" />
         <section className={styles.welcome}>
-          <b>👋🏻 {userName} 님, 안녕하세요!</b>
+          <b>👋🏻 {userInfo.name} 님, 안녕하세요!</b>
           <span style={{ display: "block", textAlign: "center" }}>
             주경야학과 함께라면, 언제 어디서든 야학 봉사가 가능합니다!
           </span>
