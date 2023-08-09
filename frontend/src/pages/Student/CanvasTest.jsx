@@ -45,6 +45,7 @@ export default function CanvasTest() {
       vision.annotate(req).then(
         (res) => {
           setStudentAns(res.responses[0]["textAnnotations"][0]["description"]);
+          console.log(res.responses[0]["textAnnotations"][0]["description"])
         },
         (e) => {
           console.log("Error: ", e);
@@ -76,6 +77,7 @@ export default function CanvasTest() {
     <div className={styles.canvasContainer}>
       <h1 className={styles.centeredHeading}>여기에 적어 보아요</h1>
       <CanvasDraw
+        hideInterface
         className={styles.canvasDraw} // Apply the new style class
         ref={canvasRef}
         brushRadius={5}
