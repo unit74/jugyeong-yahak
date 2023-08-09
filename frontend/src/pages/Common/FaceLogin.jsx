@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import * as tmImage from "@teachablemachine/image";
+import axios from "axios";
 
 export default function FaceLogin() {
   const [predictions, setPredictions] = useState([]);
+  const [isCaptured, setisCaptured] = useState(false);
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
@@ -42,7 +44,9 @@ export default function FaceLogin() {
   // 계속 이미지 가져와
   const loop = async () => {
     webcam.update(); // 웹캠 프레임 업데이트
-    await predict(); // 이미지 예측 실행
+    if (!isCaptured) {
+      await predict(); // 이미지 예측 실행
+    }
     window.requestAnimationFrame(loop);
   };
 
@@ -50,14 +54,29 @@ export default function FaceLogin() {
   const predict = async () => {
     const prediction = await model.predict(webcam.canvas);
     setPredictions(prediction);
-    console.log(predictions);
+    // console.log(predictions);
     const notebookClass = prediction.find((p) => p.className === "frontal");
     if (notebookClass && notebookClass.probability === 1) {
       console.log("정면");
     }
   };
 
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(",")[1]);
+    var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    var bb = new Blob([ab], { type: "image/jpeg" });
+    return bb;
+  }
+
   const takePicture = () => {
+    setisCaptured(true);
+
     let width = 500;
     let height = width / (6 / 4);
     let photo = photoRef.current;
@@ -68,11 +87,37 @@ export default function FaceLogin() {
 
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
+
+    var dataUrl = photo.toDataURL("image/jpeg");
+    var blob = dataURItoBlob(dataUrl);
+
+    var formData = new FormData();
+    formData.append("image", blob);
+
+    login(formData);
   };
 
-  useEffect(() => {
-    console.log(predictions);
-  }, [predictions]);
+  const login = (data) => {
+    console.log(data);
+    const governmentId = 4;
+
+    axios
+      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, data, {
+        headers: {
+          accept: "*/*",
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+        },
+      })
+      .then((response) => {
+        console.log("login 성공");
+        console.log(response);
+      })
+      .catch((error) => console.error(`Error: ${error}`));
+  };
+
+  // useEffect(() => {
+  //   console.log(predictions);
+  // }, [predictions]);
 
   useEffect(() => {
     setupWebcam();
