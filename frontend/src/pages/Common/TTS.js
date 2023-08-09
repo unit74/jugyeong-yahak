@@ -1,9 +1,20 @@
 import React, { useEffect } from "react";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
-export default function TTS({ ssml }) {
+export default function TTS({ repeat, message }) {
+  console.log("Received message:", message);
+
+  
   useEffect(() => {
-    
+    // SSML 생성
+    const ssmlTemplate = `
+      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ko-KR"> 
+        <voice name="ko-KR-InJoonNeural"> 
+          <prosody rate="-25.00%"> ${message} </prosody> 
+        </voice> 
+      </speak>
+    `;
+
     // 오디오 권한 요청
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
@@ -16,7 +27,7 @@ export default function TTS({ ssml }) {
         const synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig);
 
         synthesizer.speakSsmlAsync(
-          ssml,
+          ssmlTemplate,
           result => {
             if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
               console.log("synthesis finished.");
@@ -36,7 +47,7 @@ export default function TTS({ ssml }) {
         console.error('Access denied:', err);
       });
     
-  }, [ssml]);
+  }, [repeat, message]);
 
   return null;
 }

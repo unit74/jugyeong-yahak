@@ -10,12 +10,14 @@ import { fetchTheme } from "../../store/actions/themeAction";
 
 import { useDebounce } from "../Common/hooks/useDebounce";
 import speak from "../../assets/images/speak.png";
+import TTS from "../Common/TTS";
 
 export default function StudentRecordWord() {
   // DB에 저장된 단어 가져오기
   const dispatch = useDispatch();
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const [repeatValue, setRepeatValue] = useState(0); // prop을 새로 넣어줌으로써 TTS를 리렌더링 시킨다.
 
   // 음성인식 관련
   const { transcript, listening, browserSupportsSpeechRecognition } =
@@ -45,7 +47,12 @@ export default function StudentRecordWord() {
   }, [debounceTerm]);
 
   useEffect(() => {
-    dispatch(fetchTheme());
+    const intervalsForRepeat = [8800, 16800]; // 처음은 word 불러오고 나면 실행 됨
+    const timersForRepeat = intervalsForRepeat.map((interval) => {
+      return setTimeout(() => {
+        setRepeatValue((prev) => prev + 1);
+      }, interval);
+    });
 
     const startListeningWithDelay = (delay) => {
       return setTimeout(() => {
@@ -54,24 +61,18 @@ export default function StudentRecordWord() {
       }, delay);
     };
 
-    // 첫번째 음성인식 시작
-    const timer1 = startListeningWithDelay(800);
+    const intervalsForListening = [1800, 9800, 17800, 25800]; // 녹음은 3번하고 마지막 4번째는 카운트를 올려서 피드백실행 하려고 넣음
+    const timersForListening = intervalsForListening.map((interval) => {
+      return startListeningWithDelay(interval);
+    });
 
-    // 8초 후 두번째 음성인식 시작 (5초 녹음후 디바운스텀 고려)
-    const timer2 = startListeningWithDelay(8800);
+    dispatch(fetchTheme());
 
-    // 16초 후 세번째 음성인식 시작 (5초 녹음후 디바운스텀 고려)
-    const timer3 = startListeningWithDelay(16800);
-
-    // 24초 후 세번째 음성인식 시작 (5초 녹음후 디바운스텀 고려)
-    const timer4 = startListeningWithDelay(24800); // 끝내기 위해서 한번더 호출
-
+    // 언마운트될 때, 모든 타이머 클리어
     return () => {
-      // 워드 리스트 빈배열로 바꿔줭
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-      clearTimeout(timer4);
+      [...timersForRepeat, ...timersForListening].forEach((timer) =>
+        clearTimeout(timer)
+      );
     };
   }, []);
 
@@ -109,6 +110,12 @@ export default function StudentRecordWord() {
             <h1 className={styles.situationText}>
               {wordsList.length > 0 && wordsList[wordIndex].word}
             </h1>
+          </div>
+          <div>
+            {wordsList[wordIndex].word && (
+              <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
+            )}
+            {/* && 앞에 조건을 Redux에서 불러오는 걸로 해둬야 불러오기전에 TTS 실행을 안함 */}
           </div>
           <div className={styles.microphone}>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Audio from "../Common/Audio";
+import TTS from "../Common/TTS";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
@@ -79,6 +79,7 @@ const StudentReviewTheme = () => {
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
+      {/* {themeSituation && <TTS message={themeSituation} />} */}
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
