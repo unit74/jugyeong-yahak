@@ -1,7 +1,7 @@
 import "./App.css";
-import React, { useEffect } from "react";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import React from "react";
+import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
+import { Provider, useSelector } from "react-redux";
 import store from "./store"; // Redux Store를 import 해야 함
 
 // pages
@@ -15,6 +15,7 @@ import StudyClassPage from "./pages/Government/ClassPage";
 //Student
 // Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
+import StudentBook from "./pages/Student/StudentBook";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 
@@ -44,6 +45,7 @@ import TeacherMain from "./pages/Teacher/TeacherMain";
 import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
 import TeacherTheme from "./pages/Teacher/TeacherTheme";
+import TeacherClass from "./pages/Teacher/TeacherClass";
 import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 // Teacher_실시간 강의
@@ -54,12 +56,10 @@ function App() {
   return (
     <Provider store={store}>
       <Routes>
-        {/* Common */}
-        <Route path="*" element={<NotFound />} />
-
         {/* Student */}
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
+        <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
@@ -70,10 +70,7 @@ function App() {
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-main" element={<StudentDictationMain />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route
-          path="/dictation-question"
-          element={<StudentDictationQuestion />}
-        />
+        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -88,14 +85,12 @@ function App() {
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
-        <Route
-          path="/teacher-studentprogress"
-          element={<TeacherStudentProgress />}
-        />
+        <Route path="/teacher-class" element={<TeacherClass />} />
+        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
-        {/* <Route path="/teacher-live" element={<TeacherLive />} /> */}
+        <Route path="/teacher-live/*" element={<TeacherLive />} />
 
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
@@ -108,6 +103,8 @@ function App() {
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
         <Route path="/facetest" element={<FaceLogin />} />
+        {/* Common */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Provider>
   );
