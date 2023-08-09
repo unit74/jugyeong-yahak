@@ -44,7 +44,7 @@ export default function StudentTalking() {
       setIsGenerating(true);
 
       try {
-        const apiKey = '';
+        const apiKey = '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';
 
         const configuration = new Configuration({
           apiKey: apiKey,
