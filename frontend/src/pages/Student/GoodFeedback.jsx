@@ -24,7 +24,7 @@ export default function GoodFeedback() {
         dispatch(setWordIndex());
         navigate("/review-word");
       } else if (course === "writing" && wordIndex === 5) {
-        navigate("/diary");
+        navigate("/student-talking");
       } else if (course === "diary") {
         navigate("/student-done");
       }
