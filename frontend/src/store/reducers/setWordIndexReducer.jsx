@@ -17,7 +17,7 @@ const setWordIndexReducer = (state = initialState, action) => {
       } else {
         return {
           ...state,
-          wordIndex: state.wordIndex + 1,
+          wordIndex: (state.wordIndex + 1) % 5,
         };
       };
     default:

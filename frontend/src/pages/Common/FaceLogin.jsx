@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import styles from "../Student/StudentMain.module.css";
 import * as tmImage from "@teachablemachine/image";
 import axios from "axios";
+import TTS from "../Common/TTS";
 
 export default function FaceLogin() {
   const [predictions, setPredictions] = useState([]);
   // const [isCaptured, setisCaptured] = useState(true);
   const [fade, setFade] = useState(false);
+  const [msg, setMsg] = useState(null);
 
   const navigate = useNavigate();
 
@@ -20,6 +22,15 @@ export default function FaceLogin() {
   const modelMetadataURL = modelURL + "metadata.json";
 
   let model, webcam;
+
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
 
   // 웹캠 세팅
   const setupWebcam = async () => {
@@ -138,7 +149,9 @@ export default function FaceLogin() {
         // setisCaptured(true);
         setTimeout(() => {
           isCaptured.current = true;
+          ttsMaker("로그인 실패! 얼굴을 중앙에 맞춰주세요.", 0);
         }, 1200); // fadeout 후 이동
+
         console.error(`Error: ${error}`);
       });
   };
@@ -150,6 +163,7 @@ export default function FaceLogin() {
   useEffect(() => {
     setupWebcam();
     initTeachableMachine();
+    ttsMaker("얼굴을 중앙에 맞춰주세요.", 0);
   }, []);
 
   return (
@@ -164,6 +178,10 @@ export default function FaceLogin() {
       </div> */}
       <canvas ref={photoRef} width={500} style={{ display: "none" }}></canvas>
       {/* <button onClick={takePicture}>클릭해서 캡쳐하기</button> */}
+      {msg && (
+        // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
+        <TTS message={msg} />
+      )}
     </div>
   );
 }
