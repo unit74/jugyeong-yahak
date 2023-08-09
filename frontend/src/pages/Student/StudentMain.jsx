@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
@@ -7,6 +7,13 @@ import Audio from "../Common/Audio";
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
+
+  // useEffect(() => {
+  //   const data = localStorage.getItem("userInfo");
+  //   console.log(data);
+  // }, []);
+
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
@@ -21,7 +28,7 @@ export default function StudentMain() {
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
-          <b className={styles.b}>👋🏻 김나연 님, 안녕하세요!</b>
+          <b className={styles.b}>👋🏻 {userInfo.name}님, 안녕하세요!</b>
         </div>
         {/*  */}
         <div className={styles.time}>
