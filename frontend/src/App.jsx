@@ -81,7 +81,7 @@ function App() {
         <Route path="/canvas-test" element={<CanvasTest />} />
 
         {/* 학생 실시간 강의 */}
-        <Route path="/student-live" element={<StudentLive />} />
+        <Route path="/student-live/*" element={<StudentLive />} />
 
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}

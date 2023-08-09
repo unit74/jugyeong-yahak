@@ -1,18 +1,18 @@
-import styles from './StudentLive.module.css';
+import styles from "./StudentLive.module.css";
 
-import { OpenVidu } from 'openvidu-browser';
-import { Route, Routes } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { EventSourcePolyfill } from 'event-source-polyfill';
+import { OpenVidu } from "openvidu-browser";
+import { Route, Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
-import axios from 'axios';
-import React, { Component } from 'react';
+import axios from "axios";
+import React, { Component } from "react";
 // import "./TeacherLive.module.css";
-import UserVideoComponent from '../../components/UserVideoComponent';
-import About from '../Common/About';
-import Home from '../Common/Home';
+import UserVideoComponent from "../../components/UserVideoComponent";
+import About from "../Common/About";
+import Home from "../Common/Home";
 
-const BASE_URL = 'https://i9e206.p.ssafy.io';
+const BASE_URL = "https://i9e206.p.ssafy.io";
 
 export default function StudentLive() {
   const navigate = useNavigate();
@@ -20,9 +20,9 @@ export default function StudentLive() {
   const state = {
     clazz: {
       no: 1,
-      name: '새싹반',
+      name: "새싹반",
     },
-    userName: '김나연',
+    userName: "학생" + Math.floor(Math.random() * 100),
   };
 
   // 태그 생성부분
@@ -52,6 +52,12 @@ class OpenViduSession extends Component {
       trace: false,
       mouse: { x: null, y: null },
       mic: true,
+      theme: null,
+      word: null,
+      choseong: null,
+      page: -1,
+      count: -1,
+      mutes: [],
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -59,16 +65,16 @@ class OpenViduSession extends Component {
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
-    this.handlePageMove = this.handlePageMove.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
   }
 
   componentDidMount() {
     this.joinSession();
-    window.addEventListener('beforeunload', this.onbeforeunload);
+    window.addEventListener("beforeunload", this.onbeforeunload);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onbeforeunload);
+    window.removeEventListener("beforeunload", this.onbeforeunload);
   }
 
   onbeforeunload(event) {
@@ -104,24 +110,28 @@ class OpenViduSession extends Component {
       () => {
         var mySession = this.state.session;
 
-        mySession.on('streamCreated', (event) => {
+        mySession.on("streamCreated", (event) => {
           var subscriber = mySession.subscribe(event.stream, undefined);
           var subscribers = this.state.subscribers;
+          subscriber.publishAudio = true;
           subscribers.push(subscriber);
 
-          console.log(subscribers);
           this.setState({
             subscribers: subscribers,
           });
         });
 
-        mySession.on('streamDestroyed', (event) => {
+        mySession.on("streamDestroyed", (event) => {
           this.deleteSubscriber(event.stream.streamManager);
         });
 
-        mySession.on('exception', (exception) => {
+        mySession.on("exception", (exception) => {
           console.warn(exception);
         });
+
+        this.subscribeToMicControl();
+        this.subscribeToInit();
+        this.subscribeToMouse();
 
         this.getToken().then((token) => {
           mySession
@@ -130,31 +140,24 @@ class OpenViduSession extends Component {
               let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined,
                 videoSource: undefined,
-                publishAudio: true,
+                publishAudio: this.state.mic,
                 publishVideo: true,
-                resolution: '640x480',
+                resolution: "640x480",
                 frameRate: 30,
-                insertMode: 'APPEND',
+                insertMode: "APPEND",
                 mirror: false,
               });
 
               mySession.publish(publisher);
 
-              this.setState(
-                {
-                  mainStreamManager: publisher,
-                  publisher: publisher,
-                },
-                () => {
-                  this.handleConnect();
-                  console.log('Here');
-                  console.log(this.state.mainStreamManager);
-                }
-              );
+              this.setState({
+                mainStreamManager: publisher,
+                publisher: publisher,
+              });
             })
             .catch((error) => {
               console.log(
-                'There was an error connecting to the session:',
+                "There was an error connecting to the session:",
                 error.code,
                 error.message
               );
@@ -177,56 +180,83 @@ class OpenViduSession extends Component {
       mainStreamManager: undefined,
       publisher: undefined,
       subscribers: [],
-      trace: false,
       mouse: { x: null, y: null },
       mic: true,
+      theme: null,
+      word: null,
+      page: -1,
+      count: -1,
+      mutes: [],
     });
   }
 
-  handleConnect() {
-    const eventSourceInitDict = {
-      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
-    };
+  micStatusChanged() {
+    const publisher = this.state.publisher;
+    publisher.isAudioActive = this.state.mic;
+    this.sendSignalUserChanged({ isAudioActive: this.state.mic });
+    this.setState({ publisher: publisher });
+  }
 
-    const sse = new EventSourcePolyfill(
-      `${BASE_URL}/sse/v1/subscribe?streamId=${this.state.publisher.stream.connection.connectionId}&classId=${this.state.mySessionId}`,
-      eventSourceInitDict
-    );
-
-    sse.addEventListener('connect', (e) => {
-      const { data: receivedConnectData } = e;
-      console.log('Connected! ', receivedConnectData);
-    });
-
-    sse.addEventListener('page', (e) => {
-      const { data: receivedPageNo } = e;
-      this.handlePageMove(receivedPageNo);
-    });
-
-    sse.addEventListener('mic', (e) => {
-      const { data: receivedMicStatus } = e;
+  subscribeToMicControl() {
+    this.state.session.on("signal:mic", (event) => {
+      let remoteUsers = this.state.subscribers;
+      remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === event.from.connectionId) {
+          const data = JSON.parse(event.data);
+          console.log("EVENTO REMOTE: ", event.data);
+          if (data.isAudioActive !== undefined) {
+            user.publishAudio = data.isAudioActive;
+          }
+        }
+      });
       this.setState({
-        mic: receivedMicStatus,
+        subscribers: remoteUsers,
       });
     });
+  }
 
-    sse.addEventListener('mouse', (e) => {
-      const { data: receivedMousePointer } = e;
+  subscribeToInit() {
+    this.state.session.on("signal:init", (event) => {
+      let remoteUsers = this.state.subscribers;
+      remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === event.from.connectionId) {
+          const data = JSON.parse(event.data);
+          console.log("EVENTO REMOTE: ", event.data);
+
+          this.handleMainVideoStream(user);
+        }
+      });
       this.setState({
-        mouse: JSON.parse(receivedMousePointer),
+        subscribers: remoteUsers,
       });
     });
-
-    alert(`Connected`);
   }
 
-  updateMousePosition(e) {
-    this.handleMousePointerRequest(e.clientX, e.clientY);
+  subscribeToMouse() {
+    this.state.session.on("signal:mouse", (event) => {
+      const data = JSON.parse(event.data);
+      console.log("EVENTO REMOTE: ", event.data);
+
+      this.setState({
+        mouse: data,
+      });
+    });
   }
 
-  handlePageMove(page) {
-    if (page === '1') this.state.navigate('/teacher-live');
-    else if (page === '2') this.state.navigate('/teacher-live/about');
+  subscribeToPage() {
+    this.state.session.on("signal:page", (event) => {
+      const data = JSON.parse(event.data);
+      console.log("EVENTO REMOTE: ", event.data);
+
+      this.setState({
+        page: data.page,
+      });
+    });
+  }
+
+  handlePageMove() {
+    if (this.state.page === "0") this.state.navigate("/student-live");
+    else if (this.state.page === "1") this.state.navigate("/student-live/about");
   }
 
   render() {
@@ -235,35 +265,38 @@ class OpenViduSession extends Component {
     const clazz = this.state.clazz;
 
     return (
-      <div className='container'>
+      <div className="container">
         <h1>{clazz.name} 라이브 중입니다.</h1>
         {this.state.session !== undefined ? (
-          <div id='session'>
+          <div id="session">
             {this.state.mainStreamManager !== undefined ? (
               <div
-                id='main-video'
+                id="main-video"
                 style={{
-                  display: 'inline-block',
-                  width: '200px',
-                  height: '200px',
+                  display: "inline-block",
+                  width: "200px",
+                  height: "200px",
                 }}
               >
                 <div>교사</div>
                 <UserVideoComponent streamManager={this.state.mainStreamManager} />
               </div>
             ) : null}
-            <div id='video-container' className='col-md-6'>
+            <div id="video-container" className="col-md-6">
               {this.state.publisher !== undefined ? (
                 <div
-                  className='stream-container'
+                  className="stream-container"
                   style={{
-                    display: 'inline-block',
-                    width: '200px',
-                    height: '200px',
+                    display: "inline-block",
+                    width: "200px",
+                    height: "200px",
                   }}
-                  onClick={() => this.handleMainVideoStream(this.state.publisher)}
                 >
                   <div>{myUserName}님</div>
+                  <div>
+                    Mic :
+                    <input type="checkbox" disabled={true} checked={this.state.mic} />
+                  </div>
                   <UserVideoComponent streamManager={this.state.publisher} />
                 </div>
               ) : null}
@@ -279,21 +312,13 @@ class OpenViduSession extends Component {
                   <div
                     key={sub.id}
                     style={{
-                      display: 'inline-block',
-                      width: '200px',
-                      height: '200px',
+                      display: "inline-block",
+                      width: "200px",
+                      height: "200px",
                     }}
-                    className='stream-container'
+                    className="stream-container"
                   >
-                    <input
-                      type='checkbox'
-                      onChange={(e) => {
-                        this.handleMicControlRequest(
-                          sub.stream.connection.connectionId,
-                          e.target.checked
-                        );
-                      }}
-                    />
+                    <input type="checkbox" disabled={true} checked={sub.publishAudio} />
                     <span>{sub.id}</span>
                     <UserVideoComponent streamManager={sub} />
                   </div>
@@ -308,13 +333,23 @@ class OpenViduSession extends Component {
           <div>
             Mouse : {this.state.mouse.x} {this.state.mouse.y}
           </div>
-          <div>
-            Mic : <input type='checkbox' disabled={true} checked={this.state.mic === 'true'} />
-          </div>
           <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/about' element={<About />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
           </Routes>
+          {this.state.mouse.x !== null && this.state.mouse.y != null && (
+            <div
+              style={{
+                position: "absolute",
+                left: `${this.state.mouse.x}px`,
+                top: `${this.state.mouse.y}px`,
+                height: "20px",
+                width: "20px",
+                borderRadius: "50%",
+                backgroundColor: "red",
+              }}
+            />
+          )}
         </div>
       </div>
     );
@@ -327,10 +362,10 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + '/api/v1/openvidu/sessions',
-      { customSessionId: sessionId + '' },
+      BASE_URL + "/api/v1/openvidu/sessions",
+      { customSessionId: sessionId + "" },
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data;
@@ -338,10 +373,10 @@ class OpenViduSession extends Component {
 
   async createToken(sessionId) {
     const response = await axios.post(
-      BASE_URL + '/api/v1/openvidu/' + sessionId + '/connections',
+      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
       {},
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
     return response.data;
