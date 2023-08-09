@@ -45,6 +45,7 @@ import TeacherMain from "./pages/Teacher/TeacherMain";
 import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
 import TeacherTheme from "./pages/Teacher/TeacherTheme";
+import TeacherClass from "./pages/Teacher/TeacherClass";
 import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 // Teacher_실시간 강의
@@ -87,11 +88,12 @@ function App() {
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
+        <Route path="/teacher-class" element={<TeacherClass />} />
         <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
-        {/* <Route path="/teacher-live" element={<TeacherLive />} /> */}
+        <Route path="/teacher-live/*" element={<TeacherLive />} />
 
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />

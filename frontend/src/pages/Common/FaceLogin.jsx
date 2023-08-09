@@ -61,6 +61,19 @@ export default function FaceLogin() {
     }
   };
 
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(",")[1]);
+    var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    var bb = new Blob([ab], { type: "image/jpeg" });
+    return bb;
+  }
+
   const takePicture = () => {
     setisCaptured(true);
 
@@ -75,17 +88,26 @@ export default function FaceLogin() {
     let ctx = photo.getContext("2d");
     ctx.drawImage(video, 0, 0, photo.width, photo.height);
 
-    var pixel = ctx.getImageData(0, 0, photo.width, photo.height);
-    var data = pixel.data;
-    console.log(data);
-    login(new ImageData(data, photo.width, photo.height));
+    var dataUrl = photo.toDataURL("image/jpeg");
+    var blob = dataURItoBlob(dataUrl);
+
+    var formData = new FormData();
+    formData.append("image", blob);
+
+    login(formData);
   };
 
   const login = (data) => {
+    console.log(data);
     const governmentId = 4;
 
     axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, { image: data })
+      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, data, {
+        headers: {
+          accept: "*/*",
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+        },
+      })
       .then((response) => {
         console.log("login 성공");
         console.log(response);
