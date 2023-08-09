@@ -21,7 +21,7 @@ export default function StudentMain() {
   };
 
   useEffect(() => {
-    ttsMaker(`${userInfo}님, 안녕하세요!`, 0);
+    ttsMaker(`${userInfo.name}님, 안녕하세요!`, 0);
     ttsMaker("지금은 혼자 학습 시간입니다.", 3500);
   }, []);
 
@@ -38,7 +38,9 @@ export default function StudentMain() {
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
-          <b className={styles.b}>👋🏻 {userInfo === undefined ? "" : userInfo}님, 안녕하세요!</b>
+          <b className={styles.b}>
+            👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+          </b>
           {msg && <TTS message={msg} />}
         </div>
         {/*  */}
