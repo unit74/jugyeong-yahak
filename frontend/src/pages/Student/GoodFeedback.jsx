@@ -29,23 +29,25 @@ export default function GoodFeedback() {
   };
 
   useEffect(() => {
+    ttsMaker("정말 잘하셨어요!!", 0);
+
     const timer = setTimeout(() => {
       if (course === "reading") {
         ttsMaker("이제 받아쓰기를 해볼까요?", 0);
         setTimeout(() => {
           navigate("/dictation-question");
-        }, 2000);
+        }, 3500);
       } else if (course === "writing" && wordIndex < 5) {
         ttsMaker("다른 단어를 배워볼까요?", 0);
         setTimeout(() => {
           dispatch(setWordIndex());
           navigate("/review-word");
-        }, 2000);
+        }, 3500);
       } else if (course === "writing" && wordIndex === 5) {
         ttsMaker("이제 일기를 써볼까요?", 0);
         setTimeout(() => {
           navigate("/diary");
-        }, 2000);
+        }, 3500);
       } else if (course === "diary") {
         navigate("/student-done");
       }
