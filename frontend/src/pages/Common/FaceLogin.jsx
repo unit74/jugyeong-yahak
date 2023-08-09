@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "../Student/StudentMain.module.css";
 import * as tmImage from "@teachablemachine/image";
 import axios from "axios";
 
 export default function FaceLogin() {
   const [predictions, setPredictions] = useState([]);
-  const [isCaptured, setisCaptured] = useState(false);
+  // const [isCaptured, setisCaptured] = useState(true);
+  const [fade, setFade] = useState(false);
+
+  const navigate = useNavigate();
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
+  let isCaptured = useRef(true);
 
   // Teachable Machine 모델 불러오기
   const modelURL = "https://teachablemachine.withgoogle.com/models/vjtO5zeXw/";
@@ -44,7 +50,7 @@ export default function FaceLogin() {
   // 계속 이미지 가져와
   const loop = async () => {
     webcam.update(); // 웹캠 프레임 업데이트
-    if (!isCaptured) {
+    if (isCaptured.current === true) {
       await predict(); // 이미지 예측 실행
     }
     window.requestAnimationFrame(loop);
@@ -54,16 +60,17 @@ export default function FaceLogin() {
   const predict = async () => {
     const prediction = await model.predict(webcam.canvas);
     setPredictions(prediction);
-    // console.log(predictions);
     const notebookClass = prediction.find((p) => p.className === "frontal");
-    if (notebookClass && notebookClass.probability === 1) {
+
+    if (notebookClass && notebookClass.probability > 0.96) {
+      takePicture();
+      // isCaptured.current = false;
       console.log("정면");
     }
   };
 
   function dataURItoBlob(dataURI) {
     var byteString = atob(dataURI.split(",")[1]);
-    var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);
     for (var i = 0; i < byteString.length; i++) {
@@ -75,7 +82,11 @@ export default function FaceLogin() {
   }
 
   const takePicture = () => {
-    setisCaptured(true);
+    // setisCaptured(false);
+
+    isCaptured.current = false;
+
+    console.log(isCaptured);
 
     let width = 500;
     let height = width / (6 / 4);
@@ -98,7 +109,6 @@ export default function FaceLogin() {
   };
 
   const login = (data) => {
-    console.log(data);
     const governmentId = 4;
 
     axios
@@ -110,9 +120,27 @@ export default function FaceLogin() {
       })
       .then((response) => {
         console.log("login 성공");
+
+        const role = response.data.data.info.role;
         console.log(response);
+        // teacher-main
+
+        setTimeout(() => {
+          setFade(true);
+
+          localStorage.setItem("userInfo", JSON.stringify(response.data.data.info)); // userInfo 저장
+          localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
+
+          navigate(role === "ROLE_STUDENT" ? "/" : "/teacher-main");
+        }, 1000); // fadeout 후 이동
       })
-      .catch((error) => console.error(`Error: ${error}`));
+      .catch((error) => {
+        // setisCaptured(true);
+        setTimeout(() => {
+          isCaptured.current = true;
+        }, 1200); // fadeout 후 이동
+        console.error(`Error: ${error}`);
+      });
   };
 
   // useEffect(() => {
@@ -125,17 +153,17 @@ export default function FaceLogin() {
   }, []);
 
   return (
-    <div className="webcam-container">
+    <div className={`"webcam-container" ${fade ? styles.fadeOut : ""}`}>
       {/* 웹캠 화면을 보여주는 video 요소 */}
       <video className="container" ref={videoRef}></video>
       {/* 클래스 레이블을 표시하는 부분 */}
-      <div id="label-container">
+      {/* <div id="label-container">
         {predictions.map((p, index) => (
           <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
         ))}
-      </div>
-      <canvas ref={photoRef} width={500}></canvas>
-      <button onClick={takePicture}>클릭해서 캡쳐하기</button>
+      </div> */}
+      <canvas ref={photoRef} width={500} style={{ display: "none" }}></canvas>
+      {/* <button onClick={takePicture}>클릭해서 캡쳐하기</button> */}
     </div>
   );
 }
