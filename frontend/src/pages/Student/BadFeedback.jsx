@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./GoodFeedback.module.css";
 import bad from "../../assets/images/bad_feedback.png";
+import TTS from "../Common/TTS";
 
 //단어읽기 문제 표시 페이지
 export default function StudentReviewWord() {
@@ -34,6 +35,7 @@ export default function StudentReviewWord() {
             <img src={bad} alt="bad_img" />
             <b className={styles.b}>아쉬워요.</b>
           </div>
+          <TTS message={"다시 도전!! 한번 더 읽어 볼까요?"} />
         </div>
       </div>
     </div>
