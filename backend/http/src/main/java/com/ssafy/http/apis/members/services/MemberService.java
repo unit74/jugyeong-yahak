@@ -2,9 +2,13 @@ package com.ssafy.http.apis.members.services;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
-import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
+import com.ssafy.http.apis.members.requests.StudentRequest;
+import com.ssafy.http.apis.members.requests.TeacherRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
+import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
+import com.ssafy.http.apis.roles.Role;
+import com.ssafy.http.apis.roles.entities.RoleEntity;
+import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.WrongParameterException;
 import com.ssafy.http.support.codes.ErrorCode;
@@ -16,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -31,6 +36,23 @@ public class MemberService {
   private String url;
 
   private String imageType = ".png";
+
+  @Transactional
+  public StudentDetailResponse updateStudent(Long studentId,
+      StudentRequest studentRequest) {
+    StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
+
+    MemberEntity studentEntity = memberRepository.findMemberEntityById(studentId).orElseThrow(
+        () -> new CustomException(ErrorCode.IO_ERROR)
+    );
+
+    studentEntity = studentRequest.toEntityForUpdate(studentEntity);
+    memberRepository.save(studentEntity);
+
+    studentDetailResponse.of(studentEntity);
+
+    return studentDetailResponse;
+  }
 
   public StudentDetailResponse getStudentDetail(Long studentId) {
     StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
@@ -60,11 +82,12 @@ public class MemberService {
   }
 
   public void registerStudents(Long governmentId, MultipartFile faceImage,
-      StudentRegisterRequest studentRegisterRequest) {
+      StudentRequest studentRequest) {
 
     String uuid = UUID.randomUUID().toString();
 
-    MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType, governmentId, uuid);
+    MemberEntity memberEntity = studentRequest.toEntityForRegister(url, imageType,
+        governmentId, uuid);
 
     String folder = memberEntity.getGovernmentId()
         .toString();
@@ -84,12 +107,14 @@ public class MemberService {
   }
 
   public void registerTeachers(Long governmentId, MultipartFile faceImage,
-      TeacherRegisterRequest teacherRegisterRequest) {
+      TeacherRequest teacherRequest) {
 
-    MemberEntity memberEntity = teacherRegisterRequest.toEntity(url, imageType, governmentId);
+    String uuid = UUID.randomUUID().toString();
+
+    MemberEntity memberEntity = teacherRequest.toEntityForRegister(url, imageType, governmentId,
+        uuid);
 
     String folder = memberEntity.getGovernmentId().toString();
-    String uuid = memberEntity.getUuid();
 
     memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
         .ifPresent((student) -> new RegisterIdentificationException(
@@ -103,6 +128,53 @@ public class MemberService {
 
     memberEntity.encodePassword(passwordEncoder);
     memberRepository.save(memberEntity);
+  }
+
+  @Transactional //강사 update
+  public TeacherDetailResponse updateTeacher(Long teacherId,
+      TeacherRequest teacherRequest) {
+
+    TeacherDetailResponse teacherDetailResponse = new TeacherDetailResponse();
+
+    MemberEntity studentEntity = memberRepository.findMemberEntityById(teacherId).orElseThrow(
+        () -> new CustomException(ErrorCode.IO_ERROR)
+    );
+
+    studentEntity = teacherRequest.toEntityForUpdate(studentEntity);
+    memberRepository.save(studentEntity);
+
+    teacherDetailResponse.of(studentEntity);
+
+    return teacherDetailResponse;
+  }
+
+  //강사 상세 조회
+  public TeacherDetailResponse getTeacherDetail(Long teacherId) {
+    TeacherDetailResponse teacherDetailResponse = new TeacherDetailResponse();
+
+    teacherDetailResponse.of(memberRepository.findById(teacherId)
+        .orElseThrow(
+            () -> new WrongParameterException(
+                ErrorCode.BAD_REQUEST_ERROR)));
+
+    return teacherDetailResponse;
+  }
+
+  public List<TeacherDetailResponse> getTeachers() {
+    List<TeacherDetailResponse> teacherDetailResponses = new ArrayList<>();
+
+    List<MemberEntity> teachers = memberRepository.findAllByRole(
+        RoleEntity.builder().role(Role.TEACHER).build());
+
+    for (MemberEntity teacher : teachers) {
+      TeacherDetailResponse teacherDetailResponse = new TeacherDetailResponse();
+
+      teacherDetailResponse.of(teacher);
+
+      teacherDetailResponses.add(teacherDetailResponse);
+    }
+
+    return teacherDetailResponses;
   }
 
   public Long getClassId(Long id) {
