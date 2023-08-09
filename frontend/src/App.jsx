@@ -1,7 +1,7 @@
 import "./App.css";
-import React, { useEffect } from "react";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import React from "react";
+import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
+import { Provider, useSelector } from "react-redux";
 import store from "./store"; // Redux Store를 import 해야 함
 
 // pages
@@ -56,9 +56,6 @@ function App() {
   return (
     <Provider store={store}>
       <Routes>
-        {/* Common */}
-        <Route path="*" element={<NotFound />} />
-
         {/* Student */}
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
@@ -106,6 +103,8 @@ function App() {
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
         <Route path="/facetest" element={<FaceLogin />} />
+        {/* Common */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Provider>
   );
