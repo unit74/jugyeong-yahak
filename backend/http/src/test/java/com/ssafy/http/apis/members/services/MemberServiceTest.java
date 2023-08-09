@@ -26,65 +26,66 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class MemberServiceTest {
 
-    @InjectMocks
-    private MemberService memberService;
+  @InjectMocks
+  private MemberService memberService;
 
-    @Mock
-    private MemberRepository memberRepository;
+  @Mock
+  private MemberRepository memberRepository;
 
-    private MemberEntity testMemberEntity;
-    private StudentDetailResponse testStudentDetailResponse;
+  private MemberEntity testMemberEntity;
+  private StudentDetailResponse testStudentDetailResponse;
 
-    @BeforeEach
-    public void setup() {
-        testMemberEntity = MemberEntity.builder()
-                                       .id(1L)
-                                       .governmentId(1L)
-                                       .classId(1L)
-                                       .role(RoleEntity.builder()
-                                                       .role(Role.STUDENT)
-                                                       .build())
-                                       .statusCode("Active")
-                                       .name("Test Member")
-                                       .phone("1234567890")
-                                       .address("Test Address")
-                                       .faceImageUrl("TestImageUrl")
-                                       .firstResponder("FirstResponder")
-                                       .tabletNo(1L)
-                                       .createdAt(LocalDateTime.now())
-                                       .updatedAt(LocalDateTime.now())
-                                       .build();
+  @BeforeEach
+  public void setup() {
+    testMemberEntity = MemberEntity.builder()
+        .id(1L)
+        .governmentId(1L)
+        .classId(1L)
+        .role(RoleEntity.builder()
+            .role(Role.STUDENT)
+            .build())
+        .statusCode("Active")
+        .name("Test Member")
+        .phone("1234567890")
+        .address("Test Address")
+        .faceImageUrl("TestImageUrl")
+        .firstResponder("FirstResponder")
+        .tabletNo(1L)
+        .createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now())
+        .gender(1)
+        .build();
 
-        testStudentDetailResponse = new StudentDetailResponse();
-        testStudentDetailResponse.of(testMemberEntity);
-    }
+    testStudentDetailResponse = new StudentDetailResponse();
+    testStudentDetailResponse.of(testMemberEntity);
+  }
 
-    @Test
-    public void getStudentDetailTest() {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(testMemberEntity));
+  @Test
+  public void getStudentDetailTest() {
+    given(memberRepository.findById(anyLong())).willReturn(Optional.of(testMemberEntity));
 
-        StudentDetailResponse result = memberService.getStudentDetail(1L);
+    StudentDetailResponse result = memberService.getStudentDetail(1L);
 
-        assertNotNull(result);
-        assertEquals(testStudentDetailResponse, result);
-    }
+    assertNotNull(result);
+    assertEquals(testStudentDetailResponse, result);
+  }
 
-    @Test
-    public void getClassStudentsTest() {
-        given(memberRepository.findAllByClassId(anyLong())).willReturn(
-            Arrays.asList(testMemberEntity));
+  @Test
+  public void getClassStudentsTest() {
+    given(memberRepository.findAllByClassId(anyLong())).willReturn(
+        Arrays.asList(testMemberEntity));
 
-        List<StudentDetailResponse> result = memberService.getClassStudents(1L);
+    List<StudentDetailResponse> result = memberService.getClassStudents(1L);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(testStudentDetailResponse, result.get(0));
-    }
+    assertNotNull(result);
+    assertEquals(1, result.size());
+    assertEquals(testStudentDetailResponse, result.get(0));
+  }
 
-    @Test
-    public void getStudentDetailNotFoundTest() {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
+  @Test
+  public void getStudentDetailNotFoundTest() {
+    given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        assertThrows(WrongParameterException.class, () -> memberService.getStudentDetail(1L));
-    }
+    assertThrows(WrongParameterException.class, () -> memberService.getStudentDetail(1L));
+  }
 }
