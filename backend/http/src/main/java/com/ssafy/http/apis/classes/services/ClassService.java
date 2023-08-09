@@ -4,6 +4,8 @@ import com.ssafy.http.apis.classes.entities.ClassEntity;
 import com.ssafy.http.apis.classes.repositories.ClassRepository;
 import com.ssafy.http.apis.classes.request.ClassRequest;
 import com.ssafy.http.apis.classes.responses.ClassDetailResponse;
+import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.support.codes.ErrorCode;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ClassService {
 
   private final ClassRepository classRepository;
+  private final MemberRepository memberRepository;
 
 
   @Transactional
@@ -62,10 +65,14 @@ public class ClassService {
 
   }
 
-  //지자체가 담당하는 class list
-  public List<ClassDetailResponse> getClassList(Long governmentId) {
+  @Transactional
+  public List<ClassDetailResponse> getClassList(Long governmentId, Role loginUserRole) {
 
     List<ClassDetailResponse> classDetailResponses = new ArrayList<>();
+
+    if (loginUserRole == Role.TEACHER) {
+      governmentId = memberRepository.findById(governmentId).get().getGovernmentId();
+    }
 
     List<ClassEntity> classes = classRepository.findAllByGovernmentId(governmentId);
 

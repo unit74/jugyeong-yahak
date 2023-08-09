@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class StudentDetailResponse {
+public class TeacherDetailResponse {
 
   private Long id;
   private Long governmentId;
@@ -21,7 +20,6 @@ public class StudentDetailResponse {
   private String phone;
   private String address;
   private String faceImageUrl;
-  private String firstResponder;
   private Long tabletNo;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
@@ -38,7 +36,6 @@ public class StudentDetailResponse {
     this.phone = memberEntity.getPhone();
     this.address = memberEntity.getAddress();
     this.faceImageUrl = memberEntity.getFaceImageUrl();
-    this.firstResponder = memberEntity.getFirstResponder();
     this.tabletNo = memberEntity.getTabletNo();
     this.createdAt = memberEntity.getCreatedAt();
     this.updatedAt = memberEntity.getUpdatedAt();
