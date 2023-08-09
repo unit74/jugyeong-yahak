@@ -33,26 +33,36 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       mouse: { x: null, y: null },
-      mic: true,
+      theme: null,
+      word: null,
+      choseong: null,
+      page: -1,
+      count: -1,
+      mutes: [],
     };
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
     this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.handleConnect = this.handleConnect.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
-    this.handlePageMove = this.handlePageMove.bind(this);
+    this.sendSignalMouse = this.sendSignalMouse.bind(this);
+    this.handleMouseTraceOn = this.handleMouseTraceOn.bind(this);
+    this.handleMouseTraceOff = this.handleMouseTraceOff.bind(this);
   }
 
   componentDidMount() {
     this.login(); // 일단 여기서 임시로 로그인
     this.joinSession();
+    window.addEventListener("mousedown", this.handleMouseTraceOn);
+    window.addEventListener("mouseup", this.handleMouseTraceOff);
     window.addEventListener("mousemove", this.updateMousePosition);
     window.addEventListener("beforeunload", this.onbeforeunload);
   }
 
   componentWillUnmount() {
+    window.removeEventListener("mousedown", this.handleMouseTraceOn);
+    window.removeEventListener("mouseup", this.handleMouseTraceOff);
     window.removeEventListener("mousemove", this.updateMousePosition);
     window.removeEventListener("beforeunload", this.onbeforeunload);
   }
@@ -93,7 +103,10 @@ class OpenViduSession extends Component {
         mySession.on("streamCreated", (event) => {
           var subscriber = mySession.subscribe(event.stream, undefined);
           var subscribers = this.state.subscribers;
+          subscriber.publishAudio = true;
           subscribers.push(subscriber);
+
+          this.sendSignalInit({}); // 페이지 정보나 이런거 일단 보낼듯?
 
           this.setState({
             subscribers: subscribers,
@@ -108,6 +121,9 @@ class OpenViduSession extends Component {
           console.warn(exception);
         });
 
+        this.subscribeToMicControl();
+        this.subscribeToPage();
+
         this.getToken().then((token) => {
           mySession
             .connect(token, { clientData: this.state.myUserName })
@@ -115,7 +131,7 @@ class OpenViduSession extends Component {
               let publisher = await this.OV.initPublisherAsync(undefined, {
                 audioSource: undefined,
                 videoSource: undefined,
-                publishAudio: true,
+                publishAudio: this.state.mic,
                 publishVideo: true,
                 resolution: "640x480",
                 frameRate: 30,
@@ -125,15 +141,10 @@ class OpenViduSession extends Component {
 
               mySession.publish(publisher);
 
-              this.setState(
-                {
-                  mainStreamManager: publisher,
-                  publisher: publisher,
-                },
-                () => {
-                  this.handleConnect();
-                }
-              );
+              this.setState({
+                mainStreamManager: publisher,
+                publisher: publisher,
+              });
             })
             .catch((error) => {
               console.log(
@@ -155,61 +166,100 @@ class OpenViduSession extends Component {
     }
 
     this.OV = null;
-    this.setState({
-      session: undefined,
-      mainStreamManager: undefined,
-      publisher: undefined,
-      subscribers: [],
-      trace: false,
-      mouse: { x: null, y: null },
-      mic: true,
+    this.setState({});
+  }
+
+  sendSignal(data, type) {
+    const signalOptions = {
+      data: JSON.stringify(data),
+      type: type,
+    };
+    this.state.session.signal(signalOptions);
+  }
+
+  subscribeToMicControl() {
+    this.state.session.on("signal:mic", (event) => {
+      let remoteUsers = this.state.subscribers;
+      remoteUsers.forEach((user) => {
+        if (user.stream.connection.connectionId === event.from.connectionId) {
+          const data = JSON.parse(event.data);
+          console.log("EVENTO REMOTE: ", event.data);
+          if (data.isAudioActive !== undefined) {
+            user.publishAudio = data.isAudioActive;
+          }
+        }
+      });
+      this.setState({
+        subscribers: remoteUsers,
+      });
     });
   }
 
-  handleConnect() {
-    const eventSourceInitDict = {
-      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
-    };
+  subscribeToPage() {
+    this.state.session.on("signal:page", (event) => {
+      const data = JSON.parse(event.data);
+      console.log("EVENTO REMOTE: ", event.data);
 
-    const sse = new EventSourcePolyfill(
-      `${BASE_URL}/sse/v1/subscribe?streamId=${this.state.publisher.stream.connection.connectionId}&classId=${this.state.mySessionId}`,
-      eventSourceInitDict
+      this.setState({
+        page: data.page,
+      });
+    });
+  }
+
+  handleMouseTraceOn() {
+    this.setState({
+      trace: true,
+    });
+  }
+
+  handleMouseTraceOff() {
+    this.setState(
+      {
+        trace: false,
+      },
+      () => {
+        const data = {
+          x: null,
+          y: null,
+        };
+        const type = "mouse";
+
+        this.sendSignal(data, type);
+      }
     );
-
-    sse.addEventListener("connect", (e) => {
-      const { data: receivedConnectData } = e;
-      console.log("Connected! ", receivedConnectData);
-    });
-
-    sse.addEventListener("page", (e) => {
-      const { data: receivedPageNo } = e;
-      this.handlePageMove(receivedPageNo);
-    });
-
-    sse.addEventListener("mic", (e) => {
-      const { data: receivedMicStatus } = e;
-      this.setState({
-        mic: receivedMicStatus,
-      });
-    });
-
-    sse.addEventListener("mouse", (e) => {
-      const { data: receivedMousePointer } = e;
-      this.setState({
-        mouse: JSON.parse(receivedMousePointer),
-      });
-    });
-
-    alert(`Connected`);
   }
 
   updateMousePosition(e) {
-    this.handleMousePointerRequest(e.clientX, e.clientY);
+    if (!this.state.trace) return;
+
+    const data = {
+      x: e.clientX,
+      y: e.clientY,
+    };
+    const type = "mouse";
+
+    this.sendSignal(data, type);
   }
 
-  handlePageMove(page) {
-    if (page === "1") this.state.navigate("/teacher-live");
-    else if (page === "2") this.state.navigate("/teacher-live/about");
+  updatePage(page) {
+    this.setState(
+      {
+        page: page,
+      },
+      () => {
+        const data = {
+          page: this.state.page,
+        };
+        const type = "page";
+
+        this.sendSignal(data, type);
+      }
+    );
+  }
+
+  handlePageMove() {
+    if (this.state.page === "0") this.state.navigate("/teacher-live");
+    else if (this.state.page === "1") this.state.navigate("/teacher-live/about");
   }
 
   render() {
@@ -231,11 +281,23 @@ class OpenViduSession extends Component {
                   height: "200px",
                 }}
               >
-                <div>교사 : {myUserName}님</div>
                 <UserVideoComponent streamManager={this.state.mainStreamManager} />
               </div>
             ) : null}
             <div id="video-container" className="col-md-6">
+              {this.state.publisher !== undefined ? (
+                <div
+                  className="stream-container"
+                  style={{
+                    display: "inline-block",
+                    width: "200px",
+                    height: "200px",
+                  }}
+                >
+                  <div>교사 : {myUserName}님</div>
+                  <UserVideoComponent streamManager={this.state.publisher} />
+                </div>
+              ) : null}
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={sub.id}
@@ -249,6 +311,7 @@ class OpenViduSession extends Component {
                 >
                   <input
                     type="checkbox"
+                    checked={sub.publishAudio}
                     onChange={(e) => {
                       this.handleMicControlRequest(
                         sub.stream.connection.connectionId,
@@ -267,36 +330,15 @@ class OpenViduSession extends Component {
         <hr></hr>
         <div>
           {/* 페이지 변경 시작 */}
-          <button onClick={() => this.handlePageMoveRequest(1)}>
-            Home 페이지로 이동 변경 요청
-          </button>
-          <button onClick={() => this.handlePageMoveRequest(2)}>
-            About 페이지로 이동 변경 요청
-          </button>
+          <button onClick={() => this.updatePage(0)}>Home 페이지로 이동 변경 요청</button>
+          <button onClick={() => this.updatePage(1)}>About 페이지로 이동 변경 요청</button>
           {/* 페이지 변경 끝 */}
-
-          {/* 마우스 트레킹 시작 */}
-          <div>
-            <label>마우스 트레이싱 : </label>
-            <input
-              type="checkbox"
-              onChange={(e) => {
-                this.setState({
-                  trace: e.target.checked,
-                });
-              }}
-            />
-          </div>
-          {/* 마우스 트레킹 끝 */}
         </div>
         <hr></hr>
         <div>
           <h1>실시간 정보들</h1>
           <div>
             Mouse : {this.state.mouse.x} {this.state.mouse.y}
-          </div>
-          <div>
-            Mic : <input type="checkbox" disabled={true} checked={this.state.mic === "true"} />
           </div>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -349,74 +391,6 @@ class OpenViduSession extends Component {
       }
     );
     return response.data;
-  }
-
-  async handlePageMoveRequest(pageNo) {
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/convert/page`,
-        {
-          classId: this.state.mySessionId,
-          streamId: this.state.publisher.stream.connection.connectionId,
-          number: pageNo,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
-  }
-
-  async handleMicControlRequest(target, status) {
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/mic/control`,
-        {
-          classId: this.state.mySessionId,
-          streamId: target,
-          status: status,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
-  }
-
-  async handleMousePointerRequest(x, y) {
-    if (!this.state.trace) {
-      return;
-    }
-
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/mouse/pointer`,
-        {
-          classId: this.state.mySessionId,
-          streamId: this.state.publisher.stream.connection.connectionId,
-          x: x,
-          y: y,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
   }
 }
 
