@@ -28,7 +28,8 @@ public class FaceLoginService {
     File uploadFile = null;
     try {
       uploadFile = convert(faceImage)
-          .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+          .orElseThrow(() ->
+              new IllegalArgumentException("MultipartFile -> File 전환 실패"));
     } catch (IOException e) {
 
       throw new RegisterIdentificationException(
@@ -58,11 +59,11 @@ public class FaceLoginService {
     try {
       ResponseEntity<JsonNode> postForEntity
           = rest.postForEntity(nodeUrl, request, JsonNode.class);
-
       return postForEntity.getBody().get("result").get(0).get("_label").asText();
     } catch (Exception e) {
-      removeNewFile(uploadFile);
       throw new IllegalArgumentException("face-login 서버 연결 오류입니다.");
+    } finally {
+      removeNewFile(uploadFile);
     }
 
   }
