@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./GoodFeedback.module.css";
 import bad from "../../assets/images/bad_feedback.png";
@@ -10,13 +10,32 @@ export default function StudentReviewWord() {
   const course = location.state.course;
   const navigate = useNavigate();
 
+  const [msg, setMsg] = useState(null);
+
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
+
   useEffect(() => {
+    if (course !== "reading") {
+      ttsMaker("다시 도전!! 한번 더 써 볼까요?", 0);
+    }
+
     const timer = setTimeout(() => {
       // 다시 도전 없애기
       if (course === "reading") {
         //   navigate('/review-word');
         // } else if (course === 'writing') {
         navigate("/dictation-question");
+      } else {
+        setTimeout(() => {
+          navigate("/dictation-answer");
+        }, 1000);
       }
     }, 5000); // 10초
 
@@ -35,7 +54,11 @@ export default function StudentReviewWord() {
             <img src={bad} alt="bad_img" />
             <b className={styles.b}>아쉬워요.</b>
           </div>
-          <TTS message={"다시 도전!! 한번 더 읽어 볼까요?"} />
+          {msg && (
+            // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
+            <TTS message={msg} />
+          )}
+          {/* <TTS message={"다시 도전!! 한번 더 읽어 볼까요?"} /> */}
         </div>
       </div>
     </div>
