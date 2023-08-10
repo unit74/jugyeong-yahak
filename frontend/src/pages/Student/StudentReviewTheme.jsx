@@ -83,7 +83,7 @@ const StudentReviewTheme = () => {
     // setFade(true);
 
     axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
       .then((response) => {
         setThemeTitle(response.data.data.theme);
         setThemeImg(response.data.data.themeImageUrl);
