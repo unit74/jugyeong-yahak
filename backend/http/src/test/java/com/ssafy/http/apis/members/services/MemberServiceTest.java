@@ -87,14 +87,17 @@ public class MemberServiceTest {
 
 //  @Test
 //  public void setTeacherClassIdSuccessTest() {
-//    given(memberRepository.findClassIdByRole(14L)).willReturn(Optional.of(testTeacherEntity));
+//    given(memberRepository.save(testTeacherEntity)).wait();
 //
-//    Optional<MemberEntity> entity = memberService.setTeacherClassId(2L, 14L);
+//    List<TeacherDetailResponse> teachers = memberService.getTeachers();
+//    for (TeacherDetailResponse t : teachers) {
+//      System.out.println(t);
+//    }
+//    MemberEntity entity = memberService.setTeacherClassId(16L, 13L);
 //
-//    System.out.println(entity.get());
+//    System.out.println(entity);
 //
-//    assertNotNull(entity.get());
-//    assertEquals(testTeacherEntity, entity.get());
+//    assertNotNull(entity);
 //
 //  }
 //
