@@ -2,13 +2,14 @@ import React, { useCallback, useState, useEffect } from "react";
 import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
-import Audio from "../Common/Audio";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -65,7 +66,7 @@ export default function StudentMain() {
             {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
             할머님, 안녕하세요!
           </b>
-          {msg && <TTS message={msg} />}
+          {msg && <TTSsentence message={msg} />}
         </div>
         {/*  */}
         <div className={styles.time}>
