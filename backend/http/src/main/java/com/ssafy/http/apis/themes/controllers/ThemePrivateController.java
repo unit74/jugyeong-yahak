@@ -31,7 +31,8 @@ public class ThemePrivateController {
   private final ThemeService themeService;
   private final WordService wordService;
 
-  //GetMapping() -> 전체 반의 테마 리스트
+  //GetMapping() -> 전체 반의 테마 리스트도 필요하면 구현해야함
+
   @GetMapping // 해당 반의 테마 리스트 반환
   public ResponseEntity<?> getThemeList() {
 
