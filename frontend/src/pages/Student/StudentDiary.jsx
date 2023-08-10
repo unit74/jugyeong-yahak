@@ -31,9 +31,9 @@ export default function StudentDiary() {
   const formattedText =
     (generatedText && generatedText && generatedText.split(". ").join(".\n")) || "";
 
-  const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/good-feedback", { state: { course: "diary" } });
-  }, []);
+  // const navigateToRecordDictation = useCallback((navigate) => {
+  //   navigate("/good-feedback", { state: { course: "diary" } });
+  // }, []);
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
