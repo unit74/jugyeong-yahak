@@ -29,7 +29,8 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        text = `${userInfo.name}님, 안녕하세요!`;
+        // text = `${userInfo.name}님, 안녕하세요!`;
+        text = `할머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -61,7 +62,8 @@ export default function StudentMain() {
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>
-            👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+            {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
+            할머님, 안녕하세요!
           </b>
           {msg && <TTS message={msg} />}
         </div>
