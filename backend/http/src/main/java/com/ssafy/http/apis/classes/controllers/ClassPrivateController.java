@@ -51,7 +51,8 @@ public class ClassPrivateController {
   }
 
   @DeleteMapping
-  public ResponseEntity<?> deleteClass(@RequestBody Map<String, Long> requestData) {
+  public ResponseEntity<?> deleteClass(
+      @RequestBody Map<String, Long> requestData) { //이거 수정 필요 -> 전용 request 객체
 
     if (requestData.get("id") == null) {
       return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
@@ -70,13 +71,11 @@ public class ClassPrivateController {
 
     classService.updateClass(classrequest, SecurityUtil.getLoginUserId());
 
-    System.out.println("여기까지 오나?");
-
     //204라서 response가 안보임
     return createSuccessResponse(SuccessCode.UPDATE_SUCCESS,
         " 반을 수정하였습니다.",
         classService.getClassList(SecurityUtil.getLoginUserId(), SecurityUtil.getLoginUserRole())
-        //상세 보기로 변경할 예정?
+        //상세 보기로 변경?
     );
   }
 
