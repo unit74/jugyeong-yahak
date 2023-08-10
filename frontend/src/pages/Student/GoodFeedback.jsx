@@ -28,35 +28,63 @@ export default function GoodFeedback() {
     });
   };
 
-  useEffect(() => {
-    ttsMaker("정말 잘하셨어요!!", 0);
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const timer = setTimeout(() => {
+  useEffect(() => {
+    async function makeRequest() {
+      let text = "정말 잘하셨어요!!";
+      ttsMaker(text, 0);
+      await delay(text.length * 300);
+
       if (course === "reading") {
-        ttsMaker("이제 받아쓰기를 해볼까요?", 0);
-        setTimeout(() => {
-          navigate("/dictation-question");
-        }, 3500);
-      } else if (course === "writing" && wordIndex < 5) {
-        ttsMaker("다른 단어를 배워볼까요?", 0);
-        setTimeout(() => {
-          dispatch(setWordIndex());
-          navigate("/review-word");
-        }, 3500);
-      } else if (course === "writing" && wordIndex === 5) {
-        ttsMaker("이제 일기를 써볼까요?", 0);
-        setTimeout(() => {
-          navigate("/diary");
-        }, 3500);
+        let text = "이제 받아쓰기를 해볼까요?";
+        ttsMaker(text, 0);
+        await delay(text.length * 300);
+        navigate("/dictation-question");
+      } else if (course === "writing" && wordIndex < 4) {
+        let text = "다른 단어를 배워볼까요?";
+        ttsMaker(text, 0);
+        dispatch(setWordIndex());
+        await delay(text.length * 300);
+        navigate("/review-word");
+      } else if (course === "writing" && wordIndex === 4) {
+        let text = "이제 일기를 써볼까요?";
+        ttsMaker(text, 0);
+        await delay(text.length * 300);
+        navigate("/student-talking");
       } else if (course === "diary") {
         navigate("/student-done");
       }
-    }, 5000); // 10초
+    }
+
+    makeRequest();
+
+    // ttsMaker("정말 잘하셨어요!!", 0);
+
+    // if (course === "reading") {
+    //   ttsMaker("이제 받아쓰기를 해볼까요?", 0);
+    //   setTimeout(() => {
+    //     navigate("/dictation-question");
+    //   }, 3500);
+    // } else if (course === "writing" && wordIndex < 5) {
+    //   ttsMaker("다른 단어를 배워볼까요?", 0);
+    //   setTimeout(() => {
+    //     dispatch(setWordIndex());
+    //     navigate("/review-word");
+    //   }, 3500);
+    // } else if (course === "writing" && wordIndex === 5) {
+    //   ttsMaker("이제 일기를 써볼까요?", 0);
+    //   setTimeout(() => {
+    //     navigate("/diary");
+    //   }, 3500);
+    // } else if (course === "diary") {
+    //   navigate("/student-done");
+    // }
 
     // 언마운트 될 시 타이머 클리어
-    return () => {
-      clearTimeout(timer);
-    };
+    // return () => {
+    //   clearTimeout(timer);
+    // };
   }, [course, navigate]);
 
   // 컨페티효과
