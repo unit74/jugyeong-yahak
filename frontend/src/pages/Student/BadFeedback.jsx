@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./GoodFeedback.module.css";
+import styles from "./BadFeedback.module.css";
 import bad from "../../assets/images/bad_feedback.png";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
-//단어읽기 문제 표시 페이지
-export default function StudentReviewWord() {
+export default function BadFeedback() {
   const location = useLocation();
   const course = location.state.course;
   const navigate = useNavigate();
@@ -35,10 +34,10 @@ export default function StudentReviewWord() {
         await delay(text.length * 300);
         navigate("/dictation-answer");
       } else {
-        text = "아쉬워요! 더 열심히 공부해보아요.";
+        text = "아쉬워요! 다시 한번 도전해요.";
         ttsMaker(text, 0);
         await delay(text.length * 300);
-        navigate("/dictation-question");
+        navigate("/record-word");
       }
     }
 
@@ -78,7 +77,7 @@ export default function StudentReviewWord() {
           </div>
           {msg && (
             // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
-            <TTS message={msg} />
+            <TTSsentence message={msg} />
           )}
           {/* <TTS message={"다시 도전!! 한번 더 읽어 볼까요?"} /> */}
         </div>

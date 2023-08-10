@@ -6,6 +6,7 @@ import themeReducer from "./themeReducer";
 import setSelectedThemeReducer from "./setSelectedThemeReducer";
 import setWordIndexReducer from "./setWordIndexReducer";
 import messageReducer from "./messageReducer";
+import noteReducer from "./noteReducer";
 
 const rootReducer = combineReducers({
   allThemesState: allThemesReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   selectedThemeState: setSelectedThemeReducer,
   wordIndexState: setWordIndexReducer,
   message: messageReducer,
+  note: noteReducer,
 });
 
 export default rootReducer;

@@ -3,13 +3,15 @@ import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import axios from "axios";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
-  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
+  const lastVisited = lastVisitedString
+    ? new Date(lastVisitedString)
+    : new Date(0);
   const [msg, setMsg] = useState(null);
 
   // fade 효과
@@ -45,7 +47,7 @@ const StudentReviewTheme = () => {
       localStorage.setItem("lastVisitedSpeakingVideo", timeNow.toISOString());
       return "/speaking-video";
     } else {
-      return "/record-word";
+      return "/situation";
     }
   };
 
@@ -81,7 +83,7 @@ const StudentReviewTheme = () => {
     // setFade(true);
 
     axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
       .then((response) => {
         setThemeTitle(response.data.data.theme);
         setThemeImg(response.data.data.themeImageUrl);
@@ -126,7 +128,7 @@ const StudentReviewTheme = () => {
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
-          {themeTitle && themeSituation && msg && <TTS message={msg} />}
+          {themeTitle && themeSituation && msg && <TTSsentence message={msg} />}
           <div className={styles.imageSituationContainer}>
             <div className={styles.imageContainer}>
               <img src={themeImg} alt="" />
