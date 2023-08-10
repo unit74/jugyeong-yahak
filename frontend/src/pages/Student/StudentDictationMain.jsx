@@ -2,11 +2,13 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudentDictationMain.module.css";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
+import TTSsentence from "../Common/TTSsentence";
 
+// 받아쓰기 안내 -> 공책이 있는지 물어보기
 export default function StudentDictationMain() {
   const navigate = useNavigate();
 
-  // 7일에 한번씩
+  // 7일에 한번씩만 보여줘
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
   const lastVisited = lastVisitedString
@@ -38,7 +40,7 @@ export default function StudentDictationMain() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/*  */}
-          <p>받아쓰기 안내 메인페이지</p>
+          <h1>받아쓰기 안내 메인페이지</h1>
         </div>
       </div>
     </div>
