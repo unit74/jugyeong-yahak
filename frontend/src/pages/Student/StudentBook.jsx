@@ -38,7 +38,7 @@ export default function StudentBook() {
       .get("https://i9e206.p.ssafy.io/api/v1/members/libraries", {
         headers: {
           Authorization:
-            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTE1MTE0NTgsInN1YiI6ImFjY2Vzcy10b2tlbiIsImlkZW50aWZpY2F0aW9uIjoiMTIiLCJyb2xlIjoiUk9MRV9TVFVERU5UIn0.jpy8sqMLP4VEbD0AOYqC0pNG6aLNxeygDASyOi03cnBRxt7U0Fy2kARB2bsm81U0EbUe5unQOqlkod-D6rbdBQ",
+            "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2OTE1NDA1NDcsInN1YiI6ImFjY2Vzcy10b2tlbiIsImlkZW50aWZpY2F0aW9uIjoiNCIsInJvbGUiOiJST0xFX1NUVURFTlQifQ.sZoEZuhJNGgc18Qgdu-5DEA6fcf9dJPP16K3u_EGmVbOWrpplMp_5dBqXgRhvBzw5r2Mce_WtI605sVaw3EI1w",
         },
       })
       .then((response) => {
@@ -53,23 +53,14 @@ export default function StudentBook() {
         <div className={styles.books}>
           <b className={styles.greeting}>현재 공부</b>
           {book.map((sub, i) => (
-            <CSSTransition
-              in={true}
-              appear
-              timeout={5000}
-              classNames={bookAnimationClassNames}
-            >
+            <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
               <div
                 id={`book${i + 1}`}
                 className={`${styles.book} ${styles[`book${i + 1}`]}`}
                 style={bookStyle(sub.status)}
               >
                 {sub.themeName + "  :  "}
-                {sub.status === 0
-                  ? "시작 안함"
-                  : sub.status === 5
-                  ? "완료됨"
-                  : "공부 중"}
+                {sub.status === 0 ? "시작 안함" : sub.status === 5 ? "완료됨" : "공부 중"}
               </div>
             </CSSTransition>
           ))}

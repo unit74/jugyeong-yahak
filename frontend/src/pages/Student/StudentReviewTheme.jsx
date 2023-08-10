@@ -2,15 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Audio from "../Common/Audio";
+import TTS from "../Common/TTS";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
-  const lastVisited = lastVisitedString
-    ? new Date(lastVisitedString)
-    : new Date(0);
+  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
 
   // fade 효과
   const [fade, setFade] = useState(false);
@@ -79,10 +77,13 @@ const StudentReviewTheme = () => {
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
-      <Audio path={"sS_RW_LW"} />
+      {/* {themeSituation && <TTS message={themeSituation} />} */}
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
+          {themeTitle && themeSituation && (
+            <TTS message={`이번 시간은 ${themeTitle}에 대해 공부해요! ${themeSituation}`} />
+          )}
           <div className={styles.imageSituationContainer}>
             <div className={styles.imageContainer}>
               <img src={themeImg} alt="" />
