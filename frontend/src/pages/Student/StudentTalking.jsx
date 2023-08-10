@@ -51,7 +51,7 @@ export default function StudentTalking() {
       }, 20000); // 60,000ms = 1분
 
       return () => clearTimeout(stopTimer);
-    }, 10000);
+    }, 12000);
 
     return () => {
       clearTimeout(startTimer);
