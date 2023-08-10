@@ -10,7 +10,7 @@ export default function TTS({ repeat, message }) {
     const ssmlTemplate = `
       <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ko-KR"> 
         <voice name="ko-KR-InJoonNeural"> 
-          <prosody rate="-25.00%"> ${message} </prosody> 
+          <prosody rate="-20.00%"> ${message} </prosody> 
         </voice> 
       </speak>
     `;

@@ -20,9 +20,31 @@ export default function StudentMain() {
     });
   };
 
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   useEffect(() => {
-    ttsMaker(`${userInfo.name}님, 안녕하세요!`, 0);
-    ttsMaker("지금은 혼자 학습 시간입니다.", 3500);
+    async function makeRequest() {
+      await delay(1000);
+
+      let text = "";
+
+      if (userInfo !== null) {
+        text = `${userInfo.name}님, 안녕하세요!`;
+        ttsMaker(text, 0);
+        await delay(text.length * 300);
+      }
+
+      text = "지금은 혼자 학습 시간입니다.";
+
+      ttsMaker(text, 0);
+      await delay(text.length * 300);
+
+      text = "복습을 진행할려면 아래의 빨간 버튼을 누르세요.";
+
+      ttsMaker(text, 0);
+    }
+
+    makeRequest();
   }, []);
 
   const navigateToRecordDictation = useCallback(() => {
@@ -32,7 +54,7 @@ export default function StudentMain() {
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
-  useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
+  // useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
@@ -48,6 +70,9 @@ export default function StudentMain() {
           <b className={styles.b2}>지금은</b>
           <b className={styles.b3}>혼자 학습</b>
           <b className={styles.b4}>시간</b>
+        </div>
+        <div className={styles.time}>
+          <button onClick={navigateToRecordDictation}>복습하기</button>
         </div>
       </div>
     </div>
