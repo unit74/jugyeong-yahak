@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./GoodFeedback.module.css";
+import styles from "./BadFeedback.module.css";
 import bad from "../../assets/images/bad_feedback.png";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
-//단어읽기 문제 표시 페이지
-export default function StudentReviewWord() {
+export default function BadFeedback() {
   const location = useLocation();
   const course = location.state.course;
   const navigate = useNavigate();
@@ -21,28 +20,50 @@ export default function StudentReviewWord() {
     });
   };
 
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   useEffect(() => {
-    if (course !== "reading") {
-      ttsMaker("다시 도전!! 한번 더 써 볼까요?", 0);
+    async function makeRequest() {
+      await delay(1000);
+
+      let text = "";
+
+      if (course !== "reading") {
+        text = "다시 도전!! 한번 더 써 볼까요?";
+        ttsMaker(text, 0);
+        await delay(text.length * 300);
+        navigate("/dictation-answer");
+      } else {
+        text = "아쉬워요! 더 열심히 공부해보아요.";
+        ttsMaker(text, 0);
+        await delay(text.length * 300);
+        navigate("/dictation-question");
+      }
     }
 
-    const timer = setTimeout(() => {
-      // 다시 도전 없애기
-      if (course === "reading") {
-        //   navigate('/review-word');
-        // } else if (course === 'writing') {
-        navigate("/dictation-question");
-      } else {
-        setTimeout(() => {
-          navigate("/dictation-answer");
-        }, 1000);
-      }
-    }, 5000); // 10초
+    makeRequest();
 
-    // 언마운트 될 시 타이머 클리어
-    return () => {
-      clearTimeout(timer);
-    };
+    // if (course !== "reading") {
+    //   ttsMaker("다시 도전!! 한번 더 써 볼까요?", 0);
+    // }
+
+    // const timer = setTimeout(() => {
+    //   // 다시 도전 없애기
+    //   if (course === "reading") {
+    //     //   navigate('/review-word');
+    //     // } else if (course === 'writing') {
+    //     navigate("/dictation-question");
+    //   } else {
+    //     setTimeout(() => {
+    //       navigate("/dictation-answer");
+    //     }, 1000);
+    //   }
+    // }, 5000); // 10초
+
+    // // 언마운트 될 시 타이머 클리어
+    // return () => {
+    //   clearTimeout(timer);
+    // };
   }, [course, navigate]);
 
   return (
@@ -56,7 +77,7 @@ export default function StudentReviewWord() {
           </div>
           {msg && (
             // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
-            <TTS message={msg} />
+            <TTSsentence message={msg} />
           )}
           {/* <TTS message={"다시 도전!! 한번 더 읽어 볼까요?"} /> */}
         </div>

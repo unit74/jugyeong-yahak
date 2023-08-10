@@ -1,16 +1,19 @@
+// 기존 TTS의 속도 80%에서 문장 읽을 때의 속도 95%로만 바꾼 TTS입니다.
+
 import React, { useEffect } from "react";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
-export default function TTS({ repeat, message }) {
+export default function TTSsentence({ repeat, message }) {
   console.log("Received message:", message);
 
   
   useEffect(() => {
     // SSML 생성
+    // <prosody rate="-5.00%"> 이부분으로 속도 조절 -5% 이면 원래 속도의 95% 속도
     const ssmlTemplate = `
       <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ko-KR"> 
         <voice name="ko-KR-InJoonNeural"> 
-          <prosody rate="-20.00%"> ${message} </prosody> 
+          <prosody rate="-5.00%"> ${message} </prosody>  
         </voice> 
       </speak>
     `;
