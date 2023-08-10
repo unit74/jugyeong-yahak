@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 import friends from "../../assets/images/friends.png";
 import { Configuration, OpenAIApi } from "openai";
-import TTSsentence from "../Common/TTSsentence";
+import TTS from "../Common/TTSsentence";
 
 // 예시영상 페이지
 export default function StudentDiary() {
