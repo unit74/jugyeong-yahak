@@ -27,16 +27,16 @@ export default function DictaionFeedback() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (course === "writing" && wordIndex < 5) {
+      if (course === "writing" && wordIndex < 4) {
         ttsMaker("다른 단어를 배워볼까요?", 0);
         setTimeout(() => {
           dispatch(setWordIndex());
           navigate("/review-word");
         }, 3500);
-      } else if (course === "writing" && wordIndex === 5) {
+      } else if (course === "writing" && wordIndex === 4) {
         ttsMaker("이제 일기를 써볼까요?", 0);
         setTimeout(() => {
-          navigate("/diary");
+          navigate("/student-talking");
         }, 3500);
       }
     }, 5000); // 5초
