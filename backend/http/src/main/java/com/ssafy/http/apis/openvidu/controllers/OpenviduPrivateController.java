@@ -1,9 +1,12 @@
 package com.ssafy.http.apis.openvidu.controllers;
 
+import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
+
 import com.ssafy.http.apis.fcm.services.FcmService;
 import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.apis.openvidu.requests.InitOpenViduRequest;
 import com.ssafy.http.security.utils.SecurityUtil;
+import com.ssafy.http.support.codes.SuccessCode;
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.ConnectionProperties;
 import io.openvidu.java.client.OpenVidu;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -82,12 +86,14 @@ public class OpenviduPrivateController {
     return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
   }
 
-//  @DeleteMapping
-//  public ResponseEntity<?> deleteSession() {
-//
-//    memberService.deleteTeacherClassId();
-//
-//  }
+  @DeleteMapping
+  public ResponseEntity<?> deleteSession() {
+
+    memberService.deleteTeacherClassId(SecurityUtil.getLoginUserId());
+
+    return createSuccessResponse(SuccessCode.DELETE_SUCCESS, "강사의 classId를 해제하였습니다.");
+
+  }
 
   // 알람을 받으면 바로 connections 실행할 수 있게 해주면 됨, 이거 써야됨 위에꺼는 openvidu랑 연결 잘되는지 확인할려고 쓰고 있음
 //    /**

@@ -1,5 +1,8 @@
 package com.ssafy.http.apis.members.services;
 
+import com.ssafy.http.apis.commoncodes.CommonCode;
+import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
+import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.members.requests.StudentRequest;
@@ -8,6 +11,10 @@ import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
+import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
+import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
+import com.ssafy.http.apis.themes.entities.ThemeEntity;
+import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.WrongParameterException;
@@ -32,11 +39,60 @@ public class MemberService {
   private final MemberRepository memberRepository;
   private final PasswordEncoder passwordEncoder;
   private final S3ImageUploadService s3ImageUploadService;
+  private final LectureHistoryRepository lectureHistoryRepository;
+  private final HomeworkHistoryRepository homeworkHistoryRepository;
+  private final ThemeRepository themeRepository;
 
   @Value("${cloud.aws.s3.url}")
   private String url;
 
   private String imageType = ".png";
+
+  @Transactional
+  public void deleteTeacherClassId(Long loginUserId) {
+    Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberEntityById(
+        loginUserId);
+
+    MemberEntity memberEntity = memberEntityOptional.orElseThrow(
+        () -> new CustomException(ErrorCode.NOT_FOUND_ERROR)
+    );
+
+    Long classId = memberEntity.getClassId();
+
+    // 강의 종료 로그
+    LectureHistoryEntity lectureHistoryEntity = lectureHistoryRepository.findNotClosedEntityById(
+        classId);
+
+    lectureHistoryEntity.endLecture();
+    lectureHistoryRepository.save(lectureHistoryEntity);
+
+    //강사 classId null로 처리
+    memberEntity.setClassId(null);
+    memberRepository.save(memberEntity);
+
+    //숙제
+    List<HomeworkHistoriesEntity> homeworks = new ArrayList<>();
+
+    List<MemberEntity> students = memberRepository.findAllByClassId(classId);//학생들 조회
+
+    ThemeEntity themeEntity = themeRepository.findById(
+        lectureHistoryEntity.getThemeEntity().getId()).orElseThrow(
+        () -> new CustomException(ErrorCode.NOT_FOUND_ERROR)
+    );
+
+    for (MemberEntity student : students) {
+      HomeworkHistoriesEntity entity = HomeworkHistoriesEntity.builder()
+          .memberId(student.getId())
+          .classId(student.getClassId())
+          .themeEntity(themeEntity)
+          .status(CommonCode.C01.getStatusCode())
+          .build();
+
+      homeworks.add(entity);
+    }
+
+    homeworkHistoryRepository.saveAll(homeworks);
+  }
 
   @Transactional
   public MemberEntity setTeacherClassId(Long loginUserId, Long classId) {

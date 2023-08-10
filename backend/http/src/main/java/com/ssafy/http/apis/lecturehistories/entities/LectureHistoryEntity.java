@@ -58,4 +58,8 @@ public class LectureHistoryEntity {
     this.startedAt = startedAt;
     this.endedAt = endedAt;
   }
+
+  public void endLecture() {
+    endedAt = LocalDateTime.now();
+  }
 }
