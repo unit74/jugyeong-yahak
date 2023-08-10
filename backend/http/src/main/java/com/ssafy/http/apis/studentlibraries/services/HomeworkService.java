@@ -1,8 +1,8 @@
-package com.ssafy.http.apis.homework.services;
+package com.ssafy.http.apis.studentlibraries.services;
 
-import com.ssafy.http.apis.homework.responses.LibraryResponse;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
