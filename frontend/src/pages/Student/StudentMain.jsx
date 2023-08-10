@@ -30,8 +30,9 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        // text = `${userInfo.name}님, 안녕하세요!`;
-        text = `할머님, 안녕하세요!`;
+
+        // text = `${userInfo.name} 어머님, 안녕하세요!`;
+        text = `어머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -52,7 +53,7 @@ export default function StudentMain() {
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
     setTimeout(() => {
-      navigate("/review-theme");
+      navigate("/student-note");
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
