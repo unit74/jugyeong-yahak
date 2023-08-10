@@ -11,7 +11,9 @@ public enum CommonCode {
   A03("A03", "UNASSIGNED"),
   B01("B01", "받아쓰기"),
   B02("B02", "읽기"),
-  ;
+  C01("C01", "NOT_SOLVED"),
+  C02("C02", "IN_PROGRESS"),
+  C03("C03", "SOLVED");
 
   private String statusCode;
   private String statusName;
