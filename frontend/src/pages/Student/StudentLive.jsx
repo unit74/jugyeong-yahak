@@ -46,6 +46,11 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       mouse: { x: null, y: null },
+      page: 0,
+      theme: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -58,6 +63,8 @@ class OpenViduSession extends Component {
     this.subscribeToInit = this.subscribeToInit.bind(this);
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToMouse = this.subscribeToMouse.bind(this);
+    this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToTimer = this.subscribeToTimer.bind(this);
   }
 
   componentDidMount() {
@@ -159,6 +166,9 @@ class OpenViduSession extends Component {
     this.subscribeToMic();
     this.subscribeToInit();
     this.subscribeToMouse();
+    this.subscribeToExit();
+    this.subscribeToInfo();
+    this.subscribeToTimer();
 
     this.setState({
       mainStreamUser: localUser,
@@ -197,6 +207,11 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       mouse: { x: null, y: null },
+      page: 0,
+      theme: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     });
   }
 
@@ -269,6 +284,9 @@ class OpenViduSession extends Component {
 
       this.setState({
         subscribers: remoteUsers,
+        page: data.page,
+        theme: data.theme,
+        word: data.word,
       });
     });
   }
@@ -307,16 +325,54 @@ class OpenViduSession extends Component {
   subscribeToMouse() {
     this.state.session.on("signal:mouse", (event) => {
       const data = JSON.parse(event.data);
-      console.log(data);
 
-      this.setState(
-        {
-          mouse: { x: data.x, y: data.y },
-        },
-        () => {
-          console.log(this.state.mouse);
-        }
-      );
+      this.setState({
+        mouse: { x: data.x, y: data.y },
+      });
+    });
+  }
+
+  subscribeToExit() {
+    this.state.session.on('signal:exit', (event) => {
+      this.leaveSession();
+      this.navigate('/');
+    });
+  }
+
+  subscribeToInfo() {
+    this.state.session.on('signal:info', (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.page !== undefined) {
+        this.setState({
+          page: data.page,
+        });
+      }
+      if (data.theme !== undefined) {
+        this.setState({
+          theme: data.theme,
+        });
+      }
+      if (data.word !== undefined) {
+        this.setState({
+          word: data.word,
+        });
+      }
+      if (data.choseong !== undefined) {
+        this.setState({
+          choseong: data.choseong,
+        });
+      }
+    });
+  }
+
+  subscribeToTimer() {
+    this.state.session.on('signal:timer', (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({
+        timer: data.timer - 1,
+      });
     });
   }
 
@@ -378,6 +434,38 @@ class OpenViduSession extends Component {
       }
     );
     return response.data;
+  }
+
+  renderComponent() {
+    if (this.state.page === 0) {
+      return (
+        <div>
+          <h1>수업 대기하는 페이지</h1>
+        </div>
+      );
+    } else if (this.state.page === 1) {
+      // 화면 구성에 따라 많을듯?
+      return (
+        <div>
+          <h1>수업하는 페이지</h1>
+          <span>테마 : {this.state.theme}</span>
+          <span>단어 : {this.state.word}</span>
+        </div>
+      );
+    } else if (this.state.page === 11) {
+      return (
+        <div>
+          <h1>게임 1 페이지</h1>
+          {this.state.timer !== 0 && <span>{this.state.timer}</span>}
+        </div>
+      );
+    } else if (this.state.page === 21) {
+      return (
+        <div>
+          <h1>게임 2 페이지</h1>
+        </div>
+      );
+    }
   }
 
   render() {
