@@ -7,6 +7,7 @@ import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.apis.themes.responses.ThemeDetailResponse;
 import com.ssafy.http.apis.themes.responses.ThemeNameResponse;
+import com.ssafy.http.apis.themes.responses.ThemeStageResponse;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.WrongParameterException;
 import com.ssafy.http.support.codes.ErrorCode;
@@ -45,7 +46,7 @@ public class ThemeService {
 
       if (themeCount < 5) {
         ThemeNameResponse themeNameResponse = new ThemeNameResponse();
-        themeNameResponse.setTheme(themeName);
+        themeNameResponse.setThemeName(themeName);
         themeNameResponses.add(themeNameResponse);
       }
 
@@ -53,6 +54,30 @@ public class ThemeService {
 
     return themeNameResponses;
   }
+
+  public List<ThemeStageResponse> getClassCurriculums(String themeName, Long loginUserId) {
+
+    List<ThemeStageResponse> themeStageResponses = new ArrayList<>();
+
+    Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberEntityById(
+        loginUserId);
+
+    MemberEntity memberEntity = memberEntityOptional.orElseThrow(
+        () -> new CustomException(ErrorCode.NOT_FOUND_ERROR)
+    );
+
+    List<ThemeEntity> stages = lectureHistoryRepository.findStagesAllForClass(
+        themeName, memberEntity.getClassId());
+
+    for (ThemeEntity stage : stages) {
+      ThemeStageResponse response = new ThemeStageResponse();
+      response.of(stage);
+      themeStageResponses.add(response);
+    }
+
+    return themeStageResponses;
+  }
+
 
   public List<ThemeDetailResponse> getThemeList() {
 

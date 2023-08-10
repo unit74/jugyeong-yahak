@@ -4,6 +4,7 @@ import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse
 
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.responses.ThemeNameResponse;
+import com.ssafy.http.apis.themes.responses.ThemeStageResponse;
 import com.ssafy.http.apis.themes.responses.WordDetailResponse;
 import com.ssafy.http.apis.themes.services.ThemeService;
 import com.ssafy.http.apis.themes.services.WordService;
@@ -41,10 +42,14 @@ public class ThemePrivateController {
         themeNameResponses);
   }
 
-//  @GetMapping("/stages")
-//  public ResponseEntity<?> getThemeStages(@RequestBody StagesRequest stagesRequest) {
-//
-//  }
+  @GetMapping("/stages/{themeName}")
+  public ResponseEntity<?> getThemeStages(@PathVariable String themeName) {
+    List<ThemeStageResponse> temeStageResponses = themeService.getClassCurriculums(
+        themeName, SecurityUtil.getLoginUserId());
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "반의 커리큘럼 리스트를 조회하였습니다.",
+        temeStageResponses);
+  }
 
   @GetMapping("/{curriculumId}")   // 선택된 테마 내용 반환
   public ResponseEntity<?> getTheme(@PathVariable("curriculumId") Long curriculumId) {
