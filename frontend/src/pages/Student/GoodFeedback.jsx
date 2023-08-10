@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./GoodFeedback.module.css";
 import good from "../../assets/images/good_feedback.png";
 import confetti from "canvas-confetti";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setWordIndex } from "../../store/actions/setWordIndexAction";
@@ -84,7 +84,7 @@ export default function GoodFeedback() {
           )} */}
           {msg && (
             // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
-            <TTS message={msg} />
+            <TTSsentence message={msg} />
           )}
         </div>
       </div>
