@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 import friends from "../../assets/images/friends.png";
 import { Configuration, OpenAIApi } from "openai";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 // 예시영상 페이지
 export default function StudentDiary() {
@@ -29,7 +29,8 @@ export default function StudentDiary() {
     "";
 
   const formattedText =
-    (generatedText && generatedText && generatedText.split(". ").join(".\n")) || "";
+    (generatedText && generatedText && generatedText.split(". ").join(".\n")) ||
+    "";
 
   const navigateToRecordDictation = useCallback((navigate) => {
     navigate("/good-feedback", { state: { course: "diary" } });
@@ -101,7 +102,7 @@ export default function StudentDiary() {
           {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedDiary}</b>
           <b className={styles.diarytext}>{formattedText}</b>
-          {msg && <TTS message={msg} />}
+          {msg && <TTSsentence message={msg} />}
         </div>
       </div>
     </div>
