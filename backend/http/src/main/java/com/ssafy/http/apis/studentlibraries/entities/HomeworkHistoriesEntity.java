@@ -1,4 +1,4 @@
-package com.ssafy.http.apis.homework.entities;
+package com.ssafy.http.apis.studentlibraries.entities;
 
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import javax.persistence.Column;
