@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.given;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
+import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
 import com.ssafy.http.exception.WrongParameterException;
@@ -33,7 +34,10 @@ public class MemberServiceTest {
   private MemberRepository memberRepository;
 
   private MemberEntity testMemberEntity;
+  private MemberEntity testTeacherEntity;
   private StudentDetailResponse testStudentDetailResponse;
+
+  private TeacherDetailResponse testTeacherDetailResponse;
 
   @BeforeEach
   public void setup() {
@@ -58,7 +62,51 @@ public class MemberServiceTest {
 
     testStudentDetailResponse = new StudentDetailResponse();
     testStudentDetailResponse.of(testMemberEntity);
+
+    testTeacherEntity = MemberEntity.builder()
+        .id(2L)
+        .governmentId(1L)
+        .classId(14L)
+        .role(RoleEntity.builder()
+            .role(Role.TEACHER)
+            .build())
+        .statusCode("C03")
+        .name("test teacher")
+        .phone("12312321")
+        .address("test Add")
+        .faceImageUrl("test")
+        .tabletNo(100L)
+        .createdAt(LocalDateTime.now())
+        .updatedAt(LocalDateTime.now())
+        .gender(1)
+        .build();
+
+    testTeacherDetailResponse = new TeacherDetailResponse();
+    testTeacherDetailResponse.of(testTeacherEntity);
   }
+
+//  @Test
+//  public void setTeacherClassIdSuccessTest() {
+//    given(memberRepository.findClassIdByRole(14L)).willReturn(Optional.of(testTeacherEntity));
+//
+//    Optional<MemberEntity> entity = memberService.setTeacherClassId(2L, 14L);
+//
+//    System.out.println(entity.get());
+//
+//    assertNotNull(entity.get());
+//    assertEquals(testTeacherEntity, entity.get());
+//
+//  }
+//
+//  @Test
+//  public void setTeacherClassIdFailTest() {
+//    given(memberRepository.findClassIdByRole(14L)).willReturn(Optional.of(testTeacherEntity));
+//
+//    Optional<MemberEntity> entity = memberService.setTeacherClassId(2L, 13L);
+//
+//    assertNull(entity);
+//
+//  }
 
   @Test
   public void getStudentDetailTest() {
