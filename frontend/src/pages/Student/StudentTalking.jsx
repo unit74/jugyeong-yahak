@@ -26,6 +26,30 @@ export default function StudentTalking() {
     });
   };
 
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  useEffect(() => {
+    async function makeRequest() {
+      await delay(1000);
+
+      let text = `1분 동안 ${themeTitle}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`;
+      ttsMaker(text, 0);
+      await delay(text.length * 250);
+
+      SpeechRecognition.startListening({ continuous: true });
+
+      // 1분 후 녹음 중지
+      setTimeout(() => {
+        SpeechRecognition.stopListening();
+        setSpeechWord(transcript);
+      }, 60000); // 60,000ms = 1분
+    }
+
+    if (themeTitle !== null) {
+      makeRequest();
+    }
+  }, [themeTitle]);
+
   // useEffect
   useEffect(() => {
     // 1. 테마명 받아오기
@@ -33,29 +57,29 @@ export default function StudentTalking() {
       .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
       .then((response) => {
         setThemeTitle(response.data.data.theme);
-        ttsMaker(
-          `1분 동안 ${response.data.data.theme}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`,
-          0
-        );
+        // ttsMaker(
+        //   `1분 동안 ${response.data.data.theme}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`,
+        //   0
+        // );
       })
       .catch((error) => console.error(`Error: ${error}`));
 
     // 2. 마운트 후 0.8초 뒤 녹음 시작
-    const startTimer = setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
+    // const startTimer = setTimeout(() => {
+    //   SpeechRecognition.startListening({ continuous: true });
 
-      // 1분 후 녹음 중지
-      const stopTimer = setTimeout(() => {
-        SpeechRecognition.stopListening();
-        setSpeechWord(transcript);
-      }, 20000); // 60,000ms = 1분
+    //   // 1분 후 녹음 중지
+    //   const stopTimer = setTimeout(() => {
+    //     SpeechRecognition.stopListening();
+    //     setSpeechWord(transcript);
+    //   }, 20000); // 60,000ms = 1분
 
-      return () => clearTimeout(stopTimer);
-    }, 10000);
+    //   return () => clearTimeout(stopTimer);
+    // }, 12000);
 
-    return () => {
-      clearTimeout(startTimer);
-    };
+    // return () => {
+    //   clearTimeout(startTimer);
+    // };
   }, [transcript]);
 
   // 2. transcript를 speechWord에 저장
