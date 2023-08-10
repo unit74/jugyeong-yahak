@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name = "members")
+@Entity
+@Table(name = "members")
 @ToString
 public class MemberEntity {
 
@@ -96,6 +98,10 @@ public class MemberEntity {
     this.tabletNo = tabletNo;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+
+  public void setClassId(Long classId) {
+    this.classId = classId;
   }
 
   @PrePersist
