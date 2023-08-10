@@ -5,6 +5,8 @@ import com.ssafy.http.apis.roles.entities.RoleEntity;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
@@ -19,4 +21,7 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
   Optional<MemberEntity> findMemberEntityById(Long id);
 
   List<MemberEntity> findAllByRole(RoleEntity role);
+
+  @Query("SELECT m FROM MemberEntity m WHERE m.classId = :classId And m.role.id = 4")
+  Optional<MemberEntity> findClassIdByRole(@Param("classId") Long classId);
 }
