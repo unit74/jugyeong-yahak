@@ -15,6 +15,7 @@ import com.ssafy.http.support.codes.ErrorCode;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,33 @@ public class MemberService {
   private String url;
 
   private String imageType = ".png";
+
+  @Transactional
+  public MemberEntity setTeacherClassId(Long loginUserId, Long classId) {
+
+    // 반이 선생에게 이미 할당이 되어 있는지 체크
+    Optional<MemberEntity> entity = memberRepository.findClassIdByRole(classId);
+
+    if (entity.isPresent()) { //값이 있을때 예외를 던젼야함
+      throw new CustomException(ErrorCode.ID_ALREADY_USE);
+    }
+
+    //반이 free한 상태
+    Optional<MemberEntity> teacherOptionalEntity = memberRepository.findById(loginUserId);
+
+    teacherOptionalEntity.ifPresentOrElse(
+        (teacherEntity) -> {
+          teacherEntity.setClassId(classId);
+          memberRepository.save(teacherEntity);
+        },
+        () -> {
+          throw new CustomException(ErrorCode.NOT_FOUND_ERROR);
+        }
+    );
+
+    return teacherOptionalEntity.get();
+
+  }
 
   @Transactional
   public StudentDetailResponse updateStudent(Long studentId,
