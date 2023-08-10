@@ -18,6 +18,7 @@ import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
 import StudentNote from "./pages/Student/StudentNote";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
+import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
@@ -64,6 +65,7 @@ function App() {
         <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
