@@ -3,7 +3,7 @@ import styles from "./StudentReviewTheme.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import axios from "axios";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
