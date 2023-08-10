@@ -25,3 +25,6 @@
   height: 90%;
 }
 /* 여기까지 공통 */
+.square * {
+  user-select: none;
+}
