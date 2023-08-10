@@ -1,0 +1,92 @@
+@font-face {
+    font-family: "KoPubWorld Batang Bold";
+    src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+  }
+  
+  .main {
+    background-image: url(/src/assets/images/real_background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  .square {
+    display: flex; /* flex를 추가 */
+    flex-direction: column; /* 자식 요소들을 세로로 정렬 */
+    justify-content: center; /* 수직으로 가운데 정렬 */
+    align-items: center; /* 수평으로 가운데 정렬 */
+    position: relative; /* 상대적 위치를 주기 위해 추가 */
+    padding: 50px; /* 추가한 부분 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(100px);
+    width: 85%;
+    height: 90%;
+  }
+
+  .b {
+    position: absolute; /* 절대 위치를 사용 */
+    top: 65%; /* 상위 요소인 .square의 높이의 75% 위치에 배치 */
+    display: flex; /* flex를 추가 */
+    justify-content: center; /* 수평으로 가운데 정렬 */
+    align-items: center; /* 수직으로 가운데 정렬 */
+    /* text-shadow: 0 15px 4px rgba(0, 0, 0, 0.25); */
+    color: var(--color-black);
+    font-family: KoPubWorld Batang Bold;
+    /* font-weight: bolder; */
+    font-size: calc(6vw + 2.5vh); /* 반응형 */
+    z-index: 1;
+    margin-top: 15px; /* 추가한 부분 */
+
+  }
+  .correctAnswer {
+    position: absolute; /* 절대 위치를 사용 */
+    top: 25%; /* 상위 요소인 .square의 높이의 75% 위치에 배치 */
+    left: 50%; /* .square의 너비의 중앙에 배치 */
+    transform: translate(-50%, -50%); /* 위치를 조정하여 중앙에 정확히 배치 */
+    display: flex; /* flex를 추가 */
+    justify-content: center; /* 수평으로 가운데 정렬 */
+    align-items: center; /* 수직으로 가운데 정렬 */
+    border-radius: 100px;
+    color: var(--color-black);
+    font-family: KoPubWorld Batang Bold;
+    font-weight: bolder;
+    letter-spacing: 1.5px;
+    background-color: #F6AA00;
+    font-size: calc(6vw + 2.5vh); /* 반응형 */
+    max-width: calc(100% - 100px); /* 추가한 부분: square의 패딩을 고려 */
+    max-height: calc(100% - 100px); /* 추가한 부분: square의 패딩을 고려 */
+    z-index: 1;
+    width: 8.5em;
+    height: 1.6em;
+  }
+  
+  /* .feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .feedback img {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    transform: translate(0%, -15%);
+  }
+   */
+  .square * {
+    user-select: none;
+  }
+  

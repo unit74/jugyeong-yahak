@@ -24,6 +24,7 @@ import StudentReviewWord from "./pages/Student/StudentReviewWord";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
+import DictaionFeedback from "./pages/Student/DictationFeedback";
 import WritingCamTest from "./pages/Student/WritingCamTest";
 import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
 import StudentDictationMain from "./pages/Student/StudentDictationMain";
@@ -68,9 +69,13 @@ function App() {
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
+        <Route path="/dictation-feedback" element={<DictaionFeedback />} />
         <Route path="/dictation-main" element={<StudentDictationMain />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
+        <Route
+          path="/dictation-question"
+          element={<StudentDictationQuestion />}
+        />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -86,7 +91,10 @@ function App() {
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
-        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
+        <Route
+          path="/teacher-studentprogress"
+          element={<TeacherStudentProgress />}
+        />
         <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}

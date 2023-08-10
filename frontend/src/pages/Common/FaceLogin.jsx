@@ -10,12 +10,16 @@ export default function FaceLogin() {
   // const [isCaptured, setisCaptured] = useState(true);
   const [fade, setFade] = useState(false);
   const [msg, setMsg] = useState(null);
+  // const [count, setCount] = useState(0);
 
   const navigate = useNavigate();
+
+  const ttsArray = [];
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
   let isCaptured = useRef(true);
+  let count = useRef(0);
 
   // Teachable Machine 모델 불러오기
   const modelURL = "https://teachablemachine.withgoogle.com/models/vjtO5zeXw/";
@@ -71,13 +75,31 @@ export default function FaceLogin() {
   const predict = async () => {
     const prediction = await model.predict(webcam.canvas);
     setPredictions(prediction);
-    const notebookClass = prediction.find((p) => p.className === "frontal");
+    // const notebookClass = prediction.find((p) => p.className === "frontal");
 
-    if (notebookClass && notebookClass.probability > 0.96) {
+    isCaptured.current = false;
+
+    if (prediction[0].probability > 0.5) {
       takePicture();
+    } else if (prediction[1].probability > 0.5) {
+      ttsMaker("왼쪽으로 이동해주세요.", 0);
+      setTimeout(() => {
+        isCaptured.current = true;
+      }, 4000);
+    } else if (prediction[2].probability > 0.5) {
       // isCaptured.current = false;
-      console.log("정면");
+      ttsMaker("오른쪽으로 이동해주세요.", 0);
+      setTimeout(() => {
+        isCaptured.current = true;
+      }, 4000);
+    } else {
+      isCaptured.current = true;
     }
+
+    // if (notebookClass && notebookClass.probability > 0.96) {
+    //   // takePicture();
+    //   console.log("정면");
+    // }
   };
 
   function dataURItoBlob(dataURI) {
@@ -95,7 +117,7 @@ export default function FaceLogin() {
   const takePicture = () => {
     // setisCaptured(false);
 
-    isCaptured.current = false;
+    // isCaptured.current = false;
 
     console.log(isCaptured);
 
@@ -147,18 +169,28 @@ export default function FaceLogin() {
       })
       .catch((error) => {
         // setisCaptured(true);
+        if (count.current === 0) {
+          ttsMaker("로그인 실패! 얼굴을 중앙에 맞춰주세요.", 0);
+          count.current += 1;
+        } else if (count.current === 1) {
+          ttsMaker("다시 로그인에 실패하였습니다. 얼굴을 중앙에 맞춰주세요", 0);
+          count.current += 1;
+        } else {
+          ttsMaker("로그인이 되지 않습니다. 서비스를 다시 시작하세요.", 0);
+        }
+
+        console.log(count.current);
+
         setTimeout(() => {
           isCaptured.current = true;
-          ttsMaker("로그인 실패! 얼굴을 중앙에 맞춰주세요.", 0);
-        }, 1200); // fadeout 후 이동
-
+        }, 4000);
         console.error(`Error: ${error}`);
       });
   };
 
-  // useEffect(() => {
-  //   console.log(predictions);
-  // }, [predictions]);
+  useEffect(() => {
+    console.log(predictions);
+  }, [predictions]);
 
   useEffect(() => {
     setupWebcam();
