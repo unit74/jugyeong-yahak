@@ -56,7 +56,7 @@ export default function StudentTalking() {
   useEffect(() => {
     // 1. 테마명 받아오기
     axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
       .then((response) => {
         setThemeTitle(response.data.data.theme);
         // ttsMaker(

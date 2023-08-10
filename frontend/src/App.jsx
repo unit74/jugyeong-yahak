@@ -16,6 +16,7 @@ import StudyClassPage from "./pages/Government/ClassPage";
 // Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
+import StudentNote from "./pages/Student/StudentNote";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 
@@ -60,6 +61,7 @@ function App() {
         {/* Student */}
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
+        <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
         <Route path="/words-list" element={<WordsListComponent />} />
