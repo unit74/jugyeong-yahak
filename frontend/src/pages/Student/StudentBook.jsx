@@ -50,35 +50,38 @@ export default function StudentBook() {
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
+        <b className={styles.greeting}>현재 공부</b>
         <div className={styles.books}>
-          <b className={styles.greeting}>현재 공부</b>
-          {book.map((sub, i) => (
-            <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-              <div
-                id={`book${i + 1}`}
-                className={`${styles.book} ${styles[`book${i + 1}`]}`}
-                style={bookStyle(sub.status)}
+          {/* 책 정렬 / 공부중 완료됨 시작안함 순서*/}
+          {book
+            .sort((a, b) => {
+              if (a.status === 0 || b.status === 0) return b.status - a.status;
+              if (a.status === 5 || b.status === 5) return a.status - b.status;
+              return a.status - b.status;
+            })
+            .map((sub, i) => (
+              <CSSTransition
+                in={true}
+                appear
+                timeout={5000}
+                classNames={bookAnimationClassNames}
               >
-                {sub.themeName + "  :  "}
-                {sub.status === 0 ? "시작 안함" : sub.status === 5 ? "완료됨" : "공부 중"}
-              </div>
-            </CSSTransition>
-          ))}
-          {/* <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-            <div className={`${styles.book} ${styles.book1}`} style={bookStyle} />
-          </CSSTransition>
-          <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-            <div className={`${styles.book} ${styles.book2}`} style={bookStyle} />
-          </CSSTransition>
-          <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-            <div className={`${styles.book} ${styles.book3}`} style={bookStyle} />
-          </CSSTransition>
-          <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-            <div className={`${styles.book} ${styles.book4}`} style={bookStyle} />
-          </CSSTransition>
-          <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
-            <div className={`${styles.book} ${styles.book5}`} style={bookStyle} />
-          </CSSTransition> */}
+                <div
+                  id={`book${i + 1}`}
+                  className={`${styles.book} ${styles[`book${i + 1}`]}`}
+                  style={bookStyle(sub.status)}
+                >
+                  <div className={styles.bookText}>
+                    {sub.themeName + "  :  "}
+                    {sub.status === 0
+                      ? "시작 안함"
+                      : sub.status === 5
+                      ? "완료됨"
+                      : "공부 중"}
+                  </div>
+                </div>
+              </CSSTransition>
+            ))}
         </div>
       </div>
     </div>
