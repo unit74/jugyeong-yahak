@@ -13,6 +13,8 @@ import Mic from '@mui/icons-material/Mic';
 import MicOff from '@mui/icons-material/MicOff';
 import IconButton from '@mui/material/IconButton';
 
+import TeacherTheme from './TeacherTheme';
+
 var localUser = new UserModel();
 const BASE_URL = 'https://i9e206.p.ssafy.io';
 
@@ -38,6 +40,13 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       trace: false,
+      page: 0,
+      themePK: null,
+      theme: null,
+      wordPK: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -51,6 +60,8 @@ class OpenViduSession extends Component {
     this.deleteSubscriber = this.deleteSubscriber.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.connectWebCam = this.connectWebCam.bind(this);
+    this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToTimer = this.subscribeToTimer.bind(this);
   }
 
   componentDidMount() {
@@ -149,6 +160,9 @@ class OpenViduSession extends Component {
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
     this.subscribeToMic();
+    this.subscribeToExit();
+    this.subscribeToInfo();
+    this.subscribeToTimer();
 
     this.setState({
       mainStreamUser: localUser,
@@ -187,6 +201,13 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       trace: false,
+      page: 0,
+      themePK: null,
+      theme: null,
+      wordPK: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     });
   }
 
@@ -231,7 +252,11 @@ class OpenViduSession extends Component {
 
       this.updateSubscribers();
 
-      const data = {};
+      const data = {
+        page: this.state.page,
+        theme: this.state.theme,
+        word: this.state.word,
+      };
 
       this.sendSignalInit(data);
     });
@@ -274,6 +299,50 @@ class OpenViduSession extends Component {
     });
   }
 
+  subscribeToExit() {
+    this.state.session.on('signal:exit', (event) => {
+      this.leaveSession();
+      this.navigate('/');
+    });
+  }
+
+  subscribeToInfo() {
+    this.state.session.on('signal:info', (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.page !== undefined) {
+        this.setState({
+          page: data.page,
+        });
+      }
+      if (data.theme !== undefined) {
+        this.setState({
+          theme: data.theme,
+        });
+      }
+      if (data.word !== undefined) {
+        this.setState({
+          word: data.word,
+        });
+      }
+      if (data.choseong !== undefined) {
+        this.setState({
+          choseong: data.choseong,
+        });
+      }
+    });
+  }
+
+  subscribeToTimer() {
+    this.state.session.on('signal:timer', (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({
+        timer: data.timer - 1,
+      });
+    });
+  }
+
   sendSignalUserChanged(data) {
     this.sendSignal(data, 'userChanged');
   }
@@ -288,6 +357,18 @@ class OpenViduSession extends Component {
 
   sendSignalMouse(data) {
     this.sendSignal(data, 'mouse');
+  }
+
+  sendSignalExit() {
+    this.sendSignal(undefined, 'exit');
+  }
+
+  sendSignalInfo(data) {
+    this.sendSignal(data, 'info');
+  }
+
+  sendSignalTimer(data) {
+    this.sendSignal(data, 'timer');
   }
 
   sendSignal(data, page) {
@@ -375,6 +456,91 @@ class OpenViduSession extends Component {
     return response.data;
   }
 
+  renderComponent() {
+    if (this.state.page === 0) {
+      if (this.state.theme === null) {
+        return (
+          <div>
+            <h1>테마 선택하는 페이지</h1>
+            {/* <TeacherTheme /> */}
+            <button
+              onClick={() => {
+                this.setState({
+                  themePK: 3,
+                  theme: '일상',
+                });
+              }}
+            >
+              뭐 하나 선택했다 치자
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <h1>단어 선택하는 페이지</h1>
+            <button
+              onClick={() => {
+                this.setState(
+                  {
+                    page: 1,
+                    wordPK: 14,
+                    word: '몰?루',
+                    theme: this.state.theme,
+                  },
+                  () => {
+                    const data = {
+                      page: 1,
+                      theme: this.state.theme,
+                      word: this.state.word,
+                    };
+
+                    this.sendSignalInfo(data);
+                  }
+                );
+              }}
+            >
+              뭐 하나 선택했다 치자
+            </button>
+          </div>
+        );
+      }
+    } else if (this.state.page === 1) {
+      // 화면 구성에 따라 많을듯?
+      return (
+        <div>
+          <h1>수업하는 페이지</h1>
+          <span>테마 : {this.state.theme}</span>
+          <span>단어 : {this.state.word}</span>
+          <button
+            onClick={() => {
+              const data = {
+                page: 11,
+              };
+
+              this.sendSignalInfo(data);
+            }}
+          >
+            뭐 하나 선택했다 치자
+          </button>
+        </div>
+      );
+    } else if (this.state.page === 11) {
+      return (
+        <div>
+          <h1>게임 1 페이지</h1>
+          {this.state.timer !== 0 && <span>{this.state.timer}</span>}
+        </div>
+      );
+    } else if (this.state.page === 21) {
+      return (
+        <div>
+          <h1>게임 2 페이지</h1>
+        </div>
+      );
+    }
+  }
+
   render() {
     const mySessionId = this.mySessionId;
     const clazz = this.clazz;
@@ -388,7 +554,11 @@ class OpenViduSession extends Component {
           clazz={clazz}
           user={localUser}
           micStatusChanged={this.micStatusChanged}
-          leaveSession={this.leaveSession}
+          leaveSession={() => {
+            if (window.confirm('강의를 종료하시겠습니까?')) {
+              this.sendSignalExit();
+            }
+          }}
         />
 
         <div>
@@ -449,6 +619,7 @@ class OpenViduSession extends Component {
             </div>
           ))}
         </div>
+        <div>{this.renderComponent()}</div>
       </div>
     );
   }
