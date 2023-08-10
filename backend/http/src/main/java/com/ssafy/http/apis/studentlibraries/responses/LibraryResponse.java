@@ -1,4 +1,4 @@
-package com.ssafy.http.apis.homework.responses;
+package com.ssafy.http.apis.studentlibraries.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.ArrayList;

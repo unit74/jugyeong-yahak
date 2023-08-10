@@ -1,9 +1,9 @@
-package com.ssafy.http.apis.homework.controllers;
+package com.ssafy.http.apis.studentlibraries.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.ssafy.http.apis.homework.responses.LibraryResponse;
-import com.ssafy.http.apis.homework.services.HomeworkService;
+import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
+import com.ssafy.http.apis.studentlibraries.services.HomeworkService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import lombok.RequiredArgsConstructor;
