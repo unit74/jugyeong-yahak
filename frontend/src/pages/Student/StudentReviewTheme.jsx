@@ -47,7 +47,7 @@ const StudentReviewTheme = () => {
       localStorage.setItem("lastVisitedSpeakingVideo", timeNow.toISOString());
       return "/speaking-video";
     } else {
-      return "/record-word";
+      return "/situation";
     }
   };
 
