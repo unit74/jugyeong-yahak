@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-import TTS from "../Common/TTS";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentTalking() {
   // 변수
@@ -54,7 +56,7 @@ export default function StudentTalking() {
   useEffect(() => {
     // 1. 테마명 받아오기
     axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
       .then((response) => {
         setThemeTitle(response.data.data.theme);
         // ttsMaker(
@@ -111,7 +113,7 @@ export default function StudentTalking() {
             <h1>{themeTitle}에 관한 경험을 이야기해보아요!</h1>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p>{transcript}</p>
-            {msg && <TTS message={msg} />}
+            {msg && <TTSsentence message={msg} />}
             <div></div>
           </div>
         </div>
