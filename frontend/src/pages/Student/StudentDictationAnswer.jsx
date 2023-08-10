@@ -6,13 +6,21 @@ import TTS from "../Common/TTS";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 import CanvasTest from "./CanvasTest";
+import TeachableMachineTest from "./TeachableMachineTest";
 
 // OCR 페이지
 export default function StudentDictationAnswer() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [repeatValue, setRepeatValue] = useState(0); // prop을 새로운 값을 넣어줌으로써 TTS를 리렌더링 시킨다.
+  const [repeatValue, setRepeatValue] = useState(0);
+ // 로컬 스토리지에서 'state'를 가져오기
+  const storedStateString = localStorage.getItem('state');
+  // 가져온 문자열을 객체로 변환
+  const storedStateObject = storedStateString ? JSON.parse(storedStateString) : {};
+  // 객체에서 'note' 값을 추출
+  const note = storedStateObject.note;
 
+  console.log(note)
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
 
@@ -26,7 +34,7 @@ export default function StudentDictationAnswer() {
     });
 
     dispatch(fetchTheme());
-
+    
     // 언마운트 시 타이머 초기화
     return () => {
       [...timersForRepeat].forEach((timer) => clearTimeout(timer));
@@ -36,11 +44,10 @@ export default function StudentDictationAnswer() {
   return (
     <div className={styles.main}>
       <div className={styles.square}>
-        {/* <TeachableMachineTest /> */}
+        {note ? <TeachableMachineTest /> : <CanvasTest />}
         {wordsList[wordIndex].word && (
           <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
         )}
-        <CanvasTest />
       </div>
     </div>
   );

@@ -16,7 +16,9 @@ import StudyClassPage from "./pages/Government/ClassPage";
 // Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
+import StudentNote from "./pages/Student/StudentNote";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
+import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
@@ -24,6 +26,7 @@ import StudentReviewWord from "./pages/Student/StudentReviewWord";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
+import DictaionFeedback from "./pages/Student/DictationFeedback";
 import WritingCamTest from "./pages/Student/WritingCamTest";
 import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
 import StudentDictationMain from "./pages/Student/StudentDictationMain";
@@ -59,8 +62,10 @@ function App() {
         {/* Student */}
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
+        <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
@@ -68,9 +73,13 @@ function App() {
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
+        <Route path="/dictation-feedback" element={<DictaionFeedback />} />
         <Route path="/dictation-main" element={<StudentDictationMain />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
+        <Route
+          path="/dictation-question"
+          element={<StudentDictationQuestion />}
+        />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -78,7 +87,7 @@ function App() {
         <Route path="/canvas-test" element={<CanvasTest />} />
 
         {/* 학생 실시간 강의 */}
-        <Route path="/student-live" element={<StudentLive />} />
+        <Route path="/student-live/*" element={<StudentLive />} />
 
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
@@ -86,7 +95,10 @@ function App() {
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
-        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
+        <Route
+          path="/teacher-studentprogress"
+          element={<TeacherStudentProgress />}
+        />
         <Route path="/carousel" element={<ThemeCarousel />} />
 
         {/* 교사 실시간 강의 */}
