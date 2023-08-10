@@ -10,62 +10,91 @@ import { fetchTheme } from "../../store/actions/themeAction";
 
 import { useDebounce } from "../Common/hooks/useDebounce";
 import speak from "../../assets/images/speak.png";
+import TTS from "../Common/TTS";
 
 export default function StudentRecordWord() {
-  // axios !!!!!!!!!
-  // 단어 조회
+  // DB에 저장된 단어 가져오기
   const dispatch = useDispatch();
-
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const [repeatValue, setRepeatValue] = useState(0); // prop을 새로 넣어줌으로써 TTS를 리렌더링 시킨다.
 
-  const {
-    transcript, // 말이 변환된 글자!!!!!!!
-    listening,
-    // resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  // 음성인식 관련
+  const { transcript, listening, browserSupportsSpeechRecognition } =
+    useSpeechRecognition();
 
-  const [speechWord, setSpeechWord] = useState("");
-  const navigate = useNavigate();
-  const debounceTerm = useDebounce(speechWord, 3000); // speechWord가 끝나면 3초 후에 정답 처리를 위해
-  // 오답처리나 정답 처리를 바로 하지 않기 위해서
+  // 녹음 카운터
+  const [recordCounter, setRecordCounter] = useState(0);
 
-  useEffect(() => {
-    dispatch(fetchTheme());
-    const timer = setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
-      // console.log("마운트 5초뒤 speech 함수가 실행되었습니다.");
-    }, 800); // 800ms = 0.8초  노인 반응 속도논문 평균 0.846초이니까 먼저 녹음 시작
-    // 5초 동안 녹음 지속
+  // 녹음된 답변들을 저장할 배열
+  const [recordedTranscripts, setRecordedTranscripts] = useState([]);
+  const debounceTerm = useDebounce(transcript, 2000);
+  console.log(transcript, "transcript");
 
-    // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
-    return () => clearTimeout(timer);
-  }, []); // 빈 의존성 배열로 인해 컴포넌트가 마운트될 때만 effect가 실행됩니다.
-
-  useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
-
-  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
-
+  // 들은 정답의 공백을 없앰
+  const removeSpaces = (str) => str.replace(/\s/g, "");
   const normalizedDebounceTerm = removeSpaces(debounceTerm);
 
   useEffect(() => {
-    // debounceterm이 바뀌면 이거 실행할거야
     if (debounceTerm) {
-      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
-        // '가시' 여기다가 문제
-        navigate("/good-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
+      setRecordedTranscripts((prev) => [...prev, normalizedDebounceTerm]);
+      console.log("녹음됨!");
+    } else {
+      // 아무것도 녹음되지 않았을 때 공백을 배열에 추가
+      setRecordedTranscripts((prev) => [...prev, ""]);
+      console.log("녹음되지 않음!");
+    }
+  }, [debounceTerm]);
+
+  useEffect(() => {
+    const intervalsForRepeat = [8800, 16800]; // 처음은 word 불러오고 나면 실행 됨
+    const timersForRepeat = intervalsForRepeat.map((interval) => {
+      return setTimeout(() => {
+        setRepeatValue((prev) => prev + 1);
+      }, interval);
+    });
+
+    const startListeningWithDelay = (delay) => {
+      return setTimeout(() => {
+        SpeechRecognition.startListening();
+        setRecordCounter((prevCounter) => prevCounter + 1); // 카운터 증가
+      }, delay);
+    };
+
+    const intervalsForListening = [1800, 9800, 17800, 25800]; // 녹음은 3번하고 마지막 4번째는 카운트를 올려서 피드백실행 하려고 넣음
+    const timersForListening = intervalsForListening.map((interval) => {
+      return startListeningWithDelay(interval);
+    });
+
+    dispatch(fetchTheme());
+
+    // 언마운트될 때, 모든 타이머 클리어
+    return () => {
+      [...timersForRepeat, ...timersForListening].forEach((timer) =>
+        clearTimeout(timer)
+      );
+    };
+  }, []);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(recordedTranscripts);
+    console.log(recordCounter);
+    if (recordCounter === 4) {
+      // 녹음 개수가 3이면 카운터는 4까지 해야함
+      // 이럴거면 그냥 해도 되는거 아냐? 근데 또 다르게는 안고쳐지네 몇번할지는 나연이에게 토스
+      if (
+        recordedTranscripts.some(
+          (transcript) => transcript === wordsList[wordIndex]?.word
+        )
+      ) {
+        navigate("/good-feedback", { state: { course: "reading" } });
       } else {
-        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+        navigate("/bad-feedback", { state: { course: "reading" } });
       }
     }
-  }, [debounceTerm, navigate]);
-
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
+  }, [recordCounter, recordedTranscripts, navigate]);
 
   return (
     <div className={styles.main}>
@@ -81,6 +110,12 @@ export default function StudentRecordWord() {
             <h1 className={styles.situationText}>
               {wordsList.length > 0 && wordsList[wordIndex].word}
             </h1>
+          </div>
+          <div>
+            {wordsList[wordIndex].word && (
+              <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
+            )}
+            {/* && 앞에 조건을 Redux에서 불러오는 걸로 해둬야 불러오기전에 TTS 실행을 안함 */}
           </div>
           <div className={styles.microphone}>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>

@@ -35,15 +35,19 @@
 
 .diarytext {
   position: absolute;
-  transform: translate(-50%, 50%);
-  line-height: calc(1vw + 1.5vh);
+  transform: translate(-50%, 38%);
+  line-height: calc(2vw + 2vh);
   display: inline-block;
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
   font-size: calc(2.5vw + 1.5vh); /* 반응형 */
-  line-height: 1.5;
+  line-height: 2;
   width: 100%;
   white-space: pre-wrap;
   /* color: #ff403c; */
+}
+
+.square * {
+  user-select: none;
 }
