@@ -45,7 +45,7 @@ export default function CanvasTest() {
       vision.annotate(req).then(
         (res) => {
           setStudentAns(res.responses[0]["textAnnotations"][0]["description"]);
-          console.log(res.responses[0]["textAnnotations"][0]["description"])
+          console.log(res.responses[0]["textAnnotations"][0]["description"]);
         },
         (e) => {
           console.log("Error: ", e);
@@ -67,7 +67,13 @@ export default function CanvasTest() {
       if (studentAns === wordsList[wordIndex]?.word) {
         navigate("/good-feedback", { state: { course: "writing" } });
       } else {
-        navigate("/bad-feedback", { state: { course: "writing" } });
+        navigate("/dictation-feedback", {
+          state: {
+            course: "writing",
+            studentAnswer: studentAns,
+            correctAnswer: wordsList[wordIndex]?.word,
+          },
+        });
       }
     }
   }, [studentAns]);
