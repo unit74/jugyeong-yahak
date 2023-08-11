@@ -34,10 +34,10 @@ export default function BadFeedback() {
         await delay(text.length * 300);
         navigate("/dictation-answer");
       } else {
-        text = "아쉬워요! 더 열심히 공부해보아요.";
+        text = "아쉬워요! 다시 한번 도전해요.";
         ttsMaker(text, 0);
         await delay(text.length * 300);
-        navigate("/dictation-question");
+        navigate("/record-word");
       }
     }
 

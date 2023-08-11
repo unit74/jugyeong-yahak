@@ -16,7 +16,9 @@ import StudyClassPage from "./pages/Government/ClassPage";
 // Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
+import StudentNote from "./pages/Student/StudentNote";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
+import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
@@ -60,8 +62,10 @@ function App() {
         {/* Student */}
         {/* 혼자학습 */}
         <Route exact path="/" element={<StudentMain />} />
+        <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
@@ -83,7 +87,7 @@ function App() {
         <Route path="/canvas-test" element={<CanvasTest />} />
 
         {/* 학생 실시간 강의 */}
-        <Route path="/student-live" element={<StudentLive />} />
+        <Route path="/student-live/*" element={<StudentLive />} />
 
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
