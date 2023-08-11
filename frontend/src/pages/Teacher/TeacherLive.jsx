@@ -12,7 +12,7 @@ import UserModel from "../../models/user-model";
 import Mic from "@mui/icons-material/Mic";
 import MicOff from "@mui/icons-material/MicOff";
 import IconButton from "@mui/material/IconButton";
-import { Scrollbars } from "react-custom-scrollbars";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import TeacherTheme from "./TeacherTheme";
 import styles from "./TeacherLive.module.css";
@@ -29,7 +29,6 @@ export default function TeacherLive() {
 class OpenViduSession extends Component {
   constructor(props) {
     super(props);
-
     this.navigate = props.navigate;
     this.clazz = props.clazz;
     this.mySessionId = props.clazz.id;
