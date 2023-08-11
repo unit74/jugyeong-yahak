@@ -65,5 +65,7 @@
 .canvasDraw {
   flex: 1;
   width: 100%;
+  max-width: 100%; /* 최대 폭 제한 */
+  max-height: calc(100% - 4rem); /* 최대 높이 제한. 버튼 및 기타 요소의 공간을 고려하기 위해 */
   border: 2px solid #ccc;
 }
