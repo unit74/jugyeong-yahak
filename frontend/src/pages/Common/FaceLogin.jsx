@@ -70,6 +70,7 @@ export default function FaceLogin() {
     // console.log(predictions[0].topLeft[0]);
 
     if (
+      predictions[0] !== undefined &&
       predictions[0].box.xMin >= width / 4 &&
       predictions[0].box.yMin >= width / 4 &&
       predictions[0].box.xMax <= (3 * width) / 4 &&
