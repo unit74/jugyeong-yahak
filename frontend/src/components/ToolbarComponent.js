@@ -36,7 +36,7 @@ export default class ToolbarComponent extends Component {
             {this.props.sessionId && (
               <div id='titleContent'>
                 <span id='session-title'>
-                  {mySessionId} - {clazz.name}
+                  {mySessionId} - {clazz.className}
                 </span>
               </div>
             )}
