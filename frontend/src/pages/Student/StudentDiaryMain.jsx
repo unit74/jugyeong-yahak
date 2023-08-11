@@ -53,7 +53,7 @@ export default function StudentDiaryMain() {
       
       let listenText = "질문을 듣고,";
       ttsMaker(listenText, 0);
-      await delay(listenText.length * 300);
+      await delay(listenText.length * 400);
 
       // 이름 -> 나중에 성별로 바꾸기
       let speakText = `${userInfo === undefined ? "" : userInfo.name}님의 이야기를 들려주세요!`;
