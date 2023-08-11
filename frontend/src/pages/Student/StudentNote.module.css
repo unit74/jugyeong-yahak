@@ -135,7 +135,7 @@
 /*  */
 
 .clearButton {
-  background-color: #e74c3c;
+  background-color: #32f30b;
   border: none;
   border-radius: 8px;
   color: white;
@@ -147,11 +147,11 @@
 }
 
 .clearButton:hover {
-  background-color: #f3130b;
+  background-color: #00ff88;
 }
 
 .downloadButton {
-  background-color: #3498db;
+  background-color: #e74c3c;
   border: none;
   border-radius: 8px;
   color: white;
@@ -163,7 +163,7 @@
 }
 
 .downloadButton:hover {
-  background-color: #0088ff;
+  background-color: #f3130b;
 }
 .canvasContainer {
   /* transform: translate(-50%, 38%); */
