@@ -149,6 +149,7 @@
   /* font-size: calc(var(--font-size-11xl) * 1.5); */
   color: var(--color-black);
   font-family: "KimjungchulGothic-Bold";
+  user-select: none; /* 클릭금지 */
 }
 
 @media (max-width: 768px) {
