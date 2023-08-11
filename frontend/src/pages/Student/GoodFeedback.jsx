@@ -40,13 +40,13 @@ export default function GoodFeedback() {
         let text = "이제 받아쓰기를 해볼까요?";
         ttsMaker(text, 0);
         await delay(text.length * 300);
-        navigate("/dictation-question");
+        navigate("/dictation-answer");
       } else if (course === "writing" && wordIndex < 4) {
         let text = "다른 단어를 배워볼까요?";
         ttsMaker(text, 0);
         dispatch(setWordIndex());
         await delay(text.length * 300);
-        navigate("/review-word");
+        navigate("/record-word");
       } else if (course === "writing" && wordIndex === 4) {
         let text = "이제 일기를 써볼까요?";
         ttsMaker(text, 0);

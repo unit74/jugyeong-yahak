@@ -32,12 +32,13 @@
 
 .greeting {
   position: absolute;
-  top: 20%;
+  top: 10%;
   left: 50%;
   transform: translateX(-50%);
   transform: translateX(-50%);
-
+  font-family: "KoPubWorld Batang Bold";
   white-space: nowrap;
+  font-size: calc(3vw + 1.5vh);
 }
 
 .b {
@@ -125,6 +126,8 @@
   display: flex;
   justify-content: space-between;
   width: 80%;
+  position: relative;
+  align-items: center;
 }
 
 .book {
@@ -140,13 +143,35 @@
   margin: 0 10px;
 }
 
+.book::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40%;
+  height: 30%; /* 흰 줄 높이 */
+  background-color: #fff;
+  z-index: -1; /* 텍스트를 줄 앞으로 가져옴 */
+}
+
+.bookText {
+  position: relative;
+  z-index: 1;
+  top: 47%;
+  height: 30%;
+  padding-left: 15px;
+  color: #111;
+  font-size: calc(1vw + 1vh);
+  font-weight: bold;
+}
+
 /* 수정된 book 클래스  */
 
 .book1 {
-  background-color: #f48486;
+  background-color: #f77b7d;
 }
 .book2 {
-  background-color: #93c2fc;
+  background-color: #72aef7;
 }
 .book3 {
   background-color: #f81e87;
@@ -155,7 +180,7 @@
   background-color: #df83f6;
 }
 .book5 {
-  background-color: #bff596;
+  background-color: #98f551;
 }
 
 .bounceIn {

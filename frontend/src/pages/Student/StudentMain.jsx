@@ -30,8 +30,8 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        // text = `${userInfo.name}님, 안녕하세요!`;
-        text = `할머님, 안녕하세요!`;
+        // text = `${userInfo.name} 어머님, 안녕하세요!`;
+        text = `어머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -52,7 +52,7 @@ export default function StudentMain() {
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
     setTimeout(() => {
-      navigate("/review-theme");
+      navigate("/student-note");
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
@@ -64,18 +64,21 @@ export default function StudentMain() {
         <div className={styles.greeting}>
           <b className={styles.b}>
             {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
-            할머님, 안녕하세요!
+            어머님, 안녕하세요!
           </b>
           {msg && <TTSsentence message={msg} />}
         </div>
         {/*  */}
         <div className={styles.time}>
           <b className={styles.b2}>지금은</b>
-          <b className={styles.b3}>혼자 학습</b>
-          <b className={styles.b4}>시간</b>
-        </div>
-        <div className={styles.time}>
-          <button onClick={navigateToRecordDictation}>복습하기</button>
+          <b className={styles.b3}>혼자 학습 시간</b>
+          {/* <b className={styles.b4}>시간</b> */}
+          <button
+            className={styles.clearButton}
+            onClick={navigateToRecordDictation}
+          >
+            복습하기
+          </button>
         </div>
       </div>
     </div>

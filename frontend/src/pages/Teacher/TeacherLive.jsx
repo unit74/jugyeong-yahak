@@ -1,18 +1,24 @@
-import { OpenVidu } from "openvidu-browser";
-import { Route, Routes } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
-import { EventSourcePolyfill } from "event-source-polyfill";
+import { OpenVidu } from 'openvidu-browser';
+import { Route, Routes } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import axios from "axios";
-import React, { Component } from "react";
-// import "./TeacherLive.module.css";
-import UserVideoComponent from "../../components/UserVideoComponent";
-import About from "../Common/About";
-import Home from "../Common/Home";
+import axios from 'axios';
+import React, { Component } from 'react';
+import './TeacherLive.module.css';
+import StreamComponent from '../../components/StreamComponent';
+import ToolbarComponent from '../../components/ToolbarComponent';
+import UserModel from '../../models/user-model';
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
+import Mic from '@mui/icons-material/Mic';
+import MicOff from '@mui/icons-material/MicOff';
+import IconButton from '@mui/material/IconButton';
 
-function TeacherLive() {
+import TeacherTheme from './TeacherTheme';
+
+var localUser = new UserModel();
+const BASE_URL = 'https://i9e206.p.ssafy.io';
+
+export default function TeacherLive() {
   const location = useLocation();
   const navigate = useNavigate();
   return <OpenViduSession state={location.state} navigate={navigate} />;
@@ -22,62 +28,61 @@ class OpenViduSession extends Component {
   constructor(props) {
     super(props);
 
+    this.navigate = props.navigate;
+    this.clazz = props.state.clazz;
+    this.mySessionId = props.state.clazz.no;
+    this.myUserName = '교사 이름';
+    this.remotes = [];
+
     this.state = {
-      navigate: props.navigate,
-      clazz: props.state.clazz,
-      mySessionId: props.state.clazz.no,
-      myUserName: "교사 이름",
+      mainStreamUser: undefined,
       session: undefined,
-      mainStreamManager: undefined,
-      publisher: undefined,
+      localUser: undefined,
       subscribers: [],
       trace: false,
-      mouse: { x: null, y: null },
-      mic: true,
+      page: 0,
+      themePK: null,
+      theme: null,
+      wordPK: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     };
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
-    this.onbeforeunload = this.onbeforeunload.bind(this);
-    this.handleConnect = this.handleConnect.bind(this);
+    this.handleMouseTraceOn = this.handleMouseTraceOn.bind(this);
+    this.handleMouseTraceOff = this.handleMouseTraceOff.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
-    this.handlePageMove = this.handlePageMove.bind(this);
+    this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
+    this.deleteSubscriber = this.deleteSubscriber.bind(this);
+    this.updateSubscribers = this.updateSubscribers.bind(this);
+    this.connectWebCam = this.connectWebCam.bind(this);
+    this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToTimer = this.subscribeToTimer.bind(this);
   }
 
   componentDidMount() {
-    this.login(); // 일단 여기서 임시로 로그인
+    window.addEventListener('mousedown', this.handleMouseTraceOn);
+    window.addEventListener('mouseup', this.handleMouseTraceOff);
+    window.addEventListener('mousemove', this.updateMousePosition);
+    window.addEventListener('beforeunload', this.onbeforeunload);
+    this.login();
     this.joinSession();
-    window.addEventListener("mousemove", this.updateMousePosition);
-    window.addEventListener("beforeunload", this.onbeforeunload);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("mousemove", this.updateMousePosition);
-    window.removeEventListener("beforeunload", this.onbeforeunload);
+    window.removeEventListener('mousedown', this.handleMouseTraceOn);
+    window.removeEventListener('mouseup', this.handleMouseTraceOff);
+    window.removeEventListener('mousemove', this.updateMousePosition);
+    window.removeEventListener('beforeunload', this.onbeforeunload);
+    this.leaveSession();
   }
 
   onbeforeunload(event) {
     this.leaveSession();
-  }
-
-  handleMainVideoStream(stream) {
-    if (this.state.mainStreamManager !== stream) {
-      this.setState({
-        mainStreamManager: stream,
-      });
-    }
-  }
-
-  deleteSubscriber(streamManager) {
-    let subscribers = this.state.subscribers;
-    let index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      this.setState({
-        subscribers: subscribers,
-      });
-    }
   }
 
   joinSession() {
@@ -87,62 +92,97 @@ class OpenViduSession extends Component {
       {
         session: this.OV.initSession(),
       },
-      () => {
-        var mySession = this.state.session;
+      async () => {
+        this.subscribeToStreamCreated();
+        await this.connectToSession();
+      }
+    );
+  }
 
-        mySession.on("streamCreated", (event) => {
-          var subscriber = mySession.subscribe(event.stream, undefined);
-          var subscribers = this.state.subscribers;
-          subscribers.push(subscriber);
+  async connectToSession() {
+    try {
+      var token = await this.getToken();
+      console.log('Token : ' + token);
+      this.connect(token);
+    } catch (error) {
+      console.error('There was an error getting the token:', error.code, error.message);
+      if (this.props.error) {
+        this.props.error({
+          error: error.error,
+          messgae: error.message,
+          code: error.code,
+          status: error.status,
+        });
+      }
+      alert('There was an error getting the token:', error.message);
+    }
+  }
 
-          this.setState({
-            subscribers: subscribers,
+  connect(token) {
+    this.state.session
+      .connect(token, { clientData: this.myUserName })
+      .then(() => {
+        this.connectWebCam();
+      })
+      .catch((error) => {
+        if (this.props.error) {
+          this.props.error({
+            error: error.error,
+            messgae: error.message,
+            code: error.code,
+            status: error.status,
           });
-        });
+        }
+        alert('There was an error connecting to the session:', error.message);
+        console.log('There was an error connecting to the session:', error.code, error.message);
+      });
+  }
 
-        mySession.on("streamDestroyed", (event) => {
-          this.deleteSubscriber(event.stream.streamManager);
-        });
+  async connectWebCam() {
+    let publisher = this.OV.initPublisher(undefined, {
+      audioSource: undefined,
+      videoSource: undefined,
+      publishAudio: localUser.isAudioActive(),
+      publishVideo: true,
+      resolution: '640x480',
+      frameRate: 30,
+      insertMode: 'APPEND',
+    });
 
-        mySession.on("exception", (exception) => {
-          console.warn(exception);
-        });
+    this.state.session.publish(publisher).then(() => {
+      this.updateSubscribers();
+    });
 
-        this.getToken().then((token) => {
-          mySession
-            .connect(token, { clientData: this.state.myUserName })
-            .then(async () => {
-              let publisher = await this.OV.initPublisherAsync(undefined, {
-                audioSource: undefined,
-                videoSource: undefined,
-                publishAudio: true,
-                publishVideo: true,
-                resolution: "640x480",
-                frameRate: 30,
-                insertMode: "APPEND",
-                mirror: false,
-              });
+    localUser.setNickname(this.myUserName);
+    localUser.setConnectionId(this.state.session.connection.connectionId);
+    localUser.setStreamManager(publisher);
 
-              mySession.publish(publisher);
+    this.subscribeToUserChanged();
+    this.subscribeToStreamDestroyed();
+    this.subscribeToMic();
+    this.subscribeToExit();
+    this.subscribeToInfo();
+    this.subscribeToTimer();
 
-              this.setState(
-                {
-                  mainStreamManager: publisher,
-                  publisher: publisher,
-                },
-                () => {
-                  this.handleConnect();
-                }
-              );
-            })
-            .catch((error) => {
-              console.log(
-                "There was an error connecting to the session:",
-                error.code,
-                error.message
-              );
-            });
-        });
+    this.setState({
+      mainStreamUser: localUser,
+      localUser: localUser,
+    });
+  }
+
+  updateSubscribers() {
+    var subscribers = this.remotes;
+    this.setState(
+      {
+        subscribers: subscribers,
+      },
+      () => {
+        if (this.state.localUser) {
+          this.sendSignalUserChanged({
+            isAudioActive: this.state.localUser.isAudioActive(),
+            nickname: this.state.localUser.getNickname(),
+          });
+        }
       }
     );
   }
@@ -156,168 +196,233 @@ class OpenViduSession extends Component {
 
     this.OV = null;
     this.setState({
+      mainStreamUser: undefined,
       session: undefined,
-      mainStreamManager: undefined,
-      publisher: undefined,
+      localUser: undefined,
       subscribers: [],
       trace: false,
-      mouse: { x: null, y: null },
-      mic: true,
+      page: 0,
+      themePK: null,
+      theme: null,
+      wordPK: null,
+      word: null,
+      choseong: null,
+      timer: 0,
     });
   }
 
-  handleConnect() {
-    const eventSourceInitDict = {
-      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
+  micStatusChanged() {
+    localUser.setAudioActive(!localUser.isAudioActive());
+    localUser.getStreamManager().publishAudio(localUser.isAudioActive());
+    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.setState({ localUser: localUser });
+  }
+
+  handleMainVideoStream(stream) {
+    if (this.state.mainStreamUser !== stream) {
+      this.setState({
+        mainStreamUser: stream,
+      });
+    }
+  }
+
+  deleteSubscriber(stream) {
+    const remoteUsers = this.state.subscribers;
+    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
+    let index = remoteUsers.indexOf(userStream, 0);
+    if (index > -1) {
+      remoteUsers.splice(index, 1);
+      this.setState({
+        subscribers: remoteUsers,
+      });
+    }
+  }
+
+  subscribeToStreamCreated() {
+    this.state.session.on('streamCreated', (event) => {
+      const subscriber = this.state.session.subscribe(event.stream, undefined);
+
+      const newUser = new UserModel();
+      newUser.setStreamManager(subscriber);
+      newUser.setConnectionId(event.stream.connection.connectionId);
+      newUser.setType('remote');
+      const nickname = event.stream.connection.data.split('%')[0];
+      newUser.setNickname(JSON.parse(nickname).clientData);
+      this.remotes.push(newUser);
+
+      this.updateSubscribers();
+
+      const data = {
+        page: this.state.page,
+        theme: this.state.theme,
+        word: this.state.word,
+      };
+
+      this.sendSignalInit(data);
+    });
+  }
+
+  subscribeToStreamDestroyed() {
+    this.state.session.on('streamDestroyed', (event) => {
+      this.deleteSubscriber(event.stream);
+      event.preventDefault();
+    });
+  }
+
+  subscribeToUserChanged() {
+    this.state.session.on('signal:userChanged', (event) => {
+      let remoteUsers = this.state.subscribers;
+      remoteUsers.forEach((user) => {
+        if (user.getConnectionId() === event.from.connectionId) {
+          const data = JSON.parse(event.data);
+          console.log('EVENTO REMOTE: ', event.data);
+          if (data.isAudioActive !== undefined) {
+            user.setAudioActive(data.isAudioActive);
+          }
+          if (data.nickname !== undefined) {
+            user.setNickname(data.nickname);
+          }
+        }
+      });
+
+      this.setState({
+        subscribers: remoteUsers,
+      });
+    });
+  }
+
+  subscribeToMic() {
+    this.state.session.on('signal:mic', (event) => {
+      const data = JSON.parse(event.data);
+
+      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
+    });
+  }
+
+  subscribeToExit() {
+    this.state.session.on('signal:exit', (event) => {
+      this.leaveSession();
+      this.navigate('/');
+    });
+  }
+
+  subscribeToInfo() {
+    this.state.session.on('signal:info', (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.page !== undefined) {
+        this.setState({
+          page: data.page,
+        });
+      }
+      if (data.theme !== undefined) {
+        this.setState({
+          theme: data.theme,
+        });
+      }
+      if (data.word !== undefined) {
+        this.setState({
+          word: data.word,
+        });
+      }
+      if (data.choseong !== undefined) {
+        this.setState({
+          choseong: data.choseong,
+        });
+      }
+    });
+  }
+
+  subscribeToTimer() {
+    this.state.session.on('signal:timer', (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({
+        timer: data.timer - 1,
+      });
+    });
+  }
+
+  sendSignalUserChanged(data) {
+    this.sendSignal(data, 'userChanged');
+  }
+
+  sendSignalInit(data) {
+    this.sendSignal(data, 'init');
+  }
+
+  sendSignalMic(data) {
+    this.sendSignal(data, 'mic');
+  }
+
+  sendSignalMouse(data) {
+    this.sendSignal(data, 'mouse');
+  }
+
+  sendSignalExit() {
+    this.sendSignal(undefined, 'exit');
+  }
+
+  sendSignalInfo(data) {
+    this.sendSignal(data, 'info');
+  }
+
+  sendSignalTimer(data) {
+    this.sendSignal(data, 'timer');
+  }
+
+  sendSignal(data, page) {
+    const signalOptions = {
+      data: JSON.stringify(data),
+      type: page,
     };
+    this.state.session.signal(signalOptions);
+  }
 
-    const sse = new EventSourcePolyfill(
-      `${BASE_URL}/sse/v1/subscribe?streamId=${this.state.publisher.stream.connection.connectionId}&classId=${this.state.mySessionId}`,
-      eventSourceInitDict
+  handleMouseTraceOn() {
+    this.setState({
+      trace: true,
+    });
+  }
+
+  handleMouseTraceOff() {
+    this.setState(
+      {
+        trace: false,
+      },
+      () => {
+        const data = {
+          x: null,
+          y: null,
+        };
+
+        this.sendSignalMouse(data);
+      }
     );
-
-    sse.addEventListener("connect", (e) => {
-      const { data: receivedConnectData } = e;
-      console.log("Connected! ", receivedConnectData);
-    });
-
-    sse.addEventListener("page", (e) => {
-      const { data: receivedPageNo } = e;
-      this.handlePageMove(receivedPageNo);
-    });
-
-    sse.addEventListener("mic", (e) => {
-      const { data: receivedMicStatus } = e;
-      this.setState({
-        mic: receivedMicStatus,
-      });
-    });
-
-    sse.addEventListener("mouse", (e) => {
-      const { data: receivedMousePointer } = e;
-      this.setState({
-        mouse: JSON.parse(receivedMousePointer),
-      });
-    });
-
-    alert(`Connected`);
   }
 
   updateMousePosition(e) {
-    this.handleMousePointerRequest(e.clientX, e.clientY);
-  }
+    if (!this.state.trace) return;
 
-  handlePageMove(page) {
-    if (page === "1") this.state.navigate("/teacher-live");
-    else if (page === "2") this.state.navigate("/teacher-live/about");
-  }
+    const data = {
+      x: e.clientX,
+      y: e.clientY,
+    };
 
-  render() {
-    const mySessionId = this.state.mySessionId;
-    const myUserName = this.state.myUserName;
-    const clazz = this.state.clazz;
-
-    return (
-      <div className="container">
-        <h1>{clazz.name} 라이브 중입니다.</h1>
-        {this.state.session !== undefined ? (
-          <div id="session">
-            {this.state.mainStreamManager !== undefined ? (
-              <div
-                id="main-video"
-                style={{
-                  display: "inline-block",
-                  width: "200px",
-                  height: "200px",
-                }}
-              >
-                <div>교사 : {myUserName}님</div>
-                <UserVideoComponent streamManager={this.state.mainStreamManager} />
-              </div>
-            ) : null}
-            <div id="video-container" className="col-md-6">
-              {this.state.subscribers.map((sub, i) => (
-                <div
-                  key={sub.id}
-                  style={{
-                    display: "inline-block",
-                    width: "200px",
-                    height: "200px",
-                  }}
-                  className="stream-container"
-                  onClick={() => this.handleMainVideoStream(sub)}
-                >
-                  <input
-                    type="checkbox"
-                    onChange={(e) => {
-                      this.handleMicControlRequest(
-                        sub.stream.connection.connectionId,
-                        e.target.checked
-                      );
-                    }}
-                  />
-                  <span>{sub.id}</span>
-                  <UserVideoComponent streamManager={sub} />
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        <hr></hr>
-        <div>
-          {/* 페이지 변경 시작 */}
-          <button onClick={() => this.handlePageMoveRequest(1)}>
-            Home 페이지로 이동 변경 요청
-          </button>
-          <button onClick={() => this.handlePageMoveRequest(2)}>
-            About 페이지로 이동 변경 요청
-          </button>
-          {/* 페이지 변경 끝 */}
-
-          {/* 마우스 트레킹 시작 */}
-          <div>
-            <label>마우스 트레이싱 : </label>
-            <input
-              type="checkbox"
-              onChange={(e) => {
-                this.setState({
-                  trace: e.target.checked,
-                });
-              }}
-            />
-          </div>
-          {/* 마우스 트레킹 끝 */}
-        </div>
-        <hr></hr>
-        <div>
-          <h1>실시간 정보들</h1>
-          <div>
-            Mouse : {this.state.mouse.x} {this.state.mouse.y}
-          </div>
-          <div>
-            Mic : <input type="checkbox" disabled={true} checked={this.state.mic === "true"} />
-          </div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-          </Routes>
-        </div>
-      </div>
-    );
+    this.sendSignalMouse(data);
   }
 
   async login() {
     await axios
       .post(`${BASE_URL}/api/v1/auth/governments/login`, {
         // 지자체 로그인으로 우선 테스트
-        identification: "string", // 아이디 비밀번호가 실제로 string/string임..
-        password: "string",
+        identification: 'string', // 아이디 비밀번호가 실제로 string/string임..
+        password: 'string',
       })
       .then(function (response) {
         const data = response.data.data;
 
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token);
       })
       .catch(function (error) {
         console.error(error);
@@ -331,10 +436,10 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/sessions",
-      { customSessionId: sessionId + "" },
+      BASE_URL + '/api/v1/openvidu/sessions',
+      { customSessionId: sessionId + '' },
       {
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
       }
     );
     return response.data;
@@ -342,82 +447,180 @@ class OpenViduSession extends Component {
 
   async createToken(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
+      BASE_URL + '/api/v1/openvidu/' + sessionId + '/connections',
       {},
       {
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
       }
     );
     return response.data;
   }
 
-  async handlePageMoveRequest(pageNo) {
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/convert/page`,
-        {
-          classId: this.state.mySessionId,
-          streamId: this.state.publisher.stream.connection.connectionId,
-          number: pageNo,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
-  }
+  renderComponent() {
+    if (this.state.page === 0) {
+      if (this.state.theme === null) {
+        return (
+          <div>
+            <h1>테마 선택하는 페이지</h1>
+            {/* <TeacherTheme /> */}
+            <button
+              onClick={() => {
+                this.setState({
+                  themePK: 3,
+                  theme: '일상',
+                });
+              }}
+            >
+              뭐 하나 선택했다 치자
+            </button>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <h1>단어 선택하는 페이지</h1>
+            <button
+              onClick={() => {
+                this.setState(
+                  {
+                    page: 1,
+                    wordPK: 14,
+                    word: '몰?루',
+                    theme: this.state.theme,
+                  },
+                  () => {
+                    const data = {
+                      page: 1,
+                      theme: this.state.theme,
+                      word: this.state.word,
+                    };
 
-  async handleMicControlRequest(target, status) {
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/mic/control`,
-        {
-          classId: this.state.mySessionId,
-          streamId: target,
-          status: status,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
-  }
+                    this.sendSignalInfo(data);
+                  }
+                );
+              }}
+            >
+              뭐 하나 선택했다 치자
+            </button>
+          </div>
+        );
+      }
+    } else if (this.state.page === 1) {
+      // 화면 구성에 따라 많을듯?
+      return (
+        <div>
+          <h1>수업하는 페이지</h1>
+          <span>테마 : {this.state.theme}</span>
+          <span>단어 : {this.state.word}</span>
+          <button
+            onClick={() => {
+              const data = {
+                page: 11,
+              };
 
-  async handleMousePointerRequest(x, y) {
-    if (!this.state.trace) {
-      return;
+              this.sendSignalInfo(data);
+            }}
+          >
+            뭐 하나 선택했다 치자
+          </button>
+        </div>
+      );
+    } else if (this.state.page === 11) {
+      return (
+        <div>
+          <h1>게임 1 페이지</h1>
+          {this.state.timer !== 0 && <span>{this.state.timer}</span>}
+        </div>
+      );
+    } else if (this.state.page === 21) {
+      return (
+        <div>
+          <h1>게임 2 페이지</h1>
+        </div>
+      );
     }
+  }
 
-    await axios
-      .post(
-        `${BASE_URL}/api/v1/private/lecture/mouse/pointer`,
-        {
-          classId: this.state.mySessionId,
-          streamId: this.state.publisher.stream.connection.connectionId,
-          x: x,
-          y: y,
-        },
-        {
-          headers: {
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then(function (response) {})
-      .catch(function (error) {
-        console.log("error", error);
-      });
+  render() {
+    const mySessionId = this.mySessionId;
+    const clazz = this.clazz;
+    const localUser = this.state.localUser;
+    const mainStreamUser = this.state.mainStreamUser;
+
+    return (
+      <div className='container' id='container'>
+        <ToolbarComponent
+          sessionId={mySessionId}
+          clazz={clazz}
+          user={localUser}
+          micStatusChanged={this.micStatusChanged}
+          leaveSession={() => {
+            if (window.confirm('강의를 종료하시겠습니까?')) {
+              this.sendSignalExit();
+            }
+          }}
+        />
+
+        <div>
+          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: 'inline-block',
+                width: '300px',
+                height: '300px',
+              }}
+              id='mainStreamUser'
+            >
+              <div>포커스 중인 사람</div>
+              <StreamComponent user={mainStreamUser} />
+            </div>
+          )}
+          {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: 'inline-block',
+                width: '300px',
+                height: '300px',
+              }}
+              id='localUser'
+            >
+              <div>본인</div>
+              <StreamComponent user={localUser} />
+            </div>
+          )}
+          {this.state.subscribers.map((sub, i) => (
+            <div
+              key={i}
+              style={{
+                display: 'inline-block',
+                width: '300px',
+                height: '300px',
+              }}
+              id='remoteUsers'
+            >
+              <IconButton
+                onClick={() => {
+                  const data = {
+                    target: sub.getConnectionId(),
+                  };
+
+                  this.sendSignalMic(data);
+                }}
+              >
+                {sub.isAudioActive() ? <Mic /> : <MicOff color='secondary' />}
+              </IconButton>
+              <div
+                onClick={() => {
+                  this.handleMainVideoStream(sub);
+                }}
+              >
+                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div>{this.renderComponent()}</div>
+      </div>
+    );
   }
 }
-
-export default TeacherLive;

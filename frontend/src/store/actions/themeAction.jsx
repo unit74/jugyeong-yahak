@@ -8,7 +8,7 @@ export const fetchTheme = () => async (dispatch) => {
     const themeId = Math.floor(Math.random() * 10) + 1;
 
     const response = await axios.get(
-      `https://i9e206.p.ssafy.io/api/v1/themes/8`
+      `https://i9e206.p.ssafy.io/api/v1/themes/30`
     );
 
     const themeData = response.data.data; // 테마정보
