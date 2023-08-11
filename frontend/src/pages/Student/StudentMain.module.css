@@ -23,6 +23,9 @@
   backdrop-filter: blur(100px);
   width: 85%;
   height: 90%;
+  display: flex; /* Flexbox를 사용 */
+  justify-content: space-between; /* 요소들 사이의 공간을 균등하게 분배 */
+  padding: 0 10px; /* 좌우 패딩 추가 (선택적) */
 }
 /* 여기까지 공통 */
 
@@ -49,17 +52,15 @@
 }
 
 .time {
-  position: absolute;
-  top: 33%;
-  left: 50%;
-  transform: translateX(-50%);
-  transform: translateX(-50%);
-  /* white-space: nowrap; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  flex: 1; /* 각 요소가 동일한 너비로 표시되도록 설정 */
+  margin: 0 10px; /* 좌우 마진 추가 (선택적) */
+  text-align: center; /* 이미지와 버튼이 중앙에 위치하도록 */
 }
+
 
 .b2,
 .b3,
@@ -114,10 +115,10 @@
 
 .clearButton {
   margin-top: 2%;
-  background-color: #e74c3c;
+  background-color: #ef5443;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   font-weight: bold;
   padding: 2rem 4rem;
@@ -125,10 +126,38 @@
   outline: none;
   transition: background-color 0.3s;
   animation: pulsate 1.5s infinite;
+  width: 350px; /* 원하는 너비 값으로 설정 */
+  height: 100px; /* 원하는 높이 값으로 설정 */
+  line-height: 60px; /* 버튼 높이와 동일하게 설정하여 텍스트를 세로 중앙에 배치 */
+  text-align: center; /* 텍스트를 가로 중앙에 배치 */
+  padding: 0; /* 패딩을 0으로 설정하여 버튼 내의 텍스트 위치 조절 */
 }
 
 .clearButton:hover {
   background-color: #f3130b;
+}
+.diaryButton {
+  margin-top: 2%;
+  background-color: #f7e375;
+  border: none;
+  border-radius: 8px;
+  color: rgb(0, 0, 0);
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding: 2rem 4rem;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+  animation: pulsate 1.5s infinite;
+  width: 350px; /* 원하는 너비 값으로 설정 */
+  height: 100px; /* 원하는 높이 값으로 설정 */
+  line-height: 60px; /* 버튼 높이와 동일하게 설정하여 텍스트를 세로 중앙에 배치 */
+  text-align: center; /* 텍스트를 가로 중앙에 배치 */
+  padding: 0; /* 패딩을 0으로 설정하여 버튼 내의 텍스트 위치 조절 */
+}
+
+.diaryButton:hover {
+  background-color: #ead040;
 }
 
 @keyframes pulsate {
