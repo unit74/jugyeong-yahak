@@ -77,7 +77,7 @@ function App() {
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
-  
+
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
         <Route
           path="/dictation-question"
@@ -86,7 +86,6 @@ function App() {
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
-
 
         <Route path="/diary-main" element={<StudentDiaryMain />} />
         <Route path="/student-talking" element={<StudentTalking />} />

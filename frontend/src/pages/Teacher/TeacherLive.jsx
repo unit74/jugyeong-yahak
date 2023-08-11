@@ -563,7 +563,7 @@ class OpenViduSession extends Component {
           }}
         />
 
-        <div>
+        <div className={styles.video}>
           {mainStreamUser !== undefined &&
             mainStreamUser.getStreamManager() !== undefined && (
               <div

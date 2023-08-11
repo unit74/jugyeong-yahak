@@ -2,8 +2,12 @@
   font-family: "KimjungchulGothic-Bold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
     format("woff2");
-  font-weight: 700;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "Kimjungchul";
+  src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
 }
 
 .container {
@@ -16,4 +20,15 @@
   background-position: center center;
   user-select: none; /* 클릭금지 */
   font-family: "KimjungchulGothic-Bold";
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
+
+button {
+  font-family: "Kimjungchul";
+  font-size: calc(0.8vw + 1vh); /* 반응형 */
+  border-radius: 20%;
 }
