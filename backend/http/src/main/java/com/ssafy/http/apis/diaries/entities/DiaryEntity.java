@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,10 +31,16 @@ public class DiaryEntity {
   @JoinColumn(name = "member_id", nullable = false)
   private MemberEntity memberEntity;
 
-  @Column(name = "created_at", nullable = false)
+  @Column(nullable = false)
+  private String content;
+
+  @Column(nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "image_url")
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
+
+  @Column
   private String imageUrl;
 
   @Builder
@@ -47,6 +54,12 @@ public class DiaryEntity {
   @PrePersist
   public void createTimeStamps() {
     createdAt = LocalDateTime.now();
+    updatedAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void updateTimeStamps() {
+    updatedAt = LocalDateTime.now();
   }
 
 }
