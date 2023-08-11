@@ -18,7 +18,7 @@ public class ThemeStageResponse {
 
   public void of(ThemeEntity themeEntity) {
     this.curriculumnId = themeEntity.getId();
-    this.curriculumName = themeEntity.getTheme();
+    this.curriculumName = themeEntity.getSituation();
     this.curriculumImage = themeEntity.getThemeImageUrl();
   }
 
