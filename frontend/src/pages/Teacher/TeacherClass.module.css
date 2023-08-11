@@ -56,3 +56,43 @@
   border-radius: 16px;
   object-fit: cover;
 }
+
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+.btn {
+  font-family: "KimjungchulGothic-Bold";
+  width: 15%;
+  height: 50px;
+  font-size: calc(0.5vw + 1.5vh); /* 반응형 */
+  white-space: nowrap;
+}
+
+.bb {
+  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+}
+
+.back {
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(255, 255, 255, 0.5);
+  background-image: url("../../assets/images/teacherback.jpg");
+  background-blend-mode: lighten;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  user-select: none; /* 클릭금지 */
+}
+
+.total {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}

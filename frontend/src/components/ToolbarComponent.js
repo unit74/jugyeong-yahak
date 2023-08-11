@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './ToolbarComponent.css';
+import styles from './ToolbarComponent.css';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -35,7 +35,7 @@ export default class ToolbarComponent extends Component {
           <div id='navSessionInfo'>
             {this.props.sessionId && (
               <div id='titleContent'>
-                <span id='session-title'>
+                <span id='session-title' className={styles.sessiontt} >
                   {mySessionId} - {clazz.className}
                 </span>
               </div>
@@ -55,6 +55,8 @@ export default class ToolbarComponent extends Component {
                 <MicOff color='secondary' />
               )}
             </IconButton>
+
+
             <IconButton
               color='secondary'
               className='navButton'
