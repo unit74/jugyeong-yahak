@@ -80,7 +80,7 @@ export default function StudentMain() {
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>
-            👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+            {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
             {/* 어머님, 안녕하세요! */}
           </b>
           {msg && <TTSsentence message={msg} />}

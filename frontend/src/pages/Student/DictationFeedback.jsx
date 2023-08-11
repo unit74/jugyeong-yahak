@@ -36,7 +36,7 @@ export default function DictaionFeedback() {
       } else if (course === "writing" && wordIndex === 4) {
         ttsMaker("이제 일기를 써볼까요?", 0);
         setTimeout(() => {
-          navigate("/student-talking");
+          navigate("/diary-main");
         }, 3500);
       }
     }, 5000); // 5초
