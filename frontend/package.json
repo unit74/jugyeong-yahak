@@ -10,6 +10,7 @@
     "@mui/material": "^5.14.4",
     "@teachablemachine/image": "^0.8.5",
     "@testing-library/jest-dom": "^5.17.0",
+    "animate.css": "^4.1.1",
     "axios": "^1.4.0",
     "canvas-confetti": "^1.6.0",
     "event-source-polyfill": "^1.0.31",
