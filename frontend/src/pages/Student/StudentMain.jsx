@@ -9,9 +9,7 @@ import styled from "@emotion/styled";
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -32,8 +30,8 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        // text = `${userInfo.name} 어머님, 안녕하세요!`;
-        text = `어머님, 안녕하세요!`;
+        text = `${userInfo.name} 어머님, 안녕하세요!`;
+        // text = `어머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -65,8 +63,8 @@ export default function StudentMain() {
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>
-            {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
-            어머님, 안녕하세요!
+            👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+            {/* 어머님, 안녕하세요! */}
           </b>
           {msg && <TTSsentence message={msg} />}
         </div>
@@ -75,10 +73,7 @@ export default function StudentMain() {
           <b className={styles.b2}>지금은</b>
           <b className={styles.b3}>혼자 학습 시간</b>
           {/* <b className={styles.b4}>시간</b> */}
-          <button
-            className={styles.clearButton}
-            onClick={navigateToRecordDictation}
-          >
+          <button className={styles.clearButton} onClick={navigateToRecordDictation}>
             복습하기
           </button>
         </div>
