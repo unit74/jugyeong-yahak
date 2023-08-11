@@ -2,22 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudentRecordWord.module.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTheme } from "../../store/actions/themeAction";
+import { Configuration, OpenAIApi } from "openai";
 
-import { useDebounce } from "../Common/hooks/useDebounce";
-import speak from "../../assets/images/speak.png";
-import TTS from "../Common/TTS";
+import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentRecordWord() {
   // DB에 저장된 단어 가져오기
-  const dispatch = useDispatch();
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
-  const [repeatValue, setRepeatValue] = useState(0); // prop을 새로 넣어줌으로써 TTS를 리렌더링 시킨다.
 
-  const count = 0;
+  // 음성인식 관련
+  const { transcript, listening } = useSpeechRecognition();
+
+  // TTS 관련
+  const [count, setCount] = useState(0);
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -31,104 +30,74 @@ export default function StudentRecordWord() {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  const helpGpt = async () => {
+    const apiKey = "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";
+
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        { role: "system", content: "assistant는 한국어를 가르치는 국어 교사이다." },
+        {
+          role: "user",
+          content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 이유를 초등학생의 수준에 맞게 설명해주세요.`,
+        },
+      ],
+    });
+
+    let text = response.data.choices[0].message.content;
+    ttsMaker(text, 0);
+    await delay(text.length * 250);
+  };
+
   useEffect(() => {
     async function makeRequest(data) {
       await delay(1000);
 
       ttsMaker(data, 0);
       await delay(data.length * 250);
+      ttsMaker("", 0);
 
-      // 녹음 관련 로직
-      await recording();
+      SpeechRecognition.startListening();
+      await delay(4000);
+      SpeechRecognition.stopListening();
+
+      setCount(count + 1);
+    }
+
+    async function work(data) {
+      if (data === wordsList[wordIndex].word) {
+        navigate("/good-feedback", { state: { course: "reading" } });
+      } else {
+        if (count == 1) {
+          await helpGpt();
+        }
+        setCount(count + 1);
+      }
     }
 
     if (count == 0) {
       makeRequest("단어를 읽어주세요!!");
-    } else {
+      console.log(transcript);
+    } else if (count == 1) {
+      work(transcript);
+      // console.log(transcript);
+    } else if (count == 2) {
       makeRequest("다시 단어를 읽어주세요!!");
+    } else if (count == 3) {
+      work(transcript);
+    } else if (count == 4) {
+      makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
+    } else {
+      navigate("/good-feedback", { state: { course: "reading" } });
     }
   }, [count]);
 
-  const recording = async () => {
-    return new Promise((resolve) => {
-      SpeechRecognition.startListening();
-
-      setTimeout(() => {
-        setMsg(msg);
-        resolve();
-      }, 10000);
-    });
-  };
-
-  // 음성인식 관련
-  const { transcript, listening, browserSupportsSpeechRecognition } = useSpeechRecognition();
-
-  // 녹음 카운터
-  const [recordCounter, setRecordCounter] = useState(0);
-
-  // 녹음된 답변들을 저장할 배열
-  const [recordedTranscripts, setRecordedTranscripts] = useState([]);
-  const debounceTerm = useDebounce(transcript, 2000);
-  console.log(transcript, "transcript");
-
-  // 들은 정답의 공백을 없앰
-  const removeSpaces = (str) => str.replace(/\s/g, "");
-  const normalizedDebounceTerm = removeSpaces(debounceTerm);
-
-  useEffect(() => {
-    if (debounceTerm) {
-      setRecordedTranscripts((prev) => [...prev, normalizedDebounceTerm]);
-      console.log("녹음됨!");
-    } else {
-      // 아무것도 녹음되지 않았을 때 공백을 배열에 추가
-      setRecordedTranscripts((prev) => [...prev, ""]);
-      console.log("녹음되지 않음!");
-    }
-  }, [debounceTerm]);
-
-  useEffect(() => {
-    const intervalsForRepeat = [8800, 16800]; // 처음은 word 불러오고 나면 실행 됨
-    const timersForRepeat = intervalsForRepeat.map((interval) => {
-      return setTimeout(() => {
-        setRepeatValue((prev) => prev + 1);
-      }, interval);
-    });
-
-    const startListeningWithDelay = (delay) => {
-      return setTimeout(() => {
-        SpeechRecognition.startListening();
-        setRecordCounter((prevCounter) => prevCounter + 1); // 카운터 증가
-      }, delay);
-    };
-
-    const intervalsForListening = [1800, 9800, 17800, 25800]; // 녹음은 3번하고 마지막 4번째는 카운트를 올려서 피드백실행 하려고 넣음
-    const timersForListening = intervalsForListening.map((interval) => {
-      return startListeningWithDelay(interval);
-    });
-
-    dispatch(fetchTheme());
-
-    // 언마운트될 때, 모든 타이머 클리어
-    return () => {
-      [...timersForRepeat, ...timersForListening].forEach((timer) => clearTimeout(timer));
-    };
-  }, []);
-
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(recordedTranscripts);
-    console.log(recordCounter);
-    if (recordCounter === 4) {
-      // 녹음 개수가 3이면 카운터는 4까지 해야함
-      // 이럴거면 그냥 해도 되는거 아냐? 근데 또 다르게는 안고쳐지네 몇번할지는 나연이에게 토스
-      if (recordedTranscripts.some((transcript) => transcript === wordsList[wordIndex]?.word)) {
-        navigate("/good-feedback", { state: { course: "reading" } });
-      } else {
-        navigate("/bad-feedback", { state: { course: "reading" } });
-      }
-    }
-  }, [recordCounter, recordedTranscripts, navigate]);
 
   return (
     <div className={styles.main}>
@@ -154,6 +123,7 @@ export default function StudentRecordWord() {
           <div className={styles.microphone}>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p>{transcript}</p>
+            {msg && <TTSsentence message={msg} />}
           </div>
         </div>
       </div>
