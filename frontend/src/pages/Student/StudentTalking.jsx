@@ -3,9 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentTalking() {

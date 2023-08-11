@@ -17,49 +17,6 @@ export default function StudentRecordWord() {
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
   const [repeatValue, setRepeatValue] = useState(0); // prop을 새로 넣어줌으로써 TTS를 리렌더링 시킨다.
 
-  const count = 0;
-  const [msg, setMsg] = useState(null);
-
-  const ttsMaker = async (msg, timer) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setMsg(msg);
-        resolve();
-      }, timer);
-    });
-  };
-
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  useEffect(() => {
-    async function makeRequest(data) {
-      await delay(1000);
-
-      ttsMaker(data, 0);
-      await delay(data.length * 250);
-
-      // 녹음 관련 로직
-      await recording();
-    }
-
-    if (count == 0) {
-      makeRequest("단어를 읽어주세요!!");
-    } else {
-      makeRequest("다시 단어를 읽어주세요!!");
-    }
-  }, [count]);
-
-  const recording = async () => {
-    return new Promise((resolve) => {
-      SpeechRecognition.startListening();
-
-      setTimeout(() => {
-        setMsg(msg);
-        resolve();
-      }, 10000);
-    });
-  };
-
   // 음성인식 관련
   const { transcript, listening, browserSupportsSpeechRecognition } = useSpeechRecognition();
 
@@ -85,6 +42,11 @@ export default function StudentRecordWord() {
       console.log("녹음되지 않음!");
     }
   }, [debounceTerm]);
+
+  useEffect(() => {
+    console.log(wordIndex);
+    console.log(wordsList[wordIndex]);
+  }, [wordIndex]);
 
   useEffect(() => {
     const intervalsForRepeat = [8800, 16800]; // 처음은 word 불러오고 나면 실행 됨
