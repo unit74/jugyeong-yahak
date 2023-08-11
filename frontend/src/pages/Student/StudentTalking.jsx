@@ -17,13 +17,16 @@ export default function StudentTalking() {
   const [allTranscripts, setAllTranscripts] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedText, setGeneratedText] = useState("");
+  const [generatedDiary, setGeneratedDiary] = useState("");
+
   const navigate = useNavigate();
   
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const [allConversations, setAllConversations] = useState([]);
   const [conversationCount, setConversationCount] = useState(0);
-
-
+  
+  const [isGeneratingDiary, setIsGeneratingDiary] = useState(false);
+  
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -71,6 +74,14 @@ export default function StudentTalking() {
       ttsAndListen();
     }
   }, [generatedText]);
+
+  useEffect(() => {
+    if (conversationCount >= 3) {
+      generateDiary();
+      navigate("/diary", { state: { generatedDiary: generatedDiary } });
+    }
+  }, [conversationCount]);
+  
   
 
   const generateText = async (message) => {
@@ -89,7 +100,13 @@ export default function StudentTalking() {
             { role: "system", content: "하나의 질문" },
             {
               role: "user",
-              content: `다음 내용을 듣고 나에게 질문해줘. 어르신께 질문한다고 생각하고 매우 쉽고 간결하게 얘기해줘. : ${message}`,
+              content: `
+              사용자가 하는 말을 듣고, 그에 맞게 하나의 질문을 응답받고 싶어.
+              예를 들어, '오늘 날씨가 너무 더워서 병원갔다왔는데 너무 힘들다' 라고 하면
+              '왜 병원에 다녀오셨어요?' 라는 질문을 응답받고 싶어.
+              대화하는 것 처럼 자연스럽게 질문해줘야해.
+              "${message}"에 대해 적절한 질문을 해줘!
+              `,
             },
           ],
         });
@@ -104,6 +121,40 @@ export default function StudentTalking() {
       }
     }
   };
+
+  const generateDiary = async () => {
+    if (!isGeneratingDiary) {
+      setIsGeneratingDiary(true);
+
+      try {
+        const apiKey = "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";
+
+        const configuration = new Configuration({
+          apiKey: apiKey,
+        });
+        const openai = new OpenAIApi(configuration);
+
+        const response = await openai.createChatCompletion({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: "70대가 쓴 일기처럼 작성해줘." },
+            {
+              role: "user",
+              content: `다음 내용을 짧은 4개의 문장으로 일기처럼 작성해줘 : ${allConversations}`,
+            },
+          ],
+        });
+
+        const diaryContent = response.data.choices[0].message.content;
+        setGeneratedDiary(diaryContent); 
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setIsGeneratingDiary(false);
+      }
+    }
+  };
+
 
   useEffect(() => {
     setSpeechWord(transcript);
