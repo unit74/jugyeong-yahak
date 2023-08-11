@@ -27,32 +27,62 @@
   align-items: center;
 }
 
-.topic {
-  color: var(--color-orange);
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
 }
 
-.topicsContainer {
+.btn {
+  font-family: "KimjungchulGothic-Bold";
+  width: 30%;
+  height: 200px;
+  font-size: calc(1.2vw + 1.5vh); /* 반응형 */
+  white-space: nowrap;
+  border-radius: 20%;
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
+  transition: all 0.3s ease;
 }
 
-.topicBox {
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.bb {
+  font-size: calc(2.7vw + 1.5vh); /* 반응형 */
+}
+
+.back {
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(255, 255, 255, 0.5);
+  background-image: url("../../assets/images/teacherback.jpg");
+  background-blend-mode: lighten;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  user-select: none; /* 클릭금지 */
+  min-height: calc(100vh - 80px);
+  justify-content: center;
+  display: flex;
+}
+
+.total {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
-  width: 170px;
-  height: 215px;
-  padding: 20px;
+  width: 100%;
+  overflow: hidden;
 }
 
-.topicBox img {
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  object-fit: cover;
+.classesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15%; /* 버튼 간격 조절 */
+  padding-top: 15%;
+  padding-left: 1%;
+  justify-content: center;
 }

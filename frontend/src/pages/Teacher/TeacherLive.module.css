@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+.container {
+  width: 100%;
+  background-color: var(--color-white);
+  background-image: url("../../assets/images/teacherback.jpg");
+  background-blend-mode: lighten;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  user-select: none; /* 클릭금지 */
+  font-family: "KimjungchulGothic-Bold";
+}
