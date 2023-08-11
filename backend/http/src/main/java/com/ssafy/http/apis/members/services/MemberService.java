@@ -1,6 +1,5 @@
 package com.ssafy.http.apis.members.services;
 
-import com.ssafy.http.apis.commoncodes.CommonCode;
 import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
@@ -11,9 +10,7 @@ import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
-import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
 import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
-import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
@@ -59,39 +56,18 @@ public class MemberService {
 
     Long classId = memberEntity.getClassId();
 
-    // 강의 종료 로그
-    LectureHistoryEntity lectureHistoryEntity = lectureHistoryRepository.findNotClosedEntityById(
-        classId);
+    // 강의 종료 로그 -> 커리큘럼 null
+    LectureHistoryEntity lectureHistoryEntity = LectureHistoryEntity.builder()
+        .classId(classId)
+        .teacherId(loginUserId)
+        .build();
 
-    lectureHistoryEntity.endLecture();
     lectureHistoryRepository.save(lectureHistoryEntity);
 
     //강사 classId null로 처리
     memberEntity.setClassId(null);
     memberRepository.save(memberEntity);
 
-    //숙제
-    List<HomeworkHistoriesEntity> homeworks = new ArrayList<>();
-
-    List<MemberEntity> students = memberRepository.findAllByClassId(classId);//학생들 조회
-
-    ThemeEntity themeEntity = themeRepository.findById(
-        lectureHistoryEntity.getThemeEntity().getId()).orElseThrow(
-        () -> new CustomException(ErrorCode.NOT_FOUND_ERROR)
-    );
-
-    for (MemberEntity student : students) {
-      HomeworkHistoriesEntity entity = HomeworkHistoriesEntity.builder()
-          .memberId(student.getId())
-          .classId(student.getClassId())
-          .themeEntity(themeEntity)
-          .status(CommonCode.C01.getStatusCode())
-          .build();
-
-      homeworks.add(entity);
-    }
-
-    homeworkHistoryRepository.saveAll(homeworks);
   }
 
   @Transactional
