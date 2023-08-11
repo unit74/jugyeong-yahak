@@ -127,7 +127,7 @@ const StudentReviewTheme = () => {
       {/* {themeSituation && <TTS message={themeSituation} />} */}
       <div className={styles.square}>
         <div className={styles.theme}>
-          <b className={styles.b}>📖 오늘의 주제 : {themeTitle} 📖</b>
+          <b className={styles.b}>오늘의 주제 : {themeTitle}</b>
           {themeTitle && themeSituation && msg && <TTSsentence message={msg} />}
           <div className={styles.imageSituationContainer}>
             <div className={styles.imageContainer}>
