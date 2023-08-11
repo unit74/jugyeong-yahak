@@ -43,12 +43,11 @@ export default function StudentDiary() {
   // useTimeoutCallback(navigateToRecordDictation, 70000);
 
   useEffect(() => {
-      generateText();
+    generateText();
     return () => {};
   }, []);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 
   useEffect(() => {
     console.log(formattedText);
@@ -73,7 +72,7 @@ export default function StudentDiary() {
       // navigateToRecordDictation();
       navigate("/good-feedback", { state: { course: "diary" } });
     }
-    
+
     makeRequest(data);
 
     return () => {};
@@ -124,7 +123,7 @@ export default function StudentDiary() {
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
 
-            <b className={styles.diarytext}>{formattedText}</b>
+          <b className={styles.diarytext}>{formattedText}</b>
           {msg && <TTS message={msg} />}
         </div>
       </div>
