@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,28 +39,34 @@ public class LectureHistoryEntity {
   private ThemeEntity themeEntity;
 
   @Column(nullable = false)
-  private LocalDateTime startedAt;
+  private LocalDateTime createdAt;
 
-  @Column
-  private LocalDateTime endedAt;
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 
   @PrePersist
   public void createTimeStamps() {
-    startedAt = LocalDateTime.now();
+    createdAt = LocalDateTime.now();
+    updatedAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void updateTimeStamps() {
+    updatedAt = LocalDateTime.now();
   }
 
   @Builder
   public LectureHistoryEntity(Long id, Long classId, Long teacherId, ThemeEntity themeEntity,
-      LocalDateTime startedAt, LocalDateTime endedAt) {
+      LocalDateTime createdAt, LocalDateTime endedAt) {
     this.id = id;
     this.classId = classId;
     this.teacherId = teacherId;
     this.themeEntity = themeEntity;
-    this.startedAt = startedAt;
-    this.endedAt = endedAt;
+    this.createdAt = createdAt;
+    this.updatedAt = endedAt;
   }
 
-  public void endLecture() {
-    endedAt = LocalDateTime.now();
-  }
+//  public void endLecture() {
+//    endedAt = LocalDateTime.now();
+//  }
 }

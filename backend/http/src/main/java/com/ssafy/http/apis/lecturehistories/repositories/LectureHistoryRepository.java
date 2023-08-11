@@ -22,8 +22,10 @@ public interface LectureHistoryRepository extends JpaRepository<LectureHistoryEn
   List<ThemeEntity> findStagesAllForClass(@Param("themeName") String themeName,
       @Param("classId") Long classId);
 
-  @Query("SELECT lh FROM LectureHistoryEntity lh "
-      + "WHERE lh.classId = :classId AND lh.endedAt is null "
-      + "ORDER BY lh.startedAt DESC")
-  LectureHistoryEntity findNotClosedEntityById(@Param("classId") Long classId);
+//  @Query("SELECT lh FROM LectureHistoryEntity lh "
+//      + "WHERE lh.classId = :classId AND lh.endedAt is null "
+//      + "ORDER BY lh.startedAt DESC")
+//  LectureHistoryEntity findNotClosedEntityById(@Param("classId") Long classId);
+
+
 }
