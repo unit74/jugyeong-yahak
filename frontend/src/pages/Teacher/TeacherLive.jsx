@@ -41,9 +41,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -208,9 +206,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -446,35 +442,24 @@ class OpenViduSession extends Component {
     return response.data;
   }
 
-  renderComponent() {
+  async renderComponent() {
     if (this.state.page === 0) {
       if (this.state.theme === null) {
         return (
           <div>
             <h1>테마 선택하는 페이지</h1>
-            {/* <TeacherTheme /> */}
-            <button
-              onClick={() => {
-                this.setState({
-                  themePK: 3,
-                  theme: "일상",
-                });
-              }}
-            >
-              뭐 하나 선택했다 치자
-            </button>
+            <TeacherTheme $={this} />
           </div>
         );
       } else {
         return (
           <div>
-            <h1>단어 선택하는 페이지</h1>
+            <h1>커리큘럼 선택하는 페이지</h1>
             <button
               onClick={() => {
                 this.setState(
                   {
                     page: 1,
-                    wordPK: 14,
                     word: "몰?루",
                     theme: this.state.theme,
                   },
