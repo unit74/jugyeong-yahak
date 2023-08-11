@@ -134,10 +134,11 @@
 /*  */
 
 .clearButton {
+  font-family: "KoPubWorld Batang Bold";
   background-color: #32f30b;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   padding: 2.5rem 5rem;
   cursor: pointer;
@@ -146,14 +147,15 @@
 }
 
 .clearButton:hover {
-  background-color: #00ff88;
+  background-color: #64ff6c;
 }
 
 .downloadButton {
-  background-color: #e74c3c;
+  font-family: "KoPubWorld Batang Bold";
+  background-color: #f3130b;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   padding: 2.5rem 5rem;
   cursor: pointer;
@@ -162,7 +164,7 @@
 }
 
 .downloadButton:hover {
-  background-color: #f3130b;
+  background-color: #ff6857;
 }
 .canvasContainer {
   /* transform: translate(-50%, 38%); */
