@@ -32,8 +32,8 @@
 
 .header span {
   font-weight: 700;
-  font-size: 40px;
   margin-left: 1vw;
+  font-size: calc(1.2vw + 1.5vh);
 }
 .header img {
   width: 3vw;
@@ -54,7 +54,7 @@
   transition: background-color 0.3s;
   /* 크기 설정 */
   padding: 8px 30px;
-  font-size: 17px;
+  font-size: calc(0.6vw + 1.5vh);
 }
 
 .logout:hover {
@@ -70,4 +70,5 @@
   display: flex;
   align-items: center;
   margin-right: 1%;
+  font-size: calc(0.7vw + 1.5vh);
 }

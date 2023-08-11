@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from "./TeacherHeader.module.css";
-import Slider from "react-slick";
 
 // 로그인 사용자 이름 저장
 const TeacherHeader = () => {
