@@ -76,12 +76,14 @@ export default function StudentTalking() {
   }, [generatedText]);
 
   useEffect(() => {
-    if (conversationCount >= 3) {
-      generateDiary();
-      navigate("/diary", { state: { generatedDiary: generatedDiary } });
+    async function checkAndNavigate() {
+      if (conversationCount >= 3) {
+        navigate("/diary", { state: { generatedDiary: generatedDiary } });
+      }
     }
+
+    checkAndNavigate();
   }, [conversationCount]);
-  
   
 
   const generateText = async (message) => {
@@ -122,40 +124,7 @@ export default function StudentTalking() {
     }
   };
 
-  const generateDiary = async () => {
-    if (!isGeneratingDiary) {
-      setIsGeneratingDiary(true);
-
-      try {
-        const apiKey = "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";
-
-        const configuration = new Configuration({
-          apiKey: apiKey,
-        });
-        const openai = new OpenAIApi(configuration);
-
-        const response = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: "70대가 쓴 일기처럼 작성해줘." },
-            {
-              role: "user",
-              content: `다음 내용을 짧은 4개의 문장으로 일기처럼 작성해줘 : ${allConversations}`,
-            },
-          ],
-        });
-
-        const diaryContent = response.data.choices[0].message.content;
-        setGeneratedDiary(diaryContent); 
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setIsGeneratingDiary(false);
-      }
-    }
-  };
-
-
+ 
   useEffect(() => {
     setSpeechWord(transcript);
   }, [transcript]);
