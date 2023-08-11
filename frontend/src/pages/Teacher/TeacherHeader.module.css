@@ -7,6 +7,7 @@
 }
 
 .header {
+  user-select: none; /* 클릭금지 */
   font-family: "KimjungchulGothic-Bold";
   position: relative;
   background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0));
