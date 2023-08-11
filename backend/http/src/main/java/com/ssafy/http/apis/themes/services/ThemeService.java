@@ -1,10 +1,13 @@
 package com.ssafy.http.apis.themes.services;
 
+import com.ssafy.http.apis.commoncodes.CommonCode;
 import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.roles.Role;
+import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
+import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.apis.themes.responses.ThemeDetailResponse;
@@ -27,6 +30,7 @@ public class ThemeService {
   private final ThemeRepository themeRepository;
   private final LectureHistoryRepository lectureHistoryRepository;
   private final MemberRepository memberRepository;
+  private final HomeworkHistoryRepository homeworkHistoryRepository;
 
   @Transactional
   public List<ThemeNameResponse> getClassThemeList(Long loginUserId) {
@@ -116,6 +120,26 @@ public class ThemeService {
           .build();
 
       lectureHistoryRepository.save(historyEntity);
+
+      //학생들 숙제
+      List<HomeworkHistoriesEntity> homeworks = new ArrayList<>();
+
+      List<MemberEntity> students = memberRepository.findAllByClassId(
+          memberEntity.getClassId());//학생들 조회
+
+      for (MemberEntity student : students) {
+        HomeworkHistoriesEntity entity = HomeworkHistoriesEntity.builder()
+            .memberId(student.getId())
+            .classId(student.getClassId())
+            .themeEntity(themeEntity)
+            .status(CommonCode.C01.getStatusCode())
+            .build();
+
+        homeworks.add(entity);
+      }
+
+      homeworkHistoryRepository.saveAll(homeworks);
+
     }
 
     return themeEntity;
