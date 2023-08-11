@@ -68,7 +68,7 @@ export default function StudentSituation() {
       navigate("/record-word");
     }
 
-    if (message === "" && data[0] !== "") {
+    if (data[0] !== "") {
       makeRequest(data);
     }
 
@@ -85,7 +85,7 @@ export default function StudentSituation() {
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedDiary}</b>
-          <TTS message={msg} />
+          {msg && <TTS message={msg} />}
         </div>
       </div>
     </div>
