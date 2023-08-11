@@ -16,7 +16,7 @@ const TeacherClass = () => {
   `;
 
   const Button = styled.button`
-    background-color: #2890f9;
+    background-color: hsl(135, 100%, 48%);
     color: white;
     border: none;
     padding: 10px 20px;
@@ -25,7 +25,7 @@ const TeacherClass = () => {
     text-transform: uppercase;
     font-weight: bold;
     &:hover {
-      background-color: #357ae8;
+      background-color: hsl(145, 100%, 51%);
     }
   `;
 
@@ -70,18 +70,17 @@ const TeacherClass = () => {
       <div className={styles.back}>
         <Main>
           <b className={styles.bb}>수업하실 반을 선택해주세요</b>
-          {classes.map((clazz, i) => {
-            return (
-              <p key={i}>
-                <Button
-                  className={styles.btn}
-                  onClick={() => handleClickClass(clazz)}
-                >
-                  {clazz.className}
-                </Button>
-              </p>
-            );
-          })}
+          <div className={styles.classesContainer}>
+            {classes.map((clazz, i) => (
+              <Button
+                key={i}
+                className={styles.btn}
+                onClick={() => handleClickClass(clazz)}
+              >
+                {clazz.className}
+              </Button>
+            ))}
+          </div>
         </Main>
       </div>
     </div>
