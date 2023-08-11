@@ -1,8 +1,18 @@
 /* ToolbarComponent.css */
 
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
 /* 기본적인 툴바 스타일 */
 .toolbar {
-  background-color: #3f51b5; /* 예시 색상 (다크 블루) */
+  font-family: "KimjungchulGothic-Bold";
+  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+  background-color: var(--color-orange); /* 예시 색상 (다크 블루) */
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,4 +50,8 @@
 
 #navLeaveButton {
   color: red;
+}
+
+.sessiontt {
+  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
 }

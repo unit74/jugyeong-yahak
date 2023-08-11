@@ -15,18 +15,13 @@ export default function StudentDiary() {
   const themeData = useSelector((state) => state.themeState.themeData) || {};
   const navigate = useNavigate();
   const location = useLocation();
-  const message = location.state && location.state.message;
+  const generatedDiary = location.state && location.state.generatedDiary;
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedText, setGeneratedText] = useState("");
 
   const [msg, setMsg] = useState(null);
 
   // 온점일 때 줄 띄우기
-  const formattedDiary =
-    (themeData &&
-      themeData.situationJournal &&
-      themeData.situationJournal.split(". ").join(".\n")) ||
-    "";
 
   const formattedText =
     (generatedText && generatedText && generatedText.split(". ").join(".\n")) ||
@@ -48,51 +43,17 @@ export default function StudentDiary() {
   // useTimeoutCallback(navigateToRecordDictation, 70000);
 
   useEffect(() => {
-    console.log(message);
-    if (message === "") {
-      dispatch(fetchTheme());
-    } else {
       generateText();
-    }
     return () => {};
-  }, [message, dispatch]);
+  }, []);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 
   useEffect(() => {
     console.log(formattedText);
 
     const data = formattedText.split(".\n");
-
-    async function makeRequest(data) {
-      await delay(1000);
-
-      ttsMaker(data[0], 0);
-      await delay(data[0].length * 500);
-
-      ttsMaker(data[1], 0);
-      await delay(data[1].length * 500);
-
-      ttsMaker(data[2], 0);
-      await delay(data[2].length * 500);
-
-      ttsMaker(data[3], 0);
-      await delay(data[3].length * 500);
-      // navigateToRecordDictation();
-      navigate("/good-feedback", { state: { course: "diary" } });
-    }
-
-    if (formattedText !== "") {
-      makeRequest(data);
-    }
-
-    return () => {};
-  }, [formattedText]);
-
-  useEffect(() => {
-    console.log(formattedDiary);
-
-    const data = formattedDiary.split(".\n");
 
     async function makeRequest(data) {
       await delay(5000);
@@ -112,10 +73,8 @@ export default function StudentDiary() {
       // navigateToRecordDictation();
       navigate("/good-feedback", { state: { course: "diary" } });
     }
-
-    if (message === "" && data[0] !== "") {
-      makeRequest(data);
-    }
+    
+    makeRequest(data);
 
     return () => {};
   }, [formattedText]);
@@ -144,7 +103,7 @@ export default function StudentDiary() {
             { role: "system", content: "70대가 쓴 일기처럼 작성해줘." },
             {
               role: "user",
-              content: `다음 내용을 짧은 4개의 문장으로 일기처럼 작성해줘 : ${message}`,
+              content: `다음 내용을 짧은 4개의 문장으로 일기처럼 작성해줘 : ${generatedDiary}`,
             },
           ],
         });
@@ -164,11 +123,8 @@ export default function StudentDiary() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
-          {message === "" ? (
-            <b className={styles.diarytext}>{formattedDiary}</b>
-          ) : (
+
             <b className={styles.diarytext}>{formattedText}</b>
-          )}
           {msg && <TTS message={msg} />}
         </div>
       </div>
