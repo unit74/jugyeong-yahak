@@ -69,7 +69,7 @@ export default function StudentDiaryMain() {
 
     makeRequest();
 
-  }, [ navigate]);
+  }, [ ]);
 
   const navigateToNextPage = useCallback(() => {
     // 페이지 이동
