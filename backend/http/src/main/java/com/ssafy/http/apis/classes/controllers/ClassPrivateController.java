@@ -50,6 +50,17 @@ public class ClassPrivateController {
         classDetailResponses);
   }
 
+  @GetMapping("/unassigned")
+  public ResponseEntity<?> getClassesUnassigned() {
+
+    List<ClassDetailResponse> classDetailResponses = classService.getUnassignedClassList(
+        SecurityUtil.getLoginUserId()
+    );
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "수업 가능한 반을 전체조회 하였습니다.",
+        classDetailResponses);
+  }
+
   @DeleteMapping
   public ResponseEntity<?> deleteClass(
       @RequestBody Map<String, Long> requestData) { //이거 수정 필요 -> 전용 request 객체
