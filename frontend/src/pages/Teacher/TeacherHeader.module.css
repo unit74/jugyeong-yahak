@@ -1,19 +1,29 @@
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
 .header {
+  font-family: "KimjungchulGothic-Bold";
   position: relative;
   background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0));
-  height: 7.5vh;
+  height: 8.5vh;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-left: 2vw;
   justify-content: space-between;
   padding-right: 2vw;
+  z-index: 1;
 }
 
 .header b {
-  font-weight: 600;
+  font-family: "KimjungchulGothic-Bold";
+  font-weight: 500;
   line-height: 60px;
-  font-family: var(--font-roboto);
   color: #424242;
   margin-left: 1vw;
   padding-right: 4%;
@@ -22,7 +32,7 @@
 
 .header span {
   font-weight: 700;
-  font-size: 50px;
+  font-size: 40px;
   margin-left: 1vw;
 }
 .header img {
@@ -33,6 +43,7 @@
 }
 
 .header .logout {
+  font-family: "KimjungchulGothic-Bold";
   background-color: var(--color-orange);
   color: var(--color-white);
   border-radius: var(--br-16xl);
@@ -42,8 +53,8 @@
   cursor: pointer;
   transition: background-color 0.3s;
   /* 크기 설정 */
-  padding: 15px 35px;
-  font-size: 25px;
+  padding: 8px 30px;
+  font-size: 17px;
 }
 
 .logout:hover {
