@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/openvidu")
+@RequestMapping("/api/v1/private/openvidu")
 public class OpenviduPrivateController {
 
   @Value("${OPENVIDU_URL}")
