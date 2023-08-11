@@ -85,6 +85,7 @@ export default function StudentSituation() {
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedDiary}</b>
+          {/* msg && 앞에 해줘야 2번 안읽음 */}
           {msg && <TTS message={msg} />}
         </div>
       </div>
