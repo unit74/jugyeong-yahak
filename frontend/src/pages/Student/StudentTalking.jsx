@@ -34,7 +34,9 @@ export default function StudentTalking() {
     async function makeRequest() {
       await delay(1000);
 
-      let text = `1분 동안 ${themeTitle}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`;
+      let text = 
+      `오늘 공부는 어떠셨나요?
+      오늘 `;
       ttsMaker(text, 0);
       await delay(text.length * 250);
 
@@ -44,7 +46,7 @@ export default function StudentTalking() {
       setTimeout(() => {
         SpeechRecognition.stopListening();
         setSpeechWord(transcript);
-      }, 60000); // 60,000ms = 1분
+      }, 100000); // 60,000ms = 1분
     }
 
     if (themeTitle !== null) {
@@ -92,17 +94,17 @@ export default function StudentTalking() {
   // 3. 이야기하기 어려워하시면 기존 일기로 연결
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (speechWord.includes("어렵다")) {
-      navigate("/diary", { state: { message: "" } });
-    }
-  }, [speechWord, navigate]);
+  // useEffect(() => {
+  //   if (speechWord.includes("어렵다")) {
+  //     navigate("/diary", { state: { message: "" } });
+  //   }
+  // }, [speechWord, navigate]);
 
-  useEffect(() => {
-    if (debounceTerm) {
-      navigate("/diary", { state: { message: debounceTerm } });
-    }
-  }, [debounceTerm, navigate]);
+  // useEffect(() => {
+  //   if (debounceTerm) {
+  //     navigate("/diary", { state: { message: debounceTerm } });
+  //   }
+  // }, [debounceTerm, navigate]);
 
   return (
     <div className={styles.main}>
@@ -110,7 +112,7 @@ export default function StudentTalking() {
         <div className={styles.theme}>
           <div className={styles.text}></div>
           <div className={styles.microphone}>
-            <h1>{themeTitle}에 관한 경험을 이야기해보아요!</h1>
+            <h1>일기를 써보아요</h1>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p>{transcript}</p>
             {msg && <TTSsentence message={msg} />}
