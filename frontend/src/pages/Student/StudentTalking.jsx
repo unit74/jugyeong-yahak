@@ -6,19 +6,27 @@ import styles from "./StudentDiary.module.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentTalking() {
-  // 변수
   const [speechWord, setSpeechWord] = useState("");
-  const debounceTerm = useDebounce(speechWord, 2000);
-  const [themeTitle, setThemeTitle] = useState(null);
-
-  // 음성 인식
   const { transcript, listening } = useSpeechRecognition();
-
+  const debounceTerm = useDebounce(transcript, 2000);
   const [msg, setMsg] = useState(null);
+  const [allTranscripts, setAllTranscripts] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedText, setGeneratedText] = useState("");
+  const [generatedDiary, setGeneratedDiary] = useState("");
 
+  const navigate = useNavigate();
+  
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const [allConversations, setAllConversations] = useState([]);
+  const [conversationCount, setConversationCount] = useState(0);
+  
+  const [isGeneratingDiary, setIsGeneratingDiary] = useState(false);
+  
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -28,81 +36,98 @@ export default function StudentTalking() {
     });
   };
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
   useEffect(() => {
     async function makeRequest() {
-      await delay(1000);
-
-      let text = `1분 동안 ${themeTitle}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`;
+      let text = `오늘 하루는 어떠셨나요?`;
       ttsMaker(text, 0);
       await delay(text.length * 250);
-
-      SpeechRecognition.startListening({ continuous: true });
-
-      // 1분 후 녹음 중지
-      setTimeout(() => {
-        SpeechRecognition.stopListening();
-        setSpeechWord(transcript);
-      }, 60000); // 60,000ms = 1분
+      SpeechRecognition.startListening();
     }
+    makeRequest();
+  }, []);
 
-    if (themeTitle !== null) {
-      makeRequest();
-    }
-  }, [themeTitle]);
-
-  // useEffect
   useEffect(() => {
-    // 1. 테마명 받아오기
-    axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
-      .then((response) => {
-        setThemeTitle(response.data.data.theme);
-        // ttsMaker(
-        //   `1분 동안 ${response.data.data.theme}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`,
-        //   0
-        // );
-      })
-      .catch((error) => console.error(`Error: ${error}`));
-
-    // 2. 마운트 후 0.8초 뒤 녹음 시작
-    // const startTimer = setTimeout(() => {
-    //   SpeechRecognition.startListening({ continuous: true });
-
-    //   // 1분 후 녹음 중지
-    //   const stopTimer = setTimeout(() => {
-    //     SpeechRecognition.stopListening();
-    //     setSpeechWord(transcript);
-    //   }, 20000); // 60,000ms = 1분
-
-    //   return () => clearTimeout(stopTimer);
-    // }, 12000);
-
-    // return () => {
-    //   clearTimeout(startTimer);
-    // };
+    setAllTranscripts(prev => prev + " " + transcript);
   }, [transcript]);
-
-  // 2. transcript를 speechWord에 저장
-  useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]);
-
-  // 3. 이야기하기 어려워하시면 기존 일기로 연결
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (speechWord.includes("어렵다")) {
-      navigate("/diary", { state: { message: "" } });
-    }
-  }, [speechWord, navigate]);
 
   useEffect(() => {
     if (debounceTerm) {
-      navigate("/diary", { state: { message: debounceTerm } });
+        setAllConversations(prev => [...prev, {type: 'user', content: debounceTerm}]);
+        if (conversationCount < 3) {
+          generateText(debounceTerm);
+        }
     }
-  }, [debounceTerm, navigate]);
+  }, [debounceTerm]);
+  
+
+  useEffect(() => {
+    if (generatedText) {
+      setAllConversations(prev => [...prev, {type: 'response', content: generatedText}]);
+      setConversationCount(prev => prev + 1); // GPT-3 응답 후 카운트 증가
+      async function ttsAndListen() {
+        await ttsMaker(generatedText, 0);
+        await delay(generatedText.length * 250);
+        if (conversationCount < 3) { // 수정: 응답 2번 후에만 음성 입력 대기
+          SpeechRecognition.startListening();
+        }
+      }
+      ttsAndListen();
+    }
+  }, [generatedText]);
+
+  useEffect(() => {
+    async function checkAndNavigate() {
+      if (conversationCount >= 3) {
+        navigate("/diary", { state: { generatedDiary: generatedDiary } });
+      }
+    }
+
+    checkAndNavigate();
+  }, [conversationCount]);
+  
+
+  const generateText = async (message) => {
+    if (!isGenerating) {
+      setIsGenerating(true);
+      try {
+        const apiKey = "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";
+        const configuration = new Configuration({
+          apiKey: apiKey,
+        });
+        const openai = new OpenAIApi(configuration);
+
+        const response = await openai.createChatCompletion({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: "하나의 질문" },
+            {
+              role: "user",
+              content: `
+              사용자가 하는 말을 듣고, 그에 맞게 하나의 질문을 응답받고 싶어.
+              예를 들어, '오늘 날씨가 너무 더워서 병원갔다왔는데 너무 힘들다' 라고 하면
+              '왜 병원에 다녀오셨어요?' 라는 질문을 응답받고 싶어.
+              대화하는 것 처럼 자연스럽게 질문해줘야해.
+              "${message}"에 대해 적절한 질문을 해줘!
+              `,
+            },
+          ],
+        });
+
+        const generatedMessage = response.data.choices[0].message.content;
+        setGeneratedText(generatedMessage);
+        console.log(generatedMessage)
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setIsGenerating(false);
+      }
+    }
+  };
+
+ 
+  useEffect(() => {
+    setSpeechWord(transcript);
+  }, [transcript]);
 
   return (
     <div className={styles.main}>
@@ -110,9 +135,15 @@ export default function StudentTalking() {
         <div className={styles.theme}>
           <div className={styles.text}></div>
           <div className={styles.microphone}>
-            <h1>{themeTitle}에 관한 경험을 이야기해보아요!</h1>
+            <h1>오늘 하루는 어떠셨나요?</h1>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
-            <p>{transcript}</p>
+            
+            {allConversations.map((conversation, index) => (
+              <div key={index} className={conversation.type === 'user' ? styles.userMessage : styles.generatedMessage}>
+                {conversation.content}
+              </div>
+            ))}
+            
             {msg && <TTSsentence message={msg} />}
             <div></div>
           </div>

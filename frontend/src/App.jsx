@@ -17,6 +17,7 @@ import StudyClassPage from "./pages/Government/ClassPage";
 import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
 import StudentNote from "./pages/Student/StudentNote";
+import StudentDiaryList from "./pages/Student/StudentDiaryList";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
@@ -29,11 +30,12 @@ import BadFeedback from "./pages/Student/BadFeedback";
 import DictaionFeedback from "./pages/Student/DictationFeedback";
 import WritingCamTest from "./pages/Student/WritingCamTest";
 import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
-import StudentDictationMain from "./pages/Student/StudentDictationMain";
+
 import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
 import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
 import StudentDictationAnswer from "./pages/Student/StudentDictationAnswer";
 import StudentDiary from "./pages/Student/StudentDiary";
+import StudentDiaryMain from "./pages/Student/StudentDiaryMain";
 import StudentTalking from "./pages/Student/StudentTalking";
 
 import StudentDone from "./pages/Student/StudentDone";
@@ -65,6 +67,7 @@ function App() {
         <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/diary-list" element={<StudentDiaryList />} />
         <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
@@ -74,7 +77,7 @@ function App() {
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
-        <Route path="/dictation-main" element={<StudentDictationMain />} />
+  
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
         <Route
           path="/dictation-question"
@@ -83,6 +86,9 @@ function App() {
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
+
+
+        <Route path="/diary-main" element={<StudentDiaryMain />} />
         <Route path="/student-talking" element={<StudentTalking />} />
         <Route path="/canvas-test" element={<CanvasTest />} />
 

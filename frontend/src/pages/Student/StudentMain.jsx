@@ -3,13 +3,17 @@ import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
+import { Transition } from "react-transition-group";
+import styled from "@emotion/styled";
+
+import liveImg from "../../assets/images/live.png";
+import reviewImg from "../../assets/images/studentreview.png";
+import diaryImg from "../../assets/images/diary.png";
 
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -30,8 +34,8 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        // text = `${userInfo.name} 어머님, 안녕하세요!`;
-        text = `어머님, 안녕하세요!`;
+        text = `${userInfo.name} 어머님, 안녕하세요!`;
+        // text = `어머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -49,37 +53,79 @@ export default function StudentMain() {
     makeRequest();
   }, []);
 
+  // 복습시작
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
     setTimeout(() => {
       navigate("/student-note");
-    }, 1000); // fadeout 후 이동
+    }, 1000); 
   }, [navigate]);
 
-  // useTimeoutCallback(navigateToRecordDictation, 10000); // 10초
+  const navigateToLive = useCallback(() => {
+    setFade(true);
+    setTimeout(() => {
+      navigate("/student-live");
+    }, 1000); 
+  }, [navigate]);
+  
+  const navigateToDiaryList= useCallback(() => {
+    setFade(true);
+    setTimeout(() => {
+      navigate("/diary-list");
+    }, 1000); // fadeout 후 이동
+  }, [navigate]);
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>
-            {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
-            어머님, 안녕하세요!
+            {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+            {/* 어머님, 안녕하세요! */}
           </b>
           {msg && <TTSsentence message={msg} />}
         </div>
-        {/*  */}
+
         <div className={styles.time}>
-          <b className={styles.b2}>지금은</b>
-          <b className={styles.b3}>혼자 학습 시간</b>
-          {/* <b className={styles.b4}>시간</b> */}
+          <div className={styles.timeImg}>
+           <img src={reviewImg} alt="reviewImg" />
+          </div>
           <button
             className={styles.clearButton}
             onClick={navigateToRecordDictation}
           >
-            복습하기
+            혼자 공부하기
           </button>
-        </div>
+          </div>
+
+        <div className={styles.time}>
+          <div className={styles.timeImg}>
+            <img src={liveImg} alt="liveImg" />
+          </div>
+          <button
+            className={styles.clearButton}
+            onClick={navigateToLive}
+          >
+            교실에 들어가기
+          </button>
+          </div>
+
+
+          <div className={styles.time}>
+          <div className={styles.timeImg}>
+            <img src={diaryImg} alt="diaryImg" />
+          </div>
+          <button
+            className={styles.diaryButton}
+            onClick={navigateToDiaryList}
+          >
+            일기장 보기
+          </button>
+          </div>
+
+          
+
+       
       </div>
     </div>
   );
