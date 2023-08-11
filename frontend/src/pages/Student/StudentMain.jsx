@@ -3,6 +3,8 @@ import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
+import { Transition } from "react-transition-group";
+import styled from "@emotion/styled";
 
 import liveImg from "../../assets/images/live.png";
 import reviewImg from "../../assets/images/studentreview.png";
@@ -11,9 +13,7 @@ import diaryImg from "../../assets/images/diary.png";
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -34,8 +34,8 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        // text = `${userInfo.name} 어머님, 안녕하세요!`;
-        text = `어머님, 안녕하세요!`;
+        text = `${userInfo.name} 어머님, 안녕하세요!`;
+        // text = `어머님, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
@@ -80,8 +80,8 @@ export default function StudentMain() {
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>
-            {/* 👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요! */}
-            어머님, 안녕하세요!
+            👋🏻 {userInfo === undefined ? "" : userInfo.name}님, 안녕하세요!
+            {/* 어머님, 안녕하세요! */}
           </b>
           {msg && <TTSsentence message={msg} />}
         </div>

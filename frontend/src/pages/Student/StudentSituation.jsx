@@ -37,14 +37,12 @@ export default function StudentSituation() {
     });
   };
 
-
   useEffect(() => {
     console.log(message);
     dispatch(fetchTheme());
   }, [dispatch]);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
 
   useEffect(() => {
     console.log(formattedDiary);
@@ -80,7 +78,6 @@ export default function StudentSituation() {
   useEffect(() => {
     ttsMaker("오늘의 이야기를 한 문장씩 따라 읽어요!!", 0);
   }, []);
-
 
   return (
     <div className={styles.main}>
