@@ -3,6 +3,8 @@ import styles from "./StudentMain.module.css";
 import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
+import { Transition } from "react-transition-group";
+import styled from "@emotion/styled";
 
 export default function StudentMain() {
   const navigate = useNavigate();
