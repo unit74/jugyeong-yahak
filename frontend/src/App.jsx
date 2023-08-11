@@ -17,6 +17,7 @@ import StudyClassPage from "./pages/Government/ClassPage";
 import StudentMain from "./pages/Student/StudentMain";
 import StudentBook from "./pages/Student/StudentBook";
 import StudentNote from "./pages/Student/StudentNote";
+import StudentDiaryList from "./pages/Student/StudentDiaryList";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
@@ -65,6 +66,7 @@ function App() {
         <Route exact path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
+        <Route path="/diary-list" element={<StudentDiaryList />} />
         <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
 
