@@ -73,13 +73,15 @@ public class MemberService {
   @Transactional
   public MemberEntity setTeacherClassId(Long loginUserId, Long classId) {
 
-    // 반이 선생에게 이미 할당이 되어 있는지 체크
-    Optional<MemberEntity> entity = memberRepository.findClassIdByRole(classId);
+    if (classId != 206L) {
+      // 해당 반이 임의의 선생에게 이미 할당이 되어 있는지 체크
+      Optional<MemberEntity> entity = memberRepository.findClassIdByRole(classId);
 
-    if (entity.isPresent()) { //값이 있을때 예외를 던젼야함
-      throw new CustomException(ErrorCode.ID_ALREADY_USE);
+      if (entity.isPresent()) { //값이 있을때 예외를 던젼야함
+        throw new CustomException(ErrorCode.ID_ALREADY_USE);
+      }
+
     }
-
     //반이 free한 상태
     Optional<MemberEntity> teacherOptionalEntity = memberRepository.findById(loginUserId);
 
