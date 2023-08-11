@@ -4,8 +4,10 @@ import com.ssafy.http.apis.classes.entities.ClassEntity;
 import com.ssafy.http.apis.classes.repositories.ClassRepository;
 import com.ssafy.http.apis.classes.request.ClassRequest;
 import com.ssafy.http.apis.classes.responses.ClassDetailResponse;
+import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.roles.Role;
+import com.ssafy.http.apis.roles.entities.RoleEntity;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.support.codes.ErrorCode;
 import java.util.ArrayList;
@@ -22,6 +24,31 @@ public class ClassService {
   private final ClassRepository classRepository;
   private final MemberRepository memberRepository;
 
+  @Transactional
+  public List<ClassDetailResponse> getUnassignedClassList(Long loginUserId) {
+
+    List<ClassDetailResponse> classDetailResponses = new ArrayList<>();
+
+    MemberEntity memberEntity = memberRepository.findMemberEntityById(loginUserId).orElseThrow(() ->
+        new CustomException(ErrorCode.ID_NOTFOUND)
+    );
+
+    List<ClassEntity> classEntities = classRepository.findUnassignedClassList(
+        memberEntity.getGovernmentId(),
+        RoleEntity.builder()
+            .role(Role.TEACHER)
+            .build());
+
+    for (ClassEntity classEntity : classEntities) {
+      ClassDetailResponse classDetailResponse = new ClassDetailResponse();
+
+      classDetailResponse.of(classEntity);
+
+      classDetailResponses.add(classDetailResponse);
+    }
+
+    return classDetailResponses;
+  }
 
   @Transactional
   public ClassDetailResponse selectOne(Long classId) {

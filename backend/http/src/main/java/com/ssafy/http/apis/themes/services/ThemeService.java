@@ -1,8 +1,10 @@
 package com.ssafy.http.apis.themes.services;
 
+import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.apis.themes.responses.ThemeDetailResponse;
@@ -96,11 +98,25 @@ public class ThemeService {
     return themeDetailResponses;
   }
 
-  public ThemeEntity getTheme(Long id) {
+  public ThemeEntity getTheme(Long themeId, Long loginUserId) {
 
-    ThemeEntity themeEntity = themeRepository.findById(id)
+    ThemeEntity themeEntity = themeRepository.findById(themeId)
         .orElseThrow(() -> new WrongParameterException(
             ErrorCode.BAD_REQUEST_ERROR));
+
+    MemberEntity memberEntity = memberRepository.findById(loginUserId)
+        .orElseThrow(() -> new CustomException(ErrorCode.ID_NOTFOUND));
+
+    //강사
+    if (memberEntity.getRole().getId() == Role.TEACHER.getId()) {
+      LectureHistoryEntity historyEntity = LectureHistoryEntity.builder()
+          .themeEntity(themeEntity)
+          .teacherId(memberEntity.getId())
+          .classId(memberEntity.getClassId())
+          .build();
+
+      lectureHistoryRepository.save(historyEntity);
+    }
 
     return themeEntity;
   }
