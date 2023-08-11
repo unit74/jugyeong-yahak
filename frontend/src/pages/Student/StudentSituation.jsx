@@ -68,7 +68,7 @@ export default function StudentSituation() {
       navigate("/record-word");
     }
 
-    if (message === "" && data[0] !== "") {
+    if (data[0] !== "") {
       makeRequest(data);
     }
 
