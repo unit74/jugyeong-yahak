@@ -202,7 +202,7 @@ class OpenViduSession extends Component {
       mySession.disconnect();
 
       await axios
-        .delete(`${BASE_URL}/api/v1/openvidu`)
+        .delete(`${BASE_URL}/api/v1/private/openvidu`)
         .then(function (response) {})
         .catch(function (error) {
           console.error(error);
@@ -438,7 +438,7 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/sessions",
+      BASE_URL + "/api/v1/private/openvidu/sessions",
       { customSessionId: sessionId + "" },
       {
         headers: { "Content-Type": "application/json" },
@@ -449,7 +449,7 @@ class OpenViduSession extends Component {
 
   async createToken(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
+      BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
