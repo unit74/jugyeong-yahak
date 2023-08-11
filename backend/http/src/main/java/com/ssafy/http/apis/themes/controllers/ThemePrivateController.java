@@ -55,7 +55,13 @@ public class ThemePrivateController {
   @GetMapping("/{curriculumId}")   // 선택된 테마 내용 반환
   public ResponseEntity<?> getTheme(@PathVariable("curriculumId") Long curriculumId) {
 
-    ThemeEntity themeEntity = themeService.getTheme(curriculumId, SecurityUtil.getLoginUserId());
+    Long loginUserId = 4L;
+
+    if (SecurityUtil.getLoginUserId() != null) {
+      loginUserId = SecurityUtil.getLoginUserId();
+    }
+
+    ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
 
     List<WordDetailResponse> words = wordService.getWords(curriculumId);
 
