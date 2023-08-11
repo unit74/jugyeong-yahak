@@ -13,7 +13,9 @@ import diaryImg from "../../assets/images/diary.png";
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -58,17 +60,17 @@ export default function StudentMain() {
     setFade(true);
     setTimeout(() => {
       navigate("/student-note");
-    }, 1000); 
+    }, 1000);
   }, [navigate]);
 
   const navigateToLive = useCallback(() => {
     setFade(true);
     setTimeout(() => {
       navigate("/student-live");
-    }, 1000); 
+    }, 1000);
   }, [navigate]);
-  
-  const navigateToDiaryList= useCallback(() => {
+
+  const navigateToDiaryList = useCallback(() => {
     setFade(true);
     setTimeout(() => {
       navigate("/diary-list");
@@ -88,7 +90,11 @@ export default function StudentMain() {
 
         <div className={styles.time}>
           <div className={styles.timeImg}>
-           <img src={reviewImg} alt="reviewImg" />
+            <img
+              className={styles.responsive_image}
+              src={reviewImg}
+              alt="reviewImg"
+            />
           </div>
           <button
             className={styles.clearButton}
@@ -96,36 +102,33 @@ export default function StudentMain() {
           >
             혼자 공부하기
           </button>
-          </div>
+        </div>
 
         <div className={styles.time}>
           <div className={styles.timeImg}>
-            <img src={liveImg} alt="liveImg" />
+            <img
+              className={styles.responsive_image}
+              src={liveImg}
+              alt="liveImg"
+            />
           </div>
-          <button
-            className={styles.clearButton}
-            onClick={navigateToLive}
-          >
+          <button className={styles.clearButton} onClick={navigateToLive}>
             교실에 들어가기
           </button>
-          </div>
+        </div>
 
-
-          <div className={styles.time}>
+        <div className={styles.time}>
           <div className={styles.timeImg}>
-            <img src={diaryImg} alt="diaryImg" />
+            <img
+              className={styles.responsive_image}
+              src={diaryImg}
+              alt="diaryImg"
+            />
           </div>
-          <button
-            className={styles.diaryButton}
-            onClick={navigateToDiaryList}
-          >
+          <button className={styles.diaryButton} onClick={navigateToDiaryList}>
             일기장 보기
           </button>
-          </div>
-
-          
-
-       
+        </div>
       </div>
     </div>
   );
