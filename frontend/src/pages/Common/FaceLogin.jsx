@@ -5,16 +5,15 @@ import axios from "axios";
 import TTS from "../Common/TTS";
 import "@mediapipe/face_detection";
 import "@tensorflow/tfjs-core";
-// Register WebGL backend.
 import "@tensorflow/tfjs-backend-webgl";
 import * as faceDetection from "@tensorflow-models/face-detection";
-// import "./FaceLogin.css";
+import "../../App.css";
+import "./FaceLogin.css";
 
 export default function FaceLogin() {
-  // const [isCaptured, setisCaptured] = useState(true);
   const [fade, setFade] = useState(false);
   const [msg, setMsg] = useState(null);
-  // const [count, setCount] = useState(0);
+  const [onTarget, setOnTarget] = useState(false);
 
   const navigate = useNavigate();
 
@@ -65,16 +64,14 @@ export default function FaceLogin() {
     const estimationConfig = { flipHorizontal: false };
     const predictions = await model.estimateFaces(photoRef, estimationConfig);
 
-    console.log(predictions);
-    console.log(predictions[0]);
-    // console.log(predictions[0].topLeft[0]);
-
     if (
+      predictions[0] !== undefined &&
       predictions[0].box.xMin >= width / 4 &&
       predictions[0].box.yMin >= width / 4 &&
       predictions[0].box.xMax <= (3 * width) / 4 &&
       predictions[0].box.yMax <= (3 * width) / 4
     ) {
+      setOnTarget(true);
       if (
         predictions[0].box.width <= (1 * width) / 4 ||
         predictions[0].box.height <= (1 * width) / 4
@@ -95,6 +92,7 @@ export default function FaceLogin() {
         login(formData);
       }
     } else {
+      setOnTarget(false);
       ttsMaker("얼굴을 칸에 맞춰주세요!!", 0);
       setTimeout(() => {
         isCaptured.current = true;
@@ -151,10 +149,6 @@ export default function FaceLogin() {
 
       isCaptured.current = true;
       ttsMaker("", 0);
-      // ttsMaker("다시 얼굴을 맞춰주세요!!", 0);
-      // setTimeout(() => {
-      //   isCaptured.current = true;
-      // }, 5000);
     }
 
     const governmentId = 4;
@@ -170,8 +164,8 @@ export default function FaceLogin() {
         console.log("login 성공");
 
         const role = response.data.data.info.role;
-        // console.log(response);
-        // teacher-main
+
+        closeWebcam();
 
         setTimeout(() => {
           setFade(true);
@@ -183,23 +177,11 @@ export default function FaceLogin() {
         }, 1000); // fadeout 후 이동
       })
       .catch((error) => {
-        // setisCaptured(true);
-
-        // ttsMaker("로그인 실패!!", 0);
-        // setTimeout(() => {}, 2000);
-        // ttsMaker("다시 얼굴을 맞춰주세요!!", 0);
-        // setTimeout(() => {
-        //   isCaptured.current = true;
-        // }, 5000);
         makeRequest();
 
         console.error(`Error: ${error}`);
       });
   };
-
-  // useEffect(() => {
-  //   console.log(predictions);
-  // }, [predictions]);
 
   useEffect(() => {
     const initFD = async () => {
@@ -211,8 +193,6 @@ export default function FaceLogin() {
       };
       model = await faceDetection.createDetector(model_1, detectorConfig);
 
-      // await tf.setBackend("webgl");
-      // model = await blazeface.load();
       console.log("model", model);
 
       window.requestAnimationFrame(loop);
@@ -223,7 +203,29 @@ export default function FaceLogin() {
     setTimeout(() => {
       isCaptured.current = true;
     }, 5000);
+
+    return () => {
+      closeModel();
+    };
   }, []);
+
+  const closeWebcam = () => {
+    const stream = videoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    videoRef.current.srcObject = null;
+  };
+
+  const closeModel = () => {
+    if (model) {
+      model.dispose(); // 모델 종료 메서드를 호출하여 메모리를 해제합니다.
+      model = null; // 모델 참조를 비웁니다.
+    }
+  };
 
   return (
     // <div className={"webcam-container" ${fade ? styles.fadeOut : ""}}>
@@ -232,32 +234,50 @@ export default function FaceLogin() {
         <div className="video-wrapper">
           {/* 웹캠 화면을 보여주는 video 요소 */}
           <div>
-            <video ref={videoRef} width={500} height={500}></video>
+            <video ref={videoRef}></video>
           </div>
         </div>
-        <div className="line_1"></div>
-        <div className="line_2"></div>
-        <div className="line_3"></div>
-        <div className="line_4"></div>
-        <div className="line_5"></div>
-        <div className="line_6"></div>
-        <div className="line_7"></div>
-        <div className="line_8"></div>
+        <div
+          className="line_1"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_2"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_3"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_4"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_5"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_6"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_7"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_8"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
       </div>
 
-      {/* 클래스 레이블을 표시하는 부분 */}
-      {/* <div id="label-container">
-    {predictions.map((p, index) => (
-      <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
-    ))}
-  </div> */}
       <div>
-        <canvas ref={photoRef} width={500} style={{ display: "none" }}></canvas>
+        <canvas ref={photoRef} style={{ display: "none" }}></canvas>
       </div>
       {/* <button onClick={takePicture}>클릭해서 캡쳐하기</button> */}
       {msg && (
         // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
-        <div>
+        <div style={{ display: "none" }}>
           <TTS message={msg} />
         </div>
       )}
