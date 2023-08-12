@@ -16,6 +16,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 
 import TeacherTheme from "./TeacherTheme";
 import styles from "./TeacherLive.module.css";
+import TeacherCurriculum from "./TeacherCurriculum";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -43,6 +44,7 @@ class OpenViduSession extends Component {
       trace: false,
       page: 0,
       theme: null,
+      curriculum: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -52,28 +54,22 @@ class OpenViduSession extends Component {
     this.leaveSession = this.leaveSession.bind(this);
     this.micStatusChanged = this.micStatusChanged.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
-    this.handleMouseTraceOn = this.handleMouseTraceOn.bind(this);
-    this.handleMouseTraceOff = this.handleMouseTraceOff.bind(this);
+    this.traceStatusChanged = this.traceStatusChanged.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.deleteSubscriber = this.deleteSubscriber.bind(this);
     this.updateSubscribers = this.updateSubscribers.bind(this);
     this.connectWebCam = this.connectWebCam.bind(this);
-    this.subscribeToInfo = this.subscribeToInfo.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
   }
 
   componentDidMount() {
-    window.addEventListener("mousedown", this.handleMouseTraceOn);
-    window.addEventListener("mouseup", this.handleMouseTraceOff);
     window.addEventListener("mousemove", this.updateMousePosition);
     window.addEventListener("beforeunload", this.onbeforeunload);
     this.joinSession();
   }
 
   componentWillUnmount() {
-    window.removeEventListener("mousedown", this.handleMouseTraceOn);
-    window.removeEventListener("mouseup", this.handleMouseTraceOff);
     window.removeEventListener("mousemove", this.updateMousePosition);
     window.removeEventListener("beforeunload", this.onbeforeunload);
     this.leaveSession();
@@ -113,6 +109,7 @@ class OpenViduSession extends Component {
         });
       }
       alert("There was an error getting the token:", error.message);
+      this.navigate("/teacher-main");
     }
   }
 
@@ -159,7 +156,6 @@ class OpenViduSession extends Component {
     this.subscribeToStreamDestroyed();
     this.subscribeToMic();
     this.subscribeToExit();
-    this.subscribeToInfo();
     this.subscribeToTimer();
 
     this.setState({
@@ -189,29 +185,32 @@ class OpenViduSession extends Component {
     const mySession = this.state.session;
 
     if (mySession) {
-      await axios
-        .delete(`${BASE_URL}/api/v1/private/openvidu`)
-        .then(function (response) {})
-        .catch(function (error) {
-          console.error(error);
-        });
-
-      mySession.disconnect();
+      this.OV = null;
+      this.setState(
+        {
+          mainStreamUser: undefined,
+          session: undefined,
+          localUser: undefined,
+          subscribers: [],
+          trace: false,
+          page: 0,
+          theme: null,
+          word: null,
+          choseong: null,
+          timer: 0,
+        },
+        async () => {
+          await axios
+            .delete(`${BASE_URL}/api/v1/private/openvidu`)
+            .then(function (response) {
+              mySession.disconnect();
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
+        }
+      );
     }
-
-    this.OV = null;
-    this.setState({
-      mainStreamUser: undefined,
-      session: undefined,
-      localUser: undefined,
-      subscribers: [],
-      trace: false,
-      page: 0,
-      theme: null,
-      word: null,
-      choseong: null,
-      timer: 0,
-    });
   }
 
   micStatusChanged() {
@@ -309,33 +308,6 @@ class OpenViduSession extends Component {
     });
   }
 
-  subscribeToInfo() {
-    this.state.session.on("signal:info", (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.page !== undefined) {
-        this.setState({
-          page: data.page,
-        });
-      }
-      if (data.theme !== undefined) {
-        this.setState({
-          theme: data.theme,
-        });
-      }
-      if (data.word !== undefined) {
-        this.setState({
-          word: data.word,
-        });
-      }
-      if (data.choseong !== undefined) {
-        this.setState({
-          choseong: data.choseong,
-        });
-      }
-    });
-  }
-
   subscribeToTimer() {
     this.state.session.on("signal:timer", (event) => {
       const data = JSON.parse(event.data);
@@ -382,26 +354,19 @@ class OpenViduSession extends Component {
     this.state.session.signal(signalOptions);
   }
 
-  handleMouseTraceOn() {
+  traceStatusChanged() {
+    if (this.state.trace) {
+      const data = {
+        x: null,
+        y: null,
+      };
+
+      this.sendSignalMouse(data);
+    }
+
     this.setState({
-      trace: true,
+      trace: !this.state.trace,
     });
-  }
-
-  handleMouseTraceOff() {
-    this.setState(
-      {
-        trace: false,
-      },
-      () => {
-        const data = {
-          x: null,
-          y: null,
-        };
-
-        this.sendSignalMouse(data);
-      }
-    );
   }
 
   updateMousePosition(e) {
@@ -449,35 +414,14 @@ class OpenViduSession extends Component {
         return (
           <div>
             <h1>테마 선택하는 페이지</h1>
-            <TeacherTheme />
+            <TeacherTheme $={this} />
           </div>
         );
       } else {
         return (
           <div>
             <h1>커리큘럼 선택하는 페이지</h1>
-            <button
-              onClick={() => {
-                this.setState(
-                  {
-                    page: 1,
-                    word: "몰?루",
-                    theme: this.state.theme,
-                  },
-                  () => {
-                    const data = {
-                      page: 1,
-                      theme: this.state.theme,
-                      word: this.state.word,
-                    };
-
-                    this.sendSignalInfo(data);
-                  }
-                );
-              }}
-            >
-              뭐 하나 선택했다 치자
-            </button>
+            <TeacherCurriculum $={this} />
           </div>
         );
       }
@@ -486,8 +430,9 @@ class OpenViduSession extends Component {
       return (
         <div>
           <h1>수업하는 페이지</h1>
-          <span>테마 : {this.state.theme}</span>
-          <span>단어 : {this.state.word}</span>
+          <h2>
+            {this.state.theme} - {this.state.curriculum.curriculumName}
+          </h2>
           <button
             onClick={() => {
               const data = {
@@ -522,6 +467,7 @@ class OpenViduSession extends Component {
     const clazz = this.clazz;
     const localUser = this.state.localUser;
     const mainStreamUser = this.state.mainStreamUser;
+    const trace = this.state.trace;
 
     return (
       <div className={styles.container} id="container">
@@ -529,7 +475,9 @@ class OpenViduSession extends Component {
           sessionId={mySessionId}
           clazz={clazz}
           user={localUser}
+          trace={trace}
           micStatusChanged={this.micStatusChanged}
+          traceStatusChanged={this.traceStatusChanged}
           leaveSession={() => {
             if (window.confirm("강의를 종료하시겠습니까?")) {
               this.sendSignalExit();
