@@ -1,14 +1,32 @@
-.App {
-  text-align: center;
-}
-
-.video-line-container {
+/* .video-line-container {
+  background-color: aquamarine;
   position: relative;
   width: 100%;
+  height: 100%;
 }
 
 .video-wrapper {
   position: relative;
+} */
+
+.video-line-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.video-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.video-wrapper video {
+  /* width: 100vh;  */
+  height: 100vh;
 }
 
 .line_1 {
@@ -17,7 +35,6 @@
   left: 25%;
   width: 10%;
   height: 5px; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -27,7 +44,6 @@
   left: 25%;
   width: 10%;
   height: 5px; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -37,7 +53,6 @@
   right: 25%;
   width: 10%;
   height: 5px; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -47,7 +62,6 @@
   right: 25%;
   width: 10%;
   height: 5px; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -57,7 +71,6 @@
   right: 25%;
   width: 5px;
   height: 10%; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -67,7 +80,6 @@
   left: 25%;
   width: 5px;
   height: 10%; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -77,7 +89,6 @@
   right: 25%;
   width: 5px;
   height: 10%; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
 }
 
@@ -87,6 +98,16 @@
   left: 25%;
   width: 5px;
   height: 10%; /* 선의 높이 (두께) 조절 */
-  background-color: red; /* 선의 색상 */
   z-index: 1; /* 선이 비디오 위에 나타나도록 z-index 설정 */
+}
+
+.line_1,
+.line_2,
+.line_3,
+.line_4,
+.line_5,
+.line_6,
+.line_7,
+.line_8 {
+  opacity: 0.5;
 }
