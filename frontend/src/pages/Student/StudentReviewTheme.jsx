@@ -49,6 +49,7 @@ const StudentReviewTheme = () => {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  // 이거 그냥 뒤에 30 번호 없이 API 호출하면 바로 숙제 가져올 수 있게 수정해야됨
   useEffect(() => {
     axios
       .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
