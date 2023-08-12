@@ -27,6 +27,35 @@ const TeacherCurriculum = (props) => {
     };
   }, []);
 
+  const chooseCurriculum = async (curriculum) => {
+    console.log(curriculum);
+    await axios
+      .get(`${BASE_URL}/api/v1/themes/${curriculum.curriculumnId}`)
+      .then(function (response) {
+        const data = response.data.data;
+
+        props.$.setState(
+          {
+            page: props.$.state.page + 1,
+            theme: props.$.state.theme,
+            curriculum: data,
+          },
+          () => {
+            const sendData = {
+              page: props.$.state.page,
+              theme: props.$.state.theme,
+              curriculum: props.$.state.curriculum.situation,
+            };
+
+            props.$.sendSignalInfo(sendData);
+          }
+        );
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <div className={styles.ipadPro1115}>
       <main className={styles.main}>
@@ -36,36 +65,10 @@ const TeacherCurriculum = (props) => {
               <div
                 className={styles.curriculumBtnEach}
                 key={i}
-                onClick={() => {
-                  props.$.setState(
-                    {
-                      page: props.$.state.page + 1,
-                      theme: props.$.state.theme,
-                      curriculum: curriculum,
-                    },
-                    () => {
-                      const data = {
-                        page: props.$.state.page,
-                        theme: props.$.state.theme,
-                        curriculum: props.$.state.curriculum,
-                      };
-
-                      props.$.sendSignalInfo(data);
-                    }
-                  );
-                }}
+                onClick={() => chooseCurriculum(curriculum)}
               >
-                <img
-                  src={curriculum.curriculumImage}
-                  alt=""
-                  height="100"
-                  width="100"
-                />
-                <button
-                  className={`${styles.curriculumBtn} ${
-                    styles[`curriculum-${i + 1}`]
-                  }`}
-                >
+                <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
+                <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
                   {curriculum.curriculumName}
                 </button>
               </div>

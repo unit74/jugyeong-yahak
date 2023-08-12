@@ -17,6 +17,7 @@ import Scrollbars from "react-custom-scrollbars-2";
 import TeacherTheme from "./TeacherTheme";
 import styles from "./TeacherLive.module.css";
 import TeacherCurriculum from "./TeacherCurriculum";
+import TeacherLiveWord from "./TeacherLiveWord";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -446,19 +447,9 @@ class OpenViduSession extends Component {
         <div>
           <h1>✔ 수업을 진행해 주세요</h1>
           <h2>
-            {this.state.theme} - {this.state.curriculum.curriculumName}
+            {this.state.theme} - {this.state.curriculum.situation}
           </h2>
-          <button
-            onClick={() => {
-              const data = {
-                page: 11,
-              };
-
-              this.sendSignalInfo(data);
-            }}
-          >
-            뭐 하나 선택했다 치자
-          </button>
+          <TeacherLiveWord $={this} />
         </div>
       );
     } else if (this.state.page === 11) {
