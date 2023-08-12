@@ -8,7 +8,12 @@ export default function PrivateRoute() {
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       navigate("/facetest", { replace: true, state: { from: location } });
+      return;
     }
+
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    if (userInfo.role === "ROLE_TEACHER")
+      navigate("/teacher-main", { replace: true, state: { from: location } });
   }, [navigate, location]);
 
   return <Outlet />;
