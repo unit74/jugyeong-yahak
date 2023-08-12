@@ -59,4 +59,10 @@ body,
 
 h1 {
   margin-left: 3%;
+  font-family: "Kimjungchul";
+}
+
+.wordname {
+  padding-left: 5%;
+  font-family: "Kimjungchul";
 }
