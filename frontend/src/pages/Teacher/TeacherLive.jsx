@@ -490,71 +490,72 @@ class OpenViduSession extends Component {
             }
           }}
         />
-
-        <div className={styles.video}>
-          {mainStreamUser !== undefined &&
-            mainStreamUser.getStreamManager() !== undefined && (
+        <div className={styles.contentContainer}>
+          <div className={styles.video}>
+            {mainStreamUser !== undefined &&
+              mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "50%",
+                    height: "50%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  <div>포커스 중인 사람</div>
+                  <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
+            {localUser !== undefined &&
+              localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "300px",
+                  }}
+                  id="localUser"
+                >
+                  <div>본인</div>
+                  <StreamComponent user={localUser} />
+                </div>
+              )}
+            {this.state.subscribers.map((sub, i) => (
               <div
-                style={{
-                  display: "inline-block",
-                  width: "50%",
-                  height: "50%",
-                }}
-                id="mainStreamUser"
-              >
-                <div>포커스 중인 사람</div>
-                <StreamComponent user={mainStreamUser} />
-              </div>
-            )}
-          {localUser !== undefined &&
-            localUser.getStreamManager() !== undefined && (
-              <div
+                key={i}
                 style={{
                   display: "inline-block",
                   width: "300px",
                   height: "300px",
                 }}
-                id="localUser"
+                id="remoteUsers"
               >
-                <div>본인</div>
-                <StreamComponent user={localUser} />
-              </div>
-            )}
-          {this.state.subscribers.map((sub, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="remoteUsers"
-            >
-              <IconButton
-                onClick={() => {
-                  const data = {
-                    target: sub.getConnectionId(),
-                  };
+                <IconButton
+                  onClick={() => {
+                    const data = {
+                      target: sub.getConnectionId(),
+                    };
 
-                  this.sendSignalMic(data);
-                }}
-              >
-                {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
-              </IconButton>
-              <div
-                onClick={() => {
-                  this.handleMainVideoStream(sub);
-                }}
-              >
-                <StreamComponent
-                  user={sub}
-                  streamId={sub.streamManager.stream.streamId}
-                />
+                    this.sendSignalMic(data);
+                  }}
+                >
+                  {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
+                </IconButton>
+                <div
+                  onClick={() => {
+                    this.handleMainVideoStream(sub);
+                  }}
+                >
+                  <StreamComponent
+                    user={sub}
+                    streamId={sub.streamManager.stream.streamId}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div>{this.renderComponent()}</div>
         </div>
-        <div>{this.renderComponent()}</div>
       </div>
     );
   }
