@@ -66,3 +66,9 @@ h1 {
   padding-left: 5%;
   font-family: "Kimjungchul";
 }
+
+.pageButtons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
