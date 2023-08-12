@@ -12,8 +12,10 @@ import UserModel from "../../models/user-model";
 import Mic from "@mui/icons-material/Mic";
 import MicOff from "@mui/icons-material/MicOff";
 import IconButton from "@mui/material/IconButton";
+import Scrollbars from "react-custom-scrollbars-2";
 
 import TeacherTheme from "./TeacherTheme";
+import styles from "./TeacherLive.module.css";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -27,7 +29,6 @@ export default function TeacherLive() {
 class OpenViduSession extends Component {
   constructor(props) {
     super(props);
-
     this.navigate = props.navigate;
     this.clazz = props.clazz;
     this.mySessionId = props.clazz.id;
@@ -41,9 +42,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -190,14 +189,14 @@ class OpenViduSession extends Component {
     const mySession = this.state.session;
 
     if (mySession) {
-      mySession.disconnect();
-
       await axios
-        .delete(`${BASE_URL}/api/v1/openvidu`)
+        .delete(`${BASE_URL}/api/v1/private/openvidu`)
         .then(function (response) {})
         .catch(function (error) {
           console.error(error);
         });
+
+      mySession.disconnect();
     }
 
     this.OV = null;
@@ -208,9 +207,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -426,7 +423,7 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/sessions",
+      BASE_URL + "/api/v1/private/openvidu/sessions",
       { customSessionId: sessionId + "" },
       {
         headers: { "Content-Type": "application/json" },
@@ -437,7 +434,7 @@ class OpenViduSession extends Component {
 
   async createToken(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
+      BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -452,29 +449,18 @@ class OpenViduSession extends Component {
         return (
           <div>
             <h1>테마 선택하는 페이지</h1>
-            {/* <TeacherTheme /> */}
-            <button
-              onClick={() => {
-                this.setState({
-                  themePK: 3,
-                  theme: "일상",
-                });
-              }}
-            >
-              뭐 하나 선택했다 치자
-            </button>
+            <TeacherTheme />
           </div>
         );
       } else {
         return (
           <div>
-            <h1>단어 선택하는 페이지</h1>
+            <h1>커리큘럼 선택하는 페이지</h1>
             <button
               onClick={() => {
                 this.setState(
                   {
                     page: 1,
-                    wordPK: 14,
                     word: "몰?루",
                     theme: this.state.theme,
                   },
@@ -538,7 +524,7 @@ class OpenViduSession extends Component {
     const mainStreamUser = this.state.mainStreamUser;
 
     return (
-      <div className="container" id="container">
+      <div className={styles.container} id="container">
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
@@ -551,7 +537,7 @@ class OpenViduSession extends Component {
           }}
         />
 
-        <div>
+        <div className={styles.video}>
           {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
             <div
               style={{

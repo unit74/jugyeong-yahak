@@ -68,7 +68,7 @@ export default function StudentSituation() {
       navigate("/record-word");
     }
 
-    if (message === "" && data[0] !== "") {
+    if (data[0] !== "") {
       makeRequest(data);
     }
 
@@ -85,7 +85,9 @@ export default function StudentSituation() {
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedDiary}</b>
-          <TTS message={msg} />
+          {/* msg && 앞에 해줘야 2번 안읽음 */}
+          {/* TTS가 자기혼자 null이라고 말함 */}
+          {msg && <TTS message={msg} />}
         </div>
       </div>
     </div>
