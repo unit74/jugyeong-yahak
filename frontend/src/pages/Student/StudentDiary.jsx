@@ -68,7 +68,6 @@ export default function StudentDiary() {
       ttsMaker(data[3], 0);
       await delay(data[3].length * 500);
 
-      // navigateToRecordDictation();
       navigate("/good-feedback", { state: { course: "diary" } });
     }
 
