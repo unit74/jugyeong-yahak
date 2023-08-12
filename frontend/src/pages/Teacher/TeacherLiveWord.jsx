@@ -13,11 +13,7 @@ const TeacherLiveWord = (props) => {
 
   return (
     <div className={styles.main}>
-      <div>
-        <span className={styles.topic}>
-          {props.$.state.curriculum.situation}
-        </span>
-      </div>
+      <span className={styles.topic}>{props.$.state.curriculum.situation}</span>
     </div>
   );
 };
