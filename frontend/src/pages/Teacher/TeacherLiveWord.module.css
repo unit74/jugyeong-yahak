@@ -14,19 +14,9 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top;
   text-align: left;
   font-size: 31px;
   color: white;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 50px;
 }
 
 .main {
@@ -38,30 +28,4 @@
 
 .topic {
   color: var(--color-orange);
-}
-
-.topicsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.topicBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
-  width: 170px;
-  height: 215px;
-  padding: 20px;
-}
-
-.topicBox img {
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  object-fit: cover;
 }
