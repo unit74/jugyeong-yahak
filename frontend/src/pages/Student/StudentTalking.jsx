@@ -10,23 +10,28 @@ import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentTalking() {
-  const [speechWord, setSpeechWord] = useState("");
+
+  // [녹음]
   const { transcript, listening } = useSpeechRecognition();
   const debounceTerm = useDebounce(transcript, 2000);
-  const [msg, setMsg] = useState(null);
-  const [allTranscripts, setAllTranscripts] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState("");
-  const [generatedDiary, setGeneratedDiary] = useState("");
 
-  const navigate = useNavigate();
+  // debounceTerm내용을 allConversations에 저장할거야. 
+  // 3번 안됐으면 GPT에 보내서 질문을 만들거야.
+  useEffect(() => {
+    if (debounceTerm) {
+        setAllConversations(prev => [...prev, {type: 'user', content: debounceTerm}]);
+        console.log(allConversations)
+        if (conversationCount < 3) {
+          generateText(debounceTerm);
+        }
+    }
+  }, [debounceTerm]);
   
+  // [TTS]
+  const [msg, setMsg] = useState(null);;
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const [allConversations, setAllConversations] = useState([]);
-  const [conversationCount, setConversationCount] = useState(0);
-  
-  const [isGeneratingDiary, setIsGeneratingDiary] = useState(false);
-  
+
+  // TTS 생성함수
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -36,6 +41,7 @@ export default function StudentTalking() {
     });
   };
 
+  // TTS 첫 질문
   useEffect(() => {
     async function makeRequest() {
       let text = `오늘 하루는 어떠셨나요?`;
@@ -46,46 +52,15 @@ export default function StudentTalking() {
     makeRequest();
   }, []);
 
-  useEffect(() => {
-    setAllTranscripts(prev => prev + " " + transcript);
-  }, [transcript]);
-
-  useEffect(() => {
-    if (debounceTerm) {
-        setAllConversations(prev => [...prev, {type: 'user', content: debounceTerm}]);
-        if (conversationCount < 3) {
-          generateText(debounceTerm);
-        }
-    }
-  }, [debounceTerm]);
   
+  // [GPT]
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedText, setGeneratedText] = useState("");
+  const [allConversations, setAllConversations] = useState([]);
+  const [conversationCount, setConversationCount] = useState(0);
+  const [generatedDiary, setGeneratedDiary] = useState(""); //삭제예정
 
-  useEffect(() => {
-    if (generatedText) {
-      setAllConversations(prev => [...prev, {type: 'response', content: generatedText}]);
-      setConversationCount(prev => prev + 1); // GPT-3 응답 후 카운트 증가
-      async function ttsAndListen() {
-        await ttsMaker(generatedText, 0);
-        await delay(generatedText.length * 250);
-        if (conversationCount < 3) { // 수정: 응답 2번 후에만 음성 입력 대기
-          SpeechRecognition.startListening();
-        }
-      }
-      ttsAndListen();
-    }
-  }, [generatedText]);
-
-  useEffect(() => {
-    async function checkAndNavigate() {
-      if (conversationCount >= 3) {
-        navigate("/diary", { state: { generatedDiary: generatedDiary } });
-      }
-    }
-
-    checkAndNavigate();
-  }, [conversationCount]);
-  
-
+  // GPT에 사용자의 답변을 보내서 질문을 받아와, generatedMessage에 저장해
   const generateText = async (message) => {
     if (!isGenerating) {
       setIsGenerating(true);
@@ -124,10 +99,38 @@ export default function StudentTalking() {
     }
   };
 
- 
+  // GPT에서 질문 받으면 -> 배열에 추가하고, TTS로 읽고, 녹음 시작 (두번째 질문부터)
   useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]);
+    if (generatedText) {
+      setAllConversations(prev => [...prev, {type: 'response', content: generatedText}]);
+      setConversationCount(prev => prev + 1); // GPT-3 응답 후 카운트 증가
+      async function ttsAndListen() {
+        await ttsMaker(generatedText, 0);
+        await delay(generatedText.length * 250);
+        if (conversationCount < 3) { // 수정: 응답 2번 후에만 음성 입력 대기
+          SpeechRecognition.startListening();
+        }
+      }
+      ttsAndListen();
+    }
+  }, [generatedText]);
+  
+  console.log(allConversations)
+
+  // 페이지 이동, 수정예정
+  // const navigate = useNavigate();
+  
+  // useEffect(() => {
+  //   async function checkAndNavigate() {
+  //     if (conversationCount >= 3) {
+  //       navigate("/diary", { state: { allConversations: allConversations } });
+  //     }
+  //   }
+
+  //   checkAndNavigate();
+  // }, [conversationCount]);
+
+ 
 
   return (
     <div className={styles.main}>
@@ -143,6 +146,7 @@ export default function StudentTalking() {
                 {conversation.content}
               </div>
             ))}
+  
             
             {msg && <TTSsentence message={msg} />}
             <div></div>
