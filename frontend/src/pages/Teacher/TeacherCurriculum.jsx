@@ -28,6 +28,35 @@ const TeacherCurriculum = (props) => {
     };
   }, []);
 
+  const chooseCurriculum = async (curriculum) => {
+    console.log(curriculum);
+    await axios
+      .get(`${BASE_URL}/api/v1/themes/${curriculum.curriculumnId}`)
+      .then(function (response) {
+        const data = response.data.data;
+
+        props.$.setState(
+          {
+            page: props.$.state.page + 1,
+            theme: props.$.state.theme,
+            curriculum: data,
+          },
+          () => {
+            const sendData = {
+              page: props.$.state.page,
+              theme: props.$.state.theme,
+              curriculum: props.$.state.curriculum.situation,
+            };
+
+            props.$.sendSignalInfo(sendData);
+          }
+        );
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   return (
     <div className={styles.ipadPro1115}>
       <TeacherHeader />
@@ -38,28 +67,7 @@ const TeacherCurriculum = (props) => {
           <span>을 선택해주세요</span>
           <div id="curriculums">
             {curriculums.map((curriculum, i) => (
-              <div
-                id="curriculum"
-                key={i}
-                onClick={() => {
-                  props.$.setState(
-                    {
-                      page: props.$.state.page + 1,
-                      theme: props.$.state.theme,
-                      curriculum: curriculum,
-                    },
-                    () => {
-                      const data = {
-                        page: props.$.state.page,
-                        theme: props.$.state.theme,
-                        curriculum: props.$.state.curriculum,
-                      };
-
-                      props.$.sendSignalInfo(data);
-                    }
-                  );
-                }}
-              >
+              <div id="curriculum" key={i} onClick={() => chooseCurriculum(curriculum)}>
                 <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
                 <button>{curriculum.curriculumName}</button>
               </div>
