@@ -78,7 +78,7 @@ export default function StudentTalking() {
             {
               role: "system",
               content:
-                "You are a helpful assistant. Whenever the user shares a statement or sentiment, ask a relevant and engaging question in response.",
+                "You are a helpful assistant. Whenever the user shares a statement or sentiment, ask a relevant and engaging question in response, using Korean honorifics (존댓말).",
             },
             {
               role: "user",
