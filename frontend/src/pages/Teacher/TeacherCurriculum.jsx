@@ -60,7 +60,12 @@ const TeacherCurriculum = (props) => {
                   );
                 }}
               >
-                <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
+                <img
+                  src={curriculum.curriculumImage}
+                  alt=""
+                  height="100"
+                  width="100"
+                />
                 <button>{curriculum.curriculumName}</button>
               </div>
             ))}
