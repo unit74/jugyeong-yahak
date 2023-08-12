@@ -41,10 +41,10 @@ export default function StudentRecordWord() {
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: "assistant는 한국어를 가르치는 국어 교사이다." },
+        { role: "system", content: "70대 어르신들에게 한글을 가르쳐 드릴꺼야!." },
         {
           role: "user",
-          content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 이유를 초등학생의 수준에 맞게 설명해주세요.`,
+          content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 부분을 짧게 한줄로 설명해줘`,
         },
       ],
     });
