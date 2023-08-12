@@ -121,17 +121,26 @@ export default function StudentTalking() {
   console.log(allConversations);
 
   // 페이지 이동, 수정예정
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   async function checkAndNavigate() {
-  //     if (conversationCount >= 3) {
-  //       navigate("/diary", { state: { allConversations: allConversations } });
-  //     }
-  //   }
+  useEffect(() => {
+    async function checkAndNavigate() {
+      if (conversationCount >= 3) {
+        // 1. allConversations 배열에서 type이 'user'인 객체들만 필터링
+        const userConversations = allConversations.filter(
+          (convo) => convo.type === "user"
+        );
 
-  //   checkAndNavigate();
-  // }, [conversationCount]);
+        // 2. 이들의 content만 따로 모아 배열로 만듦
+        const userContents = userConversations.map((convo) => convo.content);
+
+        // 3. 만든 배열을 diary 페이지로 전달
+        navigate("/diary", { state: { userConversations: userContents } });
+      }
+    }
+
+    checkAndNavigate();
+  }, [conversationCount]);
 
   return (
     <div className={styles.main}>
