@@ -15,8 +15,8 @@ export default function StudentLive() {
   const navigate = useNavigate();
 
   const clazz = {
-    no: 1,
-    name: "새싹반",
+    no: 206,
+    name: "신호동햇님반",
   };
   // 태그 생성부분
   return (
@@ -48,6 +48,7 @@ class OpenViduSession extends Component {
       mouse: { x: null, y: null },
       page: 0,
       theme: null,
+      curriculum: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -276,7 +277,10 @@ class OpenViduSession extends Component {
         subscribers: remoteUsers,
         page: data.page,
         theme: data.theme,
+        curriculum: data.curriculum,
         word: data.word,
+        choseong: data.choseong,
+        timer: data.timer,
       });
     });
   }
@@ -345,6 +349,11 @@ class OpenViduSession extends Component {
       if (data.word !== undefined) {
         this.setState({
           word: data.word,
+        });
+      }
+      if (data.curriculum !== undefined) {
+        this.setState({
+          curriculum: data.curriculum,
         });
       }
       if (data.choseong !== undefined) {

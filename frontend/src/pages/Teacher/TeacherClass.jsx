@@ -15,8 +15,19 @@ const TeacherClass = () => {
     padding: 5%;
   `;
 
+  const buttonColors = [
+    "#ffa742",
+    "#51ee56",
+    "#ff9a9a",
+    "#8f70ff",
+    "#fa67ff",
+    "#ff5d73",
+    "#5da3ff",
+  ];
+
   const Button = styled.button`
-    background-color: hsl(135, 100%, 48%);
+    background-color: ${({ colorIndex }) =>
+      buttonColors[colorIndex % buttonColors.length]};
     color: white;
     border: none;
     padding: 10px 20px;
@@ -28,7 +39,6 @@ const TeacherClass = () => {
       background-color: hsl(145, 100%, 51%);
     }
   `;
-
   const Background = styled.div`
     width: 100%;
     min-height: 100vh;
@@ -67,10 +77,15 @@ const TeacherClass = () => {
       <TeacherHeader />
       <div className={styles.back}>
         <Main>
-          <b className={styles.bb}>수업하실 반을 선택해주세요</b>
+          <b className={styles.bb}>✔ 수업하실 반을 선택해주세요</b>
           <div className={styles.classesContainer}>
             {classes.map((clazz, i) => (
-              <Button key={i} className={styles.btn} onClick={() => handleClickClass(clazz)}>
+              <Button
+                key={i}
+                colorIndex={i}
+                className={styles.btn}
+                onClick={() => handleClickClass(clazz)}
+              >
                 {clazz.className}
               </Button>
             ))}
