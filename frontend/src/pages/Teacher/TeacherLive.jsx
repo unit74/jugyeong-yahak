@@ -257,7 +257,10 @@ class OpenViduSession extends Component {
       const data = {
         page: this.state.page,
         theme: this.state.theme,
+        curriculum: this.state.curriculum,
         word: this.state.word,
+        choseong: this.state.choseong,
+        timer: this.state.timer,
       };
 
       this.sendSignalInit(data);
