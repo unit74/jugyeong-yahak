@@ -44,11 +44,14 @@ public class DiaryEntity {
   private String imageUrl;
 
   @Builder
-  public DiaryEntity(Long id, MemberEntity memberEntity, String imageUrl, LocalDateTime createdAt) {
+  public DiaryEntity(Long id, MemberEntity memberEntity, String content, String imageUrl,
+      LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
     this.memberEntity = memberEntity;
     this.imageUrl = imageUrl;
     this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.content = content;
   }
 
   @PrePersist

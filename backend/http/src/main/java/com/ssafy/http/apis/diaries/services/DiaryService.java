@@ -2,6 +2,7 @@ package com.ssafy.http.apis.diaries.services;
 
 import com.ssafy.http.apis.diaries.entities.DiaryEntity;
 import com.ssafy.http.apis.diaries.repositories.DiaryRepository;
+import com.ssafy.http.apis.diaries.requests.DiaryRegisterRequest;
 import com.ssafy.http.apis.diaries.responses.DiaryDetailResponse;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
@@ -48,5 +49,16 @@ public class DiaryService {
       diaryDetailResponses.add(diaryDetailResponse);
     }
     return diaryDetailResponses;
+  }
+
+  public void registerDiary(Long loginUserId, DiaryRegisterRequest diaryRegisterRequest) {
+
+    MemberEntity memberEntity = memberRepository.findMemberEntityById(loginUserId).orElseThrow(
+        () -> new CustomException(ErrorCode.ID_NOTFOUND)
+    );
+
+    DiaryEntity diaryEntity = diaryRegisterRequest.toEntity(memberEntity);
+
+    diaryRepository.save(diaryEntity);
   }
 }
