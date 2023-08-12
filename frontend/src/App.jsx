@@ -78,27 +78,22 @@ function App() {
         <Route path="/diary-list" element={<StudentDiaryList />} />
         <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
-
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
-
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
         <Route path="/dictation-question" element={<StudentDictationQuestion />} />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
-
         <Route path="/diary-main" element={<StudentDiaryMain />} />
         <Route path="/student-talking" element={<StudentTalking />} />
         <Route path="/canvas-test" element={<CanvasTest />} />
-
         {/* 학생 실시간 강의 */}
         <Route path="/student-live/*" element={<StudentLive />} />
-
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
         <Route path="/teacher-main" element={<TeacherMain />} />
@@ -106,17 +101,14 @@ function App() {
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
         <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
-
         {/* 교사 실시간 강의 */}
         <Route path="/teacher-live/*" element={<TeacherLive />} />
-
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
         <Route
           path="governmentmain/studyclasspage"
           element={<StudyClassPage />}
         /> */}
-
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
