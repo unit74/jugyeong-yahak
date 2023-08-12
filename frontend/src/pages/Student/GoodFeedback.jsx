@@ -30,6 +30,24 @@ export default function GoodFeedback() {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  // 7일에 한번씩만 보여줘
+  const timeNow = new Date();
+  const lastVisitedString = localStorage.getItem("lastVisitedDictationVideo");
+  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
+
+  // 이동할 다음 페이지 결정
+  const moveToNextPage = () => {
+    const daysPassed = (timeNow - lastVisited) / (1000 * 60 * 60 * 24); // 초를 일 단위로 변환
+
+    // 일주일이 지났는지 확인해서 경로 반환
+    if (daysPassed >= 7) {
+      localStorage.setItem("lastVisitedDictationVideo", timeNow.toISOString());
+      return "/dictation-video";
+    } else {
+      return "/dictation-answer";
+    }
+  };
+
   useEffect(() => {
     async function makeRequest() {
       let text = "정말 잘하셨어요!!";
@@ -40,7 +58,7 @@ export default function GoodFeedback() {
         let text = "이제 받아쓰기를 해볼까요?";
         ttsMaker(text, 0);
         await delay(text.length * 300);
-        navigate("/dictation-answer");
+        navigate(moveToNextPage());
       } else if (course === "writing" && wordIndex < 4) {
         let text = "다른 단어를 배워볼까요?";
         ttsMaker(text, 0);
@@ -58,7 +76,6 @@ export default function GoodFeedback() {
     }
 
     makeRequest();
-
   }, [course, navigate]);
 
   // 컨페티효과
