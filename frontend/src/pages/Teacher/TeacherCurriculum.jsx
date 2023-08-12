@@ -62,25 +62,32 @@ const TeacherCurriculum = (props) => {
   };
 
   return (
-    <div className={styles.ipadPro1115}>
-      <main className={styles.main}>
-        <div>
-          <div className={styles.curriculumBtnContainer}>
-            {curriculums.map((curriculum, i) => (
-              <div
-                className={styles.curriculumBtnEach}
-                key={i}
-                onClick={() => chooseCurriculum(curriculum)}
+    <div className={styles.main}>
+      <div>
+        <div className={styles.curriculumBtnContainer}>
+          {curriculums.map((curriculum, i) => (
+            <div
+              className={styles.curriculumBtnEach}
+              key={i}
+              onClick={() => chooseCurriculum(curriculum)}
+            >
+              <img
+                src={curriculum.curriculumImage}
+                alt=""
+                height="100"
+                width="100"
+              />
+              <button
+                className={`${styles.curriculumBtn} ${
+                  styles[`curriculum-${i + 1}`]
+                }`}
               >
-                <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
-                <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
-                  {curriculum.curriculumName}
-                </button>
-              </div>
-            ))}
-          </div>
+                {curriculum.curriculumName}
+              </button>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 };
