@@ -2,11 +2,16 @@ package com.ssafy.http.apis.studentlibraries.services;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.studentlibraries.repositories.HomeworkRepository;
 import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import com.ssafy.http.apis.themes.entities.ThemeEntity;
+import com.ssafy.http.exception.WrongParameterException;
+import com.ssafy.http.support.codes.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class HomeworkService {
 
   private final MemberRepository memberRepository;
+  private final HomeworkRepository homeworkRepository;
   private final EntityManager em;
 
 
@@ -40,4 +46,13 @@ public class HomeworkService {
     return response;
 
   }
+
+    public long getThemeId(Long studentId) {
+
+      long themeId = homeworkRepository.findFirstByMemberId(studentId);
+
+      return themeId;
+    }
+
+
 }
