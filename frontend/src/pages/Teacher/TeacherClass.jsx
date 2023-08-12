@@ -67,10 +67,14 @@ const TeacherClass = () => {
       <TeacherHeader />
       <div className={styles.back}>
         <Main>
-          <b className={styles.bb}>수업하실 반을 선택해주세요</b>
+          <b className={styles.bb}>✔ 수업하실 반을 선택해주세요</b>
           <div className={styles.classesContainer}>
             {classes.map((clazz, i) => (
-              <Button key={i} className={styles.btn} onClick={() => handleClickClass(clazz)}>
+              <Button
+                key={i}
+                className={`${styles.btn} ${styles[`color${(i % 7) + 1}`]}`} // 버튼에 색상 클래스 적용
+                onClick={() => handleClickClass(clazz)}
+              >
                 {clazz.className}
               </Button>
             ))}
