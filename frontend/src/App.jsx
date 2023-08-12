@@ -7,6 +7,8 @@ import store from "./store"; // Redux Store를 import 해야 함
 // pages
 // Common
 import NotFound from "./pages/Common/NotFound";
+import PrivateRoute from "./components/PrivateRoute";
+import Logout from "./pages/Common/logout";
 
 // Government
 import GovernmentMainPage from "./pages/Government/MainPage";
@@ -62,8 +64,15 @@ function App() {
       <Routes>
         {/* Student */}
         {/* 혼자학습 */}
-        <Route exact path="/" element={<StudentMain />} />
-        <Route exact path="student-note" element={<StudentNote />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <StudentMain />
+            </PrivateRoute>
+          }
+        />
+        <Route path="student-note" element={<StudentNote />} />
         <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
         <Route path="/diary-list" element={<StudentDiaryList />} />
@@ -112,6 +121,7 @@ function App() {
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
         <Route path="/facetest" element={<FaceLogin />} />
+        <Route path="/logout" element={<Logout />} />
         {/* Common */}
         <Route path="*" element={<NotFound />} />
       </Routes>
