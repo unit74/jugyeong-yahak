@@ -1,5 +1,5 @@
 import React from "react";
-import TeacherHeader from "./TeacherHeader";
+import styles from "./TeacherLiveSituation.module.css";
 
 const TeacherLiveSituation = (props) => {
   const img = props.img;
@@ -7,14 +7,11 @@ const TeacherLiveSituation = (props) => {
   const situationJournal = props.situationJournal;
 
   return (
-    <div>
-      <TeacherHeader />
-      <main>
-        <h1>상황글 페이지</h1>
-        <img src={img} alt="" />
-        <div>{situation}</div>
-        <div>{situationJournal}</div>
-      </main>
+    <div className={styles.main}>
+      <h1>상황글 페이지</h1>
+      <img src={img} alt="" />
+      <div>{situation}</div>
+      <div>{situationJournal}</div>
     </div>
   );
 };
