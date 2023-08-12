@@ -6,6 +6,7 @@ export default function PrivateRoute({ children }) {
   let location = useLocation();
 
   useEffect(() => {
+    console.log(localStorage.getItem("userInfo"));
     if (!localStorage.getItem("userInfo")) {
       navigate("/facetest", { replace: true, state: { from: location } });
       return;
