@@ -1,23 +1,65 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./TeacherCurriculum.module.css";
 import TeacherHeader from "./TeacherHeader";
-import axios from "../Common/api/authAxios";
-
-const BASE_URL = "https://i9e206.p.ssafy.io";
 
 const TeacherLiveWord = (props) => {
-  const [index, setIndex] = useState(0);
+  const curriculum = props.$.state.curriculum;
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+  const handleWord = (word) => {
+    props.$.setState({
+      word: word,
+      page: 3,
+    });
+  };
 
   return (
     <div className={styles.ipadPro1115}>
       <TeacherHeader />
       <main className={styles.main}>
         <div>
-          <span className={styles.topic}>{props.$.state.curriculum.situation}</span>
+          <button
+            onClick={() => {
+              props.$.setState(
+                {
+                  page: 2,
+                },
+                () => {
+                  props.$.sendSignalInfo({
+                    page: props.$.state.page,
+                  });
+                }
+              );
+            }}
+          >
+            상황글 페이지로
+          </button>
+          {curriculum.wordList &&
+            curriculum.wordList.map((word, i) => (
+              <button
+                className={styles.word}
+                onClick={() => handleWord(word.word)}
+                id="word"
+                key={i}
+              >
+                {word.word}
+              </button>
+            ))}
+          <button
+            onClick={() => {
+              props.$.setState(
+                {
+                  page: 11,
+                },
+                () => {
+                  props.$.sendSignalInfo({
+                    page: props.$.state.page,
+                  });
+                }
+              );
+            }}
+          >
+            게임1 페이지로
+          </button>
         </div>
       </main>
     </div>
