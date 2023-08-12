@@ -42,8 +42,8 @@
 
 .btn {
   font-family: "KimjungchulGothic-Bold";
-  width: 30%;
-  height: 200px;
+  width: 15%;
+  height: 100px;
   font-size: calc(1.2vw + 1.5vh); /* 반응형 */
   white-space: nowrap;
   border-radius: 20%;
@@ -51,6 +51,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  margin: 10px;
 }
 
 .btn:hover {
@@ -58,7 +59,7 @@
 }
 
 .bb {
-  font-size: calc(2.7vw + 1.5vh); /* 반응형 */
+  font-size: calc(2.4vw + 1.5vh); /* 반응형 */
 }
 
 .back {
@@ -86,8 +87,33 @@
 .classesContainer {
   display: flex;
   flex-wrap: wrap;
-  gap: 15%; /* 버튼 간격 조절 */
-  padding-top: 15%;
+  gap: 4%; /* 버튼 간격 조절 */
+  padding-top: 5%;
   padding-left: 1%;
-  justify-content: center;
+
+  /* justify-content: center; */
+}
+
+/* 버튼 색상 추가 */
+.color1 {
+  background-color: #ffa742;
+}
+.color2 {
+  background-color: #51ee56;
+}
+.color3 {
+  background-color: #ff9a9a;
+}
+.color4 {
+  background-color: #8f70ff;
+}
+
+.color5 {
+  background-color: #fa67ff;
+}
+.color6 {
+  background-color: #ff5d73;
+}
+.color7 {
+  background-color: #5da3ff;
 }
