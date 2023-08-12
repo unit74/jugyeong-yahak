@@ -15,6 +15,10 @@ export default function StudentReviewWord() {
   const [repeatValue, setRepeatValue] = useState(0);
 
   useEffect(() => {
+    console.log(wordsList);
+  }, [wordsList]);
+
+  useEffect(() => {
     // 3초 후에 첫 번째 리렌더링
     const timer1 = setTimeout(() => {
       setRepeatValue((prev) => prev + 1);
