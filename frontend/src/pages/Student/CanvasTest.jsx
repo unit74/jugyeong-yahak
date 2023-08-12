@@ -65,6 +65,7 @@ export default function CanvasTest() {
     dispatch(fetchTheme());
 
     // 2. OCR 결과가 들어오면, 정답과 비교하여 피드백해줌
+    console.log(studentAns);
     if (studentAns) {
       if (studentAns === wordsList[wordIndex]?.word) {
         navigate("/good-feedback", { state: { course: "writing" } });
