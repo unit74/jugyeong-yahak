@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TeacherCurriculum.module.css";
-import TeacherHeader from "./TeacherHeader";
 import axios from "../Common/api/authAxios";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -30,16 +29,12 @@ const TeacherCurriculum = (props) => {
 
   return (
     <div className={styles.ipadPro1115}>
-      <TeacherHeader />
       <main className={styles.main}>
         <div>
-          <span>오늘의 </span>
-          <span className={styles.topic}>커리큘럼</span>
-          <span>을 선택해주세요</span>
-          <div id="curriculums">
+          <div className={styles.curriculumBtnContainer}>
             {curriculums.map((curriculum, i) => (
               <div
-                id="curriculum"
+                className={styles.curriculumBtnEach}
                 key={i}
                 onClick={() => {
                   props.$.setState(
@@ -66,7 +61,13 @@ const TeacherCurriculum = (props) => {
                   height="100"
                   width="100"
                 />
-                <button>{curriculum.curriculumName}</button>
+                <button
+                  className={`${styles.curriculumBtn} ${
+                    styles[`curriculum-${i + 1}`]
+                  }`}
+                >
+                  {curriculum.curriculumName}
+                </button>
               </div>
             ))}
           </div>
