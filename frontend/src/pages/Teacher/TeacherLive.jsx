@@ -427,14 +427,15 @@ class OpenViduSession extends Component {
       if (this.state.theme === null) {
         return (
           <div>
-            <h1>테마 선택하는 페이지</h1>
+            <h1>✔ 수업하실 테마를 선택해주세요</h1>
             <TeacherTheme $={this} />
           </div>
         );
       } else {
         return (
           <div>
-            <h1>커리큘럼 선택하는 페이지</h1>
+            <h1>✔ 수업하실 커리큘럼을 선택해주세요</h1>
+
             <TeacherCurriculum $={this} />
           </div>
         );
@@ -443,7 +444,7 @@ class OpenViduSession extends Component {
       // 화면 구성에 따라 많을듯?
       return (
         <div>
-          <h1>수업하는 페이지</h1>
+          <h1>✔ 수업을 진행해 주세요</h1>
           <h2>
             {this.state.theme} - {this.state.curriculum.curriculumName}
           </h2>
@@ -505,8 +506,8 @@ class OpenViduSession extends Component {
               <div
                 style={{
                   display: "inline-block",
-                  width: "300px",
-                  height: "300px",
+                  width: "50%",
+                  height: "50%",
                 }}
                 id="mainStreamUser"
               >
