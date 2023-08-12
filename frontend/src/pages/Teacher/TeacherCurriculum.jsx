@@ -14,7 +14,12 @@ const TeacherCurriculum = (props) => {
         .then(function (response) {
           const data = response.data.data;
 
-          setCurriculums(data);
+          if (data.length === 0) {
+            alert("모두 완료된 테마입니다.");
+            props.$.setState({
+              theme: null,
+            });
+          } else setCurriculums(data);
         })
         .catch(function (error) {
           console.error(error);
