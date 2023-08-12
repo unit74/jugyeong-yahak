@@ -51,7 +51,6 @@ import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
 import TeacherTheme from "./pages/Teacher/TeacherTheme";
 import TeacherClass from "./pages/Teacher/TeacherClass";
-import ThemeCarousel from "./pages/Teacher/ThemeCarousel";
 
 // Teacher_실시간 강의
 import TeacherLive from "./pages/Teacher/TeacherLive";
@@ -79,10 +78,7 @@ function App() {
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
 
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route
-          path="/dictation-question"
-          element={<StudentDictationQuestion />}
-        />
+        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -100,11 +96,7 @@ function App() {
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
-        <Route
-          path="/teacher-studentprogress"
-          element={<TeacherStudentProgress />}
-        />
-        <Route path="/carousel" element={<ThemeCarousel />} />
+        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
 
         {/* 교사 실시간 강의 */}
         <Route path="/teacher-live/*" element={<TeacherLive />} />

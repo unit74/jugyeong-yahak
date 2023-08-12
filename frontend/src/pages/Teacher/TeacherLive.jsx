@@ -42,9 +42,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -105,11 +103,7 @@ class OpenViduSession extends Component {
       console.log("Token : " + token);
       this.connect(token);
     } catch (error) {
-      console.error(
-        "There was an error getting the token:",
-        error.code,
-        error.message
-      );
+      console.error("There was an error getting the token:", error.code, error.message);
       if (this.props.error) {
         this.props.error({
           error: error.error,
@@ -138,11 +132,7 @@ class OpenViduSession extends Component {
           });
         }
         alert("There was an error connecting to the session:", error.message);
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
+        console.log("There was an error connecting to the session:", error.code, error.message);
       });
   }
 
@@ -199,14 +189,14 @@ class OpenViduSession extends Component {
     const mySession = this.state.session;
 
     if (mySession) {
-      mySession.disconnect();
-
       await axios
         .delete(`${BASE_URL}/api/v1/private/openvidu`)
         .then(function (response) {})
         .catch(function (error) {
           console.error(error);
         });
+
+      mySession.disconnect();
     }
 
     this.OV = null;
@@ -217,9 +207,7 @@ class OpenViduSession extends Component {
       subscribers: [],
       trace: false,
       page: 0,
-      themePK: null,
       theme: null,
-      wordPK: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -243,9 +231,7 @@ class OpenViduSession extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter(
-      (user) => user.getStreamManager().stream === stream
-    )[0];
+    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -312,8 +298,7 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:mic", (event) => {
       const data = JSON.parse(event.data);
 
-      if (localUser && localUser.getConnectionId() === data.target)
-        this.micStatusChanged();
+      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
     });
   }
 
@@ -464,29 +449,18 @@ class OpenViduSession extends Component {
         return (
           <div>
             <h1>테마 선택하는 페이지</h1>
-            {/* <TeacherTheme /> */}
-            <button
-              onClick={() => {
-                this.setState({
-                  themePK: 3,
-                  theme: "일상",
-                });
-              }}
-            >
-              뭐 하나 선택했다 치자
-            </button>
+            <TeacherTheme />
           </div>
         );
       } else {
         return (
           <div>
-            <h1>단어 선택하는 페이지</h1>
+            <h1>커리큘럼 선택하는 페이지</h1>
             <button
               onClick={() => {
                 this.setState(
                   {
                     page: 1,
-                    wordPK: 14,
                     word: "몰?루",
                     theme: this.state.theme,
                   },
@@ -564,34 +538,32 @@ class OpenViduSession extends Component {
         />
 
         <div className={styles.video}>
-          {mainStreamUser !== undefined &&
-            mainStreamUser.getStreamManager() !== undefined && (
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "300px",
-                  height: "300px",
-                }}
-                id="mainStreamUser"
-              >
-                <div>포커스 중인 사람</div>
-                <StreamComponent user={mainStreamUser} />
-              </div>
-            )}
-          {localUser !== undefined &&
-            localUser.getStreamManager() !== undefined && (
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "300px",
-                  height: "300px",
-                }}
-                id="localUser"
-              >
-                <div>본인</div>
-                <StreamComponent user={localUser} />
-              </div>
-            )}
+          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: "inline-block",
+                width: "300px",
+                height: "300px",
+              }}
+              id="mainStreamUser"
+            >
+              <div>포커스 중인 사람</div>
+              <StreamComponent user={mainStreamUser} />
+            </div>
+          )}
+          {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: "inline-block",
+                width: "300px",
+                height: "300px",
+              }}
+              id="localUser"
+            >
+              <div>본인</div>
+              <StreamComponent user={localUser} />
+            </div>
+          )}
           {this.state.subscribers.map((sub, i) => (
             <div
               key={i}
@@ -618,10 +590,7 @@ class OpenViduSession extends Component {
                   this.handleMainVideoStream(sub);
                 }}
               >
-                <StreamComponent
-                  user={sub}
-                  streamId={sub.streamManager.stream.streamId}
-                />
+                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
               </div>
             </div>
           ))}
