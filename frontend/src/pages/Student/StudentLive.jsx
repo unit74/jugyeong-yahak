@@ -15,8 +15,8 @@ export default function StudentLive() {
   const navigate = useNavigate();
 
   const clazz = {
-    no: 1,
-    name: "새싹반",
+    no: 206,
+    name: "신호동햇님반",
   };
   // 태그 생성부분
   return (
@@ -277,7 +277,10 @@ class OpenViduSession extends Component {
         subscribers: remoteUsers,
         page: data.page,
         theme: data.theme,
+        curriculum: data.curriculum,
         word: data.word,
+        choseong: data.choseong,
+        timer: data.timer,
       });
     });
   }
