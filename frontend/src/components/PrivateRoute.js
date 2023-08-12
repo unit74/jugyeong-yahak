@@ -1,7 +1,7 @@
 import { Route, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
-export default function PrivateRoute() {
+export default function PrivateRoute({ children }) {
   let navigate = useNavigate();
   let location = useLocation();
 
@@ -16,5 +16,5 @@ export default function PrivateRoute() {
       navigate("/teacher-main", { replace: true, state: { from: location } });
   }, [navigate, location]);
 
-  return <Outlet />;
+  return children;
 }
