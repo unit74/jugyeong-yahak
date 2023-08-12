@@ -48,6 +48,7 @@ class OpenViduSession extends Component {
       mouse: { x: null, y: null },
       page: 0,
       theme: null,
+      curriculum: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -345,6 +346,11 @@ class OpenViduSession extends Component {
       if (data.word !== undefined) {
         this.setState({
           word: data.word,
+        });
+      }
+      if (data.curriculum !== undefined) {
+        this.setState({
+          curriculum: data.curriculum,
         });
       }
       if (data.choseong !== undefined) {
