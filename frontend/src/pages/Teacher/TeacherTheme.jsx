@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styles from "./TeacherTheme.module.css";
-import TeacherHeader from "./TeacherHeader";
-import axios from "../Common/api/authAxios";
+import React, { useEffect, useState } from 'react';
+import styles from './TeacherTheme.module.css';
+import TeacherHeader from './TeacherHeader';
+import axios from '../Common/api/authAxios';
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_URL = 'https://i9e206.p.ssafy.io';
 
 const TeacherTheme = (props) => {
   const [themes, setThemes] = useState([]);
@@ -38,14 +38,14 @@ const TeacherTheme = (props) => {
           <span>를 선택해주세요</span>
         </div>
       </main>
-      <div id="themes">
+      <div id='themes'>
         {themes.map((theme, i) => {
-          <div id="theme">
+          <div id='theme' key={i}>
             <button
               onClick={() => {
-                props.$.setState({
-                  theme: theme.themeName,
-                });
+                // props.$.setState({
+                //   theme: theme.themeName,
+                // });
               }}
             >
               {theme.themeName}
