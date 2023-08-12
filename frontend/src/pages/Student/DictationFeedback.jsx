@@ -57,45 +57,45 @@ export default function DictaionFeedback() {
       }
     }, 5000); // 5초
 
-  //   // 언마운트 될 시 타이머 클리어
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [course, navigate]);
+    //   // 언마운트 될 시 타이머 클리어
+    //   return () => {
+    //     clearTimeout(timer);
+    //   };
+    // }, [course, navigate]);
 
-  return (
-    <div className={styles.main}>
-      <div className={styles.square}>
-        {course === "writing" && (
-          <>
-            <div className={styles.canvasContainer}>
-              <h1 className={styles.centeredHeading}>{correctAnswer}</h1>
-              <CanvasDraw
-                hideInterface
-                className={styles.canvasDraw} // Apply the new style class
-                ref={canvasRef}
-                saveData={loadedCanvasData}
-                brushRadius={5}
-                lazyRadius={12}
-                canvasWidth={1200}
-                canvasHeight={800}
-              />
-              <div className={styles.buttonContainer}>
-                <button className={styles.clearButton} onClick={handleClear}>
-                  모두 지우기
-                </button>
-                <button className={styles.nextButton} onClick={nextPage}>
-                  완료
-                </button>
-                {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
+    return (
+      <div className={styles.main}>
+        <div className={styles.square}>
+          {course === "writing" && (
+            <>
+              <div className={styles.canvasContainer}>
+                <h1 className={styles.centeredHeading}>{correctAnswer}</h1>
+                <CanvasDraw
+                  hideInterface
+                  className={styles.canvasDraw} // Apply the new style class
+                  ref={canvasRef}
+                  saveData={loadedCanvasData}
+                  brushRadius={5}
+                  lazyRadius={12}
+                  canvasWidth={1200}
+                  canvasHeight={800}
+                />
+                <div className={styles.buttonContainer}>
+                  <button className={styles.clearButton} onClick={handleClear}>
+                    모두 지우기
+                  </button>
+                  <button className={styles.nextButton} onClick={nextPage}>
+                    완료
+                  </button>
+                  {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
+                </div>
               </div>
-            </div>
-            {msg && <TTSsentence message={msg} />}
-          </>
-        )}
-        {/* </div> */}
+              {msg && <TTSsentence message={msg} />}
+            </>
+          )}
+          {/* </div> */}
+        </div>
       </div>
-    </div>
-  );
-  })
+    );
+  });
 }

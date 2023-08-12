@@ -24,8 +24,7 @@ export default function StudentDiary() {
   // 온점일 때 줄 띄우기
 
   const formattedText =
-    (generatedText && generatedText && generatedText.split(". ").join(".\n")) ||
-    "";
+    (generatedText && generatedText && generatedText.split(". ").join(".\n")) || "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
   //   navigate("/good-feedback", { state: { course: "diary" } });
@@ -73,7 +72,9 @@ export default function StudentDiary() {
       navigate("/good-feedback", { state: { course: "diary" } });
     }
 
-    makeRequest(data);
+    if (data[0] !== "") {
+      makeRequest(data);
+    }
 
     return () => {};
   }, [formattedText]);
