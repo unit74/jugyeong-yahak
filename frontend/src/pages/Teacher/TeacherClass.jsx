@@ -25,6 +25,16 @@ const TeacherClass = () => {
     "#5da3ff",
   ];
 
+  const hoverColors = [
+    "#f49002",
+    "#47e54f",
+    "#f34b4b",
+    "#6c41cf",
+    "#d431bb",
+    "#f33c4a",
+    "#4a75f3",
+  ];
+
   const Button = styled.button`
     background-color: ${({ colorIndex }) =>
       buttonColors[colorIndex % buttonColors.length]};
@@ -36,7 +46,8 @@ const TeacherClass = () => {
     text-transform: uppercase;
     font-weight: bold;
     &:hover {
-      background-color: hsl(145, 100%, 51%);
+      background-color: ${({ colorIndex }) =>
+        hoverColors[colorIndex % hoverColors.length]};
     }
   `;
   const Background = styled.div`
