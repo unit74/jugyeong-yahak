@@ -7,14 +7,14 @@ export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
 
-  const navigateToRecordDictation = useCallback(() => {
-    setFade(true);
-    setTimeout(() => {
-      navigate("/");
-    }, 1000); // fadeout 후 이동
-  }, [navigate]);
+  // const navigateToRecordDictation = useCallback(() => {
+  //   setFade(true);
+  //   setTimeout(() => {
+  //     navigate("/");
+  //   }, 1000); // fadeout 후 이동
+  // }, [navigate]);
 
-  useTimeoutCallback(navigateToRecordDictation, 15000); // 10초
+  // useTimeoutCallback(navigateToRecordDictation, 15000); // 10초
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
