@@ -99,7 +99,11 @@ class OpenViduSession extends Component {
       console.log("Token : " + token);
       this.connect(token);
     } catch (error) {
-      console.error("There was an error getting the token:", error.code, error.message);
+      console.error(
+        "There was an error getting the token:",
+        error.code,
+        error.message
+      );
       if (this.props.error) {
         this.props.error({
           error: error.error,
@@ -129,7 +133,11 @@ class OpenViduSession extends Component {
           });
         }
         alert("There was an error connecting to the session:", error.message);
-        console.log("There was an error connecting to the session:", error.code, error.message);
+        console.log(
+          "There was an error connecting to the session:",
+          error.code,
+          error.message
+        );
       });
   }
 
@@ -230,7 +238,9 @@ class OpenViduSession extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
+    const userStream = remoteUsers.filter(
+      (user) => user.getStreamManager().stream === stream
+    )[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -297,7 +307,8 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:mic", (event) => {
       const data = JSON.parse(event.data);
 
-      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
+      if (localUser && localUser.getConnectionId() === data.target)
+        this.micStatusChanged();
     });
   }
 
@@ -486,32 +497,34 @@ class OpenViduSession extends Component {
         />
 
         <div className={styles.video}>
-          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
-            <div
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="mainStreamUser"
-            >
-              <div>포커스 중인 사람</div>
-              <StreamComponent user={mainStreamUser} />
-            </div>
-          )}
-          {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-            <div
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="localUser"
-            >
-              <div>본인</div>
-              <StreamComponent user={localUser} />
-            </div>
-          )}
+          {mainStreamUser !== undefined &&
+            mainStreamUser.getStreamManager() !== undefined && (
+              <div
+                style={{
+                  display: "inline-block",
+                  width: "300px",
+                  height: "300px",
+                }}
+                id="mainStreamUser"
+              >
+                <div>포커스 중인 사람</div>
+                <StreamComponent user={mainStreamUser} />
+              </div>
+            )}
+          {localUser !== undefined &&
+            localUser.getStreamManager() !== undefined && (
+              <div
+                style={{
+                  display: "inline-block",
+                  width: "300px",
+                  height: "300px",
+                }}
+                id="localUser"
+              >
+                <div>본인</div>
+                <StreamComponent user={localUser} />
+              </div>
+            )}
           {this.state.subscribers.map((sub, i) => (
             <div
               key={i}
@@ -538,7 +551,10 @@ class OpenViduSession extends Component {
                   this.handleMainVideoStream(sub);
                 }}
               >
-                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                <StreamComponent
+                  user={sub}
+                  streamId={sub.streamManager.stream.streamId}
+                />
               </div>
             </div>
           ))}
