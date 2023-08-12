@@ -60,12 +60,7 @@ export default function StudentBook() {
               return a.status - b.status;
             })
             .map((sub, i) => (
-              <CSSTransition
-                in={true}
-                appear
-                timeout={5000}
-                classNames={bookAnimationClassNames}
-              >
+              <CSSTransition in={true} appear timeout={5000} classNames={bookAnimationClassNames}>
                 <div
                   id={`book${i + 1}`}
                   className={`${styles.book} ${styles[`book${i + 1}`]}`}
@@ -73,11 +68,7 @@ export default function StudentBook() {
                 >
                   <div className={styles.bookText}>
                     {sub.themeName + "  :  "}
-                    {sub.status === 0
-                      ? "시작 안함"
-                      : sub.status === 5
-                      ? "완료됨"
-                      : "공부 중"}
+                    {sub.status === 0 ? "시작 안함" : sub.status === 5 ? "완료됨" : "공부 중"}
                   </div>
                 </div>
               </CSSTransition>

@@ -9,17 +9,11 @@ const StudentReviewTheme = () => {
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
-  const lastVisited = lastVisitedString
-    ? new Date(lastVisitedString)
-    : new Date(0);
+  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
   const [msg, setMsg] = useState(null);
 
   // fade 효과
   const [fade, setFade] = useState(false);
-
-  // useEffect(() => {
-  //   setFade(true);
-  // }, []);
 
   const navigateToRecordDictation = useCallback(() => {
     setFade(true);
@@ -27,18 +21,6 @@ const StudentReviewTheme = () => {
       navigate(moveToNextPage());
     }, 1000); // fadeout 후 이동
   }, [navigate]);
-
-  // useEffect(() => {
-  //   if (fade) {
-  //     // 페이지 이동 후 1초 뒤에 fade out
-  //     const fadeOutTimer = setTimeout(() => {
-  //       setFade(false);
-  //     }, 1000);
-
-  //     // 언마운트 될 때 타이머 초기화
-  //     return () => clearTimeout(fadeOutTimer);
-  //   }
-  // }, [fade]);
 
   // 이동할 다음 페이지 결정
   const moveToNextPage = () => {
@@ -50,18 +32,6 @@ const StudentReviewTheme = () => {
       return "/situation";
     }
   };
-
-  // useEffect(() => {
-  //   // 10초 후 다음 페이지로 이동
-  //   const timer = setTimeout(() => {
-  //     navigate(moveToNextPage());
-  //   }, 10000); // 10초
-
-  //   // 컴포넌트가 언마운트될 때 타이머 클리어
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [navigate, lastVisited]);
 
   // API요청 결과를 담을 변수
   const [themeTitle, setThemeTitle] = useState(null);
@@ -80,8 +50,6 @@ const StudentReviewTheme = () => {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
-    // setFade(true);
-
     axios
       .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
       .then((response) => {
@@ -90,13 +58,6 @@ const StudentReviewTheme = () => {
         setThemeSituation(response.data.data.situation);
       })
       .catch((error) => console.error(`Error: ${error}`));
-    // 10초 후 다음 페이지로 이동
-    // const timer = setTimeout(() => {
-    //   navigate(moveToNextPage());
-    // }, 10000); // 10초
-    // return () => {
-    //   // clearTimeout(timer);
-    // };
   }, []);
 
   useEffect(() => {
