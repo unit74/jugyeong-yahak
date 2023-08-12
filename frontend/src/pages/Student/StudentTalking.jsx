@@ -74,15 +74,11 @@ export default function StudentTalking() {
         const response = await openai.createChatCompletion({
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "system", content: "하나의 질문" },
+            { role: "system", content: "높임말로 질문해줘" },
             {
               role: "user",
               content: `
-              사용자가 하는 말을 듣고, 그에 맞게 하나의 질문을 응답받고 싶어.
-              예를 들어, '오늘 날씨가 너무 더워서 병원갔다왔는데 너무 힘들다' 라고 하면
-              '왜 병원에 다녀오셨어요?' 라는 질문을 응답받고 싶어.
-              대화하는 것 처럼 자연스럽게 질문해줘야해.
-              "${message}"에 대해 적절한 질문을 해줘!
+              "${message}"에 대해 대화하는 것 처럼 자연스럽게 질문해줘!
               `,
             },
           ],
