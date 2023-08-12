@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./TeacherCurriculum.module.css";
-import TeacherHeader from "./TeacherHeader";
+import styles from "./TeacherLiveWord.module.css";
 import axios from "../Common/api/authAxios";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -13,13 +12,12 @@ const TeacherLiveWord = (props) => {
   }, []);
 
   return (
-    <div className={styles.ipadPro1115}>
-      <TeacherHeader />
-      <main className={styles.main}>
-        <div>
-          <span className={styles.topic}>{props.$.state.curriculum.situation}</span>
-        </div>
-      </main>
+    <div className={styles.main}>
+      <div>
+        <span className={styles.topic}>
+          {props.$.state.curriculum.situation}
+        </span>
+      </div>
     </div>
   );
 };
