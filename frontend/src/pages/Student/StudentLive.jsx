@@ -361,6 +361,11 @@ class OpenViduSession extends Component {
           choseong: data.choseong,
         });
       }
+      if (data.quiz !== undefined) {
+        this.setState({
+          quiz: data.quiz,
+        });
+      }
     });
   }
 
