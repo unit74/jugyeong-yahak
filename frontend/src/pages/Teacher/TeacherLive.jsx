@@ -24,6 +24,7 @@ import TeacherLiveReadWordHint from "./TeacherLiveReadWordHint";
 import TeacherLiveWrite from "./TeacherLiveWrite";
 import TeacherLiveWriteHint from "./TeacherLiveWriteHint";
 import TeacherLiveGuessQuiz from "./TeacherLiveGuessQuiz";
+import TeacherLiveChoseongQuiz from "./TeacherLiveChoseongQuiz";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -56,6 +57,7 @@ class OpenViduSession extends Component {
       choseong: null,
       timer: 0,
       quiz: false,
+      count: 0,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -71,6 +73,7 @@ class OpenViduSession extends Component {
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
     this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToQuiz = this.subscribeToQuiz.bind(this);
   }
 
   componentDidMount() {
@@ -177,6 +180,7 @@ class OpenViduSession extends Component {
     this.subscribeToTimer();
     this.subscribeToCorrect();
     this.subscribeToInfo();
+    this.subscribeToQuiz();
 
     this.setState({
       mainStreamUser: localUser,
@@ -220,6 +224,7 @@ class OpenViduSession extends Component {
           choseong: null,
           timer: 0,
           quiz: false,
+          count: 0,
         },
         async () => {
           await axios
@@ -364,11 +369,6 @@ class OpenViduSession extends Component {
           choseong: data.choseong,
         });
       }
-      if (data.quiz !== undefined) {
-        this.setState({
-          quiz: data.quiz,
-        });
-      }
       if (data.page !== undefined) {
         this.setState({
           page: data.page,
@@ -381,12 +381,14 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:timer", (event) => {
       const data = JSON.parse(event.data);
 
+      if (!this.state.quiz) data.timer = 0;
+
       this.setState(
         {
           timer: data.timer,
         },
         () => {
-          if (this.state.timer > 0) {
+          if (this.state.timer > 0 && this.state.quiz) {
             const sendData = {
               timer: this.state.timer - 1,
             };
@@ -395,6 +397,29 @@ class OpenViduSession extends Component {
           }
         }
       );
+    });
+  }
+
+  subscribeToQuiz() {
+    this.state.session.on("signal:quiz", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (this.state.quiz && !data.quiz) {
+        console.log("게임 종료");
+        // 게임 종료
+        if (this.state.timer > 0) this.sendSignalInfo({ page: this.state.page + 1 });
+        else this.sendSignalInfo({ page: this.state.page + 2 });
+
+        this.sendSignalTimer({ timer: 0 });
+        this.setState({ quiz: data.quiz });
+      } else if (!this.state.quiz && data.quiz) {
+        console.log("게임 시작");
+        // 게임 시작
+        this.correctStatusChanged(false);
+        this.setState({ quiz: data.quiz, count: 0 }, () => {
+          this.sendSignalTimer({ timer: 900 });
+        });
+      }
     });
   }
 
@@ -437,6 +462,10 @@ class OpenViduSession extends Component {
 
   sendSignalCorrect(data) {
     this.sendSignal(data, "correct");
+  }
+
+  sendSignalQuiz(data) {
+    this.sendSignal(data, "quiz");
   }
 
   sendSignal(data, page) {
@@ -592,7 +621,7 @@ class OpenViduSession extends Component {
       return (
         <div>
           <h1>게임 1 페이지</h1>
-          <TeacherLiveGuessQuiz $={this} />
+          {this.state.curriculum.wordList.length > 0 && <TeacherLiveGuessQuiz $={this} />}
           {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
           {this.state.timer !== 0 && (
             <span
@@ -611,10 +640,62 @@ class OpenViduSession extends Component {
           {/* 타이머 끝 */}
         </div>
       );
+    } else if (this.state.page === 12) {
+      return (
+        <div>
+          <h1>잘하셨어요!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
+        </div>
+      );
+    } else if (this.state.page === 13) {
+      return (
+        <div>
+          <h1>아쉽습니다!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
+        </div>
+      );
     } else if (this.state.page === 21) {
       return (
         <div>
           <h1>게임 2 페이지</h1>
+          <TeacherLiveChoseongQuiz $={this} />
+          {this.state.choseong && <div>오늘의 초성 : {this.state.choseong}</div>}
+          {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
+          {this.state.timer !== 0 && (
+            <span
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#FFD700",
+                borderRadius: "5px",
+                padding: "5px 10px",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
+                color: "white",
+              }}
+            >
+              {this.state.timer}
+            </span>
+          )}
+          {/* 타이머 끝 */}
+        </div>
+      );
+    } else if (this.state.page === 22) {
+      return (
+        <div>
+          <h1>잘하셨어요!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+        </div>
+      );
+    } else if (this.state.page === 23) {
+      return (
+        <div>
+          <h1>아쉽습니다!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+        </div>
+      );
+    } else if (this.state.page === 31) {
+      return (
+        <div>
+          <h1>수고하셨습니다 !</h1>
         </div>
       );
     }
@@ -703,6 +784,19 @@ class OpenViduSession extends Component {
                       };
 
                       this.sendSignalCorrect(data);
+
+                      this.setState(
+                        {
+                          count: this.state.count + 1,
+                        },
+                        () => {
+                          if (this.state.count === this.state.subscribers.length) {
+                            this.setState({ count: 0 }, () => {
+                              this.sendSignalQuiz({ quiz: false });
+                            });
+                          }
+                        }
+                      );
                     }}
                   >
                     <Check />
