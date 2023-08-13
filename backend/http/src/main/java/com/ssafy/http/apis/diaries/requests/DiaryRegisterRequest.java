@@ -17,12 +17,17 @@ public class DiaryRegisterRequest {
   @NotEmpty
   String content;
 
+  @NotNull
+  @NotEmpty
+  String imageUrl;
+
   //image??
 
   public DiaryEntity toEntity(MemberEntity memberEntity) {
     return DiaryEntity.builder()
         .memberEntity(memberEntity)
         .content(this.content)
+        .imageUrl(this.imageUrl)
         .build();
   }
 
