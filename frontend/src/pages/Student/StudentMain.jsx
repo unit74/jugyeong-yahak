@@ -35,7 +35,7 @@ export default function StudentMain() {
 
       if (userInfo !== null) {
         let gender = userInfo.gender === 1 ? "어머님" : "아버님";
-        console.log(userInfo)
+        console.log(userInfo.gender)
         console.log(gender)
 
         // text = `${userInfo.name} 어머님, 안녕하세요!`;
