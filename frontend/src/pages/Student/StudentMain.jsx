@@ -33,9 +33,9 @@ export default function StudentMain() {
 
       let text = "";
 
-      let gender = userInfo.gender === 0 ? "어머님" : "아버님";
-
       if (userInfo !== null) {
+        let gender = userInfo.gender === 0 ? "어머님" : "아버님";
+
         // text = `${userInfo.name} 어머님, 안녕하세요!`;
         text = `${userInfo.name} ${gender}, 안녕하세요!`;
         ttsMaker(text, 0);

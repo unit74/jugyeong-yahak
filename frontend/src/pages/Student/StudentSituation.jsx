@@ -35,10 +35,10 @@ export default function StudentSituation() {
     });
   };
 
-  useEffect(() => {
-    console.log(message);
-    dispatch(fetchTheme());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log(message);
+  //   dispatch(fetchTheme());
+  // }, [dispatch]);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
