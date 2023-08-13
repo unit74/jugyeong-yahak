@@ -23,6 +23,7 @@ public class MemberLoginResponse {
     private Long classId;
     private String role;
     private String name;
+    private Integer gender;
 
   }
 

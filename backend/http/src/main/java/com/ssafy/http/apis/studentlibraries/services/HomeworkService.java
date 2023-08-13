@@ -2,11 +2,12 @@ package com.ssafy.http.apis.studentlibraries.services;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
+import com.ssafy.http.exception.CustomException;
+import com.ssafy.http.support.codes.ErrorCode;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +16,16 @@ import org.springframework.stereotype.Service;
 public class HomeworkService {
 
   private final MemberRepository memberRepository;
+  private final HomeworkHistoryRepository homeworkHistoryRepository;
   private final EntityManager em;
 
 
   public LibraryResponse getLibraryList(Long studentId) {
-    Optional<MemberEntity> memberEntity = memberRepository.findById(studentId);
+    MemberEntity memberEntity = memberRepository.findById(studentId).orElseThrow(
+        () -> new CustomException(ErrorCode.ID_NOTFOUND)
+    );
 
-    //테마명(th), 완료수(h), 미완료수(h) (group by stage)
-
-    Query query = em.createQuery(
-            "SELECT t.theme, COUNT(CASE WHEN h.status = 'C03' THEN 1 ELSE NULL END) FROM HomeworkHistoriesEntity h "
-                + "RIGHT JOIN h.themeEntity t ON t.id = h.themeEntity.id "
-                + "AND h.classId = :classId AND h.memberId = :id "
-                + "GROUP BY t.theme")
-        .setParameter("classId", memberEntity.get().getClassId())
-        .setParameter("id", memberEntity.get().getId());
-
-    List<Object[]> resultList = query.getResultList();
+    List<Object[]> resultList = homeworkHistoryRepository.findStudentLibrary(memberEntity);
 
     LibraryResponse response = new LibraryResponse();
 
@@ -40,4 +34,14 @@ public class HomeworkService {
     return response;
 
   }
+
+  public long getThemeId(Long studentId) {
+
+    //일단 주석
+    //long themeId = homeworkHistoryRepository.findFirstByMemberId(studentId);
+
+    return 30L;
+  }
+
+
 }

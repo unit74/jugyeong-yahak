@@ -1,13 +1,18 @@
 package com.ssafy.http.apis.studentlibraries.entities;
 
+import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,26 +29,44 @@ public class HomeworkHistoriesEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "member_id", nullable = false)
-  private Long memberId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id", nullable = false)
+  private MemberEntity memberEntity;
 
   @ManyToOne
   @JoinColumn(name = "theme_id", nullable = false)
   private ThemeEntity themeEntity;
 
-  @Column(name = "status_code", nullable = false)
-  private String status;
+  @Column(nullable = false)
+  private String statusCode;
 
-  @Column(name = "class_id", nullable = false)
-  private Long classId;
+  @Column(nullable = false)
+  private LocalDateTime createdAt;
+
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
+
 
   @Builder
-  public HomeworkHistoriesEntity(Long id, Long memberId, ThemeEntity themeEntity, String status,
-      Long classId) {
+  public HomeworkHistoriesEntity(Long id, MemberEntity memberEntity, ThemeEntity themeEntity,
+      String statusCode, LocalDateTime createdAt, LocalDateTime updatedAt) {
     this.id = id;
-    this.memberId = memberId;
+    this.memberEntity = memberEntity;
     this.themeEntity = themeEntity;
-    this.status = status;
-    this.classId = classId;
+    this.statusCode = statusCode;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+
+  }
+
+  @PrePersist
+  public void createTimeStamps() {
+    updatedAt = LocalDateTime.now();
+    createdAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void updateTimeStamps() {
+    updatedAt = LocalDateTime.now();
   }
 }
