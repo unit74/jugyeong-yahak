@@ -467,7 +467,7 @@ class OpenViduSession extends Component {
       ];
 
       return (
-        <div>
+        <div className={styles.container2}>
           <h1>✔ 수업을 진행해 주세요</h1>
           <h2 className={styles.wordname}>
             {this.state.theme} - {this.state.curriculum.situation}
