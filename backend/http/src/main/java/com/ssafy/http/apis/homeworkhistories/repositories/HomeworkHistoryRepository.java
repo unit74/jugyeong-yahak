@@ -1,7 +1,7 @@
-package com.ssafy.http.apis.studentlibraries.repositories;
+package com.ssafy.http.apis.homeworkhistories.repositories;
 
+import com.ssafy.http.apis.homeworkhistories.entities.HomeworkHistoriesEntity;
 import com.ssafy.http.apis.members.entities.MemberEntity;
-import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
