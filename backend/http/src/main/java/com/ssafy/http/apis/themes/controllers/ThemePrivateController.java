@@ -2,6 +2,7 @@ package com.ssafy.http.apis.themes.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
+import com.ssafy.http.apis.studentlibraries.services.HomeworkService;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.responses.ThemeNameResponse;
 import com.ssafy.http.apis.themes.responses.ThemeStageResponse;
@@ -30,6 +31,7 @@ public class ThemePrivateController {
 
   private final ThemeService themeService;
   private final WordService wordService;
+  private final HomeworkService homeworkService;
 
   //GetMapping() -> 전체 반의 테마 리스트도 필요하면 구현해야함
 
@@ -83,6 +85,30 @@ public class ThemePrivateController {
 
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "초성을 랜덤으로 5개 반환합니다.", choseongList);
   }
+
+  @GetMapping("/review")
+  public ResponseEntity<?> review() {
+
+    Long loginUserId = 4L;
+
+    if (SecurityUtil.getLoginUserId() != null) {
+      loginUserId = SecurityUtil.getLoginUserId();
+    }
+
+    long curriculumId = homeworkService.getThemeId(loginUserId);
+
+    ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
+
+    List<WordDetailResponse> words = wordService.getWords(curriculumId);
+
+    themeEntity.setWordList(words);
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.",
+            themeEntity);
+  }
+
+
+
 
   @GetMapping("/{themeId}/reasoning")
   public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
