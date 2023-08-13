@@ -11,12 +11,15 @@ import com.ssafy.http.apis.themes.services.ThemeService;
 import com.ssafy.http.apis.themes.services.WordService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/themes")
@@ -73,14 +76,17 @@ public class ThemePrivateController {
   @GetMapping("/choseong")
   public ResponseEntity<?> startChoseong() {
 
-    ArrayList<String> choseongList = new ArrayList<>();
+//    ArrayList<String choseongList = new ArrayList<>();
+//
+//    for (int i = 0; i < 5; i++) {
+//      choseongList.add(String.valueOf(choseong[(int) (Math.random() * 13)]) + String.valueOf(
+//          choseong[(int) (Math.random() * 13)]));
+//    }
 
-    for (int i = 0; i < 5; i++) {
-      choseongList.add(String.valueOf(choseong[(int) (Math.random() * 13)]) + String.valueOf(
-          choseong[(int) (Math.random() * 13)]));
-    }
+    String choseonhResult = String.valueOf(choseong[(int) (Math.random() * 13)]) + String.valueOf(
+        choseong[(int) (Math.random() * 13)]);
 
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "초성을 랜덤으로 5개 반환합니다.", choseongList);
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "초성을 랜덤으로 1개 반환합니다.", choseonhResult);
   }
 
   @GetMapping("/{themeId}/reasoning")
@@ -127,7 +133,6 @@ public class ThemePrivateController {
 
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "복습 완료");
   }
-
 
 
 }
