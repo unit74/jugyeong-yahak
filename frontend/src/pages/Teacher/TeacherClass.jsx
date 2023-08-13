@@ -15,8 +15,29 @@ const TeacherClass = () => {
     padding: 5%;
   `;
 
+  const buttonColors = [
+    "#ffa742",
+    "#51ee56",
+    "#ff9a9a",
+    "#8f70ff",
+    "#fa67ff",
+    "#ff5d73",
+    "#5da3ff",
+  ];
+
+  const hoverColors = [
+    "#f49002",
+    "#47e54f",
+    "#f34b4b",
+    "#6c41cf",
+    "#d431bb",
+    "#f33c4a",
+    "#4a75f3",
+  ];
+
   const Button = styled.button`
-    background-color: hsl(135, 100%, 48%);
+    background-color: ${({ colorIndex }) =>
+      buttonColors[colorIndex % buttonColors.length]};
     color: white;
     border: none;
     padding: 10px 20px;
@@ -25,10 +46,10 @@ const TeacherClass = () => {
     text-transform: uppercase;
     font-weight: bold;
     &:hover {
-      background-color: hsl(145, 100%, 51%);
+      background-color: ${({ colorIndex }) =>
+        hoverColors[colorIndex % hoverColors.length]};
     }
   `;
-
   const Background = styled.div`
     width: 100%;
     min-height: 100vh;
@@ -72,7 +93,8 @@ const TeacherClass = () => {
             {classes.map((clazz, i) => (
               <Button
                 key={i}
-                className={`${styles.btn} ${styles[`color${(i % 7) + 1}`]}`} // 버튼에 색상 클래스 적용
+                colorIndex={i}
+                className={styles.btn}
                 onClick={() => handleClickClass(clazz)}
               >
                 {clazz.className}
