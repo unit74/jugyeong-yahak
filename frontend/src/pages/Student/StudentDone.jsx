@@ -46,6 +46,10 @@ export default function StudentMain() {
         type: FETCH_THEME_SUCCESS,
         payload: { themeData: null, wordsList: null },
       });
+
+      setFade(true);
+      await delay(1000);
+      navigate("/");
     }
 
     if (themeData !== null) {
