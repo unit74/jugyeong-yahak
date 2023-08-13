@@ -59,7 +59,7 @@ export default function StudentTalking() {
   const [generatedText, setGeneratedText] = useState("");
   const [allConversations, setAllConversations] = useState([]);
   const [conversationCount, setConversationCount] = useState(0);
-  const [generatedDiary, setGeneratedDiary] = useState(""); //삭제예정
+  // const [generatedDiary, setGeneratedDiary] = useState(""); //삭제예정
 
   // GPT에 사용자의 답변을 보내서 질문을 받아와, generatedMessage에 저장해
   const generateText = async (message) => {
@@ -123,23 +123,47 @@ export default function StudentTalking() {
   // 페이지 이동, 수정예정
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function checkAndNavigate() {
-      if (conversationCount >= 3) {
-        // 1. allConversations 배열에서 type이 'user'인 객체들만 필터링
-        const userConversations = allConversations.filter(
-          (convo) => convo.type === "user"
-        );
+  //  일기 생성 함수
+  const generateDiary = async () => {
+    try {
+      const apiKey = "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";
+      const configuration = new Configuration({
+        apiKey: apiKey,
+      });
+      const openai = new OpenAIApi(configuration);
 
-        // 2. 이들의 content만 따로 모아 배열로 만듦
-        const userContents = userConversations.map((convo) => convo.content);
+      const userContents = allConversations
+        .filter((convo) => convo.type === "user")
+        .map((convo) => convo.content)
+        .join(" "); // 대화 내용을 하나의 문자열로 합칩니다.
 
-        // 3. 만든 배열을 diary 페이지로 전달
-        navigate("/diary", { state: { userConversations: userContents } });
-      }
+      const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
+          },
+          {
+            role: "user",
+            content: userContents,
+          },
+        ],
+      });
+
+      const diaryEntry = response.data.choices[0].message.content;
+      navigate("/diary", { state: { diaryEntry: diaryEntry } }); // 생성된 일기를 diary 페이지로 전달
+    } catch (error) {
+      console.error("Error:", error);
     }
+  };
 
-    checkAndNavigate();
+  // 카운트 확인 후 일기 생성
+  useEffect(() => {
+    if (conversationCount >= 3) {
+      generateDiary();
+    }
   }, [conversationCount]);
 
   return (
