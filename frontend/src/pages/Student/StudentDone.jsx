@@ -22,7 +22,7 @@ export default function StudentMain() {
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
-  useTimeoutCallback(navigateToRecordDictation, 15000); // 10초
+  // useTimeoutCallback(navigateToRecordDictation, 15000); // 10초
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
