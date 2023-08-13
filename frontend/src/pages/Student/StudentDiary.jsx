@@ -15,6 +15,7 @@ export default function StudentDiary() {
   const themeData = useSelector((state) => state.themeState.themeData) || {};
   const navigate = useNavigate();
   const location = useLocation();
+  const userConversations = location.state && location.state.userConversations; // StudentTalking에서 프랍으로 넘겨주는것 받기!
   const generatedDiary = location.state && location.state.generatedDiary;
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedText, setGeneratedText] = useState("");
@@ -24,7 +25,8 @@ export default function StudentDiary() {
   // 온점일 때 줄 띄우기
 
   const formattedText =
-    (generatedText && generatedText && generatedText.split(". ").join(".\n")) || "";
+    (generatedText && generatedText && generatedText.split(". ").join(".\n")) ||
+    "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
   //   navigate("/good-feedback", { state: { course: "diary" } });
@@ -43,6 +45,7 @@ export default function StudentDiary() {
 
   useEffect(() => {
     generateText();
+    console.log(userConversations); //prop 잘 받아지는지 확인 - 배열로 잘 받아진다.
     return () => {};
   }, []);
 
@@ -68,7 +71,6 @@ export default function StudentDiary() {
       ttsMaker(data[3], 0);
       await delay(data[3].length * 500);
 
-      // navigateToRecordDictation();
       navigate("/good-feedback", { state: { course: "diary" } });
     }
 

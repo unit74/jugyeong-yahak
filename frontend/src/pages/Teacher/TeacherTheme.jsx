@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TeacherTheme.module.css";
-import TeacherHeader from "./TeacherHeader";
 import axios from "../Common/api/authAxios";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -29,30 +28,20 @@ const TeacherTheme = (props) => {
   }, []);
 
   return (
-    <div className={styles.ipadPro1115}>
-      <TeacherHeader />
-      <main className={styles.main}>
-        <div>
-          <span>오늘의 </span>
-          <span className={styles.topic}>주제</span>
-          <span>를 선택해주세요</span>
-          <div id="themes">
-            {themes.map((theme, i) => (
-              <div
-                id="theme"
-                key={theme.themeName}
-                onClick={() => {
-                  props.$.setState({
-                    theme: theme.themeName,
-                  });
-                }}
-              >
-                <button>{theme.themeName}</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
+    <div className={styles.themeBtnContainer}>
+      {themes.map((theme, i) => (
+        <button
+          key={theme.themeName}
+          className={`${styles.themeBtn} ${styles[`theme-${i + 1}`]}`}
+          onClick={() => {
+            props.$.setState({
+              theme: theme.themeName,
+            });
+          }}
+        >
+          {theme.themeName}
+        </button>
+      ))}
     </div>
   );
 };
