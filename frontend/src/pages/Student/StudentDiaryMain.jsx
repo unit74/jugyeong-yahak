@@ -31,16 +31,22 @@ export default function StudentDiaryMain() {
       await delay(text.length * 300);
 
       // 이름 -> 나중에 성별로 바꾸기
-      let listenText = `질문을 듣고, ${
-        userInfo === undefined ? "" : userInfo.name
-      }님의 이야기를 들려주세요!`;
+      let gender = userInfo.gender === 1 ? "어머님" : "아버님";
+      let listenText = '질문을 듣고,' 
       ttsMaker(listenText, 0);
-      await delay(listenText.length * 300);
+      await delay(3000);
 
-      let resultText = "대화를 모두 마치면, 일기가 완성돼요!";
+      let speakText = `${gender}의 이야기를 들려주세요!`;
+      ttsMaker(speakText, 0);
+      await delay(6000);
+
+      let resultText = "대화를 모두 마치고, 완성된 일기를 읽어요!";
       ttsMaker(resultText, 0);
-      await delay(resultText.length * 300);
-
+      await delay(7000);
+      
+      let nextText = "자, 그럼 이제 이야기를 나눠봐요!";
+      ttsMaker(nextText, 0);
+      await delay(nextText.length *3000);
       navigate("/student-talking");
     }
 
@@ -51,7 +57,7 @@ export default function StudentDiaryMain() {
     <div className={`${styles.main}`}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          <b className={styles.b}>일기쓰기</b>
+          <b className={styles.b}>오늘의 일기쓰기</b>
           {msg && <TTSsentence message={msg} />}
           <div className={styles.imageSituationContainer}>
             <div>
