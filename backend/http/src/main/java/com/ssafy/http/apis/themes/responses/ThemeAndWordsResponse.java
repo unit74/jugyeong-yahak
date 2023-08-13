@@ -16,7 +16,7 @@ public class ThemeAndWordsResponse {
   private long id;
   private String theme;
   private String themeImageUrl;
-  private List<WordDetailResponse> words;
+  private List<WordDetailResponse> wordList;
 
   public void of(ThemeEntity themeEntity, List<WordDetailResponse> wordDetailResponses) {
     this.id = themeEntity.getId();
@@ -25,7 +25,7 @@ public class ThemeAndWordsResponse {
     if (themeEntity.getThemeImageUrl() == null) {
       this.themeImageUrl = "https://www.bizforms.co.kr/form/image/thumb_ing.gif";
     }
-    this.words = wordDetailResponses;
+    this.wordList = wordDetailResponses;
   }
 
 }
