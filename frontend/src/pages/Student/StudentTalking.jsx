@@ -3,9 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 
@@ -18,10 +16,7 @@ export default function StudentTalking() {
   // 3번 안됐으면 GPT에 보내서 질문을 만들거야.
   useEffect(() => {
     if (debounceTerm) {
-      setAllConversations((prev) => [
-        ...prev,
-        { type: "user", content: debounceTerm },
-      ]);
+      setAllConversations((prev) => [...prev, { type: "user", content: debounceTerm }]);
       console.log(allConversations);
       if (conversationCount < 3) {
         generateText(debounceTerm);
@@ -101,10 +96,7 @@ export default function StudentTalking() {
   // GPT에서 질문 받으면 -> 배열에 추가하고, TTS로 읽고, 녹음 시작 (두번째 질문부터)
   useEffect(() => {
     if (generatedText) {
-      setAllConversations((prev) => [
-        ...prev,
-        { type: "response", content: generatedText },
-      ]);
+      setAllConversations((prev) => [...prev, { type: "response", content: generatedText }]);
       setConversationCount((prev) => prev + 1); // GPT-3 응답 후 카운트 증가
       async function ttsAndListen() {
         await ttsMaker(generatedText, 0);
@@ -179,9 +171,7 @@ export default function StudentTalking() {
               <div
                 key={index}
                 className={
-                  conversation.type === "user"
-                    ? styles.userMessage
-                    : styles.generatedMessage
+                  conversation.type === "user" ? styles.userMessage : styles.generatedMessage
                 }
               >
                 {conversation.content}
