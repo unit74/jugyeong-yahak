@@ -129,10 +129,9 @@ public class ThemeService {
 
       for (MemberEntity student : students) {
         HomeworkHistoriesEntity entity = HomeworkHistoriesEntity.builder()
-            .memberId(student.getId())
-            .classId(student.getClassId())
+            .memberEntity(student)
             .themeEntity(themeEntity)
-            .status(CommonCode.C01.getStatusCode())
+            .statusCode(CommonCode.C01.getStatusCode())
             .build();
 
         homeworks.add(entity);
