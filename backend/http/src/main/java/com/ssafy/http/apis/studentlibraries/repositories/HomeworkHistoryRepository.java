@@ -15,6 +15,6 @@ public interface HomeworkHistoryRepository extends JpaRepository<HomeworkHistori
       + "GROUP BY t.theme")
   List<Object[]> findStudentLibrary(@Param("memberEntity") MemberEntity memberEntity);
 
-//  @Query("SELECT h.themeEntity.id FROM HomeworkHistoriesEntity h WHERE h.memberId = :memberId and h.status = 'C01' order by h.createdAt")
-//  Long findFirstByMemberId(@Param("memberId") Long memberId);
+  @Query("SELECT h.themeEntity.id FROM HomeworkHistoriesEntity h WHERE h.memberEntity.id = :memberId and h.statusCode = 'C01' order by h.createdAt desc")
+  List<Long> findFirstByMemberId(@Param("memberId") Long memberId);
 }
