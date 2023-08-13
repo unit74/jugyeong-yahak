@@ -3,7 +3,7 @@ package com.ssafy.http.apis.themes.controllers;
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
 import com.ssafy.http.apis.homeworkhistories.services.HomeworkService;
-import com.ssafy.http.apis.themes.entities.ThemeEntity;
+import com.ssafy.http.apis.themes.responses.ThemeAndWordsResponse;
 import com.ssafy.http.apis.themes.responses.ThemeNameResponse;
 import com.ssafy.http.apis.themes.responses.ThemeStageResponse;
 import com.ssafy.http.apis.themes.responses.WordDetailResponse;
@@ -54,7 +54,7 @@ public class ThemePrivateController {
         temeStageResponses);
   }
 
-  @GetMapping("/{curriculumId}")   // 선택된 테마 내용 반환
+  @GetMapping("/{curriculumId}")   // 강사 실시간 시 -> 선택된 테마 내용 반환
   public ResponseEntity<?> getTheme(@PathVariable("curriculumId") Long curriculumId) {
 
     Long loginUserId = 4L;
@@ -63,14 +63,29 @@ public class ThemePrivateController {
       loginUserId = SecurityUtil.getLoginUserId();
     }
 
-    ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
-
-    List<WordDetailResponse> words = wordService.getWords(curriculumId);
-
-    themeEntity.setWordList(words);
+    ThemeAndWordsResponse themeAndWordsResponse = themeService.getThemeAndWordsForLecture(
+        curriculumId, loginUserId);
 
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.",
-        themeEntity);
+        themeAndWordsResponse);
+  }
+
+  @GetMapping("/review") //학생이 복습 컨텐츠 요청하는 부분인가?
+  public ResponseEntity<?> review() {
+
+    Long loginUserId = 4L;
+
+    if (SecurityUtil.getLoginUserId() != null) {
+      loginUserId = SecurityUtil.getLoginUserId();
+    }
+
+    long curriculumId = homeworkService.getThemeId(loginUserId);
+
+    ThemeAndWordsResponse themeAndWordsResponse = themeService.getThemeAndWordsForLecture(
+        curriculumId, loginUserId);
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.",
+        themeAndWordsResponse);
   }
 
   @GetMapping("/choseong")
@@ -99,26 +114,6 @@ public class ThemePrivateController {
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "해당 테마의 단어를 셔플하여 반환합니다.", words);
   }
 
-  @GetMapping("/review")
-  public ResponseEntity<?> review() {
-
-    Long loginUserId = 4L;
-
-    if (SecurityUtil.getLoginUserId() != null) {
-      loginUserId = SecurityUtil.getLoginUserId();
-    }
-
-    long curriculumId = homeworkService.getThemeId(loginUserId);
-
-    ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
-
-    List<WordDetailResponse> words = wordService.getWords(curriculumId);
-
-    themeEntity.setWordList(words);
-
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.",
-        themeEntity);
-  }
 
   @PostMapping("/review/{themeId}")
   public ResponseEntity<?> reviewDone(@PathVariable("themeId") Long themeId) {
