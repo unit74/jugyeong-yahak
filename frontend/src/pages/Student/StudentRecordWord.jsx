@@ -38,6 +38,7 @@ export default function StudentRecordWord() {
     });
     const openai = new OpenAIApi(configuration);
 
+    // GPT가 좀 더 설명을 쉽고 간단하게 할 수 있게 해야됨
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [
