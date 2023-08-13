@@ -1,4 +1,4 @@
-package com.ssafy.http.apis.studentlibraries.entities;
+package com.ssafy.http.apis.homeworkhistories.entities;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;

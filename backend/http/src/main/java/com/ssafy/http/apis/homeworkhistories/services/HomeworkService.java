@@ -1,9 +1,9 @@
-package com.ssafy.http.apis.studentlibraries.services;
+package com.ssafy.http.apis.homeworkhistories.services;
 
+import com.ssafy.http.apis.homeworkhistories.repositories.HomeworkHistoryRepository;
+import com.ssafy.http.apis.homeworkhistories.responses.LibraryResponse;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
-import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.support.codes.ErrorCode;
 import java.util.List;
@@ -40,7 +40,7 @@ public class HomeworkService {
     List<Long> themeId = homeworkHistoryRepository.findFirstByMemberId(studentId);
 
     // 일단 지금 할당된 숙제 없으면 30 나오게 해놨음
-    if(themeId.size() == 0) {
+    if (themeId.size() == 0) {
       return 30L;
     }
 
