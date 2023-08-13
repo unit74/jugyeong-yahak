@@ -10,9 +10,10 @@ import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
-import com.ssafy.http.apis.themes.responses.ThemeDetailResponse;
+import com.ssafy.http.apis.themes.responses.ThemeAndWordsResponse;
 import com.ssafy.http.apis.themes.responses.ThemeNameResponse;
 import com.ssafy.http.apis.themes.responses.ThemeStageResponse;
+import com.ssafy.http.apis.themes.responses.WordDetailResponse;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.WrongParameterException;
 import com.ssafy.http.support.codes.ErrorCode;
@@ -31,6 +32,7 @@ public class ThemeService {
   private final LectureHistoryRepository lectureHistoryRepository;
   private final MemberRepository memberRepository;
   private final HomeworkHistoryRepository homeworkHistoryRepository;
+  private final WordService wordService;
 
   @Transactional
   public List<ThemeNameResponse> getClassThemeList(Long loginUserId) {
@@ -84,25 +86,9 @@ public class ThemeService {
     return themeStageResponses;
   }
 
+  public ThemeAndWordsResponse getThemeAndWordsForLecture(Long themeId, Long loginUserId) {
 
-  public List<ThemeDetailResponse> getThemeList() {
-
-    List<ThemeDetailResponse> themeDetailResponses = new ArrayList<>();
-
-    List<ThemeEntity> themes = themeRepository.findAll();
-
-    for (ThemeEntity theme : themes) {
-      ThemeDetailResponse themeDetailResponse = new ThemeDetailResponse();
-
-      themeDetailResponse.of(theme);
-
-      themeDetailResponses.add(themeDetailResponse);
-    }
-
-    return themeDetailResponses;
-  }
-
-  public ThemeEntity getTheme(Long themeId, Long loginUserId) {
+    ThemeAndWordsResponse themeAndWordsResponse = new ThemeAndWordsResponse();
 
     ThemeEntity themeEntity = themeRepository.findById(themeId)
         .orElseThrow(() -> new WrongParameterException(
@@ -110,6 +96,10 @@ public class ThemeService {
 
     MemberEntity memberEntity = memberRepository.findById(loginUserId)
         .orElseThrow(() -> new CustomException(ErrorCode.ID_NOTFOUND));
+
+    List<WordDetailResponse> wordDetailResponses = wordService.getWords(themeId);
+
+    themeAndWordsResponse.of(themeEntity, wordDetailResponses);
 
     //강사
     if (memberEntity.getRole().getId() == Role.TEACHER.getId()) {
@@ -141,6 +131,24 @@ public class ThemeService {
 
     }
 
-    return themeEntity;
+    return themeAndWordsResponse;
+    //return themeEntity;
   }
+
+//  public List<ThemeDetailResponse> getThemeList() {
+//
+//    List<ThemeDetailResponse> themeDetailResponses = new ArrayList<>();
+//
+//    List<ThemeEntity> themes = themeRepository.findAll();
+//
+//    for (ThemeEntity theme : themes) {
+//      ThemeDetailResponse themeDetailResponse = new ThemeDetailResponse();
+//
+//      themeDetailResponse.of(theme);
+//
+//      themeDetailResponses.add(themeDetailResponse);
+//    }
+//
+//    return themeDetailResponses;
+//  }
 }
