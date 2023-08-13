@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
 import { setNote } from "../../store/actions/setNoteAction";
+import { fetchTheme } from "../../store/actions/themeAction";
 
 export default function StudentNote() {
   const [fade, setFade] = useState(false);
@@ -26,6 +27,10 @@ export default function StudentNote() {
       navigate("/review-theme");
     }, 1000); // fadeout 후 이동
   }, [navigate, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchTheme());
+  }, [dispatch]);
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
