@@ -95,7 +95,7 @@ public class ThemePrivateController {
       loginUserId = SecurityUtil.getLoginUserId();
     }
 
-    long curriculumId = homeworkService.getThemeId(loginUserId);
+    long curriculumId = homeworkService.getThemeId(20L);
 
     ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
 
@@ -106,9 +106,6 @@ public class ThemePrivateController {
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "선택된 테마 상세 내용 및 단어 문제를 반환합니다.",
             themeEntity);
   }
-
-
-
 
   @GetMapping("/{themeId}/reasoning")
   public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
