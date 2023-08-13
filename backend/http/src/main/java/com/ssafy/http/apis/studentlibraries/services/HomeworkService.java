@@ -2,6 +2,7 @@ package com.ssafy.http.apis.studentlibraries.services;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
+import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
 import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
 import com.ssafy.http.exception.CustomException;
@@ -9,6 +10,7 @@ import com.ssafy.http.support.codes.ErrorCode;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,7 +39,7 @@ public class HomeworkService {
 
   public long getThemeId(Long studentId) {
 
-    List<Long> themeId = homeworkHistoryRepository.findFirstByMemberId(studentId);
+    List<Long> themeId = homeworkHistoryRepository.findFirstByMemberId(studentId, PageRequest.of(0, 1));
 
     // 일단 지금 할당된 숙제 없으면 30 나오게 해놨음
     if(themeId.size() == 0) {
@@ -47,5 +49,16 @@ public class HomeworkService {
     return themeId.get(0);
   }
 
+  public void reviewDone(Long themeId, Long loginUserId) {
 
+    List<HomeworkHistoriesEntity> currentHomeworks = homeworkHistoryRepository.findByThemeIdAndMemberId(themeId, loginUserId, PageRequest.of(0, 1));
+
+    if(currentHomeworks.size() == 1) {
+      HomeworkHistoriesEntity currentHomework = currentHomeworks.get(0);
+
+      currentHomework.setStatusCode("C03");
+
+      homeworkHistoryRepository.save(currentHomework);
+    }
+  }
 }
