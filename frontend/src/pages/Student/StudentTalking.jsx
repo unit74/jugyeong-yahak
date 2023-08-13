@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 
@@ -16,7 +18,10 @@ export default function StudentTalking() {
   // 3번 안됐으면 GPT에 보내서 질문을 만들거야.
   useEffect(() => {
     if (debounceTerm) {
-      setAllConversations((prev) => [...prev, { type: "user", content: debounceTerm }]);
+      setAllConversations((prev) => [
+        ...prev,
+        { type: "user", content: debounceTerm },
+      ]);
       console.log(allConversations);
       if (conversationCount < 3) {
         generateText(debounceTerm);
@@ -53,7 +58,7 @@ export default function StudentTalking() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedText, setGeneratedText] = useState("");
   const [allConversations, setAllConversations] = useState([]);
-  const [conversationCount, setConversationCount] = useState(0);
+  const [conversationCount, setConversationCount] = useState(1);
   // const [generatedDiary, setGeneratedDiary] = useState(""); //삭제예정
 
   // GPT에 사용자의 답변을 보내서 질문을 받아와, generatedMessage에 저장해
@@ -96,8 +101,10 @@ export default function StudentTalking() {
   // GPT에서 질문 받으면 -> 배열에 추가하고, TTS로 읽고, 녹음 시작 (두번째 질문부터)
   useEffect(() => {
     if (generatedText) {
-      setAllConversations((prev) => [...prev, { type: "response", content: generatedText }]);
-      setConversationCount((prev) => prev + 1); // GPT-3 응답 후 카운트 증가
+      setAllConversations((prev) => [
+        ...prev,
+        { type: "response", content: generatedText },
+      ]);
       async function ttsAndListen() {
         await ttsMaker(generatedText, 0);
         await delay(generatedText.length * 250);
@@ -105,6 +112,7 @@ export default function StudentTalking() {
           // 수정: 응답 2번 후에만 음성 입력 대기
           SpeechRecognition.startListening();
         }
+        setConversationCount((prev) => prev + 1); // GPT-3 응답 후 카운트 증가
       }
       ttsAndListen();
     }
@@ -171,7 +179,9 @@ export default function StudentTalking() {
               <div
                 key={index}
                 className={
-                  conversation.type === "user" ? styles.userMessage : styles.generatedMessage
+                  conversation.type === "user"
+                    ? styles.userMessage
+                    : styles.generatedMessage
                 }
               >
                 {conversation.content}

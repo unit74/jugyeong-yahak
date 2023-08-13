@@ -61,9 +61,9 @@ export default function StudentDiary() {
 
     async function makeRequest(data) {
       await delay(5000);
-      let text = "완성된 일기를 한 문장씩 따라 읽어요!!"
-      ttsMaker(text)
-      await delay( text.length * 200);
+      let text = "완성된 일기를 한 문장씩 따라 읽어요!!";
+      ttsMaker(text);
+      await delay(text.length * 200);
 
       ttsMaker(data[0], 0);
       await delay(data[0].length * 500);
@@ -88,7 +88,7 @@ export default function StudentDiary() {
   }, [formattedText]);
 
   useEffect(() => {
-    ttsMaker("일기가 완성될 때까지 잠시만 기다려주세요.", 0);
+    ttsMaker("일기 읽기를 준비중입니다, 잠시만 기다려주세요.", 0);
   }, []);
 
   //함수
