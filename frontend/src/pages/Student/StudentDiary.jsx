@@ -58,6 +58,9 @@ export default function StudentDiary() {
 
     async function makeRequest(data) {
       await delay(5000);
+      let text = "완성된 일기를 한 문장씩 따라 읽어요!!"
+      ttsMaker(text)
+      await delay( text.length * 200);
 
       ttsMaker(data[0], 0);
       await delay(data[0].length * 500);
@@ -82,7 +85,7 @@ export default function StudentDiary() {
   }, [formattedText]);
 
   useEffect(() => {
-    ttsMaker("완성된 일기를 한 문장씩 따라 읽어요!!", 0);
+    ttsMaker("일기가 완성될 때까지 잠시만 기다려주세요.", 0);
   }, []);
 
   //함수
@@ -125,7 +128,6 @@ export default function StudentDiary() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
-
           <b className={styles.diarytext}>{formattedText}</b>
           {msg && <TTS message={msg} />}
         </div>
