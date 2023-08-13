@@ -12,14 +12,17 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ThemeDetailResponse {
 
-    private long id;
-    private String theme;
-    private String themeImageUrl;
+  private long id;
+  private String theme;
+  private String themeImageUrl;
 
-    public void of(ThemeEntity themeEntity) {
-        this.id = themeEntity.getId();
-        this.theme = themeEntity.getTheme();
-        this.themeImageUrl = themeEntity.getThemeImageUrl();
+  public void of(ThemeEntity themeEntity) {
+    this.id = themeEntity.getId();
+    this.theme = themeEntity.getTheme();
+    this.themeImageUrl = themeEntity.getThemeImageUrl();
+    if (themeEntity.getThemeImageUrl() == null) {
+      this.themeImageUrl = "https://www.bizforms.co.kr/form/image/thumb_ing.gif";
     }
+  }
 
 }
