@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
+import axios from "axios";
 
 export default function StudentTalking() {
   // 음성인식 관련
@@ -18,6 +17,8 @@ export default function StudentTalking() {
   const [msg, setMsg] = useState(null);
   // 이미지 생성 관련
   const [img, setImg] = useState(null);
+
+  const navigate = useNavigate();
 
   const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
 
@@ -47,17 +48,17 @@ export default function StudentTalking() {
       setCount(count + 1);
     }
 
-    if (count == 0) {
+    if (count === 0) {
       makeRequest("오늘 하루는 어떠셨나요?");
-    } else if (count == 1) {
+    } else if (count === 1) {
       helpGpt(transcript);
-    } else if (count == 2) {
+    } else if (count === 2) {
       makeRequest(generatedText);
-    } else if (count == 3) {
+    } else if (count === 3) {
       helpGpt(transcript);
-    } else if (count == 4) {
+    } else if (count === 4) {
       makeRequest(generatedText);
-    } else if (count == 5) {
+    } else if (count === 5) {
       generateDiary(transcript);
     } else {
       makeImg();
@@ -178,6 +179,23 @@ export default function StudentTalking() {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    async function saveDiary() {
+      await axios
+        .post(`https://i9e206.p.ssafy.io/api/v1/diaries`, {
+          content: diaryEntry,
+          imageUrl: img,
+        })
+        .then(() => {
+          navigate("/diary", { state: { diaryEntry, img } });
+        });
+    }
+
+    if (img !== null) {
+      saveDiary();
+    }
+  }, [img]);
 
   return (
     <div className={styles.main}>
