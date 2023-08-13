@@ -17,16 +17,11 @@ const TeacherLiveWord = (props) => {
         <button
           className={`${styles.button} ${styles.situationButton}`}
           onClick={() => {
-            props.$.setState(
-              {
-                page: 2,
-              },
-              () => {
-                props.$.sendSignalInfo({
-                  page: props.$.state.page,
-                });
-              }
-            );
+            const data = {
+              page: 2,
+            };
+
+            props.$.sendSignalInfo(data);
           }}
         >
           상황글 페이지로
@@ -45,16 +40,12 @@ const TeacherLiveWord = (props) => {
         <button
           className={`${styles.button} ${styles.gameButton}`}
           onClick={() => {
-            props.$.setState(
-              {
-                page: 11,
-              },
-              () => {
-                props.$.sendSignalInfo({
-                  page: props.$.state.page,
-                });
-              }
-            );
+            const data = {
+              page: 11,
+              quiz: true,
+            };
+
+            props.$.sendSignalInfo(data);
           }}
         >
           게임1 페이지로
