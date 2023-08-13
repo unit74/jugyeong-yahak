@@ -37,10 +37,14 @@ public class HomeworkService {
 
   public long getThemeId(Long studentId) {
 
-    //일단 주석
-    //long themeId = homeworkHistoryRepository.findFirstByMemberId(studentId);
+    List<Long> themeId = homeworkHistoryRepository.findFirstByMemberId(studentId);
 
-    return 30L;
+    // 일단 지금 할당된 숙제 없으면 30 나오게 해놨음
+    if(themeId.size() == 0) {
+      return 30L;
+    }
+
+    return themeId.get(0);
   }
 
 
