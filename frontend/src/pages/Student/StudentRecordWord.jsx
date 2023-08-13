@@ -69,16 +69,16 @@ export default function StudentRecordWord() {
       setCount(count + 1);
     }
 
-    async function work(data) {
-      if (data === wordsList[wordIndex].word) {
-        navigate("/good-feedback", { state: { course: "reading" } });
-      } else {
-        if (count == 1) {
-          await helpGpt();
-        }
-        setCount(count + 1);
-      }
-    }
+    // async function work(data) {
+    //   if (data === wordsList[wordIndex].word) {
+    //     navigate("/good-feedback", { state: { course: "reading" } });
+    //   } else {
+    //     if (count == 1) {
+    //       await helpGpt();
+    //     }
+    //     setCount(count + 1);
+    //   }
+    // }
 
     if (count == 0) {
       makeRequest("단어를 읽어주세요!!");
