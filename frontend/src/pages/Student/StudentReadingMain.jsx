@@ -32,7 +32,7 @@ export default function StudentReadingMain() {
 
   useEffect(() => {
     async function makeRequest() {
-      let text = "단어를 배워요! 총 5개의 단어를 공부해요.";
+      let text = "자, 이제 단어를 배워볼까요? 총 5개의 단어를 공부해요.";
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
