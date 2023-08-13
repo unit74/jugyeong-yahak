@@ -16,8 +16,6 @@ export default function StudentSituation() {
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state && location.state.message;
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState("");
 
   const [msg, setMsg] = useState(null);
 
