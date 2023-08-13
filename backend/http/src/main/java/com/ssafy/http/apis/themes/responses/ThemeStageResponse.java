@@ -20,6 +20,10 @@ public class ThemeStageResponse {
     this.curriculumnId = themeEntity.getId();
     this.curriculumName = themeEntity.getSituation();
     this.curriculumImage = themeEntity.getThemeImageUrl();
+
+    if (themeEntity.getThemeImageUrl() == null) {
+      this.curriculumImage = "https://www.bizforms.co.kr/form/image/thumb_ing.gif";
+    }
   }
 
 }
