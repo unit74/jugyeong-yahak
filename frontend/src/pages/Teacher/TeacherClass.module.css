@@ -58,6 +58,7 @@
 }
 
 .bb {
+  font-family: "KimjungchulGothic-Bold";
   font-size: calc(2.4vw + 1.5vh); /* 반응형 */
 }
 
