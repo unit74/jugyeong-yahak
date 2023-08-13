@@ -15,6 +15,7 @@ export default function StudentDiary() {
   const themeData = useSelector((state) => state.themeState.themeData) || {};
   const navigate = useNavigate();
   const location = useLocation();
+  const { diaryEntry, img } = location.state;
   const userConversations = location.state && location.state.userConversations; // StudentTalking에서 프랍으로 넘겨주는것 받기!
   const generatedDiary = location.state && location.state.generatedDiary;
   const userDiary = location.state && location.state.diaryEntry; // StudentTalking에서 프랍으로 diaryEntry 넘겨주는것 받기!
@@ -26,7 +27,7 @@ export default function StudentDiary() {
   // 온점일 때 줄 띄우기
 
   const formattedText =
-    (generatedText && generatedText && generatedText.split(". ").join(".\n")) ||
+    (diaryEntry && diaryEntry && diaryEntry.split(". ").join(".\n")) ||
     "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
@@ -133,6 +134,7 @@ export default function StudentDiary() {
           {/* <img src={friends} alt="friends_img" /> */}
           <b className={styles.diarytext}>{formattedText}</b>
           {msg && <TTS message={msg} />}
+          <img src={img} alt="" />
         </div>
       </div>
     </div>
