@@ -16,10 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/themes")
@@ -86,6 +83,16 @@ public class ThemePrivateController {
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "초성을 랜덤으로 5개 반환합니다.", choseongList);
   }
 
+  @GetMapping("/{themeId}/reasoning")
+  public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
+
+    List<WordDetailResponse> words = wordService.getWords(themeId);
+
+    Collections.shuffle(words);
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "해당 테마의 단어를 셔플하여 반환합니다.", words);
+  }
+
   @GetMapping("/review")
   public ResponseEntity<?> review() {
 
@@ -107,13 +114,20 @@ public class ThemePrivateController {
             themeEntity);
   }
 
-  @GetMapping("/{themeId}/reasoning")
-  public ResponseEntity<?> startReasoning(@PathVariable("themeId") Long themeId) {
+  @PostMapping("/review/{themeId}")
+  public ResponseEntity<?> reviewDone(@PathVariable("themeId") Long themeId) {
 
-    List<WordDetailResponse> words = wordService.getWords(themeId);
+    Long loginUserId = 4L;
 
-    Collections.shuffle(words);
+    if (SecurityUtil.getLoginUserId() != null) {
+      loginUserId = SecurityUtil.getLoginUserId();
+    }
 
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "해당 테마의 단어를 셔플하여 반환합니다.", words);
+    homeworkService.reviewDone(themeId, loginUserId);
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "복습 완료");
   }
+
+
+
 }
