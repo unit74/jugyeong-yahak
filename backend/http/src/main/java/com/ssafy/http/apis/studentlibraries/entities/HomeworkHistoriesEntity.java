@@ -59,6 +59,10 @@ public class HomeworkHistoriesEntity {
 
   }
 
+  public void setStatusCode(String statusCode) {
+    this.statusCode = statusCode;
+  }
+
   @PrePersist
   public void createTimeStamps() {
     updatedAt = LocalDateTime.now();
