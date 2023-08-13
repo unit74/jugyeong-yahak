@@ -1,56 +1,55 @@
 import axios from "axios";
 
 axios.interceptors.request.use(
-    (request) => {
-      const accessToken = localStorage.getItem('accessToken');
-    
-      request.headers['Authorization'] = accessToken;
-  
-      return request;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
+  (request) => {
+    const accessToken = localStorage.getItem("accessToken");
+
+    request.headers["Authorization"] = accessToken;
+
+    return request;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 axios.interceptors.response.use(
-    (response) => {
-      return response;
-    },
+  (response) => {
+    return response;
+  },
 
-    async (error) => {
-      const { response, config } = error;
-      
-      // 응답 받은 상태 코드가 401이라면
-      if (response.status === 401) {
-        const { data } = await axios.post('https://i9e206.p.ssafy.io/api/v1/private/auth/reissue', {
-         // baseURL: 'http://localhost:8080',
-          params: {
-            // refresh 토큰으로 재발급 요청
-            token: localStorage.getItem('accessToken'),
-          },
-        });
-  
-        const { accessToken } = data;
-        console.log(data);
-        //새 액세스 토큰을 세션스토리지에 저장
-        localStorage.setItem('accessToken', accessToken);
-        //새 액세스 토큰을 헤더에 설정
-        config.headers['Authorization'] = accessToken;
-        //재요청
-        return await axios(config);
-      }
-			else if (response.status === 403) {
-				alert("권한이 없는 사용자입니다!");
-			}
+  async (error) => {
+    const { response, config } = error;
 
-      return Promise.reject(error);
+    // 응답 받은 상태 코드가 401이라면
+    if (response.status === 401) {
+      const { data } = await axios.post("https://i9e206.p.ssafy.io/api/v1/private/auth/reissue", {
+        // baseURL: 'http://localhost:8080',
+        params: {
+          // refresh 토큰으로 재발급 요청
+          token: localStorage.getItem("accessToken"),
+        },
+      });
+
+      const { accessToken } = data;
+      console.log(data);
+      //새 액세스 토큰을 세션스토리지에 저장
+      localStorage.setItem("accessToken", accessToken);
+      //새 액세스 토큰을 헤더에 설정
+      config.headers["Authorization"] = accessToken;
+      //재요청
+      return await axios(config);
+    } else if (response.status === 403) {
+      alert("권한이 없는 사용자입니다!");
     }
-  );
 
-  export default axios;
+    return Promise.reject(error);
+  }
+);
 
-  /* 사용 코드 ~~.js
+export default axios;
+
+/* 사용 코드 ~~.js
 import axios from "./api/authAxios.js"; // axios 테스트가 잘 안된다 싶으면 아래 axios 사용(인터셉터 미적용)
 //import axios from "axios";
 

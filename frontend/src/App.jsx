@@ -43,6 +43,7 @@ import StudentTalking from "./pages/Student/StudentTalking";
 
 import StudentDone from "./pages/Student/StudentDone";
 import CanvasTest from "./pages/Student/CanvasTest";
+import KarloTest from "./pages/Student/KarloTest";
 
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
@@ -81,7 +82,6 @@ function App() {
         <Route path="/words-list" element={<WordsListComponent />} />
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
 
-
         <Route path="/reading-main" element={<StudentReadingMain />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
@@ -118,6 +118,7 @@ function App() {
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
         <Route path="/facetest" element={<FaceLogin />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/karlo-test" element={<KarloTest />} />
         {/* Common */}
         <Route path="*" element={<NotFound />} />
       </Routes>
