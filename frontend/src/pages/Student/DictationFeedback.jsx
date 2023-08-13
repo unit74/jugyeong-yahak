@@ -41,27 +41,27 @@ export default function DictaionFeedback() {
     });
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (course === "writing" && wordIndex < 4) {
-        ttsMaker("다른 단어를 배워볼까요?", 0);
-        setTimeout(() => {
-          dispatch(setWordIndex());
-          navigate("/review-word");
-        }, 3500);
-      } else if (course === "writing" && wordIndex === 4) {
-        ttsMaker("이제 일기를 써볼까요?", 0);
-        setTimeout(() => {
-          navigate("/diary-main");
-        }, 3500);
-      }
-    }, 5000); // 5초
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (course === "writing" && wordIndex < 4) {
+  //       ttsMaker("다른 단어를 배워볼까요?", 0);
+  //       setTimeout(() => {
+  //         dispatch(setWordIndex());
+  //         navigate("/review-word");
+  //       }, 3500);
+  //     } else if (course === "writing" && wordIndex === 4) {
+  //       ttsMaker("이제 일기를 써볼까요?", 0);
+  //       setTimeout(() => {
+  //         navigate("/diary-main");
+  //       }, 3500);
+  //     }
+  //   }, 5000); // 5초
 
-    //   // 언마운트 될 시 타이머 클리어
-    //   return () => {
-    //     clearTimeout(timer);
-    //   };
-    // }, [course, navigate]);
+  //     // 언마운트 될 시 타이머 클리어
+  //     return () => {
+  //       clearTimeout(timer);
+  //     };
+  //   }, [course, navigate]);
 
     return (
       <div className={styles.main}>
@@ -85,7 +85,7 @@ export default function DictaionFeedback() {
                     모두 지우기
                   </button>
                   <button className={styles.nextButton} onClick={nextPage}>
-                    완료
+                    다 적었어요
                   </button>
                   {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
                 </div>
@@ -97,5 +97,4 @@ export default function DictaionFeedback() {
         </div>
       </div>
     );
-  });
-}
+  }
