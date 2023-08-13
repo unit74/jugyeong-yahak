@@ -3,6 +3,7 @@ package com.ssafy.http.apis.auth.dtos;
 
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.jwt.dtos.TokenDto;
+import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,19 @@ public class MemberLoginDto {
   private String role;
   private String name;
   private Integer gender;
+  private LocalTime lectureTime;
 
+  //학생
+  public void of(TokenDto token, MemberEntity memberEntity, LocalTime lectureTime) {
+    this.token = token;
+    this.classId = memberEntity.getClassId();
+    this.role = memberEntity.getRole().getRole();
+    this.name = memberEntity.getName();
+    this.gender = memberEntity.getGender();
+    this.lectureTime = lectureTime;
+  }
+
+  //강사
   public void of(TokenDto token, MemberEntity memberEntity) {
     this.token = token;
     this.classId = memberEntity.getClassId();
