@@ -18,11 +18,13 @@ public class MemberLoginDto {
   private Long classId;
   private String role;
   private String name;
+  private Integer gender;
 
   public void of(TokenDto token, MemberEntity memberEntity) {
     this.token = token;
     this.classId = memberEntity.getClassId();
     this.role = memberEntity.getRole().getRole();
     this.name = memberEntity.getName();
+    this.gender = memberEntity.getGender();
   }
 }
