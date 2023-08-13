@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./TeacherCurriculum.module.css";
+import styles from "./TeacherLiveWord.module.css";
 
 const TeacherLiveWord = (props) => {
   const curriculum = props.$.state.curriculum;
