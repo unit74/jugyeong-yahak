@@ -95,7 +95,7 @@ public class ThemePrivateController {
       loginUserId = SecurityUtil.getLoginUserId();
     }
 
-    long curriculumId = homeworkService.getThemeId(20L);
+    long curriculumId = homeworkService.getThemeId(loginUserId);
 
     ThemeEntity themeEntity = themeService.getTheme(curriculumId, loginUserId);
 
