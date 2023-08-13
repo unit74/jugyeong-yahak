@@ -1,13 +1,13 @@
 package com.ssafy.http.apis.themes.services;
 
 import com.ssafy.http.apis.commoncodes.CommonCode;
+import com.ssafy.http.apis.homeworkhistories.entities.HomeworkHistoriesEntity;
+import com.ssafy.http.apis.homeworkhistories.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
 import com.ssafy.http.apis.roles.Role;
-import com.ssafy.http.apis.studentlibraries.entities.HomeworkHistoriesEntity;
-import com.ssafy.http.apis.studentlibraries.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.themes.entities.ThemeEntity;
 import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.apis.themes.responses.ThemeDetailResponse;
