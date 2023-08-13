@@ -83,6 +83,7 @@ public class AuthPublicController {
                     .role(memberLoginDto.getRole())
                     .name(memberLoginDto.getName())
                     .gender(memberLoginDto.getGender())
+                    .lectureTime(memberLoginDto.getLectureTime())
                     .build())
                 .build()));
   }
