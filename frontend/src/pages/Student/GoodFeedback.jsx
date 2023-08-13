@@ -68,6 +68,7 @@ export default function GoodFeedback() {
       } else if (course === "writing" && wordIndex === 4) {
         let text = "이제 일기를 써볼까요?";
         ttsMaker(text, 0);
+        dispatch(setWordIndex());
         await delay(text.length * 300);
         navigate("/diary-main");
       } else if (course === "diary") {

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import axios from "axios";
 import TTSsentence from "../Common/TTSsentence";
+import { useSelector } from "react-redux";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
@@ -11,6 +12,11 @@ const StudentReviewTheme = () => {
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
   const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
   const [msg, setMsg] = useState(null);
+
+  // DB에 저장된 단어 가져오기
+  const themeSituation = useSelector((state) => state.themeState.themeData.situation) || [];
+  const themeImg = useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
+  const themeTitle = useSelector((state) => state.themeState.themeData.theme) || [];
 
   // fade 효과
   const [fade, setFade] = useState(false);
@@ -34,9 +40,9 @@ const StudentReviewTheme = () => {
   };
 
   // API요청 결과를 담을 변수
-  const [themeTitle, setThemeTitle] = useState(null);
-  const [themeImg, setThemeImg] = useState(null);
-  const [themeSituation, setThemeSituation] = useState(null);
+  // const [themeTitle, setThemeTitle] = useState(null);
+  // const [themeImg, setThemeImg] = useState(null);
+  // const [themeSituation, setThemeSituation] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -49,17 +55,16 @@ const StudentReviewTheme = () => {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  // 이거 그냥 뒤에 30 번호 없이 API 호출하면 바로 숙제 가져올 수 있게 수정해야됨
-  useEffect(() => {
-    axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
-      .then((response) => {
-        setThemeTitle(response.data.data.theme);
-        setThemeImg(response.data.data.themeImageUrl);
-        setThemeSituation(response.data.data.situation);
-      })
-      .catch((error) => console.error(`Error: ${error}`));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://i9e206.p.ssafy.io/api/v1/themes/review")
+  //     .then((response) => {
+  //       setThemeTitle(response.data.data.theme);
+  //       setThemeImg(response.data.data.themeImageUrl);
+  //       setThemeSituation(response.data.data.situation);
+  //     })
+  //     .catch((error) => console.error(`Error: ${error}`));
+  // }, []);
 
   useEffect(() => {
     async function makeRequest() {
@@ -82,7 +87,8 @@ const StudentReviewTheme = () => {
     if (themeSituation !== null) {
       makeRequest();
     }
-  }, [themeSituation]);
+  }, []);
+  // }, [themeSituation]);
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
