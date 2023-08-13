@@ -1,9 +1,9 @@
-package com.ssafy.http.apis.studentlibraries.controllers;
+package com.ssafy.http.apis.homeworkhistories.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.ssafy.http.apis.studentlibraries.responses.LibraryResponse;
-import com.ssafy.http.apis.studentlibraries.services.HomeworkService;
+import com.ssafy.http.apis.homeworkhistories.responses.LibraryResponse;
+import com.ssafy.http.apis.homeworkhistories.services.HomeworkService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-  @RestController
-  @RequiredArgsConstructor
-  @RequestMapping("/api/v1/members/libraries")
-  public class HomeworkController {
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/members/libraries")
+public class HomeworkController {
 
   private final HomeworkService homeworkService;
 
