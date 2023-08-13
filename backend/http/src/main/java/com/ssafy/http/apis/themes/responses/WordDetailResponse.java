@@ -26,6 +26,9 @@ public class WordDetailResponse {
     this.id = wordEntity.getId();
     this.word = wordEntity.getWord();
     this.wordExplanation = wordEntity.getWordExplanation();
+    if (wordEntity.getWordExplanation() == null) {
+      this.wordExplanation = "단어 설명 부분 준비중입니다.";
+    }
     this.wordImageUrl = wordEntity.getWordImageUrl();
     this.createdAt = wordEntity.getCreatedAt();
     this.updatedAt = wordEntity.getUpdatedAt();
