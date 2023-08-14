@@ -2,8 +2,10 @@ package com.ssafy.http.apis.members.controllers;
 
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.ssafy.http.apis.members.requests.StudentRequest;
-import com.ssafy.http.apis.members.requests.TeacherRequest;
+import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
+import com.ssafy.http.apis.members.requests.StudentUpdateRequest;
+import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
+import com.ssafy.http.apis.members.requests.TeacherUpdateRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.members.services.MemberService;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,12 +34,10 @@ public class MemberPrivateController {
   private final S3ImageUploadService imageUploadService;
   private final MemberService memberService;
 
-  @PutMapping(value = "/students/{studentId}")
-  public ResponseEntity<?> updateStudent(@PathVariable Long studentId,
-      @RequestPart StudentRequest studentRequest) {
+  @PutMapping(value = "/students") //학생 수정
+  public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateRequest studentUpdateRequest) {
 
-    StudentDetailResponse studentDetailResponse = memberService.updateStudent(studentId,
-        studentRequest);
+    StudentDetailResponse studentDetailResponse = memberService.updateStudent(studentUpdateRequest);
 
     return createSuccessResponse(SuccessCode.UPDATE_SUCCESS, "학생 데이터 수정하였습니다.",
         studentDetailResponse);
@@ -69,40 +70,38 @@ public class MemberPrivateController {
 //
 //  }
 
-  @PostMapping(value = "/students/register/{governmentId}", consumes = { //학생 회원가입
+  @PostMapping(value = "/students", consumes = { //학생 회원가입
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
-      @PathVariable Long governmentId,
-      @RequestPart StudentRequest studentRequest,
+      @RequestPart StudentRegisterRequest studentRegisterRequest,
       @RequestPart MultipartFile faceImage) {
     System.out.println("학생 등록 요청 받음");
 
-    memberService.registerStudents(governmentId, faceImage, studentRequest);
+    memberService.registerStudents(SecurityUtil.getLoginUserId(), faceImage,
+        studentRegisterRequest);
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
 
-  @PostMapping(value = "/teachers/register/{governmentId}", consumes = { //강사 회원가입
+  @PostMapping(value = "/teachers", consumes = { //강사 회원가입
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerTeacher(
-      @PathVariable Long governmentId,
-      @RequestPart TeacherRequest teacherRequest,
+      @RequestPart TeacherRegisterRequest teacherRegisterRequest,
       @RequestPart MultipartFile faceImage) {
 
-    memberService.registerTeachers(governmentId, faceImage, teacherRequest);
+    memberService.registerTeachers(SecurityUtil.getLoginUserId(), faceImage,
+        teacherRegisterRequest);
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "회원 가입에 성공하였습니다.");
   }
 
-  //복붙 시작
-  @PutMapping(value = "/teachers/{teacherId}")
-  public ResponseEntity<?> updateTeacher(@PathVariable Long teacherId,
-      @RequestPart TeacherRequest teacherRequest) {
+  @PutMapping(value = "/teachers")
+  public ResponseEntity<?> updateTeacher(@RequestBody TeacherUpdateRequest teacherUpdateRequest) {
 
-    TeacherDetailResponse teacherDetailDetailResponse = memberService.updateTeacher(teacherId,
-        teacherRequest);
+    TeacherDetailResponse teacherDetailDetailResponse = memberService.updateTeacher(
+        teacherUpdateRequest);
 
     return createSuccessResponse(SuccessCode.UPDATE_SUCCESS, "강사 데이터 수정하였습니다.",
         teacherDetailDetailResponse);
