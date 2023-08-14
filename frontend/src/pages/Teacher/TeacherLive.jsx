@@ -738,99 +738,105 @@ class OpenViduSession extends Component {
           }}
         />
         <div className={styles.contentContainer}>
-          <div className={styles.video}>
-            {localUser !== undefined &&
-              localUser.getStreamManager() !== undefined && (
+          <div className={styles.contentLeft}>{this.renderComponent()}</div>
+          <div className={styles.contentRight}>
+            <div className={styles.video}>
+              {localUser !== undefined &&
+                localUser.getStreamManager() !== undefined && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "300px",
+                      height: "300px",
+                    }}
+                    id="localUser"
+                  >
+                    <div>본인</div>
+                    <StreamComponent user={localUser} />
+                  </div>
+                )}
+              {mainStreamUser !== undefined &&
+                mainStreamUser.getStreamManager() !== undefined && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "50%",
+                      height: "50%",
+                    }}
+                    id="mainStreamUser"
+                  >
+                    <div>포커스 중인 사람</div>
+                    <StreamComponent user={mainStreamUser} />
+                  </div>
+                )}
+              {this.state.subscribers.map((sub, i) => (
                 <div
+                  key={i}
                   style={{
                     display: "inline-block",
                     width: "300px",
                     height: "300px",
                   }}
-                  id="localUser"
+                  id="remoteUsers"
                 >
-                  <div>본인</div>
-                  <StreamComponent user={localUser} />
-                </div>
-              )}
-            {mainStreamUser !== undefined &&
-              mainStreamUser.getStreamManager() !== undefined && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    width: "50%",
-                    height: "50%",
-                  }}
-                  id="mainStreamUser"
-                >
-                  <div>포커스 중인 사람</div>
-                  <StreamComponent user={mainStreamUser} />
-                </div>
-              )}
-            {this.state.subscribers.map((sub, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "inline-block",
-                  width: "300px",
-                  height: "300px",
-                }}
-                id="remoteUsers"
-              >
-                <IconButton
-                  onClick={() => {
-                    const data = {
-                      target: sub.getConnectionId(),
-                    };
-
-                    this.sendSignalMic(data);
-                  }}
-                >
-                  {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
-                </IconButton>
-                {quiz && !sub.isCorrect() && (
                   <IconButton
                     onClick={() => {
                       const data = {
                         target: sub.getConnectionId(),
-                        correct: true,
                       };
 
-                      this.sendSignalCorrect(data);
-
-                      this.setState(
-                        {
-                          count: this.state.count + 1,
-                        },
-                        () => {
-                          if (
-                            this.state.count === this.state.subscribers.length
-                          ) {
-                            this.setState({ count: 0 }, () => {
-                              this.sendSignalQuiz({ quiz: false });
-                            });
-                          }
-                        }
-                      );
+                      this.sendSignalMic(data);
                     }}
                   >
-                    <Check />
+                    {sub.isAudioActive() ? (
+                      <Mic />
+                    ) : (
+                      <MicOff color="secondary" />
+                    )}
                   </IconButton>
-                )}
-                <div
-                  onClick={() => {
-                    this.handleMainVideoStream(sub);
-                  }}
-                >
-                  <StreamComponent
-                    user={sub}
-                    streamId={sub.streamManager.stream.streamId}
-                  />
+                  {quiz && !sub.isCorrect() && (
+                    <IconButton
+                      onClick={() => {
+                        const data = {
+                          target: sub.getConnectionId(),
+                          correct: true,
+                        };
+
+                        this.sendSignalCorrect(data);
+
+                        this.setState(
+                          {
+                            count: this.state.count + 1,
+                          },
+                          () => {
+                            if (
+                              this.state.count === this.state.subscribers.length
+                            ) {
+                              this.setState({ count: 0 }, () => {
+                                this.sendSignalQuiz({ quiz: false });
+                              });
+                            }
+                          }
+                        );
+                      }}
+                    >
+                      <Check />
+                    </IconButton>
+                  )}
+                  <div
+                    onClick={() => {
+                      this.handleMainVideoStream(sub);
+                    }}
+                  >
+                    <StreamComponent
+                      user={sub}
+                      streamId={sub.streamManager.stream.streamId}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-          <div>{this.renderComponent()}</div>
         </div>
       </div>
     );
