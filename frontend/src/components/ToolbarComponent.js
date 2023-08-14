@@ -39,52 +39,51 @@ export default class ToolbarComponent extends Component {
     const trace = this.props.trace;
 
     return (
-      <AppBar className="toolbar" id="header">
-        <Toolbar className="toolbar">
-          <div id="navSessionInfo">
-            {this.props.sessionId && (
-              <div id="titleContent">
-                <span id="session-title" className={styles.sessiontt}>
-                  {mySessionId} - {clazz.className}
-                </span>
+      <div className="sidebar">
+        <div id="navSessionInfo" className={styles.verticalText}>
+          {/* ${mySessionId}  */}
+          {this.props.sessionId &&
+            [...`${clazz.className}`].map((char, index) => (
+              <div key={index} className={styles.charContainer}>
+                <span className={styles.character}>{char}</span>
               </div>
+            ))}
+        </div>
+
+        <div className="buttonsContent">
+          <IconButton
+            style={{ color: '#4070e9' }}
+            className="navButton"
+            id="navMicButton"
+            onClick={this.micStatusChanged}
+          >
+            {localUser !== undefined && localUser.isAudioActive() ? (
+              <Mic />
+            ) : (
+              <MicOff color="secondary" />
             )}
-          </div>
+          </IconButton>
 
-          <div className="buttonsContent">
-            <IconButton
-              color="inherit"
-              className="navButton"
-              id="navMicButton"
-              onClick={this.micStatusChanged}
-            >
-              {localUser !== undefined && localUser.isAudioActive() ? (
-                <Mic />
-              ) : (
-                <MicOff color="secondary" />
-              )}
-            </IconButton>
+          <IconButton
+            style={{ color: '#4070e9' }}
+            className="navButton"
+            id="navMouseButton"
+            onClick={this.traceStatusChanged}
+          >
+            {!trace ? <Mouse /> : <Close color="secondary" />}
+          </IconButton>
 
-            <IconButton
-              color="inherit"
-              className="navButton"
-              id="navMouseButton"
-              onClick={this.traceStatusChanged}
-            >
-              {!trace ? <Mouse /> : <Close color="secondary" />}
-            </IconButton>
+          <IconButton
+            style={{ color: 'rgb(255, 5, 5)' }}
+            className="navButton"
+            onClick={this.leaveSession}
+            id="navLeaveButton"
+          >
+            <PowerSettingsNew />
+          </IconButton>
+        </div>
+      </div>
 
-            <IconButton
-              color="secondary"
-              className="navButton"
-              onClick={this.leaveSession}
-              id="navLeaveButton"
-            >
-              <PowerSettingsNew />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
     );
   }
 }

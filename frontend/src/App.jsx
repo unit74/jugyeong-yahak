@@ -56,9 +56,15 @@ import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
 import TeacherTheme from "./pages/Teacher/TeacherTheme";
 import TeacherClass from "./pages/Teacher/TeacherClass";
-
-// Teacher_실시간 강의
 import TeacherLive from "./pages/Teacher/TeacherLive";
+
+// 실시간 강의
+import LiveTheme from "./pages/Live/LiveTheme";
+import LiveCurriculum from "./pages/Live/LiveCurriculum";
+import LiveJournal from "./pages/Live/LiveJournal";
+import LiveReadWord from "./pages/Live/LiveReadWord";
+import LiveReadWordHint from "./pages/Live/LiveReadWordHint";
+
 import FaceLogin from "./pages/Common/FaceLogin";
 
 function App() {
@@ -107,7 +113,13 @@ function App() {
         <Route path="/teacher-class" element={<TeacherClass />} />
         <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         {/* 교사 실시간 강의 */}
-        <Route path="/teacher-live/*" element={<TeacherLive />} />
+        <Route path="/teacher-live" element={<TeacherLive />}>
+          <Route path="theme" element={<LiveTheme />} />
+          <Route path="curriculum" element={<LiveCurriculum />} />
+          <Route path="journal" element={<LiveJournal />} />
+          <Route path="read" element={<LiveReadWord />} />
+          <Route path="read-hint" element={<LiveReadWordHint />} />
+        </Route>
         {/* 지자체 */}
         {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
         <Route
