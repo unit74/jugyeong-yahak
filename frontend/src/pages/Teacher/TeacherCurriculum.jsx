@@ -30,7 +30,7 @@ const TeacherCurriculum = (props) => {
     return () => {
       setCurriculums([]);
     };
-  }, []);
+  }, [props.$]);
 
   const chooseCurriculum = async (curriculum) => {
     console.log(curriculum);

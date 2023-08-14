@@ -5,7 +5,7 @@ const TeacherLiveReadWord = (props) => {
   const word = props.word;
 
   return (
-    <div className={styles.main}>
+    <div>
       <h1>읽기(단어 띄워주는) 페이지</h1>
       <div>{word}</div>
     </div>
