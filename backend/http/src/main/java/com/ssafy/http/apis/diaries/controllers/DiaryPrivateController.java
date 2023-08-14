@@ -10,13 +10,15 @@ import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -45,10 +47,14 @@ public class DiaryPrivateController {
         diaryDetailResponses);
   }
 
-  @PostMapping
-  public ResponseEntity registerDiary(@RequestBody DiaryRegisterRequest diaryRegisterRequest) {
+  @PostMapping(consumes = { //학생 회원가입
+      MediaType.APPLICATION_JSON_VALUE,
+      MediaType.MULTIPART_FORM_DATA_VALUE})
+  public ResponseEntity registerDiary(
+      @RequestPart MultipartFile imageData,
+      @RequestPart DiaryRegisterRequest diaryRegisterRequest) {
 
-    diaryService.registerDiary(SecurityUtil.getLoginUserId(), diaryRegisterRequest);
+    diaryService.registerDiary(SecurityUtil.getLoginUserId(), diaryRegisterRequest, imageData);
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "일기 등록을 성공했습니다.");
   }
