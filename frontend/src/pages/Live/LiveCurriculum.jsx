@@ -2,11 +2,13 @@ import React, { useEffect, useState, useContext } from "react";
 import styles from "./LiveCurriculum.module.css";
 import axios from "../Common/api/authAxios";
 import { OpenViduSessionContext } from "../Teacher/TeacherLive";
+import { useOutletContext } from "react-router-dom";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
 
 const TeacherCurriculum = () => {
   const sendSignal = useContext(OpenViduSessionContext);
+  const theme = useOutletContext().theme;
   const [curriculums, setCurriculums] = useState([]);
 
   const send = (data, page) => {
@@ -15,20 +17,20 @@ const TeacherCurriculum = () => {
 
   useEffect(() => {
     async function getCurriculums() {
-      // 여기 props가 문제라서 수정해야함.
-      // await axios
-      //   .get(`${BASE_URL}/api/v1/themes/stages/${props.$.state.theme}`)
-      //   .then(function (response) {
-      //     const data = response.data.data;
-      //     if (data.length === 0) {
-      //       alert("모두 완료된 테마입니다.");
-      //       send({ theme: null }, "theme");
-      //       send({ page: "theme" }, "page");
-      //     } else setCurriculums(data);
-      //   })
-      //   .catch(function (error) {
-      //     console.error(error);
-      //   });
+      await axios
+        .get(`${BASE_URL}/api/v1/themes/stages/${theme}`)
+        .then(function (response) {
+          const data = response.data.data;
+
+          if (data.length === 0) {
+            alert("모두 완료된 테마입니다.");
+            send({ theme: null }, "theme");
+            send({ page: "theme" }, "page");
+          } else setCurriculums(data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
     }
 
     getCurriculums();
@@ -60,7 +62,9 @@ const TeacherCurriculum = () => {
             <div
               className={styles.curriculumBtnEach}
               key={i}
-              onClick={() => chooseCurriculum(curriculum)}
+              onClick={() => {
+                if (window.confirm("강의를 시작하시겠습니까?")) chooseCurriculum(curriculum);
+              }}
             >
               <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
               <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
