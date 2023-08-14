@@ -100,6 +100,7 @@ class OpenViduSession extends Component {
 
   joinSession() {
     this.OV = new OpenVidu();
+    const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
 
     this.setState(
       {
@@ -108,6 +109,12 @@ class OpenViduSession extends Component {
       async () => {
         this.subscribeToStreamCreated();
         await this.connectToSession();
+
+        await axios.post(`${BASE_URL_SSE}/convert/page`, {
+          classId: useLocation().state.clazz,
+          streamId: 0,
+          number: 0,
+        });
       }
     );
   }

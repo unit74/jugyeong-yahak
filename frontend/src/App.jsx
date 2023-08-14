@@ -44,6 +44,7 @@ import StudentTalking from "./pages/Student/StudentTalking";
 import StudentDone from "./pages/Student/StudentDone";
 import CanvasTest from "./pages/Student/CanvasTest";
 import KarloTest from "./pages/Student/KarloTest";
+import SSETest from "./pages/Student/SSETest";
 
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
@@ -131,6 +132,8 @@ function App() {
         <Route path="/facetest" element={<FaceLogin />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/karlo-test" element={<KarloTest />} />
+        <Route path="/sse-test" element={<SSETest />} />
+
         {/* Common */}
         <Route path="*" element={<NotFound />} />
       </Routes>

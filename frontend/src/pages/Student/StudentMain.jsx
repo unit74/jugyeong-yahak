@@ -25,6 +25,9 @@ export default function StudentMain() {
     });
   };
 
+  let lectureTime = null;
+  let lectureTimes = lectureTime && lectureTime.split(",");
+
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
