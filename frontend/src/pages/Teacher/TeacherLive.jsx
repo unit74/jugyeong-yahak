@@ -407,7 +407,8 @@ class OpenViduSession extends Component {
       if (this.state.quiz && !data.quiz) {
         console.log("게임 종료");
         // 게임 종료
-        if (this.state.timer > 0) this.sendSignalInfo({ page: this.state.page + 1 });
+        if (this.state.timer > 0)
+          this.sendSignalInfo({ page: this.state.page + 1 });
         else this.sendSignalInfo({ page: this.state.page + 2 });
 
         this.sendSignalTimer({ timer: 0 });
@@ -621,7 +622,9 @@ class OpenViduSession extends Component {
       return (
         <div>
           <h1>게임 1 페이지</h1>
-          {this.state.curriculum.wordList.length > 0 && <TeacherLiveGuessQuiz $={this} />}
+          {this.state.curriculum.wordList.length > 0 && (
+            <TeacherLiveGuessQuiz $={this} />
+          )}
           {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
           {this.state.timer !== 0 && (
             <span
@@ -644,14 +647,18 @@ class OpenViduSession extends Component {
       return (
         <div>
           <h1>잘하셨어요!</h1>
-          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>
+            다음 게임으로!
+          </button>
         </div>
       );
     } else if (this.state.page === 13) {
       return (
         <div>
           <h1>아쉽습니다!</h1>
-          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>
+            다음 게임으로!
+          </button>
         </div>
       );
     } else if (this.state.page === 21) {
@@ -659,7 +666,9 @@ class OpenViduSession extends Component {
         <div>
           <h1>게임 2 페이지</h1>
           <TeacherLiveChoseongQuiz $={this} />
-          {this.state.choseong && <div>오늘의 초성 : {this.state.choseong}</div>}
+          {this.state.choseong && (
+            <div>오늘의 초성 : {this.state.choseong}</div>
+          )}
           {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
           {this.state.timer !== 0 && (
             <span
@@ -682,14 +691,18 @@ class OpenViduSession extends Component {
       return (
         <div>
           <h1>잘하셨어요!</h1>
-          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>
+            종례 페이지로
+          </button>
         </div>
       );
     } else if (this.state.page === 23) {
       return (
         <div>
           <h1>아쉽습니다!</h1>
-          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>
+            종례 페이지로
+          </button>
         </div>
       );
     } else if (this.state.page === 31) {
@@ -708,7 +721,7 @@ class OpenViduSession extends Component {
     const mainStreamUser = this.state.mainStreamUser;
     const trace = this.state.trace;
     const quiz = this.state.quiz;
-
+    // 리턴
     return (
       <div className={styles.container} id="container">
         <ToolbarComponent
@@ -726,20 +739,6 @@ class OpenViduSession extends Component {
         />
         <div className={styles.contentContainer}>
           <div className={styles.video}>
-            {mainStreamUser !== undefined &&
-              mainStreamUser.getStreamManager() !== undefined && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    width: "50%",
-                    height: "50%",
-                  }}
-                  id="mainStreamUser"
-                >
-                  <div>포커스 중인 사람</div>
-                  <StreamComponent user={mainStreamUser} />
-                </div>
-              )}
             {localUser !== undefined &&
               localUser.getStreamManager() !== undefined && (
                 <div
@@ -752,6 +751,20 @@ class OpenViduSession extends Component {
                 >
                   <div>본인</div>
                   <StreamComponent user={localUser} />
+                </div>
+              )}
+            {mainStreamUser !== undefined &&
+              mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "50%",
+                    height: "50%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  <div>포커스 중인 사람</div>
+                  <StreamComponent user={mainStreamUser} />
                 </div>
               )}
             {this.state.subscribers.map((sub, i) => (
@@ -790,7 +803,9 @@ class OpenViduSession extends Component {
                           count: this.state.count + 1,
                         },
                         () => {
-                          if (this.state.count === this.state.subscribers.length) {
+                          if (
+                            this.state.count === this.state.subscribers.length
+                          ) {
                             this.setState({ count: 0 }, () => {
                               this.sendSignalQuiz({ quiz: false });
                             });
