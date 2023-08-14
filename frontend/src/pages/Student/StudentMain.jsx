@@ -125,7 +125,7 @@ export default function StudentMain() {
             혼자 공부하기
           </button>
         </div>
-      )}ㄴ
+      )}
         <div className={styles.time}>
           <div className={styles.timeImg}>
             <img className={styles.responsive_image} src={diaryImg} alt="diaryImg" />
