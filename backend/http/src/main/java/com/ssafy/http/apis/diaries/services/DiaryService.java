@@ -91,6 +91,10 @@ public class DiaryService {
       BufferedImage image = readWebPImage(url);
       File file = new File("diary/" + fileName);
 
+      if (!file.exists()) { // 해당 경로의 폴더가 존재하지 않을 경우
+        file.mkdirs(); // 해당 경로의 폴더 생성
+      }
+
       ImageIO.write(image, "png", file);
 
       //folder, uuid, fileType, uploadFile
