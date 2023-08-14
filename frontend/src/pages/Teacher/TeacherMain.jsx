@@ -25,11 +25,11 @@ const TeacherMain = () => {
   return (
     <div className={styles.main}>
       {/* <TeacherHeader /> */}
-      <button className={styles.logout}>Logout</button>
       <div className={styles.back}>
+        <button className={styles.logout}>Logout</button>
         <div className={styles.bannerContainer}>
           <section className={styles.welcome}>
-            <b>👋🏻 {userInfo.name} 님, 안녕하세요!</b>
+            <b className={styles.typing}>👋🏻 {userInfo.name} 님, 안녕하세요! </b>
             <span style={{ display: "block", textAlign: "center" }}>
               주경야학과 함께라면, 언제 어디서든 야학 봉사가 가능합니다!
             </span>
@@ -63,7 +63,7 @@ const TeacherMain = () => {
           <article className={styles.option} onClick={handleClick_3}>
             <div className={styles.optionImage}></div>
             <div className={styles.optionText}>
-              <p>학생 진도율</p>
+              <p>학습 교재</p>
               <p>확인하기</p>
             </div>
             <img className={styles.optionIcon} alt="" src="/group-2176.svg" />
