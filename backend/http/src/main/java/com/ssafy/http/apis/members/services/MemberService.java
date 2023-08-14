@@ -5,8 +5,10 @@ import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.apis.members.requests.StudentRequest;
-import com.ssafy.http.apis.members.requests.TeacherRequest;
+import com.ssafy.http.apis.members.requests.StudentRegisterRequest;
+import com.ssafy.http.apis.members.requests.StudentUpdateRequest;
+import com.ssafy.http.apis.members.requests.TeacherRegisterRequest;
+import com.ssafy.http.apis.members.requests.TeacherUpdateRequest;
 import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.roles.Role;
@@ -100,15 +102,16 @@ public class MemberService {
   }
 
   @Transactional
-  public StudentDetailResponse updateStudent(Long studentId,
-      StudentRequest studentRequest) {
+  public StudentDetailResponse updateStudent(StudentUpdateRequest studentUpdateRequest) {
+
     StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
 
-    MemberEntity studentEntity = memberRepository.findMemberEntityById(studentId).orElseThrow(
-        () -> new CustomException(ErrorCode.IO_ERROR)
-    );
+    MemberEntity studentEntity = memberRepository.findMemberEntityById(studentUpdateRequest.getId())
+        .orElseThrow(
+            () -> new CustomException(ErrorCode.IO_ERROR)
+        );
 
-    studentEntity = studentRequest.toEntityForUpdate(studentEntity);
+    studentEntity = studentUpdateRequest.toEntity(studentEntity);
     memberRepository.save(studentEntity);
 
     studentDetailResponse.of(studentEntity);
@@ -144,19 +147,20 @@ public class MemberService {
   }
 
   public void registerStudents(Long governmentId, MultipartFile faceImage,
-      StudentRequest studentRequest) {
+      StudentRegisterRequest studentRegisterRequest) {
 
     String uuid = UUID.randomUUID().toString();
 
-    MemberEntity memberEntity = studentRequest.toEntityForRegister(url, imageType,
+    MemberEntity memberEntity = studentRegisterRequest.toEntity(url, imageType,
         governmentId, uuid);
 
-    String folder = memberEntity.getGovernmentId()
-        .toString();
+    String folder = String.valueOf(governmentId);
 
     memberRepository.findMemberEntityByPhone(memberEntity.getPhone())
-        .ifPresent((student) -> new RegisterIdentificationException(
-            ErrorCode.ID_ALREADY_USE));
+        .ifPresent((student) -> {
+          throw new RegisterIdentificationException(
+              ErrorCode.ID_ALREADY_USE);
+        });
 
     try {
       s3ImageUploadService.uploadImage(folder, uuid, imageType, faceImage);
@@ -169,11 +173,12 @@ public class MemberService {
   }
 
   public void registerTeachers(Long governmentId, MultipartFile faceImage,
-      TeacherRequest teacherRequest) {
+      TeacherRegisterRequest teacherRegisterRequest) {
 
     String uuid = UUID.randomUUID().toString();
 
-    MemberEntity memberEntity = teacherRequest.toEntityForRegister(url, imageType, governmentId,
+    MemberEntity memberEntity = teacherRegisterRequest.toEntity(url, imageType,
+        governmentId,
         uuid);
 
     String folder = memberEntity.getGovernmentId().toString();
@@ -193,19 +198,19 @@ public class MemberService {
   }
 
   @Transactional //강사 update
-  public TeacherDetailResponse updateTeacher(Long teacherId,
-      TeacherRequest teacherRequest) {
+  public TeacherDetailResponse updateTeacher(TeacherUpdateRequest teacherUpdateRequest) {
 
     TeacherDetailResponse teacherDetailResponse = new TeacherDetailResponse();
 
-    MemberEntity studentEntity = memberRepository.findMemberEntityById(teacherId).orElseThrow(
-        () -> new CustomException(ErrorCode.IO_ERROR)
-    );
+    MemberEntity teacherEntity = memberRepository.findMemberEntityById(teacherUpdateRequest.getId())
+        .orElseThrow(
+            () -> new CustomException(ErrorCode.IO_ERROR)
+        );
 
-    studentEntity = teacherRequest.toEntityForUpdate(studentEntity);
-    memberRepository.save(studentEntity);
+    teacherEntity = teacherUpdateRequest.toEntity(teacherEntity);
+    memberRepository.save(teacherEntity);
 
-    teacherDetailResponse.of(studentEntity);
+    teacherDetailResponse.of(teacherEntity);
 
     return teacherDetailResponse;
   }
