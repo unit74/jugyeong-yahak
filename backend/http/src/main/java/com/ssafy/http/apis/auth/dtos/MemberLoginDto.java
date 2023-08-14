@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class MemberLoginDto {
 
   private TokenDto token;
+  private Long id;
   private Long classId;
   private String role;
   private String name;
@@ -25,6 +26,7 @@ public class MemberLoginDto {
   //학생
   public void of(TokenDto token, MemberEntity memberEntity, LocalTime lectureTime) {
     this.token = token;
+    this.id = memberEntity.getId();
     this.classId = memberEntity.getClassId();
     this.role = memberEntity.getRole().getRole();
     this.name = memberEntity.getName();
@@ -34,6 +36,7 @@ public class MemberLoginDto {
 
   //강사
   public void of(TokenDto token, MemberEntity memberEntity) {
+    this.id = memberEntity.getId();
     this.token = token;
     this.classId = memberEntity.getClassId();
     this.role = memberEntity.getRole().getRole();

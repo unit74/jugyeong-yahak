@@ -24,6 +24,7 @@ public class MemberLoginResponse {
   @JsonInclude(Include.NON_NULL)
   public static class Info {
 
+    private Long id;
     private Long classId;
     private String role;
     private String name;
