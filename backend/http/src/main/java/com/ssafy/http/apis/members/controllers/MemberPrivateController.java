@@ -13,6 +13,7 @@ import com.ssafy.http.apis.members.services.S3ImageUploadService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,8 @@ public class MemberPrivateController {
   private final MemberService memberService;
 
   @PutMapping(value = "/students") //학생 수정
-  public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateRequest studentUpdateRequest) {
+  public ResponseEntity<?> updateStudent(
+      @Valid @RequestBody StudentUpdateRequest studentUpdateRequest) {
 
     StudentDetailResponse studentDetailResponse = memberService.updateStudent(studentUpdateRequest);
 
@@ -61,20 +63,22 @@ public class MemberPrivateController {
 
   }
 
-//  @GetMapping("/students")
-//  public ResponseEntity<?> getStudents() { // 학생 리스트
-//    List<StudentDetailResponse> studentDetailResponses = memberService.getStudents();
-//
-//    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "학생들을 전체조회 하였습니다.",
-//        studentDetailResponses);
-//
-//  }
+  @GetMapping("/students") //지자체, 강사 : 학생 리스크 조회
+  public ResponseEntity<?> getStudents() { // 학생 리스트
+    List<StudentDetailResponse> studentDetailResponses = memberService.getStudentList(
+        SecurityUtil.getLoginUserId(),
+        SecurityUtil.getLoginUserRole());
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "지자체의 학생들을 전체조회 하였습니다.",
+        studentDetailResponses);
+
+  }
 
   @PostMapping(value = "/students", consumes = { //학생 회원가입
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
-      @RequestPart StudentRegisterRequest studentRegisterRequest,
+      @Valid @RequestPart StudentRegisterRequest studentRegisterRequest,
       @RequestPart MultipartFile faceImage) {
     System.out.println("학생 등록 요청 받음");
 
@@ -88,7 +92,7 @@ public class MemberPrivateController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerTeacher(
-      @RequestPart TeacherRegisterRequest teacherRegisterRequest,
+      @Valid @RequestPart TeacherRegisterRequest teacherRegisterRequest,
       @RequestPart MultipartFile faceImage) {
 
     memberService.registerTeachers(SecurityUtil.getLoginUserId(), faceImage,
@@ -98,7 +102,8 @@ public class MemberPrivateController {
   }
 
   @PutMapping(value = "/teachers")
-  public ResponseEntity<?> updateTeacher(@RequestBody TeacherUpdateRequest teacherUpdateRequest) {
+  public ResponseEntity<?> updateTeacher(
+      @Valid @RequestBody TeacherUpdateRequest teacherUpdateRequest) {
 
     TeacherDetailResponse teacherDetailDetailResponse = memberService.updateTeacher(
         teacherUpdateRequest);
@@ -116,10 +121,11 @@ public class MemberPrivateController {
   }
 
   @GetMapping("/teachers")
-  public ResponseEntity<?> getStudents() { // 강사 리스트
-    List<TeacherDetailResponse> teacherDetailDetailResponses = memberService.getTeachers();
+  public ResponseEntity<?> getTeachers() { // 지자체 강사 리스트
+    List<TeacherDetailResponse> teacherDetailDetailResponses = memberService.getTeachers(
+        SecurityUtil.getLoginUserId());
 
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "강사들을 전체조회 하였습니다.",
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "지자체의 강사들을 전체조회 하였습니다.",
         teacherDetailDetailResponses);
 
   }
