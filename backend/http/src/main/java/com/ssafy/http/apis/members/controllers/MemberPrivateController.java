@@ -36,7 +36,8 @@ public class MemberPrivateController {
   private final MemberService memberService;
 
   @PutMapping(value = "/students") //학생 수정
-  public ResponseEntity<?> updateStudent(@RequestBody StudentUpdateRequest studentUpdateRequest) {
+  public ResponseEntity<?> updateStudent(
+      @Valid @RequestBody StudentUpdateRequest studentUpdateRequest) {
 
     StudentDetailResponse studentDetailResponse = memberService.updateStudent(studentUpdateRequest);
 
@@ -99,7 +100,8 @@ public class MemberPrivateController {
   }
 
   @PutMapping(value = "/teachers")
-  public ResponseEntity<?> updateTeacher(@RequestBody TeacherUpdateRequest teacherUpdateRequest) {
+  public ResponseEntity<?> updateTeacher(
+      @Valid @RequestBody TeacherUpdateRequest teacherUpdateRequest) {
 
     TeacherDetailResponse teacherDetailDetailResponse = memberService.updateTeacher(
         teacherUpdateRequest);
