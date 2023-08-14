@@ -15,19 +15,13 @@ public class DiaryRegisterRequest {
 
   @NotNull
   @NotEmpty
-  String content;
+  private String content;
 
-  @NotNull
-  @NotEmpty
-  String imageUrl;
-
-  //image??
-
-  public DiaryEntity toEntity(MemberEntity memberEntity) {
+  public DiaryEntity toEntity(MemberEntity memberEntity, String imageUrl) {
     return DiaryEntity.builder()
         .memberEntity(memberEntity)
+        .imageUrl(imageUrl)
         .content(this.content)
-        .imageUrl(this.imageUrl)
         .build();
   }
 
