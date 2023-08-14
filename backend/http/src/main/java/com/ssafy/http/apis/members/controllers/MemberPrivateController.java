@@ -63,14 +63,16 @@ public class MemberPrivateController {
 
   }
 
-//  @GetMapping("/students")
-//  public ResponseEntity<?> getStudents() { // 학생 리스트
-//    List<StudentDetailResponse> studentDetailResponses = memberService.getStudents();
-//
-//    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "학생들을 전체조회 하였습니다.",
-//        studentDetailResponses);
-//
-//  }
+  @GetMapping("/students") //지자체, 강사 : 학생 리스크 조회
+  public ResponseEntity<?> getStudents() { // 학생 리스트
+    List<StudentDetailResponse> studentDetailResponses = memberService.getStudentList(
+        SecurityUtil.getLoginUserId(),
+        SecurityUtil.getLoginUserRole());
+
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "지자체의 학생들을 전체조회 하였습니다.",
+        studentDetailResponses);
+
+  }
 
   @PostMapping(value = "/students", consumes = { //학생 회원가입
       MediaType.APPLICATION_JSON_VALUE,
@@ -119,10 +121,11 @@ public class MemberPrivateController {
   }
 
   @GetMapping("/teachers")
-  public ResponseEntity<?> getStudents() { // 강사 리스트
-    List<TeacherDetailResponse> teacherDetailDetailResponses = memberService.getTeachers();
+  public ResponseEntity<?> getTeachers() { // 지자체 강사 리스트
+    List<TeacherDetailResponse> teacherDetailDetailResponses = memberService.getTeachers(
+        SecurityUtil.getLoginUserId());
 
-    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "강사들을 전체조회 하였습니다.",
+    return createSuccessResponse(SuccessCode.SELECT_SUCCESS, "지자체의 강사들을 전체조회 하였습니다.",
         teacherDetailDetailResponses);
 
   }

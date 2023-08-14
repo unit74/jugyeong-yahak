@@ -1,6 +1,5 @@
 package com.ssafy.http.apis.members.services;
 
-import com.ssafy.http.apis.homeworkhistories.repositories.HomeworkHistoryRepository;
 import com.ssafy.http.apis.lecturehistories.entities.LectureHistoryEntity;
 import com.ssafy.http.apis.lecturehistories.repositories.LectureHistoryRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
@@ -13,7 +12,6 @@ import com.ssafy.http.apis.members.responses.StudentDetailResponse;
 import com.ssafy.http.apis.members.responses.TeacherDetailResponse;
 import com.ssafy.http.apis.roles.Role;
 import com.ssafy.http.apis.roles.entities.RoleEntity;
-import com.ssafy.http.apis.themes.repositories.ThemeRepository;
 import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.exception.RegisterIdentificationException;
 import com.ssafy.http.exception.WrongParameterException;
@@ -39,9 +37,6 @@ public class MemberService {
   private final PasswordEncoder passwordEncoder;
   private final S3ImageUploadService s3ImageUploadService;
   private final LectureHistoryRepository lectureHistoryRepository;
-  private final HomeworkHistoryRepository homeworkHistoryRepository;
-  private final ThemeRepository themeRepository;
-
   @Value("${cloud.aws.s3.url}")
   private String url;
 
@@ -133,7 +128,8 @@ public class MemberService {
   public List<StudentDetailResponse> getClassStudents(Long classId) {
     List<StudentDetailResponse> studentDetailResponses = new ArrayList<>();
 
-    List<MemberEntity> students = memberRepository.findAllByClassId(classId);
+    List<MemberEntity> students = memberRepository.findAllByRoleAndClassId(
+        RoleEntity.builder().role(Role.STUDENT).build(), classId);
 
     for (MemberEntity student : students) {
       StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
@@ -227,11 +223,12 @@ public class MemberService {
     return teacherDetailResponse;
   }
 
-  public List<TeacherDetailResponse> getTeachers() {
+  public List<TeacherDetailResponse> getTeachers(Long governmentId) {
+
     List<TeacherDetailResponse> teacherDetailResponses = new ArrayList<>();
 
-    List<MemberEntity> teachers = memberRepository.findAllByRole(
-        RoleEntity.builder().role(Role.TEACHER).build());
+    List<MemberEntity> teachers = memberRepository.findAllByRoleAndGovernmentId(
+        RoleEntity.builder().role(Role.TEACHER).build(), governmentId);
 
     for (MemberEntity teacher : teachers) {
       TeacherDetailResponse teacherDetailResponse = new TeacherDetailResponse();
@@ -242,6 +239,33 @@ public class MemberService {
     }
 
     return teacherDetailResponses;
+  }
+
+  public List<StudentDetailResponse> getStudentList(Long loginUserId, Role loginUserRole) {
+
+    Long governmentId = loginUserId; //지자체 번호
+
+    if (loginUserRole.getId() == Role.TEACHER.getId()) { //강사의 경우
+      MemberEntity memberEntity = memberRepository.findById(loginUserId).orElseThrow(
+          () -> new CustomException(ErrorCode.ID_NOTFOUND)
+      );
+
+      governmentId = memberEntity.getGovernmentId();
+    }
+
+    List<StudentDetailResponse> studentDetailResponses = new ArrayList<>();
+
+    List<MemberEntity> students = memberRepository.findAllByRoleAndGovernmentId(
+        RoleEntity.builder().role(Role.STUDENT).build(), governmentId);
+
+    for (MemberEntity student : students) {
+      StudentDetailResponse studentDetailResponse = new StudentDetailResponse();
+      studentDetailResponse.of(student);
+
+      studentDetailResponses.add(studentDetailResponse);
+    }
+
+    return studentDetailResponses;
   }
 
   public Long getClassId(Long id) {
@@ -259,4 +283,6 @@ public class MemberService {
 
     return memberEntity.getGovernmentId();
   }
+
+
 }

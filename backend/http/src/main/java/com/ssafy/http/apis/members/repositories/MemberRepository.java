@@ -20,8 +20,11 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
   Optional<MemberEntity> findMemberEntityById(Long id);
 
-  List<MemberEntity> findAllByRole(RoleEntity role);
+  List<MemberEntity> findAllByRoleAndGovernmentId(RoleEntity role, Long governmentId);
+
+  List<MemberEntity> findAllByRoleAndClassId(RoleEntity role, Long classId);
 
   @Query("SELECT m FROM MemberEntity m WHERE m.classId = :classId And m.role.id = 4")
   Optional<MemberEntity> findClassIdByRole(@Param("classId") Long classId);
+
 }
