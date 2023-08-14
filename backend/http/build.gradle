@@ -62,6 +62,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+
+    // webp 형식을 받기 위해 의존성 추가
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.9.4'
+
 }
 
 tasks.named('test') {
