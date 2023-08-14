@@ -22,11 +22,17 @@ const TeacherMain = () => {
     navigate("/teacher-studentprogress");
   };
 
+  const logoutClick = () => {
+    navigate("/logout");
+  };
+
   return (
     <div className={styles.main}>
       {/* <TeacherHeader /> */}
       <div className={styles.back}>
-        <button className={styles.logout}>Logout</button>
+        <button className={styles.logout} onClick={logoutClick}>
+          Logout
+        </button>
         <div className={styles.bannerContainer}>
           <section className={styles.welcome}>
             <b className={styles.typing}>👋🏻 {userInfo.name} 님, 안녕하세요! </b>

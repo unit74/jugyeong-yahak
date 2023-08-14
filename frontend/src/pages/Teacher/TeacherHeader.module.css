@@ -1,75 +1,60 @@
-@font-face {
-  font-family: "KimjungchulGothic-Bold";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
-    format("woff2");
-  font-weight: 700;
-  font-style: normal;
-}
-
-.header {
-  user-select: none; /* 클릭금지 */
-  font-family: "KimjungchulGothic-Bold";
-  position: relative;
-  background: linear-gradient(180deg, #fff, rgba(255, 255, 255, 0));
-  height: 8.5vh;
+.sidebar {
+  width: 200px;
+  position: fixed;
+  left: -200px;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  padding-left: 2vw;
   justify-content: space-between;
-  padding-right: 2vw;
-  z-index: 1;
+  padding: 20px;
+  transition: left 0.3s;
 }
 
-.header b {
+.sidebar.open {
+  left: 0;
+}
+
+/* 토글버튼 */
+.sidebarToggle {
+  position: fixed;
+  left: 0;
+  top: 10px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.sidebarToggleIcon {
+  display: block;
+  width: 30px;
+  height: 30px;
+  color: #3668eb;
+  font-size: calc(0.8vw + 1.5vh);
+  /* background-color: #3669eb00; */
+}
+
+.logo {
   font-family: "KimjungchulGothic-Bold";
-  font-weight: 500;
-  line-height: 60px;
-  color: #424242;
-  margin-left: 1vw;
-  padding-right: 4%;
-  white-space: nowrap;
+  font-size: calc(0.9vw + 1.5vh);
 }
 
-.header span {
-  font-weight: 700;
-  margin-left: 1vw;
-  font-size: calc(1.2vw + 1.5vh);
-}
-.header img {
-  width: 3vw;
-  height: 3vw;
-  overflow: hidden;
-  margin-right: 1vw;
-}
-
-.header .logout {
+.logout {
   font-family: "KimjungchulGothic-Bold";
-  background-color: var(--color-orange);
-  color: var(--color-white);
-  border-radius: var(--br-16xl);
-  font-weight: 600;
+  background-image: linear-gradient(to bottom, #3668eb, #6f97e7);
   cursor: pointer;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
   /* 크기 설정 */
   padding: 8px 30px;
-  font-size: calc(0.6vw + 1.5vh);
 }
 
-.logout:hover {
-  background-color: #ffd700;
-}
-
-.left {
-  display: flex;
-  align-items: center;
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  margin-right: 1%;
-  font-size: calc(0.7vw + 1.5vh);
+.username {
+  font-family: "KimjungchulGothic-Bold";
+  font-size: 1.1rem;
+  margin-bottom: 5px;
 }
