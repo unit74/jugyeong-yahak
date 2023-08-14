@@ -12,10 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherRequest {
+public class TeacherUpdateRequest {
 
-  //@NotNull
-  private Long classId;
+  @NotNull
+  @NotEmpty
+  private Long id;
 
   @NotNull
   @NotEmpty
@@ -35,38 +36,14 @@ public class TeacherRequest {
 
   @NotNull
   @NotEmpty
-  private Integer gender;
-
-  @NotNull
   private Long tabletNo;
 
-  public MemberEntity toEntityForRegister(String urlPrefix, String urlPostfix, Long governmentId,
-      String uuid) {
+  public MemberEntity toEntity(MemberEntity memberEntity) {
 
     return MemberEntity.builder()
-        .governmentId(governmentId)
-        .password(uuid)
-        .classId(classId)
-        .role(RoleEntity.builder()
-            .role(Role.TEACHER)
-            .build())
-        .statusCode(statusCode)
-        .name(name)
-        .phone(phone)
-        .address(address)
-        .tabletNo(tabletNo)
-        .uuid(uuid)
-        .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
-        .gender(gender)
-        .build();
-  }
-
-  public MemberEntity toEntityForUpdate(MemberEntity memberEntity) {
-
-    return MemberEntity.builder()
+        .id(id)
         .governmentId(memberEntity.getGovernmentId())
         .password(memberEntity.getPassword())
-        .classId(classId)
         .role(RoleEntity.builder()
             .role(Role.TEACHER)
             .build())
