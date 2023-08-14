@@ -98,19 +98,20 @@
   height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
   user-select: none; /* 클릭금지 */
   justify-content: center;
   display: flex;
 }
 
 .bb {
-  font-size: calc(1.5vw + 1.5vh);
+  font-size: calc(2vw + 1.5vh);
 }
 
 .main {
   padding-top: 10%;
   padding-left: 7%;
+  padding-right: 1%;
 }
 
 .classesContainer {
@@ -118,12 +119,13 @@
 }
 
 .btn {
-  font-size: calc(0.6vw + 1.5vh);
+  font-size: 25px;
   font-family: "Kimjungchul";
   background-color: rgba(159, 159, 160, 0.093);
   color: rgb(0, 0, 0);
   border: none;
-  padding: 40px 40px;
+  width: 170px;
+  height: 170px;
   border-radius: var(--br-16xl);
   cursor: pointer;
   text-transform: uppercase;
@@ -132,6 +134,16 @@
 }
 .btn:hover {
   background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
-  transform: scale(1.05);
+  transform: translateY(-10px);
   color: rgb(255, 255, 255);
+}
+
+.classesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: baseline;
+  align-items: center;
+  gap: 20px;
+  padding-right: 3%;
+  padding-left: 3%;
 }
