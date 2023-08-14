@@ -3,74 +3,29 @@ import { useNavigate } from "react-router-dom";
 import TeacherHeader from "./TeacherHeader";
 import axios from "../Common/api/authAxios";
 import styles from "./TeacherClass.module.css";
-import styled from "@emotion/styled";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
 
 const TeacherClass = () => {
   const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
+  const [headerOpen, setHeaderOpen] = useState(true);
 
-  const Main = styled.div`
-    padding: 5%;
-  `;
-
-  const buttonColors = [
-    "#ffa742",
-    "#51ee56",
-    "#ff9a9a",
-    "#8f70ff",
-    "#fa67ff",
-    "#ff5d73",
-    "#5da3ff",
-  ];
-
-  const hoverColors = [
-    "#f49002",
-    "#47e54f",
-    "#f34b4b",
-    "#6c41cf",
-    "#d431bb",
-    "#f33c4a",
-    "#4a75f3",
-  ];
-
-  const Button = styled.button`
-    background-color: ${({ colorIndex }) =>
-      buttonColors[colorIndex % buttonColors.length]};
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    &:hover {
-      background-color: ${({ colorIndex }) =>
-        hoverColors[colorIndex % hoverColors.length]};
-    }
-  `;
-  const Background = styled.div`
-    width: 100%;
-    min-height: 100vh;
-    background-image: url("../../assets/images/teacherback.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-  `;
+  const toggleHeader = () => {
+    setHeaderOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     async function getClasses() {
-      await axios
-        .get(`${BASE_URL}/api/v1/classes/unassigned`)
-        .then(function (response) {
-          const data = response.data.data;
-
-          setClasses(data);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/api/v1/classes/unassigned`
+        );
+        const data = response.data.data;
+        setClasses(data);
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     getClasses();
@@ -85,26 +40,30 @@ const TeacherClass = () => {
 
   return (
     <div className={styles.total}>
-      <TeacherHeader />
-      <div className={styles.back}>
-        <Main>
+      <div
+        className={`${styles.back} ${
+          headerOpen ? styles.headerOpen : styles.headerClose
+        }`} // open/close 상태에 따라서 클래스를 적용하여 CSS 처리함
+      >
+        <TeacherHeader
+          toggleHeader={toggleHeader} // 사이드바 상태 업데이트 함수 전달
+          headerOpen={headerOpen} // 사이드바 상태 전달
+        />
+        <div className={styles.main}>
           <b className={styles.bb}>✔ 수업하실 반을 선택해주세요</b>
           <div className={styles.classesContainer}>
             {classes.map((clazz, i) => (
-              <Button
-                key={i}
-                colorIndex={i}
+              <button
                 className={styles.btn}
                 onClick={() => handleClickClass(clazz)}
               >
                 {clazz.className}
-              </Button>
+              </button>
             ))}
           </div>
-        </Main>
+        </div>
       </div>
     </div>
   );
 };
-
 export default TeacherClass;
