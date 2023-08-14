@@ -34,7 +34,7 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
-        let gender = userInfo.gender === 0 ? "어머님" : "아버님";
+        let gender = userInfo.gender === 1 ? "어머님" : "아버님";
         console.log(userInfo.gender);
         console.log(gender);
 
@@ -125,7 +125,7 @@ export default function StudentMain() {
             혼자 공부하기
           </button>
         </div>
-      )}ㄴ
+      )}
         <div className={styles.time}>
           <div className={styles.timeImg}>
             <img className={styles.responsive_image} src={diaryImg} alt="diaryImg" />
