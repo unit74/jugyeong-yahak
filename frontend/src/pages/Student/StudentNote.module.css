@@ -49,10 +49,11 @@
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
   font-size: calc(4vw + 1.5vh); /* 반응형 */
-  animation: bouncing-text 1s infinite;
+  /* animation: bouncing-text 1s infinite; */
   margin-bottom: 30%;
   margin-top: 35%;
 }
+
 
 @keyframes bouncing-text {
   0%,
@@ -114,9 +115,6 @@
 
 /*  fadeout */
 
-.fadeOut {
-  animation: fadeOut 1s ease-out forwards;
-}
 
 @keyframes fadeOut {
   from {
@@ -127,6 +125,9 @@
   }
 }
 
+.fadeOut {
+  animation: fadeOut 3s ease-out forwards;
+}
 .square * {
   user-select: none;
 }
