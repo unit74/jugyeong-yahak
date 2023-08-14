@@ -131,6 +131,7 @@
   text-transform: uppercase;
   font-weight: bold;
   transition: background-color 0.3s;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 .btn:hover {
   background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
