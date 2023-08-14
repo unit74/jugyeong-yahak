@@ -1,8 +1,8 @@
 import { OpenVidu } from "openvidu-browser";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import axios from "../Common/api/authAxios";
-import React, { Component, createContext, useContext } from "react";
+import React, { Component, createContext } from "react";
 import "./TeacherLive.module.css";
 import StreamComponent from "../../components/StreamComponent";
 import ToolbarComponent from "../../components/ToolbarComponent";
@@ -12,19 +12,8 @@ import Mic from "@mui/icons-material/Mic";
 import MicOff from "@mui/icons-material/MicOff";
 import Check from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
-import Scrollbars from "react-custom-scrollbars-2";
 
-import TeacherTheme from "./TeacherTheme";
 import styles from "./TeacherLive.module.css";
-import TeacherCurriculum from "./TeacherCurriculum";
-import TeacherLiveWord from "./TeacherLiveWord";
-import TeacherLiveSituation from "./TeacherLiveSituation";
-import TeacherLiveReadWord from "./TeacherLiveReadWord";
-import TeacherLiveReadWordHint from "./TeacherLiveReadWordHint";
-import TeacherLiveWrite from "./TeacherLiveWrite";
-import TeacherLiveWriteHint from "./TeacherLiveWriteHint";
-import TeacherLiveGuessQuiz from "./TeacherLiveGuessQuiz";
-import TeacherLiveChoseongQuiz from "./TeacherLiveChoseongQuiz";
 
 import { useSelector } from "react-redux";
 
@@ -528,161 +517,6 @@ class OpenViduSession extends Component {
     return response.data;
   }
 
-  // renderComponent() {
-  //   if (this.state.page === 0) {
-  //     if (this.state.theme === null) {
-  //       return (
-  //         <div>
-  //           <h1>✔ 수업하실 테마를 선택해주세요</h1>
-  //           <TeacherTheme $={this} />
-  //         </div>
-  //       );
-  //     } else {
-  //       return (
-  //         <div>
-  //           <h1>✔ 수업하실 커리큘럼을 선택해주세요</h1>
-
-  //           <TeacherCurriculum $={this} />
-  //         </div>
-  //       );
-  //     }
-  //   } else if (1 <= this.state.page && this.state.page <= 6) {
-  //     const controls = [
-  //       {
-  //         title: "읽기(단어 띄워주는) 페이지로",
-  //         page: 3,
-  //       },
-  //       {
-  //         title: "읽기(초성 중성 종성 떼서 보여주는) 페이지로",
-  //         page: 4,
-  //       },
-  //       {
-  //         title: "받아쓰기(단어 안보여줌) 페이지로",
-  //         page: 5,
-  //       },
-  //       {
-  //         title: "받아쓰기(단어 보여줌) 페이지로",
-  //         page: 6,
-  //       },
-  //     ];
-
-  //     return (
-  //       <div className={styles.container2}>
-  //         <h1>✔ 수업을 진행해 주세요</h1>
-  //         <h2 className={styles.wordname}>
-  //           {this.state.theme} - {this.state.curriculum.situation}
-  //         </h2>
-  //         <TeacherLiveWord $={this} />
-  //         {this.state.word && (
-  //           <div>
-  //             <div className={styles.controlsContainer}>
-  //               {controls.map((control, i) => (
-  //                 <button key={i} onClick={() => {}}>
-  //                   {control.title}
-  //                 </button>
-  //               ))}
-  //             </div>
-  //             <div className={styles.pageButtons}>
-  //               {this.state.page === 2 && (
-  //                 <TeacherLiveSituation
-  //                   img={this.state.curriculum.themeImageUrl}
-  //                   situation={this.state.curriculum.situation}
-  //                   situationJournal={this.state.curriculum.situationJournal}
-  //                 />
-  //               )}
-  //               {this.state.page === 3 && <TeacherLiveReadWord word={this.state.word} />}
-  //               {this.state.page === 4 && <TeacherLiveReadWordHint word={this.state.word} />}
-  //               {this.state.page === 5 && <TeacherLiveWrite />}
-  //               {this.state.page === 6 && <TeacherLiveWriteHint word={this.state.word} />}
-  //             </div>
-  //           </div>
-  //         )}
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 11) {
-  //     return (
-  //       <div>
-  //         <h1>게임 1 페이지</h1>
-  //         {this.state.curriculum.wordList.length > 0 && <TeacherLiveGuessQuiz $={this} />}
-  //         {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
-  //         {this.state.timer !== 0 && (
-  //           <span
-  //             style={{
-  //               fontSize: "20px",
-  //               backgroundColor: "#FFD700",
-  //               borderRadius: "5px",
-  //               padding: "5px 10px",
-  //               boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
-  //               color: "white",
-  //             }}
-  //           >
-  //             {this.state.timer}
-  //           </span>
-  //         )}
-  //         {/* 타이머 끝 */}
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 12) {
-  //     return (
-  //       <div>
-  //         <h1>잘하셨어요!</h1>
-  //         <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 13) {
-  //     return (
-  //       <div>
-  //         <h1>아쉽습니다!</h1>
-  //         <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 21) {
-  //     return (
-  //       <div>
-  //         <h1>게임 2 페이지</h1>
-  //         <TeacherLiveChoseongQuiz $={this} />
-  //         {this.state.choseong && <div>오늘의 초성 : {this.state.choseong}</div>}
-  //         {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
-  //         {this.state.timer !== 0 && (
-  //           <span
-  //             style={{
-  //               fontSize: "20px",
-  //               backgroundColor: "#FFD700",
-  //               borderRadius: "5px",
-  //               padding: "5px 10px",
-  //               boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
-  //               color: "white",
-  //             }}
-  //           >
-  //             {this.state.timer}
-  //           </span>
-  //         )}
-  //         {/* 타이머 끝 */}
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 22) {
-  //     return (
-  //       <div>
-  //         <h1>잘하셨어요!</h1>
-  //         <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 23) {
-  //     return (
-  //       <div>
-  //         <h1>아쉽습니다!</h1>
-  //         <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
-  //       </div>
-  //     );
-  //   } else if (this.state.page === 31) {
-  //     return (
-  //       <div>
-  //         <h1>수고하셨습니다 !</h1>
-  //       </div>
-  //     );
-  //   }
-  // }
-
   render() {
     const mySessionId = this.mySessionId;
     const clazz = this.clazz;
@@ -702,7 +536,7 @@ class OpenViduSession extends Component {
           traceStatusChanged={this.traceStatusChanged}
           leaveSession={() => {
             if (window.confirm("강의를 종료하시겠습니까?")) {
-              this.sendSignalExit();
+              this.sendSignal(undefined, "exit");
             }
           }}
         />
@@ -746,11 +580,7 @@ class OpenViduSession extends Component {
               >
                 <IconButton
                   onClick={() => {
-                    const data = {
-                      target: sub.getConnectionId(),
-                    };
-
-                    this.sendSignalMic(data);
+                    this.sendSignal({ target: sub.getConnectionId() }, "mic");
                   }}
                 >
                   {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
@@ -758,12 +588,7 @@ class OpenViduSession extends Component {
                 {quiz && !sub.isCorrect() && (
                   <IconButton
                     onClick={() => {
-                      const data = {
-                        target: sub.getConnectionId(),
-                        correct: true,
-                      };
-
-                      this.sendSignalCorrect(data);
+                      this.sendSignal({ target: sub.getConnectionId(), correct: true }, "correct");
 
                       this.setState(
                         {
@@ -771,9 +596,7 @@ class OpenViduSession extends Component {
                         },
                         () => {
                           if (this.state.count === this.state.subscribers.length) {
-                            this.setState({ count: 0 }, () => {
-                              this.sendSignalQuiz({ quiz: false });
-                            });
+                            this.sendSignal({ quiz: false }, "quiz");
                           }
                         }
                       );
@@ -797,11 +620,49 @@ class OpenViduSession extends Component {
               this.navigate("/teacher-live/theme");
             }}
           >
-            Test
-          </button>{" "}
+            커리큘럼 선택 (테스트용 버튼)
+          </button>
+          {this.state.curriculum && (
+            <div>
+              {this.state.curriculum.wordList.map((word, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    this.setState({ word: word.word });
+                  }}
+                >
+                  {word.word}
+                </button>
+              ))}
+            </div>
+          )}
+          {this.state.word && (
+            <div>
+              <button
+                onClick={() => {
+                  this.navigate("/teacher-live/read");
+                }}
+              >
+                읽기 페이지로 (테스트용 버튼)
+              </button>
+              <button
+                onClick={() => {
+                  this.navigate("/teacher-live/read-hint");
+                }}
+              >
+                읽기 힌트 페이지로 (테스트용 버튼)
+              </button>
+            </div>
+          )}
           <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
-            <Outlet context={{ theme: this.state.theme }} />
-          </OpenViduSessionContext.Provider>{" "}
+            <Outlet
+              context={{
+                theme: this.state.theme,
+                curriculum: this.state.curriculum,
+                word: this.state.word,
+              }}
+            />
+          </OpenViduSessionContext.Provider>
         </div>
       </div>
     );
