@@ -3,10 +3,10 @@ package com.ssafy.http.apis.classes.controllers;
 import static com.ssafy.http.support.utils.ApiResponseUtil.createErrorResponse;
 import static com.ssafy.http.support.utils.ApiResponseUtil.createSuccessResponse;
 
-import com.ssafy.http.apis.classes.request.ClassRequest;
+import com.ssafy.http.apis.classes.request.ClassRegisterRequest;
+import com.ssafy.http.apis.classes.request.ClassUpdateRequest;
 import com.ssafy.http.apis.classes.responses.ClassDetailResponse;
 import com.ssafy.http.apis.classes.services.ClassService;
-import com.ssafy.http.apis.members.services.MemberService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.ErrorCode;
 import com.ssafy.http.support.codes.SuccessCode;
@@ -29,12 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ClassPrivateController {
 
   private final ClassService classService;
-  private final MemberService memberService;
 
   @PostMapping
-  public ResponseEntity<?> registClasses(@RequestBody ClassRequest classRequest) {
+  public ResponseEntity<?> registClasses(@RequestBody ClassRegisterRequest classRegisterRequest) {
 
-    classService.registClass(classRequest, SecurityUtil.getLoginUserId());
+    classService.registClass(classRegisterRequest, SecurityUtil.getLoginUserId());
 
     return createSuccessResponse(SuccessCode.INSERT_SUCCESS, "반 등록에 성공하였습니다.");
   }
@@ -78,9 +77,9 @@ public class ClassPrivateController {
   }
 
   @PutMapping
-  public ResponseEntity<?> putClass(@RequestBody ClassRequest classrequest) {
+  public ResponseEntity<?> putClass(@RequestBody ClassUpdateRequest classUpdateRequest) {
 
-    classService.updateClass(classrequest, SecurityUtil.getLoginUserId());
+    classService.updateClass(classUpdateRequest, SecurityUtil.getLoginUserId()); //지자체 ID가 들어가게 될 것
 
     //204라서 response가 안보임
     return createSuccessResponse(SuccessCode.UPDATE_SUCCESS,
