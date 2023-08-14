@@ -6,6 +6,8 @@ import com.ssafy.http.apis.commoncodes.entities.CommonCodeEntity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,18 +18,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClassRegisterRequest {
-  
+
   @NotNull
   @NotEmpty
   private String status;
+
   @NotNull
   @NotEmpty
   private String name;
-  @NotNull
-  @NotEmpty
+
+  @Max(value = 23, message = "시의 범위는 0~23 입니다.")
+  @Min(value = 0, message = "시의 범위는 0~23 입니다.")
   private int hour;
-  @NotNull
-  @NotEmpty
+
+  @Max(value = 59, message = "분의 범위는 0~59 입니다.")
+  @Min(value = 0, message = "분의 범위는 0~59 입니다.")
   private int minute;
 
   public ClassEntity toEntity(Long governmentId) {

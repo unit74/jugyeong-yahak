@@ -11,7 +11,7 @@ import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.ErrorCode;
 import com.ssafy.http.support.codes.SuccessCode;
 import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,7 +31,8 @@ public class ClassPrivateController {
   private final ClassService classService;
 
   @PostMapping
-  public ResponseEntity<?> registClasses(@RequestBody ClassRegisterRequest classRegisterRequest) {
+  public ResponseEntity<?> registClasses(
+      @Valid @RequestBody ClassRegisterRequest classRegisterRequest) {
 
     classService.registClass(classRegisterRequest, SecurityUtil.getLoginUserId());
 
@@ -60,24 +61,24 @@ public class ClassPrivateController {
         classDetailResponses);
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{classId}")
   public ResponseEntity<?> deleteClass(
-      @RequestBody Map<String, Long> requestData) { //이거 수정 필요 -> 전용 request 객체
+      @PathVariable Long classId) {
 
-    if (requestData.get("id") == null) {
+    if (classId == null) {
       return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
     }
 
-    classService.deleteOne(requestData.get("id"));
+    classService.deleteOne(classId);
 
     return createSuccessResponse(SuccessCode.DELETE_SUCCESS,
-        requestData.get("id") + " 반을 삭제하였습니다.",
+        classId + " 반을 삭제하였습니다.",
         classService.getClassList(SecurityUtil.getLoginUserId(), SecurityUtil.getLoginUserRole())
     );
   }
 
   @PutMapping
-  public ResponseEntity<?> putClass(@RequestBody ClassUpdateRequest classUpdateRequest) {
+  public ResponseEntity<?> putClass(@Valid @RequestBody ClassUpdateRequest classUpdateRequest) {
 
     classService.updateClass(classUpdateRequest, SecurityUtil.getLoginUserId()); //지자체 ID가 들어가게 될 것
 
@@ -89,8 +90,9 @@ public class ClassPrivateController {
     );
   }
 
-  @PostMapping("/{classId}")
+  @GetMapping("/{classId}")
   public ResponseEntity<?> getClassDetails(@PathVariable Long classId) {
+    
     if (classId == null) {
       return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
     }
