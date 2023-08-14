@@ -13,6 +13,10 @@
 }
 
 .square {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -31,33 +35,33 @@
 
 .theme {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  width: 100%;
+  position: relative;     /* .situationText에 absolute positioning 적용을 위함 */
   height: 100%;
+  width: 100%;
   padding: 16px;
-  position: fixed;
 }
 
-.wordimg {
-  width: 40vw;
-  object-fit: cover;
-  height: auto;
-  object-fit: contain;
-  right: 53%;
+.listenImg{
+  position: absolute;
+  top: 150px; /* 상단으로부터 10px 이동 */
+  left: 100px; /* 좌측으로부터 10px 이동 */
 }
 
 .situationText {
-  position: fixed;
+  position: absolute;
+  top: 50%;                /* 상위 컨테이너의 중앙에서부터 시작 */
+  left: 50%;               /* 상위 컨테이너의 중앙에서부터 시작 */
+  transform: translate(-50%, -50%); 
+  text-align: center;
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
   font-size: calc(3.5vw + 2vh);
-  margin-right: 10%;
-  margin-bottom: 10%;
   white-space: nowrap;
-  top: 30%;
-  right: 5%;
 }
+
 
 .microphone {
   position: fixed;

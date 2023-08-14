@@ -4,7 +4,7 @@ import styles from "./StudentRecordWord.module.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { useDispatch, useSelector } from "react-redux";
 import { Configuration, OpenAIApi } from "openai";
-
+import listenImg from "../../assets/images/listening_man.png";
 import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentRecordWord() {
@@ -196,7 +196,7 @@ export default function StudentRecordWord() {
     } else if (count == 4) {
       makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
     } else {
-      navigate("/good-feedback", { state: { course: "reading" } });
+      // navigate("/good-feedback", { state: { course: "reading" } });
     }
   }, [count]);
 
@@ -206,28 +206,14 @@ export default function StudentRecordWord() {
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          {/* <img
-            className={styles.wordimg}
-            src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
-            alt=""
-          /> */}
-
-          <div className={styles.text}>
-            <h1 className={styles.situationText}>
+          <div className={styles.listenImg}>
+           {listening && <img src={listenImg} alt="listenImg" />}
+          </div>
+          <div className={styles.situationText}>
               {wordsList.length > 0 && wordsList[wordIndex].word}
-            </h1>
           </div>
-          <div>
-            {/* {wordsList[wordIndex].word && (
-              <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
-            )} */}
-            {/* && 앞에 조건을 Redux에서 불러오는 걸로 해둬야 불러오기전에 TTS 실행을 안함 */}
-          </div>
-          <div className={styles.microphone}>
-            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p>{transcript}</p>
             {msg && <TTSsentence message={msg} />}
-          </div>
         </div>
       </div>
     </div>
