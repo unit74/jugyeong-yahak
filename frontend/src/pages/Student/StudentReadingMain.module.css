@@ -3,6 +3,27 @@
   src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
 }
 
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulsatingDiv {
+  animation: pulsate 1.5s infinite;
+}
+
+
 .main {
   background-image: url(/src/assets/images/real_background.png);
   background-size: cover;
@@ -59,6 +80,36 @@
   justify-content: space-between;
   margin-top: 5%;
 }
+
+.responsive_image {
+  /* max-width: 80%; */
+  height: 320px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info {
+  margin-top: 2%;
+  background-color: #f7e375;
+  border: none;
+  border-radius: 8px;
+  color: rgb(0, 0, 0);
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding: 2rem 4rem;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+  animation: pulsate 1.5s infinite;
+  width: 350px; /* 원하는 너비 값으로 설정 */
+  height: 100px; /* 원하는 높이 값으로 설정 */
+  line-height: 60px; /* 버튼 높이와 동일하게 설정하여 텍스트를 세로 중앙에 배치 */
+  text-align: center; /* 텍스트를 가로 중앙에 배치 */
+  padding: 0; /* 패딩을 0으로 설정하여 버튼 내의 텍스트 위치 조절 */
+  font-family: "KoPubWorld Batang Bold";
+}
+
 
 .situationText {
   margin-left: 12px;
