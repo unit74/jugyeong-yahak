@@ -1,39 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useDebounce } from "../Common/hooks/useDebounce";
 import styles from "./StudentDiary.module.css";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
+import axios from "axios";
 
 export default function StudentTalking() {
-  // [녹음]
+  // 음성인식 관련
   const { transcript, listening } = useSpeechRecognition();
-  const debounceTerm = useDebounce(transcript, 2000);
-
-  // debounceTerm내용을 allConversations에 저장할거야.
-  // 3번 안됐으면 GPT에 보내서 질문을 만들거야.
-  useEffect(() => {
-    if (debounceTerm) {
-      setAllConversations((prev) => [
-        ...prev,
-        { type: "user", content: debounceTerm },
-      ]);
-      console.log(allConversations);
-      if (conversationCount < 3) {
-        generateText(debounceTerm);
-      }
-    }
-  }, [debounceTerm]);
-
-  // [TTS]
+  const [generatedText, setGeneratedText] = useState("");
+  const [allConversations, setallConversations] = useState("");
+  const [diaryEntry, setDiaryEntry] = useState("");
+  // TTS 관련
+  const [count, setCount] = useState(0);
   const [msg, setMsg] = useState(null);
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // 이미지 생성 관련
+  const [img, setImg] = useState(null);
 
-  // TTS 생성함수
+  const navigate = useNavigate();
+
+  const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
+
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -43,177 +33,130 @@ export default function StudentTalking() {
     });
   };
 
-  // TTS 첫 질문
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   useEffect(() => {
-    async function makeRequest() {
-      let text = `오늘 하루는 어떠셨나요?`;
-      ttsMaker(text, 0);
-      await delay(text.length * 250);
+    async function makeRequest(data) {
+      await delay(1000);
+
+      ttsMaker(data, 0);
+      await delay(data.length * 250);
+      ttsMaker("", 0);
+
       SpeechRecognition.startListening();
+      await delay(4000);
+      SpeechRecognition.stopListening();
+
+      setCount(count + 1);
     }
-    makeRequest();
-  }, []);
 
-  // [GPT]
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState("");
-  const [allConversations, setAllConversations] = useState([]);
-  const [conversationCount, setConversationCount] = useState(1);
-  // const [generatedDiary, setGeneratedDiary] = useState(""); //삭제예정
-
-  // GPT에 사용자의 답변을 보내서 질문을 받아와, generatedMessage에 저장해
-  const generateText = async (message) => {
-    if (!isGenerating) {
-      setIsGenerating(true);
-      try {
-        const apiKey = "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";
-        const configuration = new Configuration({
-          apiKey: apiKey,
-        });
-        const openai = new OpenAIApi(configuration);
-
-        const response = await openai.createChatCompletion({
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a helpful assistant. Whenever the user shares a statement or sentiment, ask a relevant and engaging question in response, using Korean honorifics (존댓말).",
-            },
-            {
-              role: "user",
-              content: `${message}`,
-            },
-          ],
-        });
-
-        const generatedMessage = response.data.choices[0].message.content;
-        setGeneratedText(generatedMessage);
-        console.log(generatedMessage);
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setIsGenerating(false);
-      }
+    if (count === 0) {
+      makeRequest("오늘 하루는 어떠셨나요?");
+    } else if (count === 1) {
+      helpGpt(transcript);
+    } else if (count === 2) {
+      makeRequest(generatedText);
+    } else if (count === 3) {
+      helpGpt(transcript);
+    } else if (count === 4) {
+      makeRequest(generatedText);
+    } else if (count === 5) {
+      generateDiary(transcript);
+    } else {
+      makeImg();
     }
+  }, [count]);
+
+  const helpGpt = async (message) => {
+    console.log("사용자 : " + message);
+
+    const apiKey = "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";
+
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant. Whenever the user shares a statement or sentiment, ask a relevant and engaging question in response, using Korean honorifics (존댓말).",
+        },
+        {
+          role: "user",
+          content: `${message}`,
+        },
+      ],
+    });
+
+    const generatedMessage = response.data.choices[0].message.content;
+    setGeneratedText(generatedMessage);
+    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
+    setCount(count + 1);
+    console.log("gpt : " + generatedMessage);
   };
 
-  // GPT에서 질문 받으면 -> 배열에 추가하고, TTS로 읽고, 녹음 시작 (두번째 질문부터)
-  useEffect(() => {
-    if (generatedText) {
-      setAllConversations((prev) => [
-        ...prev,
-        { type: "response", content: generatedText },
-      ]);
-      async function ttsAndListen() {
-        await ttsMaker(generatedText, 0);
-        await delay(generatedText.length * 250);
-        if (conversationCount < 3) {
-          // 수정: 응답 2번 후에만 음성 입력 대기
-          SpeechRecognition.startListening();
-        }
-        // 대답 후 카운트 증가로 순서 바꿈
-        setConversationCount((prev) => prev + 1); // GPT-3 응답 후 카운트 증가
-      }
-      ttsAndListen();
-    }
-  }, [generatedText]);
+  const generateDiary = async (message) => {
+    console.log("사용자 : " + message);
 
-  console.log(allConversations);
+    setallConversations(allConversations + message + ".\n");
 
-  // 페이지 이동, 수정예정
-  const navigate = useNavigate();
+    const apiKey = "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";
 
-  //  일기 생성 함수
-  const [diaryEntry, setDiaryEntry] = useState("");
-  const generateDiary = async () => {
-    try {
-      const apiKey = "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";
-      const configuration = new Configuration({
-        apiKey: apiKey,
-      });
-      const openai = new OpenAIApi(configuration);
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
 
-      const userContents = allConversations
-        .filter((convo) => convo.type === "user")
-        .map((convo) => convo.content)
-        .join(" "); // 대화 내용을 하나의 문자열로 합칩니다.
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
+        },
+        {
+          role: "user",
+          content: allConversations + message + ". ",
+        },
+      ],
+    });
 
-      const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
-          },
-          {
-            role: "user",
-            content: userContents,
-          },
-        ],
-      });
-
-      setDiaryEntry(response.data.choices[0].message.content);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    setDiaryEntry(response.data.choices[0].message.content);
+    setCount(count + 1);
   };
 
-  // 카운트 확인 후 일기 생성
-  useEffect(() => {
-    if (conversationCount >= 3) {
-      generateDiary();
-    }
-  }, [conversationCount]);
-
-  // 생성된 일기를 영어로 번역하고 이미지 생성하는 함수
   const makeImg = async () => {
-    console.log("호출됨");
-    try {
-      const apiKey = "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";
-      const configuration = new Configuration({
-        apiKey: apiKey,
-      });
-      const openai = new OpenAIApi(configuration);
+    const apiKey = "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";
 
-      const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Translate this into English. Please keep your response under 213 characters.", //42자 합칠 것까지 고려
-            // 213자 제한으로 답해달라고 하지만,
-            // GPT-3.5-turbo 에는 글자 수 제한 응답이 없으므로 넘게되면 밑에서 처리해줘야한다.
-          },
-          {
-            role: "user",
-            content: diaryEntry,
-          },
-        ],
-      });
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
 
-      let translatedDiary = response.data.choices[0].message.content;
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "영어로 번역하는데 총 띄어 쓰기 포함해서 글자수가 200개가 안되게 축약해서 번역해줘",
+        },
+        {
+          role: "user",
+          content: diaryEntry,
+        },
+      ],
+    });
 
-      // 255자 이내로 자르기
-      if (translatedDiary.length > 213) {
-        // 255자까지 하려면 밑의 prompt 제한 고려
-        translatedDiary = translatedDiary.substring(0, 213) + "...";
-      }
-      const prompt =
-        "drawing done with a pencil, only scenery, in color" + translatedDiary; // 앞에 drawr~~ 부분이 42자
-
-      // 이미지 생성 함수 호출
-      createImage(prompt);
-    } catch (error) {
-      console.error("Error:", error);
-    }
+    const translatedDiary = response.data.choices[0].message.content;
+    const prompt = "drawing done with a pencil, only scenery, in color" + translatedDiary;
+    createImage(prompt);
   };
-
-  // 이미지 생성 함수
-  const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
-  const [img, setImg] = useState(null);
 
   const createImage = (prompt) => {
     console.log(prompt);
@@ -225,26 +168,36 @@ export default function StudentTalking() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: prompt,
+        prompt: prompt.substr(0, Math.min(250, prompt.length)),
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
         setImg(data.images[0].image);
-        navigate("/diary", { state: { diaryEntry, img } });
+        // navigate("/diary", { state: { diaryEntry, img } });
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  // 일기가 생성되면 이미지 생성
   useEffect(() => {
-    if (diaryEntry) {
-      makeImg();
+    async function saveDiary() {
+      await axios
+        .post(`https://i9e206.p.ssafy.io/api/v1/diaries`, {
+          content: diaryEntry,
+          imageUrl: img,
+        })
+        .then(() => {
+          navigate("/diary", { state: { diaryEntry, img } });
+        });
     }
-  }, [diaryEntry]);
+
+    if (img !== null) {
+      saveDiary();
+    }
+  }, [img]);
 
   return (
     <div className={styles.main}>
@@ -255,16 +208,12 @@ export default function StudentTalking() {
             <h1>오늘 하루는 어떠셨나요?</h1>
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
 
-            {allConversations.map((conversation, index) => (
+            {allConversations.split(".\n").map((conversation, index) => (
               <div
                 key={index}
-                className={
-                  conversation.type === "user"
-                    ? styles.userMessage
-                    : styles.generatedMessage
-                }
+                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
               >
-                {conversation.content}
+                {conversation}
               </div>
             ))}
 
