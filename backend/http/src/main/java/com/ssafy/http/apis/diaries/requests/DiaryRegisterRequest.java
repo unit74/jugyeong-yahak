@@ -17,6 +17,10 @@ public class DiaryRegisterRequest {
   @NotEmpty
   private String content;
 
+  @NotNull
+  @NotEmpty
+  private String imageUrl;
+
   public DiaryEntity toEntity(MemberEntity memberEntity, String imageUrl) {
     return DiaryEntity.builder()
         .memberEntity(memberEntity)
