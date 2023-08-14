@@ -75,6 +75,7 @@
     #88a7e3
   ); /* 그라데이션 */
   transform: translateY(-10px);
+
   border-radius: var(--br-16xl);
   border: none;
 }
@@ -158,6 +159,10 @@ p {
   /* 크기 설정 */
   padding: 14px 30px;
   font-size: calc(0.6vw + 1.5vh);
+}
+
+.logout:hover {
+  transform: scale(1.1);
 }
 
 .optionIcon {
