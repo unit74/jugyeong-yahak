@@ -30,29 +30,29 @@ export default function StudentRecordWord() {
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const helpGpt = async () => {
-    const apiKey = "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";
+  // const helpGpt = async () => {
+  //   const apiKey = "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";
 
-    const configuration = new Configuration({
-      apiKey: apiKey,
-    });
-    const openai = new OpenAIApi(configuration);
+  //   const configuration = new Configuration({
+  //     apiKey: apiKey,
+  //   });
+  //   const openai = new OpenAIApi(configuration);
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "70대 어르신들에게 한글을 가르쳐 드릴꺼야!." },
-        {
-          role: "user",
-          content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 부분을 짧게 한줄로 설명해줘`,
-        },
-      ],
-    });
+  //   const response = await openai.createChatCompletion({
+  //     model: "gpt-3.5-turbo",
+  //     messages: [
+  //       { role: "system", content: "70대 어르신들에게 한글을 가르쳐 드릴꺼야!." },
+  //       {
+  //         role: "user",
+  //         content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 부분을 짧게 한줄로 설명해줘`,
+  //       },
+  //     ],
+  //   });
 
-    let text = response.data.choices[0].message.content;
-    ttsMaker(text, 0);
-    await delay(text.length * 250);
-  };
+  //   let text = response.data.choices[0].message.content;
+  //   ttsMaker(text, 0);
+  //   await delay(text.length * 250);
+  // };
 
   useEffect(() => {
     async function makeRequest(data) {
@@ -74,7 +74,9 @@ export default function StudentRecordWord() {
         navigate("/good-feedback", { state: { course: "reading" } });
       } else {
         if (count == 1) {
-          await helpGpt();
+          let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`
+            ttsMaker(text, 0);
+            await delay(text.length * 250);
         }
         setCount(count + 1);
       }
@@ -98,7 +100,7 @@ export default function StudentRecordWord() {
   }, [count]);
 
   const navigate = useNavigate();
-
+  console.log(wordsList[wordIndex])
   return (
     <div className={styles.main}>
       <div className={styles.square}>

@@ -14,7 +14,12 @@ const TeacherCurriculum = (props) => {
         .then(function (response) {
           const data = response.data.data;
 
-          setCurriculums(data);
+          if (data.length === 0) {
+            alert("모두 완료된 테마입니다.");
+            props.$.setState({
+              theme: null,
+            });
+          } else setCurriculums(data);
         })
         .catch(function (error) {
           console.error(error);
@@ -25,7 +30,7 @@ const TeacherCurriculum = (props) => {
     return () => {
       setCurriculums([]);
     };
-  }, []);
+  }, [props.$]);
 
   const chooseCurriculum = async (curriculum) => {
     console.log(curriculum);
@@ -34,22 +39,13 @@ const TeacherCurriculum = (props) => {
       .then(function (response) {
         const data = response.data.data;
 
-        props.$.setState(
-          {
-            page: props.$.state.page + 1,
-            theme: props.$.state.theme,
-            curriculum: data,
-          },
-          () => {
-            const sendData = {
-              page: props.$.state.page,
-              theme: props.$.state.theme,
-              curriculum: props.$.state.curriculum.situation,
-            };
+        const sendData = {
+          page: 1,
+          theme: props.$.state.theme,
+          curriculum: data,
+        };
 
-            props.$.sendSignalInfo(sendData);
-          }
-        );
+        props.$.sendSignalInfo(sendData);
       })
       .catch(function (error) {
         console.error(error);
@@ -57,25 +53,23 @@ const TeacherCurriculum = (props) => {
   };
 
   return (
-    <div className={styles.ipadPro1115}>
-      <main className={styles.main}>
-        <div>
-          <div className={styles.curriculumBtnContainer}>
-            {curriculums.map((curriculum, i) => (
-              <div
-                className={styles.curriculumBtnEach}
-                key={i}
-                onClick={() => chooseCurriculum(curriculum)}
-              >
-                <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
-                <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
-                  {curriculum.curriculumName}
-                </button>
-              </div>
-            ))}
-          </div>
+    <div className={styles.main}>
+      <div>
+        <div className={styles.curriculumBtnContainer}>
+          {curriculums.map((curriculum, i) => (
+            <div
+              className={styles.curriculumBtnEach}
+              key={i}
+              onClick={() => chooseCurriculum(curriculum)}
+            >
+              <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
+              <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
+                {curriculum.curriculumName}
+              </button>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

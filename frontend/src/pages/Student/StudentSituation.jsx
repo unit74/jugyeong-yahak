@@ -16,8 +16,6 @@ export default function StudentSituation() {
   const navigate = useNavigate();
   const location = useLocation();
   const message = location.state && location.state.message;
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState("");
 
   const [msg, setMsg] = useState(null);
 
@@ -37,10 +35,10 @@ export default function StudentSituation() {
     });
   };
 
-  useEffect(() => {
-    console.log(message);
-    dispatch(fetchTheme());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log(message);
+  //   dispatch(fetchTheme());
+  // }, [dispatch]);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -64,8 +62,9 @@ export default function StudentSituation() {
       ttsMaker(data[3], 0);
       await delay(data[3].length * 500);
 
+
       // navigateToRecordDictation();
-      navigate("/record-word");
+      navigate("/reading-main");
     }
 
     if (data[0] !== "") {
