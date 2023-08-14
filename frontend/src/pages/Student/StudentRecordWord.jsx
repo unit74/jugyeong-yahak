@@ -54,6 +54,98 @@ export default function StudentRecordWord() {
   //   await delay(text.length * 250);
   // };
 
+  function getConstantVowel(kor) {
+    const f = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    const s = [
+      "ㅏ",
+      "ㅐ",
+      "ㅑ",
+      "ㅒ",
+      "ㅓ",
+      "ㅔ",
+      "ㅕ",
+      "ㅖ",
+      "ㅗ",
+      "ㅘ",
+      "ㅙ",
+      "ㅚ",
+      "ㅛ",
+      "ㅜ",
+      "ㅝ",
+      "ㅞ",
+      "ㅟ",
+      "ㅠ",
+      "ㅡ",
+      "ㅢ",
+      "ㅣ",
+    ];
+    const t = [
+      "",
+      "ㄱ",
+      "ㄲ",
+      "ㄳ",
+      "ㄴ",
+      "ㄵ",
+      "ㄶ",
+      "ㄷ",
+      "ㄹ",
+      "ㄺ",
+      "ㄻ",
+      "ㄼ",
+      "ㄽ",
+      "ㄾ",
+      "ㄿ",
+      "ㅀ",
+      "ㅁ",
+      "ㅂ",
+      "ㅄ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+
+    const ga = 44032;
+    let uni = kor.charCodeAt(0);
+
+    uni = uni - ga;
+
+    let fn = parseInt(uni / 588);
+    let sn = parseInt((uni - fn * 588) / 28);
+    let tn = parseInt(uni % 28);
+
+    return {
+      f: f[fn],
+      s: s[sn],
+      t: t[tn],
+    };
+  }
+
   useEffect(() => {
     async function makeRequest(data) {
       await delay(1000);
@@ -74,9 +166,18 @@ export default function StudentRecordWord() {
         navigate("/good-feedback", { state: { course: "reading" } });
       } else {
         if (count == 1) {
-          let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`
-            ttsMaker(text, 0);
-            await delay(text.length * 250);
+          let answer = "";
+
+          for (let char of wordsList[wordIndex].word) {
+            let jamo = getConstantVowel(char); // 각 문자 출력
+            answer += jamo.f + ", " + jamo.s + ", " + jamo.t + "가 결합되어 " + char + ",";
+          }
+
+          answer += "합쳐서 " + wordsList[wordIndex].word + "으로 발음됩니다.";
+
+          // let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`;
+          ttsMaker(answer, 0);
+          await delay(answer.length * 250);
         }
         setCount(count + 1);
       }
@@ -100,7 +201,7 @@ export default function StudentRecordWord() {
   }, [count]);
 
   const navigate = useNavigate();
-  console.log(wordsList[wordIndex])
+  console.log(wordsList[wordIndex]);
   return (
     <div className={styles.main}>
       <div className={styles.square}>

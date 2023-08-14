@@ -16,19 +16,17 @@ export default function StudentDiary() {
   const navigate = useNavigate();
   const location = useLocation();
   const { diaryEntry, img } = location.state;
-  const userConversations = location.state && location.state.userConversations; // StudentTalking에서 프랍으로 넘겨주는것 받기!
-  const generatedDiary = location.state && location.state.generatedDiary;
-  const userDiary = location.state && location.state.diaryEntry; // StudentTalking에서 프랍으로 diaryEntry 넘겨주는것 받기!
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedText, setGeneratedText] = useState("");
+  // const userConversations = location.state && location.state.userConversations; // StudentTalking에서 프랍으로 넘겨주는것 받기!
+  // const generatedDiary = location.state && location.state.generatedDiary;
+  // const userDiary = location.state && location.state.diaryEntry; // StudentTalking에서 프랍으로 diaryEntry 넘겨주는것 받기!
+  // const [isGenerating, setIsGenerating] = useState(false);
+  // const [generatedText, setGeneratedText] = useState("");
 
   const [msg, setMsg] = useState(null);
 
   // 온점일 때 줄 띄우기
 
-  const formattedText =
-    (diaryEntry && diaryEntry && diaryEntry.split(". ").join(".\n")) ||
-    "";
+  const formattedText = (diaryEntry && diaryEntry && diaryEntry.split(". ").join(".\n")) || "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
   //   navigate("/good-feedback", { state: { course: "diary" } });
@@ -46,8 +44,8 @@ export default function StudentDiary() {
   // useTimeoutCallback(navigateToRecordDictation, 70000);
 
   useEffect(() => {
-    console.log("UserDiary:", userDiary); //prop 잘 받아지는지 확인 - 일기 잘 받아진다.
-    setGeneratedText(userDiary); // 다이어리
+    console.log("UserDiary:", diaryEntry); //prop 잘 받아지는지 확인 - 일기 잘 받아진다.
+    // setGeneratedText(diaryEntry); // 다이어리
     // generateText();
     // console.log(userConversations); //prop 잘 받아지는지 확인 - 배열로 잘 받아진다.
     return () => {};
@@ -88,9 +86,9 @@ export default function StudentDiary() {
     return () => {};
   }, [formattedText]);
 
-  useEffect(() => {
-    ttsMaker("일기 읽기를 준비중입니다, 잠시만 기다려주세요.", 0);
-  }, []);
+  // useEffect(() => {
+  //   ttsMaker("일기가 완성될 때까지 잠시만 기다려주세요.", 0);
+  // }, []);
 
   //함수
   // 1. API요청 함수
