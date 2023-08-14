@@ -51,3 +51,11 @@
 .square * {
   user-select: none;
 }
+
+.userMessage {
+  background-color: red;
+}
+
+.generatedMessage {
+  background-color: aquamarine;
+}
