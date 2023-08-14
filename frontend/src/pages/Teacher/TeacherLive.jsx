@@ -1,5 +1,4 @@
 import { OpenVidu } from "openvidu-browser";
-import { Route, Routes } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import axios from "../Common/api/authAxios";
@@ -11,6 +10,7 @@ import UserModel from "../../models/user-model";
 
 import Mic from "@mui/icons-material/Mic";
 import MicOff from "@mui/icons-material/MicOff";
+import Check from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import Scrollbars from "react-custom-scrollbars-2";
 
@@ -18,6 +18,13 @@ import TeacherTheme from "./TeacherTheme";
 import styles from "./TeacherLive.module.css";
 import TeacherCurriculum from "./TeacherCurriculum";
 import TeacherLiveWord from "./TeacherLiveWord";
+import TeacherLiveSituation from "./TeacherLiveSituation";
+import TeacherLiveReadWord from "./TeacherLiveReadWord";
+import TeacherLiveReadWordHint from "./TeacherLiveReadWordHint";
+import TeacherLiveWrite from "./TeacherLiveWrite";
+import TeacherLiveWriteHint from "./TeacherLiveWriteHint";
+import TeacherLiveGuessQuiz from "./TeacherLiveGuessQuiz";
+import TeacherLiveChoseongQuiz from "./TeacherLiveChoseongQuiz";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -49,19 +56,24 @@ class OpenViduSession extends Component {
       word: null,
       choseong: null,
       timer: 0,
+      quiz: false,
+      count: 0,
     };
 
     this.joinSession = this.joinSession.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
-    this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.connectWebCam = this.connectWebCam.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
+    this.updateSubscribers = this.updateSubscribers.bind(this);
+    this.deleteSubscriber = this.deleteSubscriber.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.correctStatusChanged = this.correctStatusChanged.bind(this);
     this.traceStatusChanged = this.traceStatusChanged.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
-    this.deleteSubscriber = this.deleteSubscriber.bind(this);
-    this.updateSubscribers = this.updateSubscribers.bind(this);
-    this.connectWebCam = this.connectWebCam.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
+    this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToQuiz = this.subscribeToQuiz.bind(this);
   }
 
   componentDidMount() {
@@ -166,6 +178,9 @@ class OpenViduSession extends Component {
     this.subscribeToMic();
     this.subscribeToExit();
     this.subscribeToTimer();
+    this.subscribeToCorrect();
+    this.subscribeToInfo();
+    this.subscribeToQuiz();
 
     this.setState({
       mainStreamUser: localUser,
@@ -184,6 +199,7 @@ class OpenViduSession extends Component {
           this.sendSignalUserChanged({
             isAudioActive: this.state.localUser.isAudioActive(),
             nickname: this.state.localUser.getNickname(),
+            isCorrect: this.state.localUser.isCorrect(),
           });
         }
       }
@@ -207,6 +223,8 @@ class OpenViduSession extends Component {
           word: null,
           choseong: null,
           timer: 0,
+          quiz: false,
+          count: 0,
         },
         async () => {
           await axios
@@ -226,6 +244,12 @@ class OpenViduSession extends Component {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
     this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.setState({ localUser: localUser });
+  }
+
+  correctStatusChanged(correct) {
+    localUser.setCorrect(correct);
+    this.sendSignalUserChanged({ isCorrect: localUser.isCorrect() });
     this.setState({ localUser: localUser });
   }
 
@@ -292,12 +316,10 @@ class OpenViduSession extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("EVENTO REMOTE: ", event.data);
-          if (data.isAudioActive !== undefined) {
+          if (data.isAudioActive !== undefined)
             user.setAudioActive(data.isAudioActive);
-          }
-          if (data.nickname !== undefined) {
-            user.setNickname(data.nickname);
-          }
+          if (data.nickname !== undefined) user.setNickname(data.nickname);
+          if (data.isCorrect !== undefined) user.setCorrect(data.isCorrect);
         }
       });
 
@@ -319,7 +341,39 @@ class OpenViduSession extends Component {
   subscribeToExit() {
     this.state.session.on("signal:exit", (event) => {
       this.leaveSession();
-      this.navigate("/teacher-main");
+      this.navigate("/");
+    });
+  }
+
+  subscribeToInfo() {
+    this.state.session.on("signal:info", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (data.theme !== undefined) {
+        this.setState({
+          theme: data.theme,
+        });
+      }
+      if (data.word !== undefined) {
+        this.setState({
+          word: data.word,
+        });
+      }
+      if (data.curriculum !== undefined) {
+        this.setState({
+          curriculum: data.curriculum,
+        });
+      }
+      if (data.choseong !== undefined) {
+        this.setState({
+          choseong: data.choseong,
+        });
+      }
+      if (data.page !== undefined) {
+        this.setState({
+          page: data.page,
+        });
+      }
     });
   }
 
@@ -327,9 +381,54 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:timer", (event) => {
       const data = JSON.parse(event.data);
 
-      this.setState({
-        timer: data.timer - 1,
-      });
+      if (!this.state.quiz) data.timer = 0;
+
+      this.setState(
+        {
+          timer: data.timer,
+        },
+        () => {
+          if (this.state.timer > 0 && this.state.quiz) {
+            const sendData = {
+              timer: this.state.timer - 1,
+            };
+
+            setTimeout(() => this.sendSignalTimer(sendData), 1000);
+          }
+        }
+      );
+    });
+  }
+
+  subscribeToQuiz() {
+    this.state.session.on("signal:quiz", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (this.state.quiz && !data.quiz) {
+        console.log("게임 종료");
+        // 게임 종료
+        if (this.state.timer > 0) this.sendSignalInfo({ page: this.state.page + 1 });
+        else this.sendSignalInfo({ page: this.state.page + 2 });
+
+        this.sendSignalTimer({ timer: 0 });
+        this.setState({ quiz: data.quiz });
+      } else if (!this.state.quiz && data.quiz) {
+        console.log("게임 시작");
+        // 게임 시작
+        this.correctStatusChanged(false);
+        this.setState({ quiz: data.quiz, count: 0 }, () => {
+          this.sendSignalTimer({ timer: 900 });
+        });
+      }
+    });
+  }
+
+  subscribeToCorrect() {
+    this.state.session.on("signal:correct", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (localUser && localUser.getConnectionId() === data.target)
+        this.correctStatusChanged(data.correct);
     });
   }
 
@@ -359,6 +458,14 @@ class OpenViduSession extends Component {
 
   sendSignalTimer(data) {
     this.sendSignal(data, "timer");
+  }
+
+  sendSignalCorrect(data) {
+    this.sendSignal(data, "correct");
+  }
+
+  sendSignalQuiz(data) {
+    this.sendSignal(data, "quiz");
   }
 
   sendSignal(data, page) {
@@ -441,28 +548,154 @@ class OpenViduSession extends Component {
           </div>
         );
       }
-    } else if (this.state.page === 1) {
-      // 화면 구성에 따라 많을듯?
+    } else if (1 <= this.state.page && this.state.page <= 6) {
+      const controls = [
+        {
+          title: "읽기(단어 띄워주는) 페이지로",
+          page: 3,
+        },
+        {
+          title: "읽기(초성 중성 종성 떼서 보여주는) 페이지로",
+          page: 4,
+        },
+        {
+          title: "받아쓰기(단어 안보여줌) 페이지로",
+          page: 5,
+        },
+        {
+          title: "받아쓰기(단어 보여줌) 페이지로",
+          page: 6,
+        },
+      ];
+
       return (
-        <div>
+        <div className={styles.container2}>
           <h1>✔ 수업을 진행해 주세요</h1>
-          <h2>
+          <h2 className={styles.wordname}>
             {this.state.theme} - {this.state.curriculum.situation}
           </h2>
           <TeacherLiveWord $={this} />
+          {this.state.word && (
+            <div>
+              <div className={styles.controlsContainer}>
+                {controls.map((control, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      const data = {
+                        page: control.page,
+                        word: this.state.word,
+                      };
+
+                      this.sendSignalInfo(data);
+                    }}
+                  >
+                    {control.title}
+                  </button>
+                ))}
+              </div>
+              <div className={styles.pageButtons}>
+                {this.state.page === 2 && (
+                  <TeacherLiveSituation
+                    img={this.state.curriculum.themeImageUrl}
+                    situation={this.state.curriculum.situation}
+                    situationJournal={this.state.curriculum.situationJournal}
+                  />
+                )}
+                {this.state.page === 3 && (
+                  <TeacherLiveReadWord word={this.state.word} />
+                )}
+                {this.state.page === 4 && (
+                  <TeacherLiveReadWordHint word={this.state.word} />
+                )}
+                {this.state.page === 5 && <TeacherLiveWrite />}
+                {this.state.page === 6 && (
+                  <TeacherLiveWriteHint word={this.state.word} />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       );
     } else if (this.state.page === 11) {
       return (
         <div>
           <h1>게임 1 페이지</h1>
-          {this.state.timer !== 0 && <span>{this.state.timer}</span>}
+          {this.state.curriculum.wordList.length > 0 && <TeacherLiveGuessQuiz $={this} />}
+          {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
+          {this.state.timer !== 0 && (
+            <span
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#FFD700",
+                borderRadius: "5px",
+                padding: "5px 10px",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
+                color: "white",
+              }}
+            >
+              {this.state.timer}
+            </span>
+          )}
+          {/* 타이머 끝 */}
+        </div>
+      );
+    } else if (this.state.page === 12) {
+      return (
+        <div>
+          <h1>잘하셨어요!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
+        </div>
+      );
+    } else if (this.state.page === 13) {
+      return (
+        <div>
+          <h1>아쉽습니다!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 21 })}>다음 게임으로!</button>
         </div>
       );
     } else if (this.state.page === 21) {
       return (
         <div>
           <h1>게임 2 페이지</h1>
+          <TeacherLiveChoseongQuiz $={this} />
+          {this.state.choseong && <div>오늘의 초성 : {this.state.choseong}</div>}
+          {/* 타이머 잘 안보여서 디자인 임시로 인라인으로 넣어둠 */}
+          {this.state.timer !== 0 && (
+            <span
+              style={{
+                fontSize: "20px",
+                backgroundColor: "#FFD700",
+                borderRadius: "5px",
+                padding: "5px 10px",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
+                color: "white",
+              }}
+            >
+              {this.state.timer}
+            </span>
+          )}
+          {/* 타이머 끝 */}
+        </div>
+      );
+    } else if (this.state.page === 22) {
+      return (
+        <div>
+          <h1>잘하셨어요!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+        </div>
+      );
+    } else if (this.state.page === 23) {
+      return (
+        <div>
+          <h1>아쉽습니다!</h1>
+          <button onClick={() => this.sendSignalInfo({ page: 31 })}>종례 페이지로</button>
+        </div>
+      );
+    } else if (this.state.page === 31) {
+      return (
+        <div>
+          <h1>수고하셨습니다 !</h1>
         </div>
       );
     }
@@ -474,6 +707,7 @@ class OpenViduSession extends Component {
     const localUser = this.state.localUser;
     const mainStreamUser = this.state.mainStreamUser;
     const trace = this.state.trace;
+    const quiz = this.state.quiz;
 
     return (
       <div className={styles.container} id="container">
@@ -490,71 +724,99 @@ class OpenViduSession extends Component {
             }
           }}
         />
-
-        <div className={styles.video}>
-          {mainStreamUser !== undefined &&
-            mainStreamUser.getStreamManager() !== undefined && (
+        <div className={styles.contentContainer}>
+          <div className={styles.video}>
+            {mainStreamUser !== undefined &&
+              mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "50%",
+                    height: "50%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  <div>포커스 중인 사람</div>
+                  <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
+            {localUser !== undefined &&
+              localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "300px",
+                  }}
+                  id="localUser"
+                >
+                  <div>본인</div>
+                  <StreamComponent user={localUser} />
+                </div>
+              )}
+            {this.state.subscribers.map((sub, i) => (
               <div
-                style={{
-                  display: "inline-block",
-                  width: "50%",
-                  height: "50%",
-                }}
-                id="mainStreamUser"
-              >
-                <div>포커스 중인 사람</div>
-                <StreamComponent user={mainStreamUser} />
-              </div>
-            )}
-          {localUser !== undefined &&
-            localUser.getStreamManager() !== undefined && (
-              <div
+                key={i}
                 style={{
                   display: "inline-block",
                   width: "300px",
                   height: "300px",
                 }}
-                id="localUser"
+                id="remoteUsers"
               >
-                <div>본인</div>
-                <StreamComponent user={localUser} />
-              </div>
-            )}
-          {this.state.subscribers.map((sub, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="remoteUsers"
-            >
-              <IconButton
-                onClick={() => {
-                  const data = {
-                    target: sub.getConnectionId(),
-                  };
+                <IconButton
+                  onClick={() => {
+                    const data = {
+                      target: sub.getConnectionId(),
+                    };
 
-                  this.sendSignalMic(data);
-                }}
-              >
-                {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
-              </IconButton>
-              <div
-                onClick={() => {
-                  this.handleMainVideoStream(sub);
-                }}
-              >
-                <StreamComponent
-                  user={sub}
-                  streamId={sub.streamManager.stream.streamId}
-                />
+                    this.sendSignalMic(data);
+                  }}
+                >
+                  {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
+                </IconButton>
+                {quiz && !sub.isCorrect() && (
+                  <IconButton
+                    onClick={() => {
+                      const data = {
+                        target: sub.getConnectionId(),
+                        correct: true,
+                      };
+
+                      this.sendSignalCorrect(data);
+
+                      this.setState(
+                        {
+                          count: this.state.count + 1,
+                        },
+                        () => {
+                          if (this.state.count === this.state.subscribers.length) {
+                            this.setState({ count: 0 }, () => {
+                              this.sendSignalQuiz({ quiz: false });
+                            });
+                          }
+                        }
+                      );
+                    }}
+                  >
+                    <Check />
+                  </IconButton>
+                )}
+                <div
+                  onClick={() => {
+                    this.handleMainVideoStream(sub);
+                  }}
+                >
+                  <StreamComponent
+                    user={sub}
+                    streamId={sub.streamManager.stream.streamId}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <div>{this.renderComponent()}</div>
         </div>
-        <div>{this.renderComponent()}</div>
       </div>
     );
   }

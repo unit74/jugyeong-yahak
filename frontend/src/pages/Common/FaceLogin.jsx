@@ -151,6 +151,8 @@ export default function FaceLogin() {
       ttsMaker("", 0);
     }
 
+    // 여기도 지금 무조건 4로 들어가게 되어있음 이것도 수정해야됨
+    // 그리고 로그인할 때 받아오는 정보에 gender도 추가했으면 좋겠음 -> main에서 바로 어머님, 아버님 구분할려면 필요함
     const governmentId = 4;
 
     axios

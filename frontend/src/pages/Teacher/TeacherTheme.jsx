@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TeacherTheme.module.css";
-import TeacherHeader from "./TeacherHeader";
 import axios from "../Common/api/authAxios";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";

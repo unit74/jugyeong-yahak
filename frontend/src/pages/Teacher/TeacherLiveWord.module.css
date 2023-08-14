@@ -1,58 +1,78 @@
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kimjungchul";
+  src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
+}
+
 .main {
   position: relative;
   width: 100%;
-  height: 834px;
   overflow: hidden;
-  background-image: url("/public/ipad-pro-11--15@3x.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top;
   text-align: left;
   font-size: 31px;
   color: white;
-  font-family: "Inter", sans-serif;
-}
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 50px;
-}
-
-.main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.topic {
-  color: var(--color-orange);
-}
+/*  */
 
-.topicsContainer {
+.buttonsContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  margin-top: 5px;
+  gap: 10px;
+  text-align: center;
 }
 
-.topicBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
-  width: 170px;
-  height: 215px;
-  padding: 20px;
+/*  */
+
+/* 기본 버튼 스타일 */
+.button {
+  font-size: 20px;
+  margin: 10px;
+  font-weight: bold;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.topicBox img {
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  object-fit: cover;
+/* 상황글 페이지로 이동 버튼 */
+.situationButton {
+  background-color: #05da0c;
+  color: #fff;
+}
+
+/* 단어 버튼 */
+.wordButton {
+  background-color: #0e86e7;
+  color: #fff;
+}
+
+/* 게임1 페이지로 이동 버튼 */
+.gameButton {
+  background-color: #fc594e;
+  color: #fff;
+}
+
+/* hover 효과 */
+.button:hover {
+  transform: scale(1.1);
+}
+
+h1 {
+  margin-left: 3%;
+  font-family: "Kimjungchul";
 }

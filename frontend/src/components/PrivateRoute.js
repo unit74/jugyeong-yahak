@@ -1,4 +1,4 @@
-import { Route, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 export default function PrivateRoute({ children }) {
@@ -6,7 +6,6 @@ export default function PrivateRoute({ children }) {
   let location = useLocation();
 
   useEffect(() => {
-    console.log(localStorage.getItem("userInfo"));
     if (!localStorage.getItem("userInfo")) {
       navigate("/facetest", { replace: true, state: { from: location } });
       return;
@@ -15,6 +14,8 @@ export default function PrivateRoute({ children }) {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     if (userInfo.role === "ROLE_TEACHER")
       navigate("/teacher-main", { replace: true, state: { from: location } });
+
+    return () => {};
   }, [navigate, location]);
 
   return children;

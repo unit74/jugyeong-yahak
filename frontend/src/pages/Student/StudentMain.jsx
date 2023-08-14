@@ -33,11 +33,13 @@ export default function StudentMain() {
 
       let text = "";
 
-      // let gender = userInfo.gender === 0 ? "어머님" : "아버님";
-
       if (userInfo !== null) {
-        text = `${userInfo.name} 어머님, 안녕하세요!`;
-        // text = `${userInfo.name} ${gender}, 안녕하세요!`;
+        let gender = userInfo.gender === 1 ? "어머님" : "아버님";
+        console.log(userInfo.gender)
+        console.log(gender)
+
+        // text = `${userInfo.name} 어머님, 안녕하세요!`;
+        text = `${userInfo.name} ${gender}, 안녕하세요!`;
         ttsMaker(text, 0);
         await delay(text.length * 300);
       }
