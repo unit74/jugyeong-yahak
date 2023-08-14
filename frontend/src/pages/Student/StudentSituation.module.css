@@ -1,0 +1,80 @@
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
+
+.main {
+  background-image: url(/src/assets/images/real_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(100px);
+  width: 85%;
+  height: 90%;
+  display: flex;
+  justify-content: center;  /* 가로 중앙 정렬 */
+  align-items: center;      /* 세로 중앙 정렬 */
+  height: 100vh;            /* 뷰포트의 높이로 설정 */
+  /* 기존의 .square 스타일 설정은 그대로 유지 */
+}
+
+
+
+/* 여기까지 공통 */
+
+.theme {
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.diarytext {
+  line-height: calc(2vw + 2vh);
+  display: inline-block;
+  color: var(--color-black);
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(2.5vw + 1.5vh); /* 반응형 */
+  line-height: 2;
+  white-space: pre-wrap;
+  opacity: 0.5;  /* 텍스트 투명도 설정 */
+  /* color: #ff403c; */
+}
+
+.activeDiaryText {
+  opacity: 1;  /* 텍스트 투명도 설정 */
+  line-height: calc(2vw + 2vh);
+  display: inline-block;
+  color: var(--color-black);
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(2.5vw + 1.5vh); /* 반응형 */
+  line-height: 2;
+  white-space: pre-wrap;
+  /* color: #ff403c; */
+}
+
+
+.square * {
+  user-select: none;
+}
+
+.userMessage {
+  background-color: red;
+}
+
+.generatedMessage {
+  background-color: aquamarine;
+}
