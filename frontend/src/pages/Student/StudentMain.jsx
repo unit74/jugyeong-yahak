@@ -13,7 +13,9 @@ import diaryImg from "../../assets/images/diary.png";
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
   const [msg, setMsg] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
@@ -87,9 +89,10 @@ export default function StudentMain() {
   const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
 
   // 강의 시작 시간
-  const lectureTime = userInfo.lectureTime
-  const lectureTimeParts = lectureTime.split(':');
-  const lectureStartMinutes = parseInt(lectureTimeParts[0], 10) * 60 + parseInt(lectureTimeParts[1], 10);
+  const lectureTime = userInfo.lectureTime;
+  const lectureTimeParts = lectureTime.split(":");
+  const lectureStartMinutes =
+    parseInt(lectureTimeParts[0], 10) * 60 + parseInt(lectureTimeParts[1], 10);
 
   // 강의 시작 30분 전의 시간
   const lecturePreStartMinutes = lectureStartMinutes - 30;
@@ -98,7 +101,9 @@ export default function StudentMain() {
   const lectureEndMinutes = lectureStartMinutes + 60;
 
   // 조건 확인
-  const showEnterClass = currentMinutes >= lecturePreStartMinutes && currentMinutes < lectureEndMinutes;
+  const showEnterClass =
+    currentMinutes >= lecturePreStartMinutes &&
+    currentMinutes < lectureEndMinutes;
 
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
@@ -111,27 +116,42 @@ export default function StudentMain() {
           {msg && <TTSsentence message={msg} />}
         </div>
         {showEnterClass ? (
-        <div className={styles.time}>
-          <div className={styles.timeImg}>
-            <img className={styles.responsive_image} src={liveImg} alt="liveImg" />
+          <div className={styles.time}>
+            <div className={styles.timeImg}>
+              <img
+                className={styles.responsive_image}
+                src={liveImg}
+                alt="liveImg"
+              />
+            </div>
+            <button className={styles.clearButton} onClick={navigateToLive}>
+              교실에 들어가기
+            </button>
           </div>
-          <button className={styles.clearButton} onClick={navigateToLive}>
-            교실에 들어가기
-          </button>
-        </div>
-      ) : (
-        <div className={styles.time}>
-          <div className={styles.timeImg}>
-            <img className={styles.responsive_image} src={reviewImg} alt="reviewImg" />
+        ) : (
+          <div className={styles.time}>
+            <div className={styles.timeImg}>
+              <img
+                className={styles.responsive_image}
+                src={reviewImg}
+                alt="reviewImg"
+              />
+            </div>
+            <button
+              className={styles.clearButton}
+              onClick={navigateToRecordDictation}
+            >
+              혼자 공부하기
+            </button>
           </div>
-          <button className={styles.clearButton} onClick={navigateToRecordDictation}>
-            혼자 공부하기
-          </button>
-        </div>
-      )}
+        )}
         <div className={styles.time}>
           <div className={styles.timeImg}>
-            <img className={styles.responsive_image} src={diaryImg} alt="diaryImg" />
+            <img
+              className={styles.responsive_image}
+              src={diaryImg}
+              alt="diaryImg"
+            />
           </div>
           <button className={styles.diaryButton} onClick={navigateToDiaryList}>
             일기장 보기
