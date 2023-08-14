@@ -15,9 +15,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassRequest {
-
-  private Long id;
+public class ClassRegisterRequest {
+  
   @NotNull
   @NotEmpty
   private String status;
@@ -32,17 +31,6 @@ public class ClassRequest {
   private int minute;
 
   public ClassEntity toEntity(Long governmentId) {
-
-    //수정 로직
-    if (id != null) {
-      return ClassEntity.builder()
-          .id(id)
-          .className(name)
-          .commonCode(CommonCodeEntity.builder().commonCode(CommonCode.valueOf(status)).build())
-          .governmentId(governmentId)
-          .lectureTime(toLocalTime(hour, minute))
-          .build();
-    }
     //등록 로직
     return ClassEntity.builder()
         .className(name)

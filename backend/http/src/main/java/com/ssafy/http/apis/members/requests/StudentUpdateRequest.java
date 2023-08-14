@@ -12,15 +12,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentRequest {
-  
-  private Long classId;
-
-  //private Long role;
+public class StudentUpdateRequest {
 
   @NotNull
   @NotEmpty
-  private String statusCode;
+  private Long id;
 
   @NotNull
   @NotEmpty
@@ -39,37 +35,20 @@ public class StudentRequest {
   private String firstResponder;
 
   @NotNull
-  private Long tabletNo;
+  @NotEmpty
+  private Long classId;
 
   @NotNull
-  private Integer gender;
+  @NotEmpty
+  private String statusCode;
 
-  public MemberEntity toEntityForRegister(String urlPrefix, String urlPostfix, Long governmentId,
-      String uuid) {
+  @NotNull
+  @NotEmpty
+  private Long tabletNo;
 
+  public MemberEntity toEntity(MemberEntity entity) {
     return MemberEntity.builder()
-        .governmentId(governmentId)
-        .password(uuid)
-        .classId(classId)
-        .role(RoleEntity.builder()
-            .role(Role.STUDENT)
-            .build())
-        .statusCode(statusCode)
-        .name(name)
-        .phone(phone)
-        .address(address)
-        .firstResponder(firstResponder)
-        .tabletNo(tabletNo)
-        .uuid(uuid)
-        .faceImageUrl(urlPrefix + governmentId + "/" + uuid + urlPostfix)
-        .gender(gender)
-        .build();
-  }
-
-  public MemberEntity toEntityForUpdate(MemberEntity entity) {
-
-    return MemberEntity.builder()
-        .id(entity.getId())
+        .id(id)
         .governmentId(entity.getGovernmentId())
         .password(entity.getPassword())
         .classId(classId)
@@ -88,4 +67,3 @@ public class StudentRequest {
         .build();
   }
 }
-
