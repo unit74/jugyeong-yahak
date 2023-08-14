@@ -65,13 +65,14 @@ public class DiaryService {
   public void registerDiary(Long loginUserId, DiaryRegisterRequest diaryRegisterRequest,
       MultipartFile imageData) {
 
-    String folder = "diary/" + loginUserId + "/";
+    String folder = "diary/" + loginUserId;
     String fileName = LocalDateTime.now().toString();
     System.out.println("===> fileName : " + fileName);
-    String imageUrl = "";
+    String imageUrl = url + folder + "/" + fileName + imageType;
+    System.out.println("====> : " + imageUrl);
 
     try {
-      imageUrl = s3ImageUploadService.uploadImage(folder, fileName, imageType, imageData);
+      s3ImageUploadService.uploadImage(folder, fileName, imageType, imageData);
     } catch (IOException e) {
       throw new RegisterIdentificationException(ErrorCode.IO_ERROR);
     }
