@@ -13,6 +13,7 @@ import com.ssafy.http.apis.members.services.S3ImageUploadService;
 import com.ssafy.http.security.utils.SecurityUtil;
 import com.ssafy.http.support.codes.SuccessCode;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +75,7 @@ public class MemberPrivateController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
-      @RequestPart StudentRegisterRequest studentRegisterRequest,
+      @Valid @RequestPart StudentRegisterRequest studentRegisterRequest,
       @RequestPart MultipartFile faceImage) {
     System.out.println("학생 등록 요청 받음");
 
@@ -88,7 +89,7 @@ public class MemberPrivateController {
       MediaType.APPLICATION_JSON_VALUE,
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerTeacher(
-      @RequestPart TeacherRegisterRequest teacherRegisterRequest,
+      @Valid @RequestPart TeacherRegisterRequest teacherRegisterRequest,
       @RequestPart MultipartFile faceImage) {
 
     memberService.registerTeachers(SecurityUtil.getLoginUserId(), faceImage,
