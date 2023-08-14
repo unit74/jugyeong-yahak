@@ -49,7 +49,7 @@ export default function StudentMain() {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      text = "복습을 진행할려면 아래의 빨간 버튼을 누르세요.";
+      text = "복습을 진행하시려면 아래의 빨간 버튼을 누르세요.";
 
       ttsMaker(text, 0);
     }
