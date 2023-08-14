@@ -79,6 +79,7 @@ public class AuthPublicController {
                 .token(
                     "Bearer " + tokenDto.getAccessToken())
                 .info(MemberLoginResponse.Info.builder()
+                    .id(memberLoginDto.getId())
                     .classId(memberLoginDto.getClassId())
                     .role(memberLoginDto.getRole())
                     .name(memberLoginDto.getName())
