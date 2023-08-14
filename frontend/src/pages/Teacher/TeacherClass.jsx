@@ -4,10 +4,13 @@ import TeacherHeader from "./TeacherHeader";
 import axios from "../Common/api/authAxios";
 import styles from "./TeacherClass.module.css";
 import styled from "@emotion/styled";
+import { setLiveClass } from "../../store/actions/setLiveClassAction";
+import { useDispatch } from "react-redux";
 
 const BASE_URL = "https://i9e206.p.ssafy.io";
 
 const TeacherClass = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
 
@@ -25,19 +28,10 @@ const TeacherClass = () => {
     "#5da3ff",
   ];
 
-  const hoverColors = [
-    "#f49002",
-    "#47e54f",
-    "#f34b4b",
-    "#6c41cf",
-    "#d431bb",
-    "#f33c4a",
-    "#4a75f3",
-  ];
+  const hoverColors = ["#f49002", "#47e54f", "#f34b4b", "#6c41cf", "#d431bb", "#f33c4a", "#4a75f3"];
 
   const Button = styled.button`
-    background-color: ${({ colorIndex }) =>
-      buttonColors[colorIndex % buttonColors.length]};
+    background-color: ${({ colorIndex }) => buttonColors[colorIndex % buttonColors.length]};
     color: white;
     border: none;
     padding: 10px 20px;
@@ -46,8 +40,7 @@ const TeacherClass = () => {
     text-transform: uppercase;
     font-weight: bold;
     &:hover {
-      background-color: ${({ colorIndex }) =>
-        hoverColors[colorIndex % hoverColors.length]};
+      background-color: ${({ colorIndex }) => hoverColors[colorIndex % hoverColors.length]};
     }
   `;
   const Background = styled.div`
@@ -80,7 +73,9 @@ const TeacherClass = () => {
 
   const handleClickClass = (clazz) => {
     alert(clazz.className + "의 실시간 강의를 열겠습니다.");
-    navigate("/teacher-live", { state: { clazz: clazz } });
+
+    dispatch(setLiveClass(clazz));
+    navigate("/teacher-live");
   };
 
   return (
