@@ -48,11 +48,14 @@ public class DiaryPrivateController {
   }
 
   @PostMapping(consumes = { //학생 회원가입
-      MediaType.APPLICATION_JSON_VALUE,
-      MediaType.MULTIPART_FORM_DATA_VALUE})
+      MediaType.MULTIPART_FORM_DATA_VALUE,
+      MediaType.APPLICATION_JSON_VALUE
+  })
   public ResponseEntity registerDiary(
       @RequestPart MultipartFile imageData,
-      @RequestPart DiaryRegisterRequest diaryRegisterRequest) {
+      @RequestPart DiaryRegisterRequest diaryRegisterRequest
+
+  ) {
 
     diaryService.registerDiary(SecurityUtil.getLoginUserId(), diaryRegisterRequest, imageData);
 
