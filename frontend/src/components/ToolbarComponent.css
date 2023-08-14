@@ -1,5 +1,3 @@
-/* ToolbarComponent.css */
-
 @font-face {
   font-family: "KimjungchulGothic-Bold";
   src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
@@ -7,51 +5,44 @@
   font-weight: 700;
   font-style: normal;
 }
+@font-face {
+  font-family: "Kimjungchul";
+  src: url("../assets//fonts//KimjungchulGothic-Regular.ttf");
+}
 
-/* 기본적인 툴바 스타일 */
 .toolbar {
-  font-family: "KimjungchulGothic-Bold";
-  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
-  background-color: var(--color-orange); /* 예시 색상 (다크 블루) */
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  display: none;
 }
 
-/* 툴바 아래의 다음 컨텐츠를 위한 상단 여백 설정 */
-#container {
-  margin-top: 64px; /* 툴바의 높이(예시) */
+.sidebar {
+  width: 10px;
+  position: fixed;
+  font-size: calc(0.8vw + 1.5vh);
+  left: 0px;
+  top: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  transition: left 0.3s;
 }
 
-/* 툴바 내 세션 정보 스타일 */
-#navSessionInfo {
-  flex: 1; /* 다른 요소들을 오른쪽으로 밀어내고, 세션 정보를 왼쪽으로 정렬 */
+.verticalText {
+  display: flex;
+  flex-direction: column;
 }
 
-#titleContent {
-  color: white;
-  font-size: 1.2rem; /* 글자 크기 조정 (예시) */
-  font-weight: 500; /* 글자 두께 조정 (예시) */
-}
-
-/* 툴바 내 버튼 스타일 */
-.navButton {
-  margin-left: 10px; /* 버튼 간격 조정 */
-}
-
-/* 마이크와 나가기 버튼이 묶여있는 부분 */
-.buttonsContent {
+.charContainer {
   display: flex;
   align-items: center;
+  height: 2rem;
 }
 
-/* 아이콘 버튼의 색상 변경 (예시) */
-#navMicButton {
-  color: white;
-}
-
-#navLeaveButton {
-  color: red;
-}
-
-.sessiontt {
-  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+.character {
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
 }
