@@ -15,7 +15,7 @@
 }
 
 .sidebar {
-  width: 20px;
+  width: 10px;
   position: fixed;
   font-size: calc(0.8vw + 1.5vh);
   left: 0px;
