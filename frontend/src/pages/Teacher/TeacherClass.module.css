@@ -98,7 +98,7 @@
   height: 100vh;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: center;
   user-select: none; /* 클릭금지 */
   justify-content: center;
   display: flex;
