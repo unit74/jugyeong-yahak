@@ -52,7 +52,7 @@
 
 .situationText {
   position: absolute;
-  top: 50%;                /* 상위 컨테이너의 중앙에서부터 시작 */
+  top: 40%;                /* 상위 컨테이너의 중앙에서부터 시작 */
   left: 50%;               /* 상위 컨테이너의 중앙에서부터 시작 */
   transform: translate(-50%, -50%); 
   text-align: center;
@@ -62,6 +62,12 @@
   white-space: nowrap;
 }
 
+.transcriptText{
+  margin-top: 200px;
+  color :rgb(106, 106, 106);
+  font-size: calc(2.5vw + 1vh);
+  font-family: KoPubWorld Batang Bold;
+}
 
 .microphone {
   position: fixed;
