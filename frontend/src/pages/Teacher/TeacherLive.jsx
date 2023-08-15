@@ -55,6 +55,9 @@ class OpenViduSession extends Component {
       timer: 0,
       quiz: false,
       count: 0,
+      isOpen: false,
+      pages: [],
+      words: [],
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -67,6 +70,10 @@ class OpenViduSession extends Component {
     this.correctStatusChanged = this.correctStatusChanged.bind(this);
     this.traceStatusChanged = this.traceStatusChanged.bind(this);
     this.updateMousePosition = this.updateMousePosition.bind(this);
+    this.openSidebar = this.openSidebar.bind(this);
+    this.closeSidebar = this.closeSidebar.bind(this);
+    this.changeMenus = this.changeMenus.bind(this);
+    this.sendSignal = this.sendSignal.bind(this);
 
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToStreamDestroyed = this.subscribeToStreamDestroyed.bind(this);
@@ -86,6 +93,15 @@ class OpenViduSession extends Component {
     window.addEventListener("mousemove", this.updateMousePosition);
     window.addEventListener("beforeunload", this.onbeforeunload);
     this.joinSession();
+
+    const pages = [
+      {
+        name: "커리큘럼 선택",
+        path: "theme",
+      },
+    ];
+
+    this.changeMenus(pages, []);
   }
 
   componentWillUnmount() {
@@ -230,6 +246,9 @@ class OpenViduSession extends Component {
           timer: 0,
           quiz: false,
           count: 0,
+          isOpen: false,
+          pages: [],
+          words: [],
         },
         async () => {
           await axios
@@ -385,8 +404,8 @@ class OpenViduSession extends Component {
 
       if (this.state.quiz && !data.quiz) {
         // 게임 종료
-        if (this.state.timer > 0) this.sendSignal({ page: this.state.page + 1 }, "page");
-        else this.sendSignal({ page: this.state.page + 2 }, "page");
+        if (this.state.timer > 0) this.sendSignal({ page: "" }, "page");
+        else this.sendSignal({ page: "" }, "page");
 
         this.sendSignal({ timer: 0 }, "timer");
         this.setState({ quiz: data.quiz });
@@ -444,14 +463,9 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:page", (event) => {
       const data = JSON.parse(event.data);
 
-      this.setState(
-        {
-          page: data.page,
-        },
-        () => {
-          this.navigate(`/teacher-live/${this.state.page}`);
-        }
-      );
+      this.setState({ page: data.page }, () => {
+        this.navigate(`/teacher-live/${this.state.page}`);
+      });
     });
   }
 
@@ -489,6 +503,27 @@ class OpenViduSession extends Component {
     this.sendSignal(data, "mouse");
   }
 
+  openSidebar() {
+    this.setState({
+      isOpen: true,
+    });
+  }
+
+  closeSidebar() {
+    this.setState({
+      isOpen: false,
+    });
+  }
+
+  changeMenus(pages, words) {
+    this.closeSidebar();
+    this.setState({
+      pages: pages,
+      words: words,
+    });
+    setTimeout(() => this.openSidebar(), 300);
+  }
+
   async getToken() {
     console.log(this.mySessionId);
     const sessionId = await this.createSession(this.mySessionId);
@@ -523,17 +558,30 @@ class OpenViduSession extends Component {
     const localUser = this.state.localUser;
     const mainStreamUser = this.state.mainStreamUser;
     const trace = this.state.trace;
+    const isOpen = this.state.isOpen;
+    const pages = this.state.pages;
+    const words = this.state.words;
     const quiz = this.state.quiz;
+    const containerClass = this.state.isOpen
+      ? `${styles.container} ${styles["sidebar-open"]}`
+      : styles.container;
+
     // 리턴
     return (
-      <div className={styles.container} id="container">
+      <div className={containerClass} id="container">
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
           user={localUser}
           trace={trace}
+          isOpen={isOpen}
+          pages={pages}
+          words={words}
           micStatusChanged={this.micStatusChanged}
           traceStatusChanged={this.traceStatusChanged}
+          openSidebar={this.openSidebar}
+          closeSidebar={this.closeSidebar}
+          sendSignal={this.sendSignal}
           leaveSession={() => {
             if (window.confirm("강의를 종료하시겠습니까?")) {
               this.sendSignal(undefined, "exit");
@@ -542,6 +590,45 @@ class OpenViduSession extends Component {
         />
         <div className={styles.contentContainer}>
           <div className={styles.contentLeft}>
+            <button
+              onClick={() => {
+                this.navigate("/teacher-live/theme");
+              }}
+            >
+              커리큘럼 선택 (테스트용 버튼)
+            </button>
+            {this.state.curriculum && (
+              <div>
+                {this.state.curriculum.wordList.map((word, i) => (
+                  <button
+                    key={i}
+                    onClick={() => {
+                      this.setState({ word: word.word });
+                    }}
+                  >
+                    {word.word}
+                  </button>
+                ))}
+              </div>
+            )}
+            {this.state.word && (
+              <div>
+                <button
+                  onClick={() => {
+                    this.navigate("/teacher-live/read");
+                  }}
+                >
+                  읽기 페이지로 (테스트용 버튼)
+                </button>
+                <button
+                  onClick={() => {
+                    this.navigate("/teacher-live/read-hint");
+                  }}
+                >
+                  읽기 힌트 페이지로 (테스트용 버튼)
+                </button>
+              </div>
+            )}
             <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
               <Outlet
                 context={{
@@ -605,19 +692,14 @@ class OpenViduSession extends Component {
                           "correct"
                         );
 
-                        this.setState(
-                          {
-                            count: this.state.count + 1,
-                          },
-                          () => {
-                            if (this.state.count === this.state.subscribers.length) {
-                              this.sendSignal({ quiz: false }, "quiz");
-                            }
+                        this.setState({ count: this.state.count + 1 }, () => {
+                          if (this.state.count === this.state.subscribers.length) {
+                            this.sendSignal({ quiz: false }, "quiz");
                           }
-                        );
+                        });
                       }}
                     >
-                      {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
+                      <Check />
                     </IconButton>
                   )}
                   <div
@@ -630,45 +712,6 @@ class OpenViduSession extends Component {
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => {
-                this.navigate("/teacher-live/theme");
-              }}
-            >
-              커리큘럼 선택 (테스트용 버튼)
-            </button>
-            {this.state.curriculum && (
-              <div>
-                {this.state.curriculum.wordList.map((word, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      this.setState({ word: word.word });
-                    }}
-                  >
-                    {word.word}
-                  </button>
-                ))}
-              </div>
-            )}
-            {this.state.word && (
-              <div>
-                <button
-                  onClick={() => {
-                    this.navigate("/teacher-live/read");
-                  }}
-                >
-                  읽기 페이지로 (테스트용 버튼)
-                </button>
-                <button
-                  onClick={() => {
-                    this.navigate("/teacher-live/read-hint");
-                  }}
-                >
-                  읽기 힌트 페이지로 (테스트용 버튼)
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
