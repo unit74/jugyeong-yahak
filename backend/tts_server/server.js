@@ -36,7 +36,7 @@ function handleTTSRequest(req, res) {
     headers: { 'X-NCP-APIGW-API-KEY-ID': client_id, 'X-NCP-APIGW-API-KEY': client_secret },
   };
 
-  const writeStream = fs.createWriteStream('./tts1.mp3');
+  // const writeStream = fs.createWriteStream('./tts1.mp3');
   const _req = request.post(options).on('response', function(response) {
     console.log('Received response from Naver API:', response.statusCode);
     console.log('Response content-type:', response.headers['content-type']);
@@ -45,11 +45,11 @@ function handleTTSRequest(req, res) {
     res.status(500).send('Failed to fetch from Naver API.');
   });
 
-  writeStream.on('finish', function() {
-    console.log('File write completed.');
-  }).on('error', function(err) {
-    console.error('Error while writing file:', err);
-  });
+  // writeStream.on('finish', function() {
+  //   console.log('File write completed.');
+  // }).on('error', function(err) {
+  //   console.error('Error while writing file:', err);
+  // });
 
   _req.pipe(res); // 브라우저로 출력
 };
