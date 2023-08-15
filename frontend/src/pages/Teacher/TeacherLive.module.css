@@ -20,8 +20,17 @@
   background-position: center center;
   user-select: none; /* 클릭금지 */
   font-family: "KimjungchulGothic-Bold";
+  transition: margin-left 0.3s;
 
   display: flex;
+}
+
+.container.sidebar-open {
+  margin-left: 300px;
+}
+
+.container.sidebar-open .contentContainer {
+  width: calc(100vw - 300px);
 }
 
 .contentContainer {
@@ -35,6 +44,7 @@
   background-position: center;
   user-select: none; /* 클릭금지 */
   display: flex;
+  transition: width 0.3s ease-in-out;
 }
 
 .contentLeft {
