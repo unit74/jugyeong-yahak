@@ -61,7 +61,7 @@ const StudyClassPage = () => {
   };
 
   return (
-    <div>
+    <div className={styles.main}>
       <button onClick={() => navigate("/governmentmain")}>뒤로가기</button>
       <div>
         {classes.map((clazz, index) => (
