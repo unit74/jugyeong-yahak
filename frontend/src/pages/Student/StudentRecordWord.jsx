@@ -204,7 +204,7 @@ export default function StudentRecordWord() {
     } else if (count === 4) {
       makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
     } else {
-      // navigate("/good-feedback", { state: { course: "reading" } });
+      navigate("/good-feedback", { state: { course: "reading" } });
     }
   }, [count]);
 
