@@ -146,11 +146,6 @@ p {
   animation: bounce 1s infinite;
 }
 
-.bb {
-  font-size: calc(2vw + 1.5vh);
-  font-family: "KimjungchulGothic-Bold";
-}
-
 .welcome span {
   display: block;
   font-size: 25%;
