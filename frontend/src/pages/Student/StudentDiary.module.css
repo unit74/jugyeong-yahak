@@ -34,18 +34,17 @@
 }
 
 .diarytext {
-  position: absolute;
-  transform: translate(-50%, 38%);
+  /* position: absolute; */
+  /* transform: translate(-50%, 38%); */
   line-height: calc(2vw + 2vh);
   display: inline-block;
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
-  font-size: calc(2.5vw + 1.5vh); /* 반응형 */
+  font-size: calc(2.5vw + 1.5vh);
   line-height: 2;
   width: 100%;
   white-space: pre-wrap;
-  /* color: #ff403c; */
 }
 
 .square * {
@@ -53,9 +52,22 @@
 }
 
 .userMessage {
-  background-color: red;
+  font-family: "KimjungchulGothic-Bold";
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
 }
 
 .generatedMessage {
-  background-color: aquamarine;
+  margin-left: 3%;
+  font-family: "Kimjungchul";
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 }
