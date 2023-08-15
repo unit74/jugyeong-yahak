@@ -204,7 +204,7 @@ export default function StudentRecordWord() {
     } else if (count === 4) {
       makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
     } else {
-      navigate("/good-feedback", { state: { course: "reading" } });
+      // navigate("/good-feedback", { state: { course: "reading" } });
     }
   }, [count]);
 
@@ -220,7 +220,7 @@ export default function StudentRecordWord() {
           <div className={styles.situationText}>
             {wordsList.length > 0 && wordsList[wordIndex].word}
           </div>
-          <p>{transcript}</p>
+          <p className={styles.transcriptText}>{transcript}</p>
           {msg && <TTSsentence message={msg} />}
           <div>{jamoAnswer}</div>
         </div>
