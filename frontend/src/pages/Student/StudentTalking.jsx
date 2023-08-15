@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styles from "./StudentDiary.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
@@ -217,11 +215,11 @@ export default function StudentTalking() {
               </div>
             ))}
 
-            {img && <img src={img}></img>}
+            {/* {img && <img src={img}></img>} */}
 
             {msg && <TTSsentence message={msg} />}
 
-            {diaryEntry && <p>{diaryEntry}</p>}
+            {/* {diaryEntry && <p>{diaryEntry}</p>} */}
             <div></div>
           </div>
         </div>
