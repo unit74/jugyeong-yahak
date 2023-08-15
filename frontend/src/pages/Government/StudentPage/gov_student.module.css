@@ -54,31 +54,24 @@
   font-family: "KimjungchulGothic-Bold";
   user-select: none; /* 클릭금지 */
 }
-
 .back {
-  height: 100%;
-  position: relative; /* 현재 위치를 기준으로 위치 조정 */
-  /* z-index: 1; */
+  overflow: hidden;
+  padding-top: 5%;
+  padding-left: 7%;
+  padding-right: 1%;
 }
 
-/* .welcome {
-  position: absolute;
-  top: 16vh;
-  left: 50%;
-  font-size: 2vw;
-  font-family: var(--font-roboto);
-  transform: translateX(-50%);
-}
- */
 .options {
   font-family: "KimjungchulGothic-Bold";
   position: absolute;
-  top: 46vh;
+  top: 50%;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
   width: 80%;
   height: 80%;
-  left: 10%;
+  left: 50%;
+  overflow-y: auto;
+  max-height: calc(100vh - 30vh);
 }
 
 .option {
@@ -221,4 +214,118 @@ p {
   object-fit: contain;
   margin-left: 5%;
   margin-top: 0;
+}
+
+.goback {
+  background-image: linear-gradient(to bottom, #3668eb, #6f97e7);
+  position: absolute;
+  top: 40vw;
+  left: 30px;
+
+  /* Make it a perfect circle */
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  /* font-weight: 900; */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 10px;
+  font-size: calc(1vw + 1.5vh);
+}
+
+.goback:hover {
+  transform: scale(1.1);
+}
+
+.bb {
+  font-size: calc(2vw + 1.5vh);
+  font-family: "KimjungchulGothic-Bold";
+}
+
+.options {
+  margin-left: 0;
+  left: 10%;
+  top: 30%;
+}
+
+table {
+  font-family: "Kimjungchul";
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.4vw + 1.5vh);
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+td {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.4vw + 1.5vh);
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+.modal {
+  position: fixed;
+  /* top: 50%;
+  left: 50%; */
+  width: 800px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.623);
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  /* overflow: hidden;  */
+}
+
+.studentImage {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  padding-left: 3%;
+  margin-right: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: rgba(255, 0, 0, 0.7);
+}
+
+.modalText {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.7vw + 1.5vh);
+  padding-left: 3%;
+  white-space: nowrap;
+  padding-bottom: 5%;
+}
+
+.studentInfo {
+  display: flex;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
