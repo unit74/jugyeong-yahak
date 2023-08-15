@@ -2,10 +2,14 @@
 
 - 간단한 프로젝트 소개 문구 및 (로고)
 
+<br/>
+
 ## ⌨️ 기간
 - **2023.07.04 ~ 2023.08.18(7주)**
 
 <div id="tableContents"></div>
+
+<br/>
 
 ## 🔎 목차
 
@@ -21,6 +25,8 @@
 <!------- 주제 시작 -------->
 <div id="subject"></div>
 
+<br/>
+
 ## 🎯 주제
 - 주제
   - 서비스 간략 소개
@@ -28,6 +34,8 @@
 <div style="text-align: right;">
   <a href="#tableContents">목차로 이동</a>
 </div>
+
+<br/>
 
 <!------- 주요 기능 시작 -------->
 <div id="mainContents"></div>
@@ -40,6 +48,8 @@
   <a href="#tableContents">목차로 이동</a>
 </div>
 
+<br/>
+
 <!------- 시스템 아키텍쳐 시작 -------->
 <div id="systemArchitecture"></div>
 
@@ -50,6 +60,8 @@
 <div style="text-align: right;">
   <a href="#tableContents">목차로 이동</a>
 </div>
+
+<br/>
 
 <!------- 기술 스택 시작 -------->
 <div id="skills"></div>
@@ -93,6 +105,9 @@
 <div style="text-align: right;">
   <a href="#tableContents">목차로 이동</a>
 </div>
+
+<br/>
+
 <!------- 파일 구조 시작 -------->
 <div id="directories"></div>
 
@@ -107,6 +122,8 @@
   <a href="#tableContents">목차로 이동</a>
 </div>
 
+<br/>
+
 <!------- ERD 시작 -------->
 <div id="erd"></div>
 
@@ -118,6 +135,8 @@
   <a href="#tableContents">목차로 이동</a>
 </div>
 
+<br/>
+
 <!------- 화면 소개 시작 -------->
 <div id="contents"></div>
 
@@ -128,6 +147,8 @@
 <div style="text-align: right;">
   <a href="#tableContents">목차로 이동</a>
 </div>
+
+<br/>
 
 <!------- 팀원 소개 시작 -------->
 <div id="developers"></div>
