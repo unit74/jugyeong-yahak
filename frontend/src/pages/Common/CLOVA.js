@@ -36,7 +36,7 @@ export default function CLOVA({ message }) {
   const fetchTTSMessage = async (msg) => {
     console.log('Trying to fetch TTS message with text:', msg);
     try {
-      const response = await fetch('http://127.0.0.1:3000/tts', {
+      const response = await fetch('https://i9e206.p.ssafy.io/tts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
