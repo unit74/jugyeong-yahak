@@ -29,6 +29,11 @@
   justify-content: space-between;
   padding: 20px;
   transition: left 0.3s;
+  transition: width 0.3s;
+}
+
+.sidebar.open {
+  width: 300px;
 }
 
 .verticalText {
