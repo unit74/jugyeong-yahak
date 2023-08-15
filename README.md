@@ -25,7 +25,9 @@
 - 주제
   - 서비스 간략 소개
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- 주요 기능 시작 -------->
 <div id="mainContents"></div>
@@ -34,7 +36,9 @@
 - 주요기능1
   - 소개
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- 시스템 아키텍쳐 시작 -------->
 <div id="systemArchitecture"></div>
@@ -43,7 +47,9 @@
 
 - 아키텍처 Img
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- 기술 스택 시작 -------->
 <div id="skills"></div>
@@ -84,7 +90,9 @@
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 <!------- 파일 구조 시작 -------->
 <div id="directories"></div>
 
@@ -95,7 +103,9 @@
 
 ### 백엔드 서버 - 얼굴 인식 서버
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- ERD 시작 -------->
 <div id="erd"></div>
@@ -104,7 +114,9 @@
 
 <img src="./contents/forReadme/erd.png">
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- 화면 소개 시작 -------->
 <div id="contents"></div>
@@ -113,7 +125,9 @@
 
 - 페이지별 GIF
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
 
 <!------- 팀원 소개 시작 -------->
 <div id="developers"></div>
@@ -129,4 +143,6 @@
 | **김예진**|🧚‍♀️ 프론트     | url    |
 | **김현빈**|🐱‍🚀 프론트     | url    |
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div style="text-align: right;">
+  <a href="#tableContents">목차로 이동</a>
+</div>
