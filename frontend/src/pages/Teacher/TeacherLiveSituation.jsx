@@ -7,7 +7,7 @@ const TeacherLiveSituation = (props) => {
   const situationJournal = props.situationJournal;
 
   return (
-    <div className={styles.main}>
+    <div>
       <h1>상황글 페이지</h1>
       <img src={img} alt="" />
       <div>{situation}</div>

@@ -11,51 +11,39 @@
   src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
 }
 
-.bannerImage {
-  width: 100%;
-  height: 33vh;
-  object-fit: cover;
+.main {
+  background-image: url(../../assets/images/backback.jpeg);
+  /* opacity: 0.5; */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-black);
+  font-family: "KimjungchulGothic-Bold";
+  user-select: none; /* 클릭금지 */
 }
 
-.welcome {
+.back {
+  height: 100%;
+  position: relative; /* 현재 위치를 기준으로 위치 조정 */
+  /* z-index: 1; */
+}
+
+/* .welcome {
   position: absolute;
   top: 16vh;
   left: 50%;
-  font-size: 5vw;
+  font-size: 2vw;
   font-family: var(--font-roboto);
   transform: translateX(-50%);
 }
-
-.welcome b {
-  line-height: 3.75vh;
-  font-size: 75%;
-  font-family: "KimjungchulGothic-Bold";
-}
-
-.welcome span {
-  display: block;
-  font-size: 25%;
-  line-height: 3.75vh;
-  font-family: "KimjungchulGothic-Bold";
-}
-
-.question {
-  position: absolute;
-  top: 43vh;
-  left: 8.875vw;
-  font-size: 4.4vh;
-  font-weight: 600;
-  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-  /* width: 13.65vw; */
-  text-align: center;
-}
-.emphasis {
-  color: var(--color-orange);
-}
-
+ */
 .options {
+  font-family: "KimjungchulGothic-Bold";
   position: absolute;
-  top: 59vh;
+  top: 46vh;
   display: flex;
   justify-content: space-around;
   width: 80%;
@@ -64,15 +52,30 @@
 }
 
 .option {
-  width: 16.75vw;
-  height: 16.75vw;
+  font-family: "KimjungchulGothic-Bold";
+  width: 20vw;
+  height: 20vw;
   position: relative;
+  border-radius: var(--br-16xl);
+  background-color: rgba(159, 159, 160, 0.093);
   transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.optionText p {
+  margin: 10px; /* margin을 0으로 설정하여 기본 마진을 제거합니다. */
+}
+
+.optionText p:not(:last-child) {
+  margin-bottom: 4px; /* 마지막 <p>를 제외한 모든 <p> 태그의 아래쪽 마진 값을 설정합니다. */
 }
 
 .option:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-image: linear-gradient(
+    to bottom,
+    #4070e9,
+    #88a7e3
+  ); /* 그라데이션 */
   transform: translateY(-10px);
+
   border-radius: var(--br-16xl);
   border: none;
 }
@@ -84,18 +87,9 @@
   border-radius: var(--br-16xl);
 }
 
-.option:nth-child(1) .optionImage {
-  background-color: #ebf5ff;
+.option:hover .optionText {
+  color: #fff;
 }
-
-.option:nth-child(2) .optionImage {
-  background-color: #ebe8f9;
-}
-
-.option:nth-child(3) .optionImage {
-  background-color: #eaf5e7;
-}
-
 .option:nth-child(1):hover {
   background-color: rgba(235, 245, 255, 0);
 }
@@ -107,28 +101,68 @@
 .option:nth-child(3):hover {
   background-color: rgba(235, 245, 255, 0);
 }
+p {
+  font-family: "KimjungchulGothic-Bold";
+}
 
 .optionText {
+  font-family: "KimjungchulGothic-Bold";
   position: absolute;
   font-weight: 600;
-  top: 55%;
-  left: 11.8%;
+  top: 50%;
+  left: 9%;
   text-align: left;
   width: 100%;
-  font-size: 1.7vw;
+  font-size: 2vw;
   font-weight: bolder;
 }
 
-.optionText p:nth-child(2) {
-  font-size: calc(var(--font-size-14) * 1.5);
+.welcome {
+  position: absolute;
+  top: 16vh;
+  left: 50%;
+  font-size: 6vw;
+  font-family: var(--font-roboto);
+  transform: translateX(-50%);
 }
 
-.optionText p:first-of-type {
-  margin-top: -4%;
+.welcome b {
+  line-height: 4.75vh;
+  font-size: 75%;
+  font-family: "KimjungchulGothic-Bold";
+  animation: bounce 1s infinite;
 }
 
-.optionText p:last-of-type {
-  margin-top: -3%;
+.welcome span {
+  display: block;
+  font-size: 25%;
+  line-height: 7vh;
+  font-family: "KimjungchulGothic-Bold";
+}
+
+.logout {
+  background-image: linear-gradient(
+    to bottom,
+    #3668eb,
+    #6f97e7
+  ); /* 그라데이션 */
+  position: absolute; /* 로그아웃 버튼의 위치를 조정합니다. */
+  top: 50px; /* 최상단에서의 위치를 정합니다. */
+  left: -15px; /* 왼쪽에서의 위치를 정합니다. */
+
+  /* border-radius: var(--br-16xl); */
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  /* 크기 설정 */
+  padding: 14px 30px;
+  font-size: calc(0.6vw + 1.5vh);
+}
+
+.logout:hover {
+  transform: scale(1.1);
 }
 
 .optionIcon {
@@ -144,18 +178,4 @@
   object-fit: contain;
   margin-left: 5%;
   margin-top: 0;
-}
-
-.main {
-  position: relative;
-  background-color: var(--color-white);
-  width: 100%;
-  text-align: left;
-  /* font-size: calc(var(--font-size-11xl) * 1.5); */
-  color: var(--color-black);
-  font-family: "KimjungchulGothic-Bold";
-  user-select: none; /* 클릭금지 */
-}
-
-@media (max-width: 768px) {
 }
