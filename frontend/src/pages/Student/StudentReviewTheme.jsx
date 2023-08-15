@@ -5,30 +5,36 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import axios from "axios";
 import TTSsentence from "../Common/TTSsentence";
 import { useSelector } from "react-redux";
+import CLOVA from "../Common/CLOVA";
 
 const StudentReviewTheme = () => {
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
-  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
+  const lastVisited = lastVisitedString
+    ? new Date(lastVisitedString)
+    : new Date(0);
   const [msg, setMsg] = useState(null);
 
   // DB에 저장된 단어 가져오기
-  const themeSituation = useSelector((state) => state.themeState.themeData.situation) || [];
-  const themeImg = useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
-  const themeTitle = useSelector((state) => state.themeState.themeData.theme) || [];
+  const themeSituation =
+    useSelector((state) => state.themeState.themeData.situation) || [];
+  const themeImg =
+    useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
+  const themeTitle =
+    useSelector((state) => state.themeState.themeData.theme) || [];
 
   // fade 효과
   const [fade, setFade] = useState(false);
 
-  const navigateToRecordDictation = useCallback(() => {
-    setFade(true);
-    setTimeout(() => {
-      navigate("/situation");
-    }, 1000); // fadeout 후 이동
-  }, [navigate]);
+  // const navigateToRecordDictation = useCallback(() => {
+  //   setFade(true);
+  //   setTimeout(() => {
+  //     navigate(moveToNextPage());
+  //   }, 1000); // fadeout 후 이동
+  // }, [navigate]);
 
-  // // 이동할 다음 페이지 결정
+  // 이동할 다음 페이지 결정
   // const moveToNextPage = () => {
   //   const daysPassed = (timeNow - lastVisited) / (1000 * 60 * 60 * 24); // 초를 일 단위로 변환
   //   if (daysPassed >= 7) {
@@ -81,7 +87,7 @@ const StudentReviewTheme = () => {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      navigateToRecordDictation();
+      // navigateToRecordDictation();
     }
 
     if (themeSituation !== null) {
@@ -96,7 +102,8 @@ const StudentReviewTheme = () => {
       <div className={styles.square}>
         <div className={styles.theme}>
           <b className={styles.b}>오늘의 주제 : {themeTitle}</b>
-          {themeTitle && themeSituation && msg && <TTSsentence message={msg} />}
+          {/* {themeTitle && themeSituation && msg && <TTSsentence message={msg} />} */}
+          {themeTitle && themeSituation && msg && <CLOVA message={msg} />}
           <div className={styles.imageSituationContainer}>
             <div className={styles.imageContainer}>
               <img src={themeImg} alt="" />
