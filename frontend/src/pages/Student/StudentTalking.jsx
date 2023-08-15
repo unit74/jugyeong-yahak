@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import styles from "./StudentDiary.module.css";
+import styles from "./StudentTalking.module.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
@@ -201,20 +201,23 @@ export default function StudentTalking() {
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          <div className={styles.text}></div>
           <div className={styles.microphone}>
-            <h1>오늘 하루는 어떠셨나요?</h1>
-            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
+            <h1 className={styles.generatedMessage}>오늘 하루는 어떠셨나요?</h1>
 
             {allConversations.split(".\n").map((conversation, index) => (
-              <div
+              index % 2 === 1 && (
+                <div
                 key={index}
-                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
-              >
-                {conversation}
-              </div>
-            ))}
+                className={styles.generatedMessage}
+                >
+                  {conversation}
+                </div>
+              )
+              ))}
 
+                          
+            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
+            <p className={styles.userMessage}>{transcript}</p>
             {/* {img && <img src={img}></img>} */}
 
             {msg && <TTSsentence message={msg} />}
