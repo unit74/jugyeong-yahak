@@ -57,7 +57,7 @@ const GovernmentMainPage = () => {
             <img
               className={`${styles.optionIcon} ${styles.enlargedIcon}`}
               alt=""
-              src="/twemojiwomanteacher.svg"
+              src="/group-2175.svg"
             />
           </article>
 
@@ -67,7 +67,7 @@ const GovernmentMainPage = () => {
               <p>선생님 정보</p>
               <p>확인하기</p>
             </div>
-            <img className={styles.optionIcon} alt="" src="/group-2175.svg" />
+            <img className={styles.optionIcon} alt="" src="/twemojiwomanteacher.svg" />
           </article>
 
           <article className={styles.option} onClick={handleClick_3}>
