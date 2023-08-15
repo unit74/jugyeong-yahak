@@ -7,60 +7,58 @@
 ## ⌨️ 기간
 - **2023.07.04 ~ 2023.08.18(7주)**
 
-<br/>
+<a name="tableContents"></a>
 
-<div id="tableContents"></div>
+<br/>
 
 ## 🔎 목차
 
-1. [**🎯 주제**](#🎯-주제)
-1. [**⭐️ 주요 기능**](#⭐️-주요-기능)
-1. [**📟 시스템 아키텍쳐**](#⚙-시스템-아키텍쳐)
-1. [**🛠️ 기술 스택**](#🛠️-기술-스택)
-1. [**🗂️ 파일 구조**](#🗂️-파일-구조)
-1. [**💾 ERD**](#💾-ERD)
-1. [**🖥️ 화면 소개**](#🖥️-화면-소개)
-1. [**👥 팀원 소개**](#👥-팀원-소개)
+1. <a href="#subject">🎯 주제</a>
+1. <a href="#mainContents">⭐️ 주요 기능</a>
+1. <a href="#systemArchitecture">⚙-시스템-아키텍쳐</a>
+1. <a href="#skills">🛠️-기술-스택</a>
+1. <a href="#directories">🗂️-파일-구조</a>
+1. <a href="#erd">💾-ERD</a>
+1. <a href="#contents">🖥️-화면-소개</a>
+1. <a href="#developers">👥-팀원-소개</a>
+
+<br/>
 
 <!------- 주제 시작 -------->
-<br/>
+<a name="subject"></a>
 
 ## 🎯 주제
 - 주제
   - 서비스 간략 소개
 
-[목차로 이동](#🔎-목차)
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 주요 기능 시작 -------->
-<div id="mainContents"></div>
+<a name="mainContents"></a>
 
 ## ⭐️ 주요 기능
 - 주요기능1
   - 소개
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 시스템 아키텍쳐 시작 -------->
-<div id="systemArchitecture"></div>
+<a name="systemArchitecture"></a>
 
 ## ⚙ 시스템 아키텍쳐
 
-- 아키텍처 Img
+<img src="./contents/forReadme/architecture.png">
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 기술 스택 시작 -------->
-<div id="skills"></div>
+<a name="skills"></a>
 
 ## 🛠️ 기술 스택
 ### 프론트
@@ -74,7 +72,7 @@
 
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 
-
+---
 
 ### 백엔드
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -91,6 +89,8 @@
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
 
+---
+
 ### 협업
 ![GitLab](https://img.shields.io/badge/gitlab-FC6D26.svg?style=for-the-badge&logo=gitlab&logoColor=white)
 ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
@@ -98,14 +98,12 @@
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 파일 구조 시작 -------->
-<div id="directories"></div>
+<a name="directories"></a>
 
 ## 🗂️ 파일 구조
 ### 프론트
@@ -114,40 +112,37 @@
 
 ### 백엔드 서버 - 얼굴 인식 서버
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- ERD 시작 -------->
-<div id="erd"></div>
+
+<a name="erd"></a>
 
 ## 💾 ERD
 
 <img src="./contents/forReadme/erd.png">
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 화면 소개 시작 -------->
-<div id="contents"></div>
+<a name="contents"></a>
+
+<br/>
 
 ## 🖥️ 화면 소개
 
 - 페이지별 GIF
 
-<div style="text-align: right;">
-  <a href="#tableContents">목차로 이동</a>
-</div>
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
 
 <br/>
 
 <!------- 팀원 소개 시작 -------->
-<div id="developers"></div>
+<a name="developers"></a>
 
 ## 👥 팀원 소개
 
@@ -160,4 +155,4 @@
 | **김예진**|🧚‍♀️ 프론트     | url    |
 | **김현빈**|🐱‍🚀 프론트     | url    |
 
-[목차로 이동](#🔎-목차)
+<p align="right"><a href="#tableContents">목차로 이동</a></p>
