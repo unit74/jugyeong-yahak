@@ -1,5 +1,5 @@
 import { OpenVidu } from "openvidu-browser";
-import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 import axios from "../Common/api/authAxios";
 import React, { Component, createContext } from "react";
@@ -76,8 +76,7 @@ class OpenViduSession extends Component {
     this.sendSignal = this.sendSignal.bind(this);
 
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
-    this.subscribeToStreamDestroyed =
-      this.subscribeToStreamDestroyed.bind(this);
+    this.subscribeToStreamDestroyed = this.subscribeToStreamDestroyed.bind(this);
     this.subscribeToMic = this.subscribeToMic.bind(this);
     this.subscribeToExit = this.subscribeToExit.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
@@ -117,7 +116,6 @@ class OpenViduSession extends Component {
 
   joinSession() {
     this.OV = new OpenVidu();
-    const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
 
     this.setState(
       {
@@ -127,11 +125,11 @@ class OpenViduSession extends Component {
         this.subscribeToStreamCreated();
         await this.connectToSession();
 
-        await axios.post(`${BASE_URL_SSE}/convert/page`, {
-          classId: useLocation().state.clazz,
-          streamId: 0,
-          number: 0,
-        });
+        // await axios.post(`${BASE_URL}/sse/v1/convert/page`, {
+        //   classId: this.state.mySessionId,
+        //   streamId: 0,
+        //   number: 0,
+        // });
       }
     );
   }
@@ -142,11 +140,7 @@ class OpenViduSession extends Component {
       console.log("Token : " + token);
       this.connect(token);
     } catch (error) {
-      console.error(
-        "There was an error getting the token:",
-        error.code,
-        error.message
-      );
+      console.error("There was an error getting the token:", error.code, error.message);
       if (this.props.error) {
         this.props.error({
           error: error.error,
@@ -176,11 +170,7 @@ class OpenViduSession extends Component {
           });
         }
         alert("There was an error connecting to the session:", error.message);
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
+        console.log("There was an error connecting to the session:", error.code, error.message);
       });
   }
 
@@ -224,23 +214,18 @@ class OpenViduSession extends Component {
 
   updateSubscribers() {
     var subscribers = this.remotes;
-    this.setState(
-      {
-        subscribers: subscribers,
-      },
-      () => {
-        if (this.state.localUser) {
-          this.sendSignal(
-            {
-              isAudioActive: this.state.localUser.isAudioActive(),
-              nickname: this.state.localUser.getNickname(),
-              isCorrect: this.state.localUser.isCorrect(),
-            },
-            "userChanged"
-          );
-        }
+    this.setState({ subscribers: subscribers }, () => {
+      if (this.state.localUser) {
+        this.sendSignal(
+          {
+            isAudioActive: this.state.localUser.isAudioActive(),
+            nickname: this.state.localUser.getNickname(),
+            isCorrect: this.state.localUser.isCorrect(),
+          },
+          "userChanged"
+        );
       }
-    );
+    });
   }
 
   async leaveSession() {
@@ -283,10 +268,7 @@ class OpenViduSession extends Component {
   micStatusChanged() {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignal(
-      { isAudioActive: localUser.isAudioActive() },
-      "userChanged"
-    );
+    this.sendSignal({ isAudioActive: localUser.isAudioActive() }, "userChanged");
     this.setState({ localUser: localUser });
   }
 
@@ -306,9 +288,7 @@ class OpenViduSession extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter(
-      (user) => user.getStreamManager().stream === stream
-    )[0];
+    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -360,8 +340,7 @@ class OpenViduSession extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("EVENTO REMOTE: ", event.data);
-          if (data.isAudioActive !== undefined)
-            user.setAudioActive(data.isAudioActive);
+          if (data.isAudioActive !== undefined) user.setAudioActive(data.isAudioActive);
           if (data.nickname !== undefined) user.setNickname(data.nickname);
           if (data.isCorrect !== undefined) user.setCorrect(data.isCorrect);
         }
@@ -377,8 +356,7 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:mic", (event) => {
       const data = JSON.parse(event.data);
 
-      if (localUser && localUser.getConnectionId() === data.target)
-        this.micStatusChanged();
+      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
     });
   }
 
@@ -404,20 +382,15 @@ class OpenViduSession extends Component {
 
       if (!this.state.quiz) data.timer = 0;
 
-      this.setState(
-        {
-          timer: data.timer,
-        },
-        () => {
-          if (this.state.timer > 0 && this.state.quiz) {
-            const sendData = {
-              timer: this.state.timer - 1,
-            };
+      this.setState({ timer: data.timer }, () => {
+        if (this.state.timer > 0 && this.state.quiz) {
+          const sendData = {
+            timer: this.state.timer - 1,
+          };
 
-            setTimeout(() => this.sendSignal(sendData, "timer"), 1000);
-          }
+          setTimeout(() => this.sendSignal(sendData, "timer"), 1000);
         }
-      );
+      });
     });
   }
 
@@ -446,8 +419,17 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:theme", (event) => {
       const data = JSON.parse(event.data);
 
-      this.setState({
-        theme: data.theme,
+      this.setState({ theme: data.theme }, () => {
+        if (!this.state.theme) {
+          const pages = [
+            {
+              name: "커리큘럼 선택",
+              path: "theme",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        }
       });
     });
   }
@@ -456,9 +438,37 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:word", (event) => {
       const data = JSON.parse(event.data);
 
-      this.setState({
-        word: data.word,
-      });
+      this.setState(
+        {
+          word: data.word,
+        },
+        () => {
+          const pages = [
+            {
+              name: "이전 메뉴 ◀",
+              path: "journal",
+            },
+            {
+              name: "읽기",
+              path: "read",
+            },
+            {
+              name: "읽기 힌트",
+              path: "read-hint",
+            },
+            {
+              name: "받아쓰기",
+              path: "write",
+            },
+            {
+              name: "받아쓰기 힌트",
+              path: "write-hint",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        }
+      );
     });
   }
 
@@ -485,6 +495,28 @@ class OpenViduSession extends Component {
   subscribeToPage() {
     this.state.session.on("signal:page", (event) => {
       const data = JSON.parse(event.data);
+
+      if (data.page === "journal") {
+        const pages = [
+          {
+            name: "초성 퀴즈",
+            path: "guess",
+          },
+        ];
+
+        const words = [];
+        this.state.curriculum.wordList.forEach((word) => {
+          words.push(word);
+        });
+
+        this.changeMenus(pages, words);
+      }
+
+      if (this.state.page === data.page) return;
+
+      if (data.page === "theme") {
+        this.closeSidebar();
+      }
 
       this.setState({ page: data.page }, () => {
         this.navigate(`/teacher-live/${this.state.page}`);
@@ -613,45 +645,6 @@ class OpenViduSession extends Component {
         />
         <div className={styles.contentContainer}>
           <div className={styles.contentLeft}>
-            <button
-              onClick={() => {
-                this.navigate("/teacher-live/theme");
-              }}
-            >
-              커리큘럼 선택 (테스트용 버튼)
-            </button>
-            {this.state.curriculum && (
-              <div>
-                {this.state.curriculum.wordList.map((word, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      this.setState({ word: word.word });
-                    }}
-                  >
-                    {word.word}
-                  </button>
-                ))}
-              </div>
-            )}
-            {this.state.word && (
-              <div>
-                <button
-                  onClick={() => {
-                    this.navigate("/teacher-live/read");
-                  }}
-                >
-                  읽기 페이지로 (테스트용 버튼)
-                </button>
-                <button
-                  onClick={() => {
-                    this.navigate("/teacher-live/read-hint");
-                  }}
-                >
-                  읽기 힌트 페이지로 (테스트용 버튼)
-                </button>
-              </div>
-            )}
             <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
               <Outlet
                 context={{
@@ -664,34 +657,32 @@ class OpenViduSession extends Component {
           </div>
           <div className={styles.contentRight}>
             <div className={styles.video}>
-              {localUser !== undefined &&
-                localUser.getStreamManager() !== undefined && (
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "300px",
-                      height: "300px",
-                    }}
-                    id="localUser"
-                  >
-                    <div>본인</div>
-                    <StreamComponent user={localUser} />
-                  </div>
-                )}
-              {mainStreamUser !== undefined &&
-                mainStreamUser.getStreamManager() !== undefined && (
-                  <div
-                    style={{
-                      display: "inline-block",
-                      width: "50%",
-                      height: "50%",
-                    }}
-                    id="mainStreamUser"
-                  >
-                    <div>포커스 중인 사람</div>
-                    <StreamComponent user={mainStreamUser} />
-                  </div>
-                )}
+              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "300px",
+                  }}
+                  id="localUser"
+                >
+                  <div>본인</div>
+                  <StreamComponent user={localUser} />
+                </div>
+              )}
+              {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "50%",
+                    height: "50%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  <div>포커스 중인 사람</div>
+                  <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={i}
@@ -707,11 +698,7 @@ class OpenViduSession extends Component {
                       this.sendSignal({ target: sub.getConnectionId() }, "mic");
                     }}
                   >
-                    {sub.isAudioActive() ? (
-                      <Mic />
-                    ) : (
-                      <MicOff color="secondary" />
-                    )}
+                    {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
                   </IconButton>
                   {quiz && !sub.isCorrect() && (
                     <IconButton
@@ -722,9 +709,7 @@ class OpenViduSession extends Component {
                         );
 
                         this.setState({ count: this.state.count + 1 }, () => {
-                          if (
-                            this.state.count === this.state.subscribers.length
-                          ) {
+                          if (this.state.count === this.state.subscribers.length) {
                             this.sendSignal({ quiz: false }, "quiz");
                           }
                         });
@@ -738,10 +723,7 @@ class OpenViduSession extends Component {
                       this.handleMainVideoStream(sub);
                     }}
                   >
-                    <StreamComponent
-                      user={sub}
-                      streamId={sub.streamManager.stream.streamId}
-                    />
+                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
                   </div>
                 </div>
               ))}
