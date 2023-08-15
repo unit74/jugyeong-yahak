@@ -80,6 +80,7 @@ const StudyClassPage = () => {
 
 
         {modalOpen && studentSelected && (
+
           <div className={`${styles.modal} ${styles.container}`} style={{ backgroundcolor: "red" }}>
             <button className={styles.close} onClick={closeModal}>
               X
