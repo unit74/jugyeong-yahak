@@ -26,10 +26,11 @@ import StudentDiaryList from "./pages/Student/StudentDiaryList";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
 import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
+import StudentReviewWord from "./pages/Student/StudentReviewWord";
 
 import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
 import StudentReadingMain from "./pages/Student/StudentReadingMain";
-import StudentReviewWord from "./pages/Student/StudentReviewWord";
+import StudentWordExplain from "./pages/Student/StudentWordExplain";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
@@ -93,6 +94,7 @@ function App() {
         <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
 
         <Route path="/reading-main" element={<StudentReadingMain />} />
+        <Route path="/word-explain" element={<StudentWordExplain />} />
         <Route path="/review-word" element={<StudentReviewWord />} />
         <Route path="/record-word" element={<StudentRecordWord />} />
         <Route path="/good-feedback" element={<GoodFeedback />} />

@@ -38,7 +38,6 @@ export default function StudentReadingMain() {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      // 이름 -> 나중에 성별로 바꾸기
       let readingText = `먼저, 단어의 올바른 발음을 공부해요`;
       setActiveEffect('reading')
       ttsMaker(readingText, 0);
@@ -56,7 +55,7 @@ export default function StudentReadingMain() {
 
 
       setFade(true);
-      navigate('/record-word');
+      navigate('/word-explain');
     }
 
     makeRequest();
