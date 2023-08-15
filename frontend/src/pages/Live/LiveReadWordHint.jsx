@@ -104,7 +104,7 @@ function splitKorean(text) {
 
 const LiveReadWordHint = () => {
   const word = useOutletContext().word;
-  const splittedText = splitKorean(word);
+  const splittedText = splitKorean(word.word);
 
   return (
     <div>
