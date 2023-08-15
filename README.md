@@ -25,9 +25,9 @@
 <br/>
 
 <!------- 주제 시작 -------->
+## 🎯 주제
 <a name="subject"></a>
 
-## 🎯 주제
 - 주제
   - 서비스 간략 소개
 
@@ -36,9 +36,9 @@
 <br/>
 
 <!------- 주요 기능 시작 -------->
+## ⭐️ 주요 기능
 <a name="mainContents"></a>
 
-## ⭐️ 주요 기능
 - 주요기능1
   - 소개
 
@@ -47,9 +47,8 @@
 <br/>
 
 <!------- 시스템 아키텍쳐 시작 -------->
-<a name="systemArchitecture"></a>
-
 ## ⚙ 시스템 아키텍쳐
+<a name="systemArchitecture"></a>
 
 <img src="./contents/forReadme/architecture.png">
 
@@ -58,9 +57,9 @@
 <br/>
 
 <!------- 기술 스택 시작 -------->
+## 🛠️ 기술 스택
 <a name="skills"></a>
 
-## 🛠️ 기술 스택
 ### 프론트
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
@@ -103,9 +102,9 @@
 <br/>
 
 <!------- 파일 구조 시작 -------->
+## 🗂️ 파일 구조
 <a name="directories"></a>
 
-## 🗂️ 파일 구조
 ### 프론트
 
 ### 백엔드 서버 - 메인 서버
@@ -118,9 +117,8 @@
 
 <!------- ERD 시작 -------->
 
-<a name="erd"></a>
-
 ## 💾 ERD
+<a name="erd"></a>
 
 <img src="./contents/forReadme/erd.png">
 
@@ -142,9 +140,8 @@
 <br/>
 
 <!------- 팀원 소개 시작 -------->
-<a name="developers"></a>
-
 ## 👥 팀원 소개
+<a name="developers"></a>
 
 |  이름     | 역할          | GitHub|
 | -------- | ------------- | ----- |
