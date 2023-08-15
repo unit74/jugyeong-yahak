@@ -54,8 +54,6 @@ export default class ToolbarComponent extends Component {
 
     return (
       <>
-        <button onClick={this.openSidebar}>Open Sidebar</button>
-        <button onClick={this.closeSidebar}>Close Sidebar</button>
         <div className={`sidebar ${isOpen ? "open" : ""}`}>
           <div id="navSessionInfo" className={styles.verticalText}>
             {/* ${mySessionId}  */}
@@ -68,25 +66,26 @@ export default class ToolbarComponent extends Component {
           </div>
 
           {isOpen &&
-            words.map((word, i) => (
-              <button
-                key={i}
-                onClick={() => {
-                  this.sendSignal({ word: word.data }, "word");
-                }}
-              >
-                {word.name}
-              </button>
-            ))}
-          {isOpen &&
             pages.map((page, i) => (
               <button
                 key={i}
                 onClick={() => {
-                  this.sendSignal({ page: page.path }, "page");
+                  if (window.confirm(`${page.name} 페이지로 이동하시겠습니까?`))
+                    this.sendSignal({ page: page.path }, "page");
                 }}
               >
                 {page.name}
+              </button>
+            ))}
+          {isOpen &&
+            words.map((word, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  this.sendSignal({ word: word }, "word");
+                }}
+              >
+                {word.word}
               </button>
             ))}
 
