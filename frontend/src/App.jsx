@@ -13,6 +13,9 @@ import Logout from "./pages/Common/logout";
 // Government
 import GovernmentMainPage from "./pages/Government/MainPage";
 import StudyClassPage from "./pages/Government/ClassPage";
+import StudyStudentPage from "./pages/Government/StudentPage";
+import StudyTeacherPage from "./pages/Government/TeacherPage";
+import GovernmentLogin from "./pages/Government/GovernmentLogin";
 
 //Student
 // Student_혼자학습
@@ -121,11 +124,12 @@ function App() {
           <Route path="read-hint" element={<LiveReadWordHint />} />
         </Route>
         {/* 지자체 */}
-        {/* <Route path="governmentmain" element={<GovernmentMainPage />} />
-        <Route
-          path="governmentmain/studyclasspage"
-          element={<StudyClassPage />}
-        /> */}
+        <Route path="government-login" element={<GovernmentLogin />} />
+        <Route path="governmentmain" element={<GovernmentMainPage />} />
+        <Route path="governmentmain/studyclasspage" element={<StudyClassPage />} />
+        <Route path="governmentmain/studystudentpage" element={<StudyStudentPage />} />
+        <Route path="governmentmain/studyteacherpage" element={<StudyTeacherPage />} />
+
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}

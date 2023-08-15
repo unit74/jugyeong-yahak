@@ -41,60 +41,50 @@ export default function DictaionFeedback() {
     });
   };
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if (course === "writing" && wordIndex < 4) {
-  //       ttsMaker("다른 단어를 배워볼까요?", 0);
-  //       setTimeout(() => {
-  //         dispatch(setWordIndex());
-  //         navigate("/review-word");
-  //       }, 3500);
-  //     } else if (course === "writing" && wordIndex === 4) {
-  //       ttsMaker("이제 일기를 써볼까요?", 0);
-  //       setTimeout(() => {
-  //         navigate("/diary-main");
-  //       }, 3500);
-  //     }
-  //   }, 5000); // 5초
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  //     // 언마운트 될 시 타이머 클리어
-  //     return () => {
-  //       clearTimeout(timer);
-  //     };
-  //   }, [course, navigate]);
+  const makeRequest = async () => {
+    let text = "위의 단어를 따라 써봐요!";
+    ttsMaker(text, 0);
+    delay(text.length * 250);
+  };
 
-    return (
-      <div className={styles.main}>
-        <div className={styles.square}>
-          {course === "writing" && (
-            <>
-              <div className={styles.canvasContainer}>
-                <h1 className={styles.centeredHeading}>{correctAnswer}</h1>
-                <CanvasDraw
-                  hideInterface
-                  className={styles.canvasDraw} // Apply the new style class
-                  ref={canvasRef}
-                  saveData={loadedCanvasData}
-                  brushRadius={5}
-                  lazyRadius={12}
-                  canvasWidth={1200}
-                  canvasHeight={800}
-                />
-                <div className={styles.buttonContainer}>
-                  <button className={styles.clearButton} onClick={handleClear}>
-                    모두 지우기
-                  </button>
-                  <button className={styles.nextButton} onClick={nextPage}>
-                    다 적었어요
-                  </button>
-                  {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
-                </div>
+  useEffect(() => {
+    makeRequest();
+  }, []);
+
+  return (
+    <div className={styles.main}>
+      <div className={styles.square}>
+        {course === "writing" && (
+          <>
+            <div className={styles.canvasContainer}>
+              <h1 className={styles.centeredHeading}>{correctAnswer}</h1>
+              <CanvasDraw
+                hideInterface
+                className={styles.canvasDraw} // Apply the new style class
+                ref={canvasRef}
+                saveData={loadedCanvasData}
+                brushRadius={5}
+                lazyRadius={12}
+                canvasWidth={1200}
+                canvasHeight={800}
+              />
+              <div className={styles.buttonContainer}>
+                <button className={styles.clearButton} onClick={handleClear}>
+                  모두 지우기
+                </button>
+                <button className={styles.nextButton} onClick={nextPage}>
+                  다 적었어요
+                </button>
+                {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
               </div>
-              {msg && <TTSsentence message={msg} />}
-            </>
-          )}
-          {/* </div> */}
-        </div>
+            </div>
+            {msg && <TTSsentence message={msg} />}
+          </>
+        )}
+        {/* </div> */}
       </div>
-    );
-  }
+    </div>
+  );
+}
