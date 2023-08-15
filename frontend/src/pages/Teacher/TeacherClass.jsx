@@ -54,7 +54,7 @@ const TeacherClass = () => {
           <b className={styles.bb}>✔ 수업하실 반을 선택해주세요</b>
           <div className={styles.classesContainer}>
             {classes.map((clazz, i) => (
-              <button className={styles.btn} onClick={() => handleClickClass(clazz)}>
+              <button key={i} className={styles.btn} onClick={() => handleClickClass(clazz)}>
                 {clazz.className}
               </button>
             ))}
