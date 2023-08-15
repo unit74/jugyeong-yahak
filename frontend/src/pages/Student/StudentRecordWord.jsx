@@ -4,7 +4,7 @@ import styles from "./StudentRecordWord.module.css";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { useDispatch, useSelector } from "react-redux";
 import { Configuration, OpenAIApi } from "openai";
-
+import listenImg from "../../assets/images/listening_man.png";
 import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentRecordWord() {
@@ -18,6 +18,7 @@ export default function StudentRecordWord() {
   // TTS 관련
   const [count, setCount] = useState(0);
   const [msg, setMsg] = useState(null);
+  const [jamoAnswer, setJamoAnswer] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -54,6 +55,98 @@ export default function StudentRecordWord() {
   //   await delay(text.length * 250);
   // };
 
+  function getConstantVowel(kor) {
+    const f = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    const s = [
+      "ㅏ",
+      "ㅐ",
+      "ㅑ",
+      "ㅒ",
+      "ㅓ",
+      "ㅔ",
+      "ㅕ",
+      "ㅖ",
+      "ㅗ",
+      "ㅘ",
+      "ㅙ",
+      "ㅚ",
+      "ㅛ",
+      "ㅜ",
+      "ㅝ",
+      "ㅞ",
+      "ㅟ",
+      "ㅠ",
+      "ㅡ",
+      "ㅢ",
+      "ㅣ",
+    ];
+    const t = [
+      "",
+      "ㄱ",
+      "ㄲ",
+      "ㄳ",
+      "ㄴ",
+      "ㄵ",
+      "ㄶ",
+      "ㄷ",
+      "ㄹ",
+      "ㄺ",
+      "ㄻ",
+      "ㄼ",
+      "ㄽ",
+      "ㄾ",
+      "ㄿ",
+      "ㅀ",
+      "ㅁ",
+      "ㅂ",
+      "ㅄ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+
+    const ga = 44032;
+    let uni = kor.charCodeAt(0);
+
+    uni = uni - ga;
+
+    let fn = parseInt(uni / 588);
+    let sn = parseInt((uni - fn * 588) / 28);
+    let tn = parseInt(uni % 28);
+
+    return {
+      f: f[fn],
+      s: s[sn],
+      t: t[tn],
+    };
+  }
+
   useEffect(() => {
     async function makeRequest(data) {
       await delay(1000);
@@ -74,59 +167,62 @@ export default function StudentRecordWord() {
         navigate("/good-feedback", { state: { course: "reading" } });
       } else {
         if (count == 1) {
-          let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`
-            ttsMaker(text, 0);
-            await delay(text.length * 250);
+          let answer = "";
+
+          for (let char of wordsList[wordIndex].word) {
+            let jamo = getConstantVowel(char); // 각 문자 출력
+            answer += jamo.f + ", " + jamo.s;
+            if (jamo.t !== "") {
+              answer += ", " + jamo.t;
+            }
+            answer += "가 결합되어 " + char + ", ";
+          }
+
+          answer = answer.substr(0, answer.length - 2);
+          answer += " 합쳐서 " + wordsList[wordIndex].word + "로 발음됩니다.";
+          setJamoAnswer(answer);
+
+          // let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`;
+          ttsMaker(answer, 0);
+          await delay(answer.length * 250);
         }
         setCount(count + 1);
       }
     }
 
-    if (count == 0) {
+    if (count === 0) {
       makeRequest("단어를 읽어주세요!!");
       console.log(transcript);
-    } else if (count == 1) {
+    } else if (count === 1) {
       work(transcript);
       // console.log(transcript);
-    } else if (count == 2) {
+    } else if (count === 2) {
+      setJamoAnswer(null);
       makeRequest("다시 단어를 읽어주세요!!");
-    } else if (count == 3) {
+    } else if (count === 3) {
       work(transcript);
-    } else if (count == 4) {
+    } else if (count === 4) {
       makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
     } else {
-      navigate("/good-feedback", { state: { course: "reading" } });
+      // navigate("/good-feedback", { state: { course: "reading" } });
     }
   }, [count]);
 
   const navigate = useNavigate();
-  console.log(wordsList[wordIndex])
+  console.log(wordsList[wordIndex]);
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          {/* <img
-            className={styles.wordimg}
-            src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
-            alt=""
-          /> */}
-
-          <div className={styles.text}>
-            <h1 className={styles.situationText}>
-              {wordsList.length > 0 && wordsList[wordIndex].word}
-            </h1>
+          <div className={styles.listenImg}>
+            {listening && <img src={listenImg} alt="listenImg" />}
           </div>
-          <div>
-            {/* {wordsList[wordIndex].word && (
-              <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
-            )} */}
-            {/* && 앞에 조건을 Redux에서 불러오는 걸로 해둬야 불러오기전에 TTS 실행을 안함 */}
+          <div className={styles.situationText}>
+            {wordsList.length > 0 && wordsList[wordIndex].word}
           </div>
-          <div className={styles.microphone}>
-            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
-            <p>{transcript}</p>
-            {msg && <TTSsentence message={msg} />}
-          </div>
+          <p className={styles.transcriptText}>{transcript}</p>
+          {msg && <TTSsentence message={msg} />}
+          <div>{jamoAnswer}</div>
         </div>
       </div>
     </div>

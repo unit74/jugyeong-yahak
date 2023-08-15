@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 import styles from "./ToolbarComponent.css";
 
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-
 import Mic from "@mui/icons-material/Mic";
 import MicOff from "@mui/icons-material/MicOff";
 import PowerSettingsNew from "@mui/icons-material/PowerSettingsNew";
@@ -18,6 +15,9 @@ export default class ToolbarComponent extends Component {
     this.micStatusChanged = this.micStatusChanged.bind(this);
     this.traceStatusChanged = this.traceStatusChanged.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
+    this.openSidebar = this.openSidebar.bind(this);
+    this.closeSidebar = this.closeSidebar.bind(this);
+    this.sendSignal = this.sendSignal.bind(this);
   }
 
   micStatusChanged() {
@@ -32,28 +32,67 @@ export default class ToolbarComponent extends Component {
     this.props.leaveSession();
   }
 
+  openSidebar() {
+    this.props.openSidebar();
+  }
+
+  closeSidebar() {
+    this.props.closeSidebar();
+  }
+
+  sendSignal(data, page) {
+    this.props.sendSignal(data, page);
+  }
+
   render() {
-    const mySessionId = this.props.sessionId;
+    const isOpen = this.props.isOpen;
     const clazz = this.props.clazz;
     const localUser = this.props.user;
     const trace = this.props.trace;
+    const words = this.props.words;
+    const pages = this.props.pages;
 
     return (
-      <AppBar className="toolbar" id="header">
-        <Toolbar className="toolbar">
-          <div id="navSessionInfo">
-            {this.props.sessionId && (
-              <div id="titleContent">
-                <span id="session-title" className={styles.sessiontt}>
-                  {mySessionId} - {clazz.className}
-                </span>
-              </div>
-            )}
+      <>
+        <button onClick={this.openSidebar}>Open Sidebar</button>
+        <button onClick={this.closeSidebar}>Close Sidebar</button>
+        <div className={`sidebar ${isOpen ? "open" : ""}`}>
+          <div id="navSessionInfo" className={styles.verticalText}>
+            {/* ${mySessionId}  */}
+            {this.props.sessionId &&
+              [...`${clazz.className}`].map((char, index) => (
+                <div key={index} className={styles.charContainer}>
+                  <span className={styles.character}>{char}</span>
+                </div>
+              ))}
           </div>
+
+          {isOpen &&
+            words.map((word, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  this.sendSignal({ word: word.data }, "word");
+                }}
+              >
+                {word.name}
+              </button>
+            ))}
+          {isOpen &&
+            pages.map((page, i) => (
+              <button
+                key={i}
+                onClick={() => {
+                  this.sendSignal({ page: page.path }, "page");
+                }}
+              >
+                {page.name}
+              </button>
+            ))}
 
           <div className="buttonsContent">
             <IconButton
-              color="inherit"
+              style={{ color: "#4070e9" }}
               className="navButton"
               id="navMicButton"
               onClick={this.micStatusChanged}
@@ -66,7 +105,7 @@ export default class ToolbarComponent extends Component {
             </IconButton>
 
             <IconButton
-              color="inherit"
+              style={{ color: "#4070e9" }}
               className="navButton"
               id="navMouseButton"
               onClick={this.traceStatusChanged}
@@ -75,7 +114,7 @@ export default class ToolbarComponent extends Component {
             </IconButton>
 
             <IconButton
-              color="secondary"
+              style={{ color: "rgb(255, 5, 5)" }}
               className="navButton"
               onClick={this.leaveSession}
               id="navLeaveButton"
@@ -83,8 +122,8 @@ export default class ToolbarComponent extends Component {
               <PowerSettingsNew />
             </IconButton>
           </div>
-        </Toolbar>
-      </AppBar>
+        </div>
+      </>
     );
   }
 }
