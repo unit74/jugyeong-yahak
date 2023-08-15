@@ -218,9 +218,9 @@ p {
 
 .goback {
   background-image: linear-gradient(to bottom, #3668eb, #6f97e7);
-  position: absolute;
-  top: 40vw;
-  left: 30px;
+  position: relative;
+  top: 90vw;
+  left: 0;
 
   /* Make it a perfect circle */
   width: 55px;
