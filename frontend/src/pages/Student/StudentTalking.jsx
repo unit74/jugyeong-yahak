@@ -190,7 +190,7 @@ export default function StudentTalking() {
           imageUrl: img,
         })
         .then(() => {
-          navigate("/diary", { state: { diaryEntry, img } });
+          // navigate("/diary", { state: { diaryEntry, img } });
         });
     }
 
