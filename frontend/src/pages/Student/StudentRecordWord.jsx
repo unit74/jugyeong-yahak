@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudentRecordWord.module.css";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import { useDispatch, useSelector } from "react-redux";
 import { Configuration, OpenAIApi } from "openai";
 import listenImg from "../../assets/images/listening_man.png";
 import TTSsentence from "../Common/TTSsentence";
+import CLOVA from "../Common/CLOVA";
 
 export default function StudentRecordWord() {
   // DB에 저장된 단어 가져오기
@@ -221,7 +224,7 @@ export default function StudentRecordWord() {
             {wordsList.length > 0 && wordsList[wordIndex].word}
           </div>
           <p className={styles.transcriptText}>{transcript}</p>
-          {msg && <TTSsentence message={msg} />}
+          {msg && <CLOVA message={msg} />}
           <div>{jamoAnswer}</div>
         </div>
       </div>

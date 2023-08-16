@@ -111,26 +111,22 @@ export default function StudentWordExplain() {
 
     return result;
   };
-  const thisWord = wordsList[wordIndex].word
+  const thisWord = wordsList[wordIndex].word;
   const separatedCharacters = renderSeparatedCharacters(thisWord);
-  
 
   return (
     <div className={styles.main}>
-       <div className={styles.square}>
-      <h1 className={styles.situationText}>{thisWord}</h1>
-      {separatedCharacters.map((char, index) => (
-        <div key={index}>
-         <p className={styles.wordComponent}> 
-          {char.chosung}  {char.jungsung}  {char.jongsung}
-          </p>
-         <p className={styles.wordComponent}> 
-         {char.original}
-          </p>
-        </div>
-      ))}
+      <div className={styles.square}>
+        <h1 className={styles.situationText}>{thisWord}</h1>
+        {separatedCharacters.map((char, index) => (
+          <div key={index} className={styles.maging}>
+            <p className={styles.wordComponent}>
+              {char.chosung} {char.jungsung} {char.jongsung}
+            </p>
+            <p className={styles.wordComponent}>{char.original}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
-
