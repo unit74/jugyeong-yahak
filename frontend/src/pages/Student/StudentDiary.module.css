@@ -41,7 +41,7 @@
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
-  font-size: calc(2.5vw + 1.5vh);
+  font-size: calc(1vw + 1vh);
   line-height: 2;
   width: 100%;
   white-space: pre-wrap;
