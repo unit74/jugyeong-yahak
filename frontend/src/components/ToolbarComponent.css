@@ -33,21 +33,24 @@
 }
 
 .sidebar.open {
-  width: 300px;
-}
-
-.verticalText {
-  display: flex;
-  flex-direction: column;
+  width: 150px;
 }
 
 .charContainer {
   display: flex;
   align-items: center;
-  height: 2rem;
+  width: 2rem; /* 추가 */
+  height: auto; /* 이 부분 수정 */
 }
 
-.character {
-  writing-mode: vertical-lr;
-  text-orientation: mixed;
+.nav_Button {
+  color: rgb(0, 0, 0);
+  /* background: linear-gradient(to bottom, #4070e9, #88a7e3); */
+  transition: color 0.3s, background 0.3s;
+  white-space: nowrap;
+}
+
+.nav_Button:hover {
+  color: rgb(255, 255, 255);
+  background: linear-gradient(to bottom, #4070e9, #88a7e3);
 }
