@@ -678,7 +678,7 @@ class OpenViduSession extends Component {
       <div
         className={containerClass}
         id="container"
-        style={{ overflow: "hidden" }}
+        // style={{ overflow: "hidden" }}
       >
         <ToolbarComponent
           sessionId={mySessionId}
@@ -715,19 +715,24 @@ class OpenViduSession extends Component {
             </OpenViduSessionContext.Provider>
           </div>
           <div className={styles.contentRight}>
-            <div className={styles.video}>
+            <div
+              className={styles.video}
+              style={{ display: "flex", gap: "20px" }}
+            >
               {localUser !== undefined &&
                 localUser.getStreamManager() !== undefined && (
                   <div
                     style={{
                       display: "inline-block",
-                      width: "300px",
-                      height: "300px",
+                      width: "100px",
+                      height: "100px",
                       position: "relative",
+                      margin: "30px",
+                      paddingTop: "10%",
                     }}
                     id="localUser"
                   >
-                    <div>본인</div>
+                    {/* <div>본인</div> */}
                     <StreamComponent user={localUser} />
                   </div>
                 )}
@@ -740,21 +745,23 @@ class OpenViduSession extends Component {
                       height: "50%",
                       botton: "-10px",
                       position: "relative",
+                      margin: "30px",
                     }}
                     id="mainStreamUser"
                   >
-                    <div>포커스 중인 사람</div>
+                    {/* <div>포커스 중인 사람</div> */}
                     <StreamComponent user={mainStreamUser} />
                   </div>
                 )}
-              {this.state.subscribers.map((sub, i) => (
+              {this.state.subscribers.slice(0, 6).map((sub, i) => (
                 <div
                   key={i}
                   style={{
                     display: "inline-block",
-                    width: "300px",
-                    height: "300px",
+                    width: "100px",
+                    height: "100px",
                     position: "relative",
+                    margin: "30px",
                   }}
                   id="remoteUsers"
                 >
