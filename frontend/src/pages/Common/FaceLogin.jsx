@@ -9,11 +9,14 @@ import "@tensorflow/tfjs-backend-webgl";
 import * as faceDetection from "@tensorflow-models/face-detection";
 import "../../App.css";
 import "./FaceLogin.css";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 export default function FaceLogin() {
   const [fade, setFade] = useState(false);
   const [msg, setMsg] = useState(null);
   const [onTarget, setOnTarget] = useState(false);
+
+  const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
 
   const navigate = useNavigate();
 
@@ -174,6 +177,27 @@ export default function FaceLogin() {
 
           localStorage.setItem("userInfo", JSON.stringify(response.data.data.info)); // userInfo 저장
           localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
+
+          const eventSourceInitDict = {
+            heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
+          };
+
+          const sse = new EventSourcePolyfill(
+            `${BASE_URL_SSE}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
+            eventSourceInitDict
+          );
+
+          sse.addEventListener("connect", (e) => {
+            // connect라는 이벤트를 받았을 때, connect data 출력
+            const { data: receivedConnectData } = e;
+
+            console.log("Connected! ", receivedConnectData);
+          });
+
+          sse.addEventListener("page", () => {
+            console.log("navigate");
+            navigate("/student-live");
+          });
 
           navigate(role === "ROLE_STUDENT" ? "/" : "/teacher-main");
         }, 1000); // fadeout 후 이동

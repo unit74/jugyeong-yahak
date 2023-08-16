@@ -1,24 +1,40 @@
 import React, { useState } from "react";
 import styles from "./TeacherHeader.module.css";
+import { useNavigate } from "react-router-dom";
 
-// 로그인 사용자 이름 저장
 const TeacherHeader = () => {
-  // const [loggedinUser] = useState("김나연");
-
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSidebarToggle = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const logoutClick = () => {
+    navigate("/logout");
+  };
 
   return (
-    <header className={styles.header}>
-      {/* 로고 자리 */}
-      <div className={styles.left}>
-        <span>주경야학</span>
+    <>
+      {/* 사이트바 버튼 */}
+      <div className={styles.sidebarToggle} onClick={handleSidebarToggle}>
+        <span className={styles.sidebarToggleIcon}>
+          {isSidebarOpen ? "◀" : "▶"}
+        </span>
       </div>
-      <div className={styles.right}>
-        <b>{`${userInfo.name} 봉사자님`}</b>
-        {/* button에 다시 로그인 하는 url로 연결할 것 */}
-        <button className={styles.logout}>Logout</button>
-      </div>
-    </header>
+
+      {/* 사이트바 */}
+      <aside
+        className={`${styles.sidebar} ${isSidebarOpen ? styles.open : ""}`}
+      >
+        <span className={styles.logo}>주경야학</span>
+        <b className={styles.username}>{`${userInfo.name} 봉사자님`}</b>
+        <button className={styles.logout} onClick={logoutClick}>
+          Logout
+        </button>
+      </aside>
+    </>
   );
 };
 
