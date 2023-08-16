@@ -28,3 +28,24 @@ h1 {
   margin-left: 3%;
   font-family: "Kimjungchul";
 }
+
+.button {
+  font-family: "Kimjungchul";
+  font-size: calc(1vw + 1vh); /* 반응형 */
+  border-radius: 20%;
+  padding: 15px 25px;
+  width: 15%;
+  white-space: nowrap;
+  /* margin: 10px; */
+  justify-content: center;
+  align-items: center;
+  color: black;
+  transition: transform 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
+  color: white;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-5px);
+}
