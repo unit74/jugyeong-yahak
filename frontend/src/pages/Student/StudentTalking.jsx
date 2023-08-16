@@ -51,7 +51,7 @@ export default function StudentTalking() {
     }
 
     if (count === 0) {
-      makeRequest("오늘 하루는 어떠셨나요?");
+      makeRequest("오늘은 무엇을 하셨나요?");
     } else if (count === 1) {
       helpGpt(transcript);
     } else if (count === 2) {

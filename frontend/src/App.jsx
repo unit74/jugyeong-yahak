@@ -28,7 +28,7 @@ import StudentSituation from "./pages/Student/StudentSituation";
 import WordsListComponent from "./pages/Student/WordsListComponent";
 import StudentReviewWord from "./pages/Student/StudentReviewWord";
 
-import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
+// import StudentSpeakingVideo from "./pages/Student/StudentSpeakingVideo";
 import StudentReadingMain from "./pages/Student/StudentReadingMain";
 import StudentWordExplain from "./pages/Student/StudentWordExplain";
 import StudentRecordWord from "./pages/Student/StudentRecordWord";
@@ -98,7 +98,7 @@ function App() {
         <Route path="/diary-list" element={<StudentDiaryList />} />
         <Route path="/situation" element={<StudentSituation />} />
         <Route path="/words-list" element={<WordsListComponent />} />
-        <Route path="/speaking-video" element={<StudentSpeakingVideo />} />
+        {/* <Route path="/speaking-video" element={<StudentSpeakingVideo />} /> */}
 
         <Route path="/reading-main" element={<StudentReadingMain />} />
         <Route path="/word-explain" element={<StudentWordExplain />} />

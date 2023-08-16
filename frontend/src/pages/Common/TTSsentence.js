@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Howl, Howler } from "howler";
 
-export default function CLOVA({ message }) {
+export default function CLOVA({ reapeat, message }) {
   // 이놈이 제일 중요했네......
   // navigator.mediaDevices.getUserMedia 요청을 처리하는 useEffect
   useEffect(() => {
