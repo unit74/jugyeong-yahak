@@ -1,7 +1,8 @@
 import "./App.css";
-import React from "react";
-import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import { Provider } from "react-redux";
 import store from "./store"; // Redux Store를 import 해야 함
 
 // pages
@@ -35,8 +36,6 @@ import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
 import DictaionFeedback from "./pages/Student/DictationFeedback";
-import WritingCamTest from "./pages/Student/WritingCamTest";
-import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
 
 import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
 import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
@@ -80,7 +79,38 @@ import LiveStudentChoseongQuiz from "./pages/Live/LiveStudentChoseongQuiz";
 
 import FaceLogin from "./pages/Common/FaceLogin";
 
+const BASE_URL = "https://i9e206.p.ssafy.io";
+
 function App() {
+  const [userInfo, setUserInfo] = useState(localStorage.getItem("userInfo"));
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (userInfo && userInfo.role === "ROLE_STUDENT") handleConnect();
+    return () => {};
+  }, [userInfo]);
+
+  const handleConnect = () => {
+    const eventSourceInitDict = {
+      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
+    };
+
+    const sse = new EventSourcePolyfill(
+      `${BASE_URL}/sse/v1/subscribe?streamId=${userInfo.id}&classId=${userInfo.classId}`,
+      eventSourceInitDict
+    );
+
+    sse.addEventListener("connect", (e) => {
+      const { data: receivedConnectData } = e;
+
+      console.log("Connected! ", receivedConnectData);
+    });
+
+    sse.addEventListener("page", (e) => {
+      navigate("/student-live");
+    });
+  };
+
   return (
     <Provider store={store}>
       <Routes>
@@ -163,7 +193,7 @@ function App() {
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
-        <Route path="/facetest" element={<FaceLogin />} />
+        <Route path="/facetest" element={<FaceLogin setUserInfo={setUserInfo} />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/karlo-test" element={<KarloTest />} />
         <Route path="/sse-test" element={<SSETest />} />
