@@ -44,6 +44,7 @@
 }
 
 .nav_Button {
+  font-family: "Kimjungchul";
   color: rgb(0, 0, 0);
   /* background: linear-gradient(to bottom, #4070e9, #88a7e3); */
   transition: color 0.3s, background 0.3s;
@@ -53,4 +54,21 @@
 .nav_Button:hover {
   color: rgb(255, 255, 255);
   background: linear-gradient(to bottom, #4070e9, #88a7e3);
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-5px);
+}
+
+.word_btn {
+  font-family: "Kimjungchul";
+  color: rgb(0, 0, 0);
+  /* background: linear-gradient(to bottom, #4070e9, #88a7e3); */
+  transition: color 0.3s, background 0.3s;
+  white-space: nowrap;
+}
+
+.word_btn:hover {
+  background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
+  color: white;
+  transition: transform 0.2s ease-in-out;
+  transform: translateY(-5px);
 }
