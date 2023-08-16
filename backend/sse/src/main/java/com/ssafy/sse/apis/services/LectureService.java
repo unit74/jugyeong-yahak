@@ -28,23 +28,14 @@ public class LectureService {
     public SseEmitter subscribe(Long classId, String streamId) {
         SseEmitter emitter = createEmitter(classId, streamId);
 
-        sendToClients(classId, streamId, "connect", "EventStream Created. [class=" + classId + "]");
+        sendToClients(classId, "connect", "EventStream Created. [class=" + classId + "]");
         return emitter;
     }
-
-    public void controlMic(Long classId, String streamId, Object event) {
-        sendToClient(classId, streamId, "mic", event);
+    public void convertPage(Long classId, Object event) {
+        sendToClients(classId,"page", event);
     }
 
-    public void moveMousePointer(Long classId, String streamId, Object event) {
-        sendToClients(classId, streamId, "mouse", event);
-    }
-
-    public void convertPage(Long classId, String streamId, Object event) {
-        sendToClients(classId, streamId, "page", event);
-    }
-
-    private void sendToClients(Long classId, String streamId, String name, Object data) {
+    private void sendToClients(Long classId, String name, Object data) {
         Map<String, SseEmitter> emitters = emitterRepository.get(classId);
         emitters.forEach((id, emitter) -> {
             try {
@@ -56,17 +47,5 @@ public class LectureService {
                 emitter.completeWithError(exception);
             }
         });
-    }
-
-    private void sendToClient(Long classId, String streamId, String name, Object data) {
-        SseEmitter emitter = emitterRepository.get(classId, streamId);
-        try {
-            emitter.send(SseEmitter.event()
-                                   .name(name)
-                                   .data(data));
-        } catch (IOException exception) {
-            emitterRepository.deleteById(classId, streamId);
-            emitter.completeWithError(exception);
-        }
     }
 }
