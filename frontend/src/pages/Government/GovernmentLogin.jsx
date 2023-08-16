@@ -9,8 +9,8 @@ export default function GovernmentLogin() {
   const Login = async () => {
     await axios
       .post("https://i9e206.p.ssafy.io/api/v1/auth/governments/login", {
-        identification: "string",
-        password: "string",
+        identification: "E206",
+        password: "E206",
       })
       .then((response) => {
         localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
