@@ -1,8 +1,6 @@
 package com.ssafy.http.apis.lecture.controllers;
 
-import com.ssafy.http.apis.lecture.requests.ControlMicRequest;
 import com.ssafy.http.apis.lecture.requests.ConvertPageRequest;
-import com.ssafy.http.apis.lecture.requests.MoveMouseRequest;
 import com.ssafy.http.apis.lecture.services.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,16 +18,6 @@ public class LecturePrivateController {
     @PostMapping("/convert/page")
     public void convertPage(@RequestBody ConvertPageRequest convertPageRequest) {
         lectureService.convertPage(convertPageRequest);
-    }
-
-    @PostMapping("/mouse/pointer")
-    public void moveMouseCursor(@RequestBody MoveMouseRequest moveMouseRequest) {
-        lectureService.moveMousePointer(moveMouseRequest);
-    }
-
-    @PostMapping("/mic/control")
-    public void controlMic(@RequestBody ControlMicRequest controlMicRequest) {
-        lectureService.controlMic(controlMicRequest);
     }
 
 }
