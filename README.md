@@ -65,9 +65,10 @@
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
 
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![Badge](https://img.shields.io/badge/TeachableMacine-lightblue.svg?style=for-the-badge)
+![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white)
 
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 
@@ -77,13 +78,12 @@
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 ![Badge](https://img.shields.io/badge/Openvidu-lightgreen.svg?style=for-the-badge)
 
 ![SpringBoot](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
 ![Swagger](https://img.shields.io/badge/-Swagger-%23Clojure?style=for-the-badge&logo=swagger&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
-
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
@@ -143,13 +143,11 @@
 ## 👥 팀원 소개
 <a name="developers"></a>
 
-|  이름     | 역할          | GitHub|
-| -------- | ------------- | ----- |
-| **이동규**|🐱‍👤 백엔드,팀장 | url   |
-| **김정희**|🧙‍♂️ 백엔드     | url    |
-| **하성호**|🕵️‍♀️ 백엔드     | url    |
-| **김나연**|🤖 프론트     | url    |
-| **김예진**|🧚‍♀️ 프론트     | url    |
-| **김현빈**|🐱‍🚀 프론트     | url    |
+|   **Name**   |                이동규                 |                김정희                |                  하성호                   |               김나연                |                 김예진                  |               김현빈                |
+| :----------: | :-----------------------------------: | :----------------------------------: | :---------------------------------------: | :---------------------------------: | :-------------------------------------: | :---------------------------------: |
+| **Profile**  |  ![image](./contents/forReadme/profiles/이동규.png)   |  ![image](./contents/forReadme/profiles/김정희.png)  |    ![image](./contents/forReadme/profiles/하성호.png)     | ![image](./contents/forReadme/profiles/김나연.png)  |   ![image](./contents/forReadme/profiles/김예진.png)    | ![image](./contents/forReadme/profiles/김현빈.png)  |
+| **Position** |          Backend   <br/> Leader     |          Backend           |           Backend           |        Frontend         |            Frontend             |         Frontend         |
+|   **Git**    | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) |
+
 
 <p align="right"><a href="#tableContents">목차로 이동</a></p>
