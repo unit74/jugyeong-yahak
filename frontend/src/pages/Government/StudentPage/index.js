@@ -118,18 +118,22 @@ const StudyClassPage = () => {
 
   const applyRegist = async () => {
     const formData = new FormData();
+    console.log(img);
 
     formData.append("faceImage", img);
-    formData.append("studentRegisterRequest", {
-      address: address,
-      classId: classId,
-      firstResponder: firstResponder,
-      gender: gender,
-      name: name,
-      phone: phone,
-      statusCode: statusCode,
-      tabletNo: tabletNo,
-    });
+    formData.append(
+      "studentRegisterRequest",
+      JSON.stringify({
+        address: address,
+        classId: classId,
+        firstResponder: firstResponder,
+        gender: gender,
+        name: name,
+        phone: phone,
+        statusCode: statusCode,
+        tabletNo: tabletNo,
+      })
+    );
 
     // formData.append(
     //   "studentRegisterRequest",
@@ -153,7 +157,9 @@ const StudyClassPage = () => {
     // );
 
     await axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, formData)
+      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(() => {
         modifyChange();
         setRegist(false);
@@ -320,8 +326,11 @@ const StudyClassPage = () => {
                       id="face"
                       name="face"
                       accept="image/*"
-                      value={img}
-                      onChange={(event) => setImg(event.target.value)}
+                      // value={img}
+                      onChange={(event) => {
+                        // console.log(event.target.files[0]);
+                        setImg(event.target.files[0]);
+                      }}
                     />
                   </div>
                 )}
