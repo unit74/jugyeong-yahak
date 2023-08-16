@@ -143,9 +143,9 @@
 ## 👥 팀원 소개
 <a name="developers"></a>
 
-|   **Name**   |                이동규                 |                김정희                |                  하성호                   |               김나연                |                 김예진                  |               김현빈                |
-| :----------: | :-----------------------------------: | :----------------------------------: | :---------------------------------------: | :---------------------------------: | :-------------------------------------: | :---------------------------------: |
-| **Profile**  |  ![image](./contents/forReadme/profiles/이동규.png)   |  ![image](./contents/forReadme/profiles/김정희.png)  |    ![image](./contents/forReadme/profiles/하성호.png)     | ![image](./contents/forReadme/profiles/김나연.png)  |   ![image](./contents/forReadme/profiles/김예진.png)    | ![image](./contents/forReadme/profiles/김현빈.png)  |
+| **Name** | 이동규 | 김정희 | 하성호 | 김나연 | 김예진 | 김현빈 |
+| :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: |
+| **Profile**  | ![image](./contents/forReadme/profiles/이동규.png) | ![image](./contents/forReadme/profiles/김정희.png)  |    ![image](./contents/forReadme/profiles/하성호.png)     | ![image](./contents/forReadme/profiles/김나연.png)  |   ![image](./contents/forReadme/profiles/김예진.png)    | ![image](./contents/forReadme/profiles/김현빈.png)  |
 | **Position** |          Backend   <br/> Leader     |          Backend           |           Backend           |        Frontend         |            Frontend             |         Frontend         |
 |   **Git**    | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) |
 
