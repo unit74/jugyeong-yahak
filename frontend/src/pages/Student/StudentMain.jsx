@@ -25,6 +25,9 @@ export default function StudentMain() {
     });
   };
 
+  // let lectureTime = null;
+  // let lectureTimes = lectureTime && lectureTime.split(",");
+
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
@@ -34,6 +37,7 @@ export default function StudentMain() {
       let text = "";
 
       if (userInfo !== null) {
+        console.log(userInfo.gender);
         let gender = userInfo.gender === 0 ? "어머님" : "아버님";
         console.log(userInfo.gender);
         console.log(gender);
@@ -49,7 +53,7 @@ export default function StudentMain() {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      text = "복습을 진행할려면 아래의 빨간 버튼을 누르세요.";
+      text = "복습을 진행하시려면 아래의 빨간 버튼을 누르세요.";
 
       ttsMaker(text, 0);
     }
@@ -79,6 +83,27 @@ export default function StudentMain() {
     }, 1000); // fadeout 후 이동
   }, [navigate]);
 
+  // 현재 시간
+  const currentTime = new Date();
+  const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+
+  // 강의 시작 시간
+  // const lectureTime = userInfo && userInfo.lectureTime;
+  const lectureTime = "10:00:00";
+  const lectureTimeParts = userInfo && lectureTime.split(":");
+  const lectureStartMinutes =
+    userInfo && parseInt(lectureTimeParts[0], 10) * 60 + parseInt(lectureTimeParts[1], 10);
+
+  // 강의 시작 30분 전의 시간
+  const lecturePreStartMinutes = lectureStartMinutes - 30;
+
+  // 강의 종료 1시간 후의 시간
+  const lectureEndMinutes = lectureStartMinutes + 60;
+
+  // 조건 확인
+  const showEnterClass =
+    currentMinutes >= lecturePreStartMinutes && currentMinutes < lectureEndMinutes;
+
   return (
     <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
@@ -89,25 +114,25 @@ export default function StudentMain() {
           </b>
           {msg && <TTSsentence message={msg} />}
         </div>
-
-        <div className={styles.time}>
-          <div className={styles.timeImg}>
-            <img className={styles.responsive_image} src={reviewImg} alt="reviewImg" />
+        {showEnterClass ? (
+          <div className={styles.time}>
+            <div className={styles.timeImg}>
+              <img className={styles.responsive_image} src={liveImg} alt="liveImg" />
+            </div>
+            <button className={styles.clearButton} onClick={navigateToLive}>
+              교실에 들어가기
+            </button>
           </div>
-          <button className={styles.clearButton} onClick={navigateToRecordDictation}>
-            혼자 공부하기
-          </button>
-        </div>
-
-        <div className={styles.time}>
-          <div className={styles.timeImg}>
-            <img className={styles.responsive_image} src={liveImg} alt="liveImg" />
+        ) : (
+          <div className={styles.time}>
+            <div className={styles.timeImg}>
+              <img className={styles.responsive_image} src={reviewImg} alt="reviewImg" />
+            </div>
+            <button className={styles.clearButton} onClick={navigateToRecordDictation}>
+              혼자 공부하기
+            </button>
           </div>
-          <button className={styles.clearButton} onClick={navigateToLive}>
-            교실에 들어가기
-          </button>
-        </div>
-
+        )}
         <div className={styles.time}>
           <div className={styles.timeImg}>
             <img className={styles.responsive_image} src={diaryImg} alt="diaryImg" />
