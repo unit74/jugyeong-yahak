@@ -68,6 +68,13 @@ import LiveCurriculum from "./pages/Live/LiveCurriculum";
 import LiveJournal from "./pages/Live/LiveJournal";
 import LiveReadWord from "./pages/Live/LiveReadWord";
 import LiveReadWordHint from "./pages/Live/LiveReadWordHint";
+import LiveWriteWord from "./pages/Live/LiveWriteWord";
+import LiveWirteWordHint from "./pages/Live/LiveWirteWordHint";
+import LiveTeacherGuessQuiz from "./pages/Live/LiveTeacherGuessQuiz";
+import LiveTeacherChoseongQuiz from "./pages/Live/LiveTeacherChoseongQuiz";
+import LiveGood from "./pages/Live/LiveGood";
+import LiveBad from "./pages/Live/LiveBad";
+import LiveEnd from "./pages/Live/LiveEnd";
 
 import FaceLogin from "./pages/Common/FaceLogin";
 
@@ -101,10 +108,7 @@ function App() {
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route
-          path="/dictation-question"
-          element={<StudentDictationQuestion />}
-        />
+        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -119,10 +123,7 @@ function App() {
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
-        <Route
-          path="/teacher-studentprogress"
-          element={<TeacherStudentProgress />}
-        />
+        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         {/* 교사 실시간 강의 */}
         <Route path="/teacher-live" element={<TeacherLive />}>
           <Route path="theme" element={<LiveTheme />} />
@@ -130,22 +131,20 @@ function App() {
           <Route path="journal" element={<LiveJournal />} />
           <Route path="read" element={<LiveReadWord />} />
           <Route path="read-hint" element={<LiveReadWordHint />} />
+          <Route path="write" element={<LiveWriteWord />} />
+          <Route path="write-hint" element={<LiveWirteWordHint />} />
+          <Route path="guess" element={<LiveTeacherGuessQuiz />} />
+          <Route path="choseong" element={<LiveTeacherChoseongQuiz />} />
+          <Route path="good" element={<LiveGood />} />
+          <Route path="bad" element={<LiveBad />} />
+          <Route path="end" element={<LiveEnd />} />
         </Route>
         {/* 지자체 */}
         <Route path="government-login" element={<GovernmentLogin />} />
         <Route path="governmentmain" element={<GovernmentMainPage />} />
-        <Route
-          path="governmentmain/studyclasspage"
-          element={<StudyClassPage />}
-        />
-        <Route
-          path="governmentmain/studystudentpage"
-          element={<StudyStudentPage />}
-        />
-        <Route
-          path="governmentmain/studyteacherpage"
-          element={<StudyTeacherPage />}
-        />
+        <Route path="governmentmain/studyclasspage" element={<StudyClassPage />} />
+        <Route path="governmentmain/studystudentpage" element={<StudyStudentPage />} />
+        <Route path="governmentmain/studyteacherpage" element={<StudyTeacherPage />} />
 
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />

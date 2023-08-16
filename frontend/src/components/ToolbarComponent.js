@@ -51,6 +51,7 @@ export default class ToolbarComponent extends Component {
     const trace = this.props.trace;
     const words = this.props.words;
     const pages = this.props.pages;
+    const quizAction = this.props.quizAction;
 
     return (
       <>
@@ -77,6 +78,7 @@ export default class ToolbarComponent extends Component {
                 {page.name}
               </button>
             ))}
+          {isOpen && pages && <hr />}
           {isOpen &&
             words.map((word, i) => (
               <button
@@ -88,6 +90,16 @@ export default class ToolbarComponent extends Component {
                 {word.word}
               </button>
             ))}
+          {isOpen && words && <hr />}
+          {isOpen && quizAction && (
+            <button
+              onClick={() => {
+                this.sendSignal({ quiz: true }, "quiz");
+              }}
+            >
+              퀴즈 시작
+            </button>
+          )}
 
           <div className="buttonsContent">
             <IconButton
