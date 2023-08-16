@@ -26,7 +26,10 @@ export default function StudentDiary() {
 
   // 온점일 때 줄 띄우기
 
-  const formattedText = (diaryEntry && diaryEntry && diaryEntry.split(". ").join(".\n")) || "";
+  const formattedText =
+    (diaryEntry &&
+      diaryEntry.split(". ").join(".\n").split("! ").join("!\n").split("? ").join("?\n")) ||
+    "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
   //   navigate("/good-feedback", { state: { course: "diary" } });
@@ -76,7 +79,7 @@ export default function StudentDiary() {
       ttsMaker(data[3], 0);
       await delay(data[3].length * 500);
 
-      navigate("/good-feedback", { state: { course: "diary" } });
+      // navigate("/good-feedback", { state: { course: "diary" } });
     }
 
     if (data[0] !== "") {
@@ -130,9 +133,11 @@ export default function StudentDiary() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
-          <b className={styles.diarytext}>{formattedText}</b>
+          <div>
+            <b className={styles.diarytext}>{formattedText}</b>
+          </div>
           {msg && <TTS message={msg} />}
-          <img src={img} alt="" />
+          <img src={img} alt="" height={300} />
         </div>
       </div>
     </div>
