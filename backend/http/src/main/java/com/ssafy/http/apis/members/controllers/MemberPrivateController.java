@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,7 +80,7 @@ public class MemberPrivateController {
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
       @Valid @RequestPart StudentRegisterRequest studentRegisterRequest,
-      @RequestPart MultipartFile faceImage) {
+      @RequestParam("faceImage") MultipartFile faceImage) { //@RequestPart
     System.out.println("학생 등록 요청 받음");
 
     memberService.registerStudents(SecurityUtil.getLoginUserId(), faceImage,
