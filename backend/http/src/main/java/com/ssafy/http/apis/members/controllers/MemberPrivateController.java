@@ -79,7 +79,7 @@ public class MemberPrivateController {
       MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<?> registerStudents(
       @Valid @RequestPart StudentRegisterRequest studentRegisterRequest,
-      @RequestPart MultipartFile faceImage) {
+      @RequestPart("faceImage") MultipartFile faceImage) { //@RequestParam
     System.out.println("학생 등록 요청 받음");
 
     memberService.registerStudents(SecurityUtil.getLoginUserId(), faceImage,
