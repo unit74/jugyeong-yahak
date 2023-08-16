@@ -1,12 +1,10 @@
 # 🏫 주경야학 (SSAFY 9기 부울경 E206 Hot6)
 
-오프라인으로 진행되는 <a href="https://encykorea.aks.ac.kr/Article/E0035291">야학</a>은 학생의 입장에선 공간의 제약이라는 문제가, 봉사자의 입장에선 참여의 진입 장벽이 높다는 문제점이 있습니다.
+- 주경야학 로고나 이미지
 
-**주경 야학**은 야학의 현실 및 교육 소외 계층을 위한 문제점을 온라인 야학 플랫폼을 통해 해결하였습니다.
-
-- 공간의 제약 -> 온라인 학습 컨텐츠로 해결
-- 봉사 참여의 진입 장벽이 높음 -> 강의 자료 제공 및 커리큘럼 제공으로 봉사자의 부담을 줄임으로 해결
-
+<div style="text-align: center;">
+  <h3>기초교육을 받지 못한 어르신들을 위한 온라인 문해교실 서비스</h3>
+</div>
 
 <br/>
 
@@ -34,8 +32,11 @@
 ## 🎯 주제
 <a name="subject"></a>
 
-- 주제
-  - 서비스 간략 소개
+몸이 불편하거나 근처에 야학이 없어서 기존 야학에 참여하지 못하는 어르신들을 위한 편리한 교육 플랫폼입니다.
+
+공간적 제약을 해소함으로써 더 많은 어르신에게 교육의 기회를 제공하고, 봉사자의 진입 장벽을 낮추는 것을 목표로 합니다.
+
+실시간 수업, 혼자 학습, 대화를 통한 일기 쓰기를 통한 학습을 제공합니다.
 
 <p align="right"><a href="#tableContents">목차로 이동</a></p>
 
@@ -45,8 +46,10 @@
 ## ⭐️ 주요 기능
 <a name="mainContents"></a>
 
-- 주요기능1
-  - 소개
+### 혼자 학습
+- 혼자학습은 이렇고 저렇고 합니다
+### 실시간 수업
+- 실시간 수업은 이렇습니다
 
 <p align="right"><a href="#tableContents">목차로 이동</a></p>
 
@@ -153,7 +156,7 @@
 | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: |
 | **Profile**  | ![image](./contents/forReadme/profiles/이동규.png) | ![image](./contents/forReadme/profiles/김정희.png)  |    ![image](./contents/forReadme/profiles/하성호.png)     | ![image](./contents/forReadme/profiles/김나연.png)  |   ![image](./contents/forReadme/profiles/김예진.png)    | ![image](./contents/forReadme/profiles/김현빈.png)  |
 | **Position** |          Backend   <br/> Leader     |          Backend           |           Backend           |        Frontend         |            Frontend             |         Frontend         |
-|   **Git**    | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/seongho-98) |
+|   **Git**    | [GitHub](https://github.com/unit74) | [GitHub](https://github.com/JeongHuiKim) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/nayeonxkim) | [GitHub](https://github.com/yelunar) | [GitHub](https://github.com/HyeonBhinKim) |
 
 
 <p align="right"><a href="#tableContents">목차로 이동</a></p>
