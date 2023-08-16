@@ -1,0 +1,102 @@
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
+
+.main {
+  background-image: url(/src/assets/images/real_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.square {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(100px);
+  width: 85%;
+  height: 90%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theme {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;     /* .situationText에 absolute positioning 적용을 위함 */
+  height: 100%;
+  width: 100%;
+  padding: 16px;
+}
+
+.listenImg{
+  position: absolute;
+  top: 150px; /* 상단으로부터 10px 이동 */
+  left: 100px; /* 좌측으로부터 10px 이동 */
+}
+
+
+.transcriptText{
+  margin-top: 200px;
+  color :rgb(106, 106, 106);
+  font-size: calc(2.5vw + 1vh);
+  font-family: KoPubWorld Batang Bold;
+}
+.situationText {
+  text-align: center;
+  font-family: "KoPubWorld Batang Bold";
+  font-weight: bolder;
+  font-size: calc(3.5vw + 2vh);
+  white-space: nowrap;
+  color: #333; /* Change the text color as desired */
+  margin-bottom: 40px;
+}
+
+.wordComponent {
+  text-align: center;
+  font-family: "KoPubWorld Batang Bold";
+  font-weight: bold;
+  font-size: 2.5rem; /* Adjust the font size as needed */
+  margin: 10px;
+  color: #000000; /* Change the text color as desired */
+}
+
+.microphone {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  bottom: 30%;
+  right: 22%;
+}
+
+.volume {
+  font-size: calc(3vw + 2vh);
+}
+
+.wordimg {
+  max-width: 100%;
+  max-height: 90%; /* max-height 추가 */
+  height: auto;
+  object-fit: contain; /* 이미지 비율 유지 */
+  margin-left: 10%;
+}
+.square * {
+  user-select: none;
+}
