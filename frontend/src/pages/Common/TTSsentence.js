@@ -1,56 +1,67 @@
-// 기존 TTS의 속도 80%에서 문장 읽을 때의 속도 95%로만 바꾼 TTS입니다.
-
 import React, { useEffect } from "react";
-import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import { Howl, Howler } from "howler";
 
-export default function TTSsentence({ repeat, message }) {
-  console.log("Received message:", message);
-
-  
+export default function CLOVA({ message }) {
+  // 이놈이 제일 중요했네......
+  // navigator.mediaDevices.getUserMedia 요청을 처리하는 useEffect
   useEffect(() => {
-    // SSML 생성
-    // <prosody rate="-5.00%"> 이부분으로 속도 조절 -5% 이면 원래 속도의 95% 속도
-    const ssmlTemplate = `
-      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ko-KR"> 
-        <voice name="ko-KR-InJoonNeural"> 
-          <prosody rate="-5.00%"> ${message} </prosody>  
-        </voice> 
-      </speak>
-    `;
-
-    // 오디오 권한 요청
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(stream => {
-        console.log('Access granted!');
-
-        // 권한이 허용된 후에 TTS 작업을 시작
-        const audioConfig = sdk.AudioConfig.fromDefaultSpeakerOutput();
-        const speechConfig = sdk.SpeechConfig.fromSubscription("635f31a684ac4b7db7b8c2239cbc3773", "koreacentral");
-        speechConfig.speechSynthesisVoiceName = "ko-KR-InJoonNeural";
-        const synthesizer = new sdk.SpeechSynthesizer(speechConfig, audioConfig);
-
-        synthesizer.speakSsmlAsync(
-          ssmlTemplate,
-          result => {
-            if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-              console.log("synthesis finished.");
-            } else {
-              console.error("Speech synthesis canceled, " + result.errorDetails);
-            }
-            synthesizer.close();
-          },
-          err => {
-            console.trace("err - " + err);
-            synthesizer.close();
-          }
-        );
-
+    console.log("useEffect triggered with message:", message);
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        var audioContext = new AudioContext(); // 혹시 몰라서 있는게 좋음
+        fetchTTSMessage(message);
+        // 여기에 원하는 로직을 추가할 수 있습니다.
+        // 예를 들면, 스트림에 관한 작업을 수행하거나 상태를 설정하는 등의 작업을 수행할 수 있습니다.
       })
-      .catch(err => {
-        console.error('Access denied:', err);
+      .catch((err) => {
+        console.error("Error accessing audio:", err);
       });
-    
-  }, [repeat, message]);
+  }, [message]);
+
+  const playAudio = (url) => {
+    if (url) {
+      const sound = new Howl({
+        src: [url],
+        format: ["mp3"],
+        onplayerror: function () {
+          sound.once("unlock", function () {
+            sound.play();
+          });
+        },
+      });
+      sound.play();
+    }
+  };
+
+  const fetchTTSMessage = async (msg) => {
+    console.log("Trying to fetch TTS message with text:", msg);
+    try {
+      const response = await fetch("https://i9e206.p.ssafy.io/tts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: msg }),
+      });
+      console.log("Received response:", response.status);
+
+      if (!response.ok) {
+        console.warn("Received non-OK response. Status:", response.status);
+        throw new Error("Network response was not ok");
+      }
+
+      const blob = await response.blob();
+      console.log("Converted response to blob");
+
+      const newAudioURL = URL.createObjectURL(blob);
+      console.log("Created audio URL:", newAudioURL);
+
+      playAudio(newAudioURL); // 실행!!!!!!!!!!!!!!!!!!!!!!
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
 
   return null;
 }
