@@ -11,7 +11,7 @@ import "../../App.css";
 import "./FaceLogin.css";
 import { EventSourcePolyfill } from "event-source-polyfill";
 
-export default function FaceLogin() {
+export default function FaceLogin(props) {
   const [fade, setFade] = useState(false);
   const [msg, setMsg] = useState(null);
   const [onTarget, setOnTarget] = useState(false);
@@ -174,6 +174,8 @@ export default function FaceLogin() {
 
         setTimeout(() => {
           setFade(true);
+
+          props.setUserInfo(response.data.data.info);
 
           localStorage.setItem("userInfo", JSON.stringify(response.data.data.info)); // userInfo 저장
           localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
