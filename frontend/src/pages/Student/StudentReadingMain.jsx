@@ -10,7 +10,7 @@ import readImg from "../../assets/images/reading.png";
 // 받아쓰기 안내 -> 공책이 있는지 물어보기
 export default function StudentReadingMain() {
   const navigate = useNavigate();
-
+  const [fade, setFade] = useState(false);
   // 7일에 한번씩만 보여줘
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
@@ -19,7 +19,9 @@ export default function StudentReadingMain() {
 
   const [msg, setMsg] = useState(null);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
+  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));  
+  const [activeEffect, setActiveEffect] = useState(null); // 'reading' or 'writing'
+
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -36,40 +38,46 @@ export default function StudentReadingMain() {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      // 이름 -> 나중에 성별로 바꾸기
       let readingText = `먼저, 단어의 올바른 발음을 공부해요`;
+      setActiveEffect('reading')
       ttsMaker(readingText, 0);
       await delay(readingText.length * 300);
 
       let writingText = "다음으로 받아쓰기를 해요";
+      setActiveEffect('writing')
       ttsMaker(writingText, 0);
-      await delay(writingText.length * 300);
+      await delay(writingText.length * 500);
       
-      navigate('/record-word');
+      let nextText = "자, 첫 번째 단어부터 공부해볼까요?";
+      setActiveEffect(null)
+      ttsMaker(nextText, 0);
+      await delay(nextText.length * 500);
+
+
+      setFade(true);
+      navigate('/word-explain');
     }
 
     makeRequest();
   }, []);
 
 
-  // useTimeoutCallback(navigateToNextPage, 10000); // 10초
+
 
   return (
-    <div className={`${styles.main}`}>
+    <div  className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       <div className={styles.square}>
-        <div className={styles.theme}>
-          <b className={styles.b}>단어공부</b>
+        <div className={styles.greeting}>
+          <b className={styles.b}>단어 5개 공부</b>
           {msg && <TTSsentence message={msg} />}
-          <div className={styles.imageSituationContainer}>
-            <div>
-              <img src={readImg} alt="readImg" />
-              <p>단어읽기</p>
-            </div>
-            <div>
-              <img src={writeImg} alt="writeImg" />
-              <p>받아쓰기</p>
-            </div>
-          </div>
+        </div>
+        <div className={`${activeEffect === 'reading' ? styles.pulsatingDiv : ''} ${styles.time}`}>
+            <img className={styles.responsive_image} src={readImg} alt="readImg" />
+            <p className={styles.info}>단어읽기</p>
+        </div>
+        <div className={`${activeEffect === 'writing' ? styles.pulsatingDiv : ''} ${styles.time}`}>
+            <img className={styles.responsive_image} src={writeImg} alt="writeImg" />
+            <p className={styles.info}>받아쓰기</p>
         </div>
       </div>
     </div>
