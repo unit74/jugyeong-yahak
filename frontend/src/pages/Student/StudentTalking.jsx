@@ -1,23 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useDebounce } from "../Common/hooks/useDebounce";
-import styles from "./StudentDiary.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import styles from "./StudentTalking.module.css";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
+import axios from "axios";
 
 export default function StudentTalking() {
-  // 변수
-  const [speechWord, setSpeechWord] = useState("");
-  const debounceTerm = useDebounce(speechWord, 2000);
-  const [themeTitle, setThemeTitle] = useState(null);
-
-  // 음성 인식
+  // 음성인식 관련
   const { transcript, listening } = useSpeechRecognition();
-
+  const [generatedText, setGeneratedText] = useState("");
+  const [allConversations, setallConversations] = useState("");
+  const [diaryEntry, setDiaryEntry] = useState("");
+  // TTS 관련
+  const [count, setCount] = useState(0);
   const [msg, setMsg] = useState(null);
+  // 이미지 생성 관련
+  const [img, setImg] = useState(null);
+
+  const navigate = useNavigate();
+
+  const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -31,89 +34,195 @@ export default function StudentTalking() {
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
-    async function makeRequest() {
+    async function makeRequest(data) {
       await delay(1000);
 
-      let text = `1분 동안 ${themeTitle}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`;
-      ttsMaker(text, 0);
-      await delay(text.length * 250);
+      ttsMaker(data, 0);
+      await delay(data.length * 250);
+      ttsMaker("", 0);
 
-      SpeechRecognition.startListening({ continuous: true });
+      SpeechRecognition.startListening();
+      await delay(4000);
+      SpeechRecognition.stopListening();
 
-      // 1분 후 녹음 중지
-      setTimeout(() => {
-        SpeechRecognition.stopListening();
-        setSpeechWord(transcript);
-      }, 60000); // 60,000ms = 1분
+      setCount(count + 1);
     }
 
-    if (themeTitle !== null) {
-      makeRequest();
+    if (count === 0) {
+      makeRequest("오늘 하루는 어떠셨나요?");
+    } else if (count === 1) {
+      helpGpt(transcript);
+    } else if (count === 2) {
+      makeRequest(generatedText);
+    } else if (count === 3) {
+      helpGpt(transcript);
+    } else if (count === 4) {
+      makeRequest(generatedText);
+    } else if (count === 5) {
+      generateDiary(transcript);
+    } else {
+      makeImg();
     }
-  }, [themeTitle]);
+  }, [count]);
 
-  // useEffect
-  useEffect(() => {
-    // 1. 테마명 받아오기
-    axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/30")
-      .then((response) => {
-        setThemeTitle(response.data.data.theme);
-        // ttsMaker(
-        //   `1분 동안 ${response.data.data.theme}에 관한 경험을 이야기 해주세요!! 너무 어렵다면, 어렵다!라고 말씀해주세요!!`,
-        //   0
-        // );
+  const helpGpt = async (message) => {
+    console.log("사용자 : " + message);
+
+    const apiKey = "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";
+
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant. Whenever the user shares a statement or sentiment, ask a relevant and engaging question in response, using Korean honorifics (존댓말).",
+        },
+        {
+          role: "user",
+          content: `${message}`,
+        },
+      ],
+    });
+
+    const generatedMessage = response.data.choices[0].message.content;
+    setGeneratedText(generatedMessage);
+    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
+    setCount(count + 1);
+    console.log("gpt : " + generatedMessage);
+  };
+
+  const generateDiary = async (message) => {
+    console.log("사용자 : " + message);
+
+    setallConversations(allConversations + message + ".\n");
+
+    const apiKey = "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";
+
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
+        },
+        {
+          role: "user",
+          content: allConversations + message + ". ",
+        },
+      ],
+    });
+
+    setDiaryEntry(response.data.choices[0].message.content);
+    setCount(count + 1);
+  };
+
+  const makeImg = async () => {
+    const apiKey = "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";
+
+    const configuration = new Configuration({
+      apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "영어로 번역하는데 총 띄어 쓰기 포함해서 글자수가 200개가 안되게 축약해서 번역해줘",
+        },
+        {
+          role: "user",
+          content: diaryEntry,
+        },
+      ],
+    });
+
+    const translatedDiary = response.data.choices[0].message.content;
+    const prompt = "drawing done with a pencil, only scenery, in color" + translatedDiary;
+    createImage(prompt);
+  };
+
+  const createImage = (prompt) => {
+    console.log(prompt);
+    console.log("호출됨");
+    fetch("https://api.kakaobrain.com/v2/inference/karlo/t2i", {
+      method: "POST",
+      headers: {
+        Authorization: `KakaoAK ${REST_API_KY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: prompt.substr(0, Math.min(250, prompt.length)),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setImg(data.images[0].image);
+        // navigate("/diary", { state: { diaryEntry, img } });
       })
-      .catch((error) => console.error(`Error: ${error}`));
-
-    // 2. 마운트 후 0.8초 뒤 녹음 시작
-    // const startTimer = setTimeout(() => {
-    //   SpeechRecognition.startListening({ continuous: true });
-
-    //   // 1분 후 녹음 중지
-    //   const stopTimer = setTimeout(() => {
-    //     SpeechRecognition.stopListening();
-    //     setSpeechWord(transcript);
-    //   }, 20000); // 60,000ms = 1분
-
-    //   return () => clearTimeout(stopTimer);
-    // }, 12000);
-
-    // return () => {
-    //   clearTimeout(startTimer);
-    // };
-  }, [transcript]);
-
-  // 2. transcript를 speechWord에 저장
-  useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]);
-
-  // 3. 이야기하기 어려워하시면 기존 일기로 연결
-  const navigate = useNavigate();
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
-    if (speechWord.includes("어렵다")) {
-      navigate("/diary", { state: { message: "" } });
+    async function saveDiary() {
+      await axios
+        .post(`https://i9e206.p.ssafy.io/api/v1/diaries`, {
+          content: diaryEntry,
+          imageUrl: img,
+        })
+        .then(() => {
+          // navigate("/diary", { state: { diaryEntry, img } });
+        });
     }
-  }, [speechWord, navigate]);
 
-  useEffect(() => {
-    if (debounceTerm) {
-      navigate("/diary", { state: { message: debounceTerm } });
+    if (img !== null) {
+      saveDiary();
     }
-  }, [debounceTerm, navigate]);
+  }, [img]);
 
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          <div className={styles.text}></div>
           <div className={styles.microphone}>
-            <h1>{themeTitle}에 관한 경험을 이야기해보아요!</h1>
+            <h1 className={styles.generatedMessage}>오늘 하루는 어떠셨나요?</h1>
+
+            {allConversations.split(".\n").map((conversation, index) => (
+              index % 2 === 1 && (
+                <div
+                key={index}
+                className={styles.generatedMessage}
+                >
+                  {conversation}
+                </div>
+              )
+              ))}
+
+                          
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
-            <p>{transcript}</p>
+            <p className={styles.userMessage}>{transcript}</p>
+            {/* {img && <img src={img}></img>} */}
+
             {msg && <TTSsentence message={msg} />}
+
+            {/* {diaryEntry && <p>{diaryEntry}</p>} */}
             <div></div>
           </div>
         </div>
