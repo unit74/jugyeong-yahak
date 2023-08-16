@@ -1,55 +1,72 @@
 package com.ssafy.http.apis.classes.entities;
 
+import com.ssafy.http.apis.commoncodes.entities.CommonCodeEntity;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name = "classes")
+@Entity
+@Table(name = "classes")
 public class ClassEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    @Column(nullable = false)
-    private long governmentId;
+  private Long governmentId;
 
-    @Column(nullable = false)
-    private String className;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "status_code", nullable = false)
+  private CommonCodeEntity commonCode;
 
-    @Column(nullable = false)
-    private LocalDateTime lectureTime;
+  @Column(nullable = false)
+  private String className;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+  @Column(nullable = false)
+  private LocalDateTime lectureTime;
 
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+  @Column(nullable = false)
+  private LocalDateTime createdAt;
 
-    @Builder
-    public ClassEntity(Long id, Long governmentId, String className, LocalDateTime lectureTime, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.governmentId = governmentId;
-        this.className = className;
-        this.lectureTime = lectureTime;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
+  @Column(nullable = false)
+  private LocalDateTime updatedAt;
 
-    @PrePersist
-    public void createTimeStamps() {
-        updatedAt = LocalDateTime.now();
-        createdAt = LocalDateTime.now();
-    }
+  @Builder
+  public ClassEntity(long id, Long governmentId, CommonCodeEntity commonCode,
+      String className, LocalDateTime lectureTime, LocalDateTime createdAt,
+      LocalDateTime updatedAt) {
+    this.id = id;
+    this.governmentId = governmentId;
+    this.commonCode = commonCode;
+    this.className = className;
+    this.lectureTime = lectureTime;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
-    @PreUpdate
-    public void updateTimeStamps() {
-        updatedAt = LocalDateTime.now();
-    }
+  @PrePersist
+  public void createTimeStamps() {
+    updatedAt = LocalDateTime.now();
+    createdAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void updateTimeStamps() {
+    updatedAt = LocalDateTime.now();
+  }
 }

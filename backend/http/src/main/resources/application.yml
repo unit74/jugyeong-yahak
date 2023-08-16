@@ -12,6 +12,10 @@ spring:
       - classpath:/application-sse.yml
   jpa:
     show-sql: true
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 
 server:
   port: 8080

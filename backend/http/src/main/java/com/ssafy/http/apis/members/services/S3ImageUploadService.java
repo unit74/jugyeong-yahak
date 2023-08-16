@@ -30,7 +30,7 @@ public class S3ImageUploadService {
     return upload(folder, uuid, fileType, uploadFile);
   }
 
-  private String upload(String folder, String uuid, String fileType, File uploadFile) {
+  public String upload(String folder, String uuid, String fileType, File uploadFile) {
 
     String fileName = folder + "/" + uuid + fileType;
 
@@ -70,6 +70,8 @@ public class S3ImageUploadService {
       }
       return Optional.of(convertFile);
     }
+
+    removeNewFile(convertFile);
 
     return Optional.empty();
   }
