@@ -56,7 +56,7 @@ export default class ToolbarComponent extends Component {
     return (
       <>
         <div className={`sidebar ${isOpen ? "open" : ""}`}>
-          <div id="navSessionInfo" className={styles.verticalText}>
+          <div id="navSessionInfo" >
             {/* ${mySessionId}  */}
             {this.props.sessionId &&
               [...`${clazz.className}`].map((char, index) => (
@@ -70,6 +70,7 @@ export default class ToolbarComponent extends Component {
             pages.map((page, i) => (
               <button
                 key={i}
+                className="nav_Button"
                 onClick={() => {
                   if (window.confirm(`${page.name} 페이지로 이동하시겠습니까?`))
                     this.sendSignal({ page: page.path }, "page");
@@ -101,10 +102,11 @@ export default class ToolbarComponent extends Component {
             </button>
           )}
 
+
           <div className="buttonsContent">
             <IconButton
               style={{ color: "#4070e9" }}
-              className="navButton"
+              className="nav_bottom"
               id="navMicButton"
               onClick={this.micStatusChanged}
             >
@@ -117,7 +119,7 @@ export default class ToolbarComponent extends Component {
 
             <IconButton
               style={{ color: "#4070e9" }}
-              className="navButton"
+              className="nav_bottom"
               id="navMouseButton"
               onClick={this.traceStatusChanged}
             >
@@ -126,14 +128,14 @@ export default class ToolbarComponent extends Component {
 
             <IconButton
               style={{ color: "rgb(255, 5, 5)" }}
-              className="navButton"
+              className="nav_bottom"
               onClick={this.leaveSession}
               id="navLeaveButton"
             >
               <PowerSettingsNew />
             </IconButton>
           </div>
-        </div>
+        </div >
       </>
     );
   }
