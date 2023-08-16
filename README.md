@@ -1,6 +1,12 @@
 # 🏫 주경야학 (SSAFY 9기 부울경 E206 Hot6)
 
-- 간단한 프로젝트 소개 문구 및 (로고)
+오프라인으로 진행되는 <a href="https://encykorea.aks.ac.kr/Article/E0035291">야학</a>은 학생의 입장에선 공간의 제약이라는 문제가, 봉사자의 입장에선 참여의 진입 장벽이 높다는 문제점이 있습니다.
+
+**주경 야학**은 야학의 현실 및 교육 소외 계층을 위한 문제점을 온라인 야학 플랫폼을 통해 해결하였습니다.
+
+- 공간의 제약 -> 온라인 학습 컨텐츠로 해결
+- 봉사 참여의 진입 장벽이 높음 -> 강의 자료 제공 및 커리큘럼 제공으로 봉사자의 부담을 줄임으로 해결
+
 
 <br/>
 
@@ -15,12 +21,12 @@
 
 1. <a href="#subject">🎯 주제</a>
 1. <a href="#mainContents">⭐️ 주요 기능</a>
-1. <a href="#systemArchitecture">⚙-시스템-아키텍쳐</a>
-1. <a href="#skills">🛠️-기술-스택</a>
-1. <a href="#directories">🗂️-파일-구조</a>
-1. <a href="#erd">💾-ERD</a>
-1. <a href="#contents">🖥️-화면-소개</a>
-1. <a href="#developers">👥-팀원-소개</a>
+1. <a href="#systemArchitecture">⚙ 시스템 아키텍쳐</a>
+1. <a href="#skills">🛠️ 기술 스택</a>
+1. <a href="#directories">🗂️ 파일 구조</a>
+1. <a href="#erd">💾 ERD</a>
+1. <a href="#contents">🖥️ 화면 소개</a>
+1. <a href="#developers">👥 팀원 소개</a>
 
 <br/>
 
