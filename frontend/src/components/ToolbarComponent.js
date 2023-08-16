@@ -56,8 +56,8 @@ export default class ToolbarComponent extends Component {
     return (
       <>
         <div className={`sidebar ${isOpen ? "open" : ""}`}>
-          <div id="navSessionInfo" >
-            {/* ${mySessionId}  */}
+          <div id="navSessionInfo" style={{ display: 'flex', flexDirection: isOpen ? 'row' : 'column' }}>
+            {/* ${mySessionId} */}
             {this.props.sessionId &&
               [...`${clazz.className}`].map((char, index) => (
                 <div key={index} className={styles.charContainer}>
@@ -65,6 +65,8 @@ export default class ToolbarComponent extends Component {
                 </div>
               ))}
           </div>
+
+
 
           {isOpen &&
             pages.map((page, i) => (
@@ -83,6 +85,7 @@ export default class ToolbarComponent extends Component {
           {isOpen &&
             words.map((word, i) => (
               <button
+                className="word_btn"
                 key={i}
                 onClick={() => {
                   this.sendSignal({ word: word }, "word");
