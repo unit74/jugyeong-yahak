@@ -1,9 +1,6 @@
 package com.ssafy.sse.apis.controllers;
 
-import com.ssafy.sse.apis.requests.ControlMicRequest;
 import com.ssafy.sse.apis.requests.ConvertPageRequest;
-import com.ssafy.sse.apis.requests.MoveMouseRequest;
-import com.ssafy.sse.apis.responses.MoveMouseResponse;
 import com.ssafy.sse.apis.services.LectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -28,23 +25,7 @@ public class LectureController {
 
     @PostMapping("/convert/page")
     public void convertPage(@RequestBody ConvertPageRequest convertPageRequest) {
-        lectureService.convertPage(convertPageRequest.getClassId(),
-            convertPageRequest.getStreamId(), convertPageRequest.getNumber());
+        lectureService.convertPage(convertPageRequest.getClassId(), null);
     }
 
-    @PostMapping("/mouse/pointer")
-    public void moveMouseCursor(@RequestBody MoveMouseRequest moveMouseRequest) {
-        lectureService.moveMousePointer(moveMouseRequest.getClassId(),
-            moveMouseRequest.getStreamId(), MoveMouseResponse.builder()
-                                                             .x(moveMouseRequest.getX())
-                                                             .y(
-                                                                 moveMouseRequest.getY())
-                                                             .build());
-    }
-
-    @PostMapping("/mic/control")
-    public void controlMic(@RequestBody ControlMicRequest controlMicRequest) {
-        lectureService.controlMic(controlMicRequest.getClassId(), controlMicRequest.getStreamId(),
-            controlMicRequest.getStatus());
-    }
 }
