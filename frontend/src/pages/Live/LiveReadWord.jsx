@@ -8,7 +8,7 @@ const LiveReadWord = () => {
   return (
     <div>
       <h1>✔ 아래 단어를 소리내어 읽어봅시다.</h1>
-      <div>{word}</div>
+      <div>{word.word}</div>
     </div>
   );
 };
