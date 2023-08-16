@@ -58,6 +58,7 @@ class OpenViduSession extends Component {
       isOpen: false,
       pages: [],
       words: [],
+      quizAction: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -250,6 +251,7 @@ class OpenViduSession extends Component {
           isOpen: false,
           pages: [],
           words: [],
+          quizAction: false,
         },
         async () => {
           await axios
@@ -383,7 +385,9 @@ class OpenViduSession extends Component {
       if (!this.state.quiz) data.timer = 0;
 
       this.setState({ timer: data.timer }, () => {
-        if (this.state.timer > 0 && this.state.quiz) {
+        if (this.state.timer === 0 && this.state.quiz) {
+          this.sendSignal({ quiz: false }, "quiz");
+        } else if (this.state.timer > 0 && this.state.quiz) {
           const sendData = {
             timer: this.state.timer - 1,
           };
@@ -400,16 +404,37 @@ class OpenViduSession extends Component {
 
       if (this.state.quiz && !data.quiz) {
         // 게임 종료
-        if (this.state.timer > 0) this.sendSignal({ page: "" }, "page");
-        else this.sendSignal({ page: "" }, "page");
+        if (this.state.timer > 0) this.sendSignal({ page: "good" }, "page");
+        else this.sendSignal({ page: "bad" }, "page");
 
         this.sendSignal({ timer: 0 }, "timer");
         this.setState({ quiz: data.quiz });
+
+        if (this.state.choseong === null) {
+          const pages = [
+            {
+              name: "초성 퀴즈",
+              path: "choseong",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        } else {
+          const pages = [
+            {
+              name: "종례",
+              path: "end",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        }
       } else if (!this.state.quiz && data.quiz) {
         // 게임 시작
         this.correctStatusChanged(false);
-        this.setState({ quiz: data.quiz, count: 0 }, () => {
-          this.sendSignal({ timer: 900 }, "timer");
+        this.setState({ quiz: data.quiz, count: 0, quizAction: false }, () => {
+          this.sendSignal({ timer: 10 }, "timer");
+          this.closeSidebar();
         });
       }
     });
@@ -499,7 +524,7 @@ class OpenViduSession extends Component {
       if (data.page === "journal") {
         const pages = [
           {
-            name: "초성 퀴즈",
+            name: "추리 퀴즈",
             path: "guess",
           },
         ];
@@ -515,6 +540,16 @@ class OpenViduSession extends Component {
       if (this.state.page === data.page) return;
 
       if (data.page === "theme") {
+        this.closeSidebar();
+      } else if (data.page === "guess") {
+        this.setState({ quizAction: true }, () => {
+          this.changeMenus([], []);
+        });
+      } else if (data.page === "choseong") {
+        this.setState({ quizAction: true }, () => {
+          this.changeMenus([], []);
+        });
+      } else if (data.page === "end") {
         this.closeSidebar();
       }
 
@@ -617,6 +652,7 @@ class OpenViduSession extends Component {
     const pages = this.state.pages;
     const words = this.state.words;
     const quiz = this.state.quiz;
+    const quizAction = this.state.quizAction;
     const containerClass = this.state.isOpen
       ? `${styles.container} ${styles["sidebar-open"]}`
       : styles.container;
@@ -632,6 +668,7 @@ class OpenViduSession extends Component {
           isOpen={isOpen}
           pages={pages}
           words={words}
+          quizAction={quizAction}
           micStatusChanged={this.micStatusChanged}
           traceStatusChanged={this.traceStatusChanged}
           openSidebar={this.openSidebar}
@@ -651,6 +688,8 @@ class OpenViduSession extends Component {
                   theme: this.state.theme,
                   curriculum: this.state.curriculum,
                   word: this.state.word,
+                  timer: this.state.timer,
+                  choseong: this.state.choseong,
                 }}
               />
             </OpenViduSessionContext.Provider>
