@@ -2,6 +2,7 @@ package com.ssafy.http.security.services;
 
 import com.ssafy.http.apis.governments.entities.GovernmentEntity;
 import com.ssafy.http.apis.members.entities.MemberEntity;
+import com.ssafy.http.apis.roles.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -60,6 +61,22 @@ public class CustomUserDetails implements UserDetails {
 
     return String.valueOf(memberEntity.getId());
 
+  }
+
+  public Role getRole() {
+    if (governmentEntity != null) {
+      return Role.GOVERNMENT;
+    }
+
+    if (memberEntity.getRole().getId() == Role.TEACHER.getId()) {
+      return Role.TEACHER;
+    }
+
+    if (memberEntity.getRole().getId() == Role.STUDENT.getId()) {
+      return Role.STUDENT;
+    }
+
+    return Role.ADMIN;
   }
 
   @Override

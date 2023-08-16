@@ -1,13 +1,18 @@
 package com.ssafy.http.apis.auth.services;
 
+import com.ssafy.http.apis.auth.dtos.MemberLoginDto;
 import com.ssafy.http.apis.auth.requests.GovernmentLoginRequest;
+import com.ssafy.http.apis.classes.entities.ClassEntity;
+import com.ssafy.http.apis.classes.repositories.ClassRepository;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import com.ssafy.http.exception.RegisterIdentificationException;
+import com.ssafy.http.apis.roles.Role;
+import com.ssafy.http.exception.CustomException;
 import com.ssafy.http.jwt.JwtTokenProvider;
 import com.ssafy.http.jwt.dtos.TokenDto;
 import com.ssafy.http.redis.services.RedisService;
 import com.ssafy.http.support.codes.ErrorCode;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +35,12 @@ public class AuthService {
   private final RedisService redisService;
   private final FaceLoginService faceLoginService;
   private final MemberRepository memberRepository;
+  private final ClassRepository classRepository;
 
   private final String SERVER = "Server";
 
-  @Transactional
-  public TokenDto memberLogin(MultipartFile loginImage, Long governmentId) {
+  @Transactional //회원 로그인
+  public MemberLoginDto memberLogin(MultipartFile loginImage, Long governmentId) {
 
     List<MemberEntity> members = memberRepository.findUuidByGovernmentId(
         governmentId);//uuid 리스트 가져오기
@@ -44,20 +50,17 @@ public class AuthService {
       labels[i] = members.get(i).getUuid(); //UUID list
     }
 
-    //사용자 이미지 파일, S3의 디렉토리, 파일명
+    //사용자 이미지 파일, S3의 디렉토리, 파일명 -> 로그인 요청
     String uuid = faceLoginService.faceLogin(loginImage, governmentId, labels);
 
     //UUID로 MemberEntity
-    MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).get();
+    MemberEntity member = memberRepository.findMemberEntityByUuid(uuid).orElseThrow(
+        () -> new IllegalArgumentException("사람을 찾지 못했습니다"));
 
-    System.out.println(member);
-
-    if (member == null) { //null이다 -> 사용자 발견하지 못한 것
-      new RegisterIdentificationException(ErrorCode.NOT_FOUND_ERROR);
-    }
-
+    //토큰 생성
     UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(member.getId() + " " + member.getRole().getRole(),
+        new UsernamePasswordAuthenticationToken(
+            member.getId() + " " + member.getRole().getRole(),
             member.getUuid());
 
     Authentication authentication = authenticationManagerBuilder.getObject()
@@ -65,10 +68,29 @@ public class AuthService {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    return generateToken(SERVER, authentication.getName(), getAuthorities(authentication));
+    //응답 객체 생성
+    MemberLoginDto loginDto = new MemberLoginDto();
+
+    if (member.getRole().getId() == Role.STUDENT.getId()) { //학생
+      ClassEntity classEntity = classRepository.findById(member.getClassId()).orElseThrow(
+          () -> new CustomException(ErrorCode.ID_NOTFOUND)
+      );
+
+      loginDto.of(
+          generateToken(SERVER, authentication.getName(), getAuthorities(authentication)), member,
+          LocalTime.of(classEntity.getLectureTime().getHour(),
+              classEntity.getLectureTime().getMinute()));
+
+    } else { //선생
+      loginDto.of(
+          generateToken(SERVER, authentication.getName(), getAuthorities(authentication)), member);
+
+    }
+
+    return loginDto;
   }
-  
-  @Transactional
+
+  @Transactional //지자체 로그인
   public TokenDto login(GovernmentLoginRequest governmentLoginRequest) {
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
