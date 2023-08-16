@@ -64,7 +64,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 20px;
+
   gap: 10px;
   text-align: center;
 }
@@ -97,4 +97,8 @@
 .curriculum-image {
   width: 150px;
   height: auto;
+}
+
+.containers {
+  margin-top: 5%;
 }

@@ -38,7 +38,7 @@ class OpenViduSession extends Component {
     this.navigate = props.navigate;
     this.clazz = props.clazz;
     this.mySessionId = props.clazz.id;
-    this.myUserName = localStorage.getItem("userInfo").name;
+    this.myUserName = JSON.parse(localStorage.getItem("userInfo")).name;
     this.remotes = [];
 
     this.state = {
@@ -47,7 +47,7 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       trace: false,
-      page: 0,
+      page: null,
       theme: null,
       curriculum: null,
       word: null,
@@ -76,9 +76,10 @@ class OpenViduSession extends Component {
     this.changeMenus = this.changeMenus.bind(this);
     this.sendSignal = this.sendSignal.bind(this);
 
-    this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
+    this.subscribeToStreamCreated = this.subscribeToStreamCreated.bind(this);
     this.subscribeToStreamDestroyed =
       this.subscribeToStreamDestroyed.bind(this);
+    this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToMic = this.subscribeToMic.bind(this);
     this.subscribeToExit = this.subscribeToExit.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
@@ -106,9 +107,17 @@ class OpenViduSession extends Component {
     this.changeMenus(pages, []);
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     window.removeEventListener("mousemove", this.updateMousePosition);
     window.removeEventListener("beforeunload", this.onbeforeunload);
+
+    await axios
+      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .then(function (response) {})
+      .catch(function (error) {
+        console.error(error);
+      });
+
     this.leaveSession();
   }
 
@@ -156,7 +165,7 @@ class OpenViduSession extends Component {
         });
       }
       alert("There was an error getting the token:", error.message);
-      this.navigate("/teacher-main");
+      this.navigate("/", { replace: true });
     }
   }
 
@@ -243,36 +252,26 @@ class OpenViduSession extends Component {
 
     if (mySession) {
       this.OV = null;
-      this.setState(
-        {
-          mainStreamUser: undefined,
-          session: undefined,
-          localUser: undefined,
-          subscribers: [],
-          trace: false,
-          page: 0,
-          theme: null,
-          word: null,
-          choseong: null,
-          timer: 0,
-          quiz: false,
-          count: 0,
-          isOpen: false,
-          pages: [],
-          words: [],
-          quizAction: false,
-        },
-        async () => {
-          await axios
-            .delete(`${BASE_URL}/api/v1/private/openvidu`)
-            .then(function (response) {
-              mySession.disconnect();
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        }
-      );
+      this.setState({
+        mainStreamUser: undefined,
+        session: undefined,
+        localUser: undefined,
+        subscribers: [],
+        trace: false,
+        page: null,
+        theme: null,
+        word: null,
+        choseong: null,
+        timer: 0,
+        quiz: false,
+        count: 0,
+        isOpen: false,
+        pages: [],
+        words: [],
+        quizAction: false,
+      });
+
+      mySession.disconnect();
     }
   }
 
@@ -390,7 +389,7 @@ class OpenViduSession extends Component {
   subscribeToExit() {
     this.state.session.on("signal:exit", (event) => {
       this.leaveSession();
-      this.navigate("/");
+      this.navigate("/", { replace: true });
     });
   }
 
@@ -675,7 +674,11 @@ class OpenViduSession extends Component {
 
     // 리턴
     return (
-      <div className={containerClass} id="container">
+      <div
+        className={containerClass}
+        id="container"
+        // style={{ overflow: "hidden" }}
+      >
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
@@ -711,19 +714,24 @@ class OpenViduSession extends Component {
             </OpenViduSessionContext.Provider>
           </div>
           <div className={styles.contentRight}>
-            <div className={styles.video}>
+            <div
+              className={styles.video}
+              style={{ display: "flex", gap: "20px" }}
+            >
               {localUser !== undefined &&
                 localUser.getStreamManager() !== undefined && (
                   <div
                     style={{
                       display: "inline-block",
-                      width: "300px",
-                      height: "300px",
+                      width: "100px",
+                      height: "100px",
                       position: "relative",
+                      margin: "30px",
+                      paddingTop: "10%",
                     }}
                     id="localUser"
                   >
-                    <div>본인</div>
+                    {/* <div>본인</div> */}
                     <StreamComponent user={localUser} />
                   </div>
                 )}
@@ -736,21 +744,23 @@ class OpenViduSession extends Component {
                       height: "50%",
                       botton: "-10px",
                       position: "relative",
+                      margin: "30px",
                     }}
                     id="mainStreamUser"
                   >
-                    <div>포커스 중인 사람</div>
+                    {/* <div>포커스 중인 사람</div> */}
                     <StreamComponent user={mainStreamUser} />
                   </div>
                 )}
-              {this.state.subscribers.map((sub, i) => (
+              {this.state.subscribers.slice(0, 6).map((sub, i) => (
                 <div
-                  key={i}
+                  key={sub.getConnectionId()}
                   style={{
                     display: "inline-block",
-                    width: "300px",
-                    height: "300px",
+                    width: "100px",
+                    height: "100px",
                     position: "relative",
+                    margin: "30px",
                   }}
                   id="remoteUsers"
                 >

@@ -58,7 +58,6 @@ import StudentLive from "./pages/Student/StudentLive";
 import TeacherMain from "./pages/Teacher/TeacherMain";
 import TeacherStudentInfo from "./pages/Teacher/TeacherStudentInfo";
 import TeacherStudentProgress from "./pages/Teacher/TeacherStudentProgress";
-import TeacherTheme from "./pages/Teacher/TeacherTheme";
 import TeacherClass from "./pages/Teacher/TeacherClass";
 import TeacherLive from "./pages/Teacher/TeacherLive";
 
@@ -75,6 +74,9 @@ import LiveTeacherChoseongQuiz from "./pages/Live/LiveTeacherChoseongQuiz";
 import LiveGood from "./pages/Live/LiveGood";
 import LiveBad from "./pages/Live/LiveBad";
 import LiveEnd from "./pages/Live/LiveEnd";
+import LiveWait from "./pages/Live/LiveWait";
+import LiveStudentGuessQuiz from "./pages/Live/LiveStudentGuessQuiz";
+import LiveStudentChoseongQuiz from "./pages/Live/LiveStudentChoseongQuiz";
 
 import FaceLogin from "./pages/Common/FaceLogin";
 
@@ -116,12 +118,24 @@ function App() {
         <Route path="/student-talking" element={<StudentTalking />} />
         <Route path="/canvas-test" element={<CanvasTest />} />
         {/* 학생 실시간 강의 */}
-        <Route path="/student-live/*" element={<StudentLive />} />
+        <Route path="/student-live" element={<StudentLive />}>
+          <Route path="theme" element={<LiveWait />} />
+          <Route path="curriculum" element={<LiveWait />} />
+          <Route path="journal" element={<LiveJournal />} />
+          <Route path="read" element={<LiveReadWord />} />
+          <Route path="read-hint" element={<LiveReadWordHint />} />
+          <Route path="write" element={<LiveWriteWord />} />
+          <Route path="write-hint" element={<LiveWirteWordHint />} />
+          <Route path="guess" element={<LiveStudentGuessQuiz />} />
+          <Route path="choseong" element={<LiveStudentChoseongQuiz />} />
+          <Route path="good" element={<LiveGood />} />
+          <Route path="bad" element={<LiveBad />} />
+          <Route path="end" element={<LiveEnd />} />
+        </Route>
         {/* <Route path="*" element={<Error404 />} /> */}
         {/* Teacher */}
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
-        <Route path="/teacher-theme" element={<TeacherTheme />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
         <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
         {/* 교사 실시간 강의 */}
