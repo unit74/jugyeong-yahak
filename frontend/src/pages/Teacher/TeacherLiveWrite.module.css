@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kimjungchul";
+  src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
+}
+
+.main {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: left;
+  font-size: 31px;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  margin-left: 3%;
+  font-family: "Kimjungchul";
+}
+
+.bb {
+  font-family: "KimjungchulGothic-Bold";
+}

@@ -1,17 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
-import * as tmImage from "@teachablemachine/image";
+import { useNavigate } from "react-router-dom";
+import styles from "../Student/StudentMain.module.css";
+import axios from "axios";
+import TTS from "../Common/TTS";
+import "@mediapipe/face_detection";
+import "@tensorflow/tfjs-core";
+import "@tensorflow/tfjs-backend-webgl";
+import * as faceDetection from "@tensorflow-models/face-detection";
+import "../../App.css";
+import "./FaceLogin.css";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 export default function FaceLogin() {
-  const [predictions, setPredictions] = useState([]);
+  const [fade, setFade] = useState(false);
+  const [msg, setMsg] = useState(null);
+  const [onTarget, setOnTarget] = useState(false);
+
+  const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
+
+  const navigate = useNavigate();
 
   let videoRef = useRef(null);
   let photoRef = useRef(null);
+  let isCaptured = useRef(false);
 
-  // Teachable Machine 모델 불러오기
-  const modelURL = "https://teachablemachine.withgoogle.com/models/vjtO5zeXw/";
-  const modelMetadataURL = modelURL + "metadata.json";
+  let width = 500;
+  let height = 500;
 
-  let model, webcam;
+  let model;
+
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   // 웹캠 세팅
   const setupWebcam = async () => {
@@ -27,70 +54,259 @@ export default function FaceLogin() {
     }
   };
 
-  // Teachable Machine init 함수
-  const initTeachableMachine = async () => {
-    model = await tmImage.load(modelURL + "model.json", modelMetadataURL);
-
-    const flip = true; // 웹캠 화면 반전 여부 설정
-    webcam = new tmImage.Webcam(200, 200, flip); // 웹캠 화면 크기 설정
-    await webcam.setup(); // 웹캠 접근 권한 요청 및 설정
-    await webcam.play(); // 웹캠 시작
-
-    window.requestAnimationFrame(loop);
-  };
-
   // 계속 이미지 가져와
   const loop = async () => {
-    webcam.update(); // 웹캠 프레임 업데이트
-    await predict(); // 이미지 예측 실행
+    if (isCaptured.current === true) {
+      isCaptured.current = false;
+      await drawToCanvas(); // 이미지 예측 실행
+    }
     window.requestAnimationFrame(loop);
   };
 
-  // 웹캠으로부터 가져온 이미지를 모델로 예측
-  const predict = async () => {
-    const prediction = await model.predict(webcam.canvas);
-    setPredictions(prediction);
-    console.log(predictions);
-    const notebookClass = prediction.find((p) => p.className === "frontal");
-    if (notebookClass && notebookClass.probability === 1) {
-      console.log("정면");
+  const estimateCanvas = async (photoRef) => {
+    const estimationConfig = { flipHorizontal: false };
+    const predictions = await model.estimateFaces(photoRef, estimationConfig);
+
+    if (
+      predictions[0] !== undefined &&
+      predictions[0].box.xMin >= width / 4 &&
+      predictions[0].box.yMin >= width / 4 &&
+      predictions[0].box.xMax <= (3 * width) / 4 &&
+      predictions[0].box.yMax <= (3 * width) / 4
+    ) {
+      setOnTarget(true);
+      if (
+        predictions[0].box.width <= (1 * width) / 4 ||
+        predictions[0].box.height <= (1 * width) / 4
+      ) {
+        ttsMaker("얼굴을 더 가까이 오세요!!", 0);
+        setTimeout(() => {
+          isCaptured.current = true;
+        }, 5000);
+        ttsMaker("", 0);
+      } else {
+        console.log("on Target");
+        var dataUrl = photoRef.toDataURL("image/jpeg");
+        var blob = dataURItoBlob(dataUrl);
+
+        var formData = new FormData();
+        formData.append("image", blob);
+
+        login(formData);
+      }
+    } else {
+      setOnTarget(false);
+      ttsMaker("얼굴을 칸에 맞춰주세요!!", 0);
+      setTimeout(() => {
+        isCaptured.current = true;
+      }, 5000);
+      ttsMaker("", 0);
+    }
+
+    return predictions;
+  };
+
+  const drawToCanvas = async () => {
+    try {
+      let width = 500;
+      let height = 500;
+      let photo = photoRef.current;
+      let video = videoRef.current;
+
+      photo.width = width;
+      photo.height = height;
+
+      let ctx = photo.getContext("2d");
+      ctx.drawImage(video, 0, 0, photo.width, photo.height);
+
+      const preds = await estimateCanvas(photo);
+
+      for (let i = 0; i < preds.length; i++) {
+        let p = preds[i];
+        ctx.strokeStyle = "#FF0000";
+        ctx.lineWidth = 5;
+        ctx.strokeRect(p.box.xMin, p.box.yMin, p.box.xMax - p.box.xMin, p.box.yMax - p.box.yMin);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
-  const takePicture = () => {
-    let width = 500;
-    let height = width / (6 / 4);
-    let photo = photoRef.current;
-    let video = videoRef.current;
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(",")[1]);
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
 
-    photo.width = width;
-    photo.height = height;
+    var bb = new Blob([ab], { type: "image/jpeg" });
+    return bb;
+  }
 
-    let ctx = photo.getContext("2d");
-    ctx.drawImage(video, 0, 0, photo.width, photo.height);
+  const login = (data) => {
+    async function makeRequest() {
+      let text = "로그인 실패!! 다시 얼굴을 맞춰주세요!!";
+      ttsMaker(text, 0);
+      await delay(text.length * 300);
+
+      isCaptured.current = true;
+      ttsMaker("", 0);
+    }
+
+    // 여기도 지금 무조건 4로 들어가게 되어있음 이것도 수정해야됨
+    // 그리고 로그인할 때 받아오는 정보에 gender도 추가했으면 좋겠음 -> main에서 바로 어머님, 아버님 구분할려면 필요함
+    const governmentId = 4;
+
+    axios
+      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, data, {
+        headers: {
+          accept: "*/*",
+          "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
+        },
+      })
+      .then((response) => {
+        console.log("login 성공");
+
+        const role = response.data.data.info.role;
+
+        closeWebcam();
+
+        setTimeout(() => {
+          setFade(true);
+
+          localStorage.setItem("userInfo", JSON.stringify(response.data.data.info)); // userInfo 저장
+          localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
+
+          const eventSourceInitDict = {
+            heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
+          };
+
+          const sse = new EventSourcePolyfill(
+            `${BASE_URL_SSE}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
+            eventSourceInitDict
+          );
+
+          sse.addEventListener("connect", (e) => {
+            // connect라는 이벤트를 받았을 때, connect data 출력
+            const { data: receivedConnectData } = e;
+
+            console.log("Connected! ", receivedConnectData);
+          });
+
+          sse.addEventListener("page", () => {
+            console.log("navigate");
+            navigate("/student-live");
+          });
+
+          navigate(role === "ROLE_STUDENT" ? "/" : "/teacher-main");
+        }, 1000); // fadeout 후 이동
+      })
+      .catch((error) => {
+        makeRequest();
+
+        console.error(`Error: ${error}`);
+      });
   };
 
   useEffect(() => {
-    console.log(predictions);
-  }, [predictions]);
+    const initFD = async () => {
+      const model_1 = faceDetection.SupportedModels.MediaPipeFaceDetector;
+      const detectorConfig = {
+        runtime: "mediapipe",
+        solutionPath: "https://cdn.jsdelivr.net/npm/@mediapipe/face_detection",
+        // or 'base/node_modules/@mediapipe/face_detection' in npm.
+      };
+      model = await faceDetection.createDetector(model_1, detectorConfig);
 
-  useEffect(() => {
+      console.log("model", model);
+
+      window.requestAnimationFrame(loop);
+    };
+    initFD();
     setupWebcam();
-    initTeachableMachine();
+    ttsMaker("얼굴을 중앙에 맞춰주세요.", 0);
+    setTimeout(() => {
+      isCaptured.current = true;
+    }, 5000);
+
+    return () => {
+      closeModel();
+    };
   }, []);
 
+  const closeWebcam = () => {
+    const stream = videoRef.current.srcObject;
+    const tracks = stream.getTracks();
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    videoRef.current.srcObject = null;
+  };
+
+  const closeModel = () => {
+    if (model) {
+      model.dispose(); // 모델 종료 메서드를 호출하여 메모리를 해제합니다.
+      model = null; // 모델 참조를 비웁니다.
+    }
+  };
+
   return (
-    <div className="webcam-container">
-      {/* 웹캠 화면을 보여주는 video 요소 */}
-      <video className="container" ref={videoRef}></video>
-      {/* 클래스 레이블을 표시하는 부분 */}
-      <div id="label-container">
-        {predictions.map((p, index) => (
-          <div key={index}>{`${p.className}: ${p.probability.toFixed(2)}`}</div>
-        ))}
+    // <div className={"webcam-container" ${fade ? styles.fadeOut : ""}}>
+    <div className="App">
+      <div className="video-line-container">
+        <div className="video-wrapper">
+          {/* 웹캠 화면을 보여주는 video 요소 */}
+          <div>
+            <video ref={videoRef}></video>
+          </div>
+        </div>
+        <div
+          className="line_1"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_2"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_3"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_4"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_5"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_6"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_7"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
+        <div
+          className="line_8"
+          style={{ backgroundColor: onTarget === false ? "red" : "green" }}
+        ></div>
       </div>
-      <canvas ref={photoRef} width={500}></canvas>
-      <button onClick={takePicture}>클릭해서 캡쳐하기</button>
+
+      <div>
+        <canvas ref={photoRef} style={{ display: "none" }}></canvas>
+      </div>
+      {/* <button onClick={takePicture}>클릭해서 캡쳐하기</button> */}
+      {msg && (
+        // <TTS message={`${userInfo.name}님, 안녕하세요! 지금은 혼자 학습 시간입니다.`} />
+        <div style={{ display: "none" }}>
+          <TTS message={msg} />
+        </div>
+      )}
     </div>
   );
 }

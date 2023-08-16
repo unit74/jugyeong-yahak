@@ -1,91 +1,228 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./StudentRecordWord.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
-
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTheme } from "../../store/actions/themeAction";
-
-import { useDebounce } from "../Common/hooks/useDebounce";
-import speak from "../../assets/images/speak.png";
+import { Configuration, OpenAIApi } from "openai";
+import listenImg from "../../assets/images/listening_man.png";
+import TTSsentence from "../Common/TTSsentence";
 
 export default function StudentRecordWord() {
-  // axios !!!!!!!!!
-  // 단어 조회
-  const dispatch = useDispatch();
-
+  // DB에 저장된 단어 가져오기
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
 
-  const {
-    transcript, // 말이 변환된 글자!!!!!!!
-    listening,
-    // resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  // 음성인식 관련
+  const { transcript, listening } = useSpeechRecognition();
 
-  const [speechWord, setSpeechWord] = useState("");
-  const navigate = useNavigate();
-  const debounceTerm = useDebounce(speechWord, 3000); // speechWord가 끝나면 3초 후에 정답 처리를 위해
-  // 오답처리나 정답 처리를 바로 하지 않기 위해서
+  // TTS 관련
+  const [count, setCount] = useState(0);
+  const [msg, setMsg] = useState(null);
+  const [jamoAnswer, setJamoAnswer] = useState(null);
 
-  useEffect(() => {
-    dispatch(fetchTheme());
-    const timer = setTimeout(() => {
-      SpeechRecognition.startListening({ continuous: true });
-      // console.log("마운트 5초뒤 speech 함수가 실행되었습니다.");
-    }, 800); // 800ms = 0.8초  노인 반응 속도논문 평균 0.846초이니까 먼저 녹음 시작
-    // 5초 동안 녹음 지속
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
 
-    // 컴포넌트가 언마운트될 때 타이머를 정리합니다.
-    return () => clearTimeout(timer);
-  }, []); // 빈 의존성 배열로 인해 컴포넌트가 마운트될 때만 effect가 실행됩니다.
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  useEffect(() => {
-    setSpeechWord(transcript);
-  }, [transcript]); // transcript가 변경되면 speechWord가 state 변경시킨다.
+  // const helpGpt = async () => {
+  //   const apiKey = "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";
 
-  const removeSpaces = (str) => str.replace(/\s/g, ""); // 공백 제거 함수
+  //   const configuration = new Configuration({
+  //     apiKey: apiKey,
+  //   });
+  //   const openai = new OpenAIApi(configuration);
 
-  const normalizedDebounceTerm = removeSpaces(debounceTerm);
+  //   const response = await openai.createChatCompletion({
+  //     model: "gpt-3.5-turbo",
+  //     messages: [
+  //       { role: "system", content: "70대 어르신들에게 한글을 가르쳐 드릴꺼야!." },
+  //       {
+  //         role: "user",
+  //         content: `정답인 "${wordsList[wordIndex].word}"에 대해 "${transcript}"가 틀린 부분을 짧게 한줄로 설명해줘`,
+  //       },
+  //     ],
+  //   });
 
-  useEffect(() => {
-    // debounceterm이 바뀌면 이거 실행할거야
-    if (debounceTerm) {
-      if (normalizedDebounceTerm === wordsList[wordIndex]?.word) {
-        // '가시' 여기다가 문제
-        navigate("/good-feedback", { state: { course: "reading" } }); // navigate로 이동 정답 페이지 이동
-      } else {
-        navigate("/bad-feedback", { state: { course: "reading" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
-      }
-    }
-  }, [debounceTerm, navigate]);
+  //   let text = response.data.choices[0].message.content;
+  //   ttsMaker(text, 0);
+  //   await delay(text.length * 250);
+  // };
 
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
+  function getConstantVowel(kor) {
+    const f = [
+      "ㄱ",
+      "ㄲ",
+      "ㄴ",
+      "ㄷ",
+      "ㄸ",
+      "ㄹ",
+      "ㅁ",
+      "ㅂ",
+      "ㅃ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅉ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+    const s = [
+      "ㅏ",
+      "ㅐ",
+      "ㅑ",
+      "ㅒ",
+      "ㅓ",
+      "ㅔ",
+      "ㅕ",
+      "ㅖ",
+      "ㅗ",
+      "ㅘ",
+      "ㅙ",
+      "ㅚ",
+      "ㅛ",
+      "ㅜ",
+      "ㅝ",
+      "ㅞ",
+      "ㅟ",
+      "ㅠ",
+      "ㅡ",
+      "ㅢ",
+      "ㅣ",
+    ];
+    const t = [
+      "",
+      "ㄱ",
+      "ㄲ",
+      "ㄳ",
+      "ㄴ",
+      "ㄵ",
+      "ㄶ",
+      "ㄷ",
+      "ㄹ",
+      "ㄺ",
+      "ㄻ",
+      "ㄼ",
+      "ㄽ",
+      "ㄾ",
+      "ㄿ",
+      "ㅀ",
+      "ㅁ",
+      "ㅂ",
+      "ㅄ",
+      "ㅅ",
+      "ㅆ",
+      "ㅇ",
+      "ㅈ",
+      "ㅊ",
+      "ㅋ",
+      "ㅌ",
+      "ㅍ",
+      "ㅎ",
+    ];
+
+    const ga = 44032;
+    let uni = kor.charCodeAt(0);
+
+    uni = uni - ga;
+
+    let fn = parseInt(uni / 588);
+    let sn = parseInt((uni - fn * 588) / 28);
+    let tn = parseInt(uni % 28);
+
+    return {
+      f: f[fn],
+      s: s[sn],
+      t: t[tn],
+    };
   }
 
+  useEffect(() => {
+    async function makeRequest(data) {
+      await delay(1000);
+
+      ttsMaker(data, 0);
+      await delay(data.length * 250);
+      ttsMaker("", 0);
+
+      SpeechRecognition.startListening();
+      await delay(4000);
+      SpeechRecognition.stopListening();
+
+      setCount(count + 1);
+    }
+
+    async function work(data) {
+      if (data === wordsList[wordIndex].word) {
+        navigate("/good-feedback", { state: { course: "reading" } });
+      } else {
+        if (count == 1) {
+          let answer = "";
+
+          for (let char of wordsList[wordIndex].word) {
+            let jamo = getConstantVowel(char); // 각 문자 출력
+            answer += jamo.f + ", " + jamo.s;
+            if (jamo.t !== "") {
+              answer += ", " + jamo.t;
+            }
+            answer += "가 결합되어 " + char + ", ";
+          }
+
+          answer = answer.substr(0, answer.length - 2);
+          answer += " 합쳐서 " + wordsList[wordIndex].word + "로 발음됩니다.";
+          setJamoAnswer(answer);
+
+          // let text = `이 단어의 뜻은 ${wordsList[wordIndex].wordExplanation}입니다.`;
+          ttsMaker(answer, 0);
+          await delay(answer.length * 250);
+        }
+        setCount(count + 1);
+      }
+    }
+
+    if (count === 0) {
+      makeRequest("단어를 읽어주세요!!");
+      console.log(transcript);
+    } else if (count === 1) {
+      work(transcript);
+      // console.log(transcript);
+    } else if (count === 2) {
+      setJamoAnswer(null);
+      makeRequest("다시 단어를 읽어주세요!!");
+    } else if (count === 3) {
+      work(transcript);
+    } else if (count === 4) {
+      makeRequest(`단어를 같이 읽어요!!! ${wordsList[wordIndex].word} `);
+    } else {
+      navigate("/good-feedback", { state: { course: "reading" } });
+    }
+  }, [count]);
+
+  const navigate = useNavigate();
+  console.log(wordsList[wordIndex]);
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
-          <img
-            className={styles.wordimg}
-            src={wordsList.length > 0 && wordsList[wordIndex].wordImageUrl}
-            alt=""
-          />
-
-          <div className={styles.text}>
-            <h1 className={styles.situationText}>
-              {wordsList.length > 0 && wordsList[wordIndex].word}
-            </h1>
+          <div className={styles.listenImg}>
+            {listening && <img src={listenImg} alt="listenImg" />}
           </div>
-          <div className={styles.microphone}>
-            <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
-            <p>{transcript}</p>
+          <div className={styles.situationText}>
+            {wordsList.length > 0 && wordsList[wordIndex].word}
           </div>
+          <p className={styles.transcriptText}>{transcript}</p>
+          {msg && <TTSsentence message={msg} />}
+          <div>{jamoAnswer}</div>
         </div>
       </div>
     </div>
