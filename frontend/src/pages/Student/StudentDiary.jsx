@@ -133,11 +133,11 @@ export default function StudentDiary() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
+          <img src={img} alt="" height={500} />
           <div>
             <b className={styles.diarytext}>{formattedText}</b>
           </div>
           {msg && <TTS message={msg} />}
-          <img src={img} alt="" height={300} />
         </div>
       </div>
     </div>

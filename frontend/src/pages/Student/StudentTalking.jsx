@@ -188,7 +188,7 @@ export default function StudentTalking() {
           imageUrl: img,
         })
         .then(() => {
-          // navigate("/diary", { state: { diaryEntry, img } });
+          navigate("/diary", { state: { diaryEntry, img } });
         });
     }
 
@@ -203,7 +203,7 @@ export default function StudentTalking() {
         <div className={styles.theme}>
           <div className={styles.microphone}>
             <h1 className={styles.generatedMessage}>오늘 하루는 어떠셨나요?</h1>
-
+{/* 
             {allConversations.split(".\n").map((conversation, index) => (
               index % 2 === 1 && (
                 <div
@@ -213,7 +213,17 @@ export default function StudentTalking() {
                   {conversation}
                 </div>
               )
-              ))}
+              ))} */}
+
+            {allConversations.split(".\n").map((conversation, index) => (
+              <div
+                key={index}
+                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
+              >
+                {conversation}
+              </div>
+            ))}
+
 
                           
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
