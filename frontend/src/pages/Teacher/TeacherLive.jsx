@@ -137,7 +137,6 @@ class OpenViduSession extends Component {
 
         await axios.post(`${BASE_URL}/api/v1/private/lecture/convert/page`, {
           classId: this.state.mySessionId,
-          streamId: JSON.parse(localStorage.getItem("userInfo")).id,
         });
       }
     );
