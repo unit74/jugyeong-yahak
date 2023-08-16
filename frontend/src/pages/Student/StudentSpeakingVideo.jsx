@@ -6,7 +6,7 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 // 예시영상 페이지
 export default function StudentSpeakingVideo() {
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/review-word");
+    navigate("/situation");
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초

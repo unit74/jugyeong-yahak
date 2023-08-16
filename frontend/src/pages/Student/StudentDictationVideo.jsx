@@ -8,7 +8,7 @@ export default function StudentSpeakingVideo() {
   const navigate = useNavigate();
 
   const navigateToRecordDictation = useCallback((navigate) => {
-    navigate("/dictation-question");
+    navigate("/dictation-answer");
   }, []);
 
   useTimeoutCallback(navigateToRecordDictation, 10000); // 10초

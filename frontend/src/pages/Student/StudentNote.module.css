@@ -45,15 +45,15 @@
   left: 0;
   line-height: 36px;
   display: inline-block;
-  text-shadow: 0 15px 4px rgba(0, 0, 0, 0.25);
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
   font-size: calc(4vw + 1.5vh); /* 반응형 */
-  animation: bouncing-text 1s infinite;
+  /* animation: bouncing-text 1s infinite; */
   margin-bottom: 30%;
   margin-top: 35%;
 }
+
 
 @keyframes bouncing-text {
   0%,
@@ -115,9 +115,6 @@
 
 /*  fadeout */
 
-.fadeOut {
-  animation: fadeOut 1s ease-out forwards;
-}
 
 @keyframes fadeOut {
   from {
@@ -128,6 +125,9 @@
   }
 }
 
+.fadeOut {
+  animation: fadeOut 3s ease-out forwards;
+}
 .square * {
   user-select: none;
 }
@@ -135,10 +135,11 @@
 /*  */
 
 .clearButton {
-  background-color: #e74c3c;
+  font-family: "KoPubWorld Batang Bold";
+  background-color: #247713;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   padding: 2.5rem 5rem;
   cursor: pointer;
@@ -147,14 +148,15 @@
 }
 
 .clearButton:hover {
-  background-color: #f3130b;
+  background-color: #64ff6c;
 }
 
 .downloadButton {
-  background-color: #3498db;
+  font-family: "KoPubWorld Batang Bold";
+  background-color: #f3130b;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2.5rem;
   padding: 2.5rem 5rem;
   cursor: pointer;
@@ -163,7 +165,7 @@
 }
 
 .downloadButton:hover {
-  background-color: #0088ff;
+  background-color: #ff6857;
 }
 .canvasContainer {
   /* transform: translate(-50%, 38%); */
