@@ -88,7 +88,9 @@ function splitKorean(text) {
 
     const subCode = code - korBegin;
     const chosungIndex = parseInt(subCode / chosungBase);
-    const jungsungIndex = parseInt((subCode - chosungIndex * chosungBase) / jungsungBase);
+    const jungsungIndex = parseInt(
+      (subCode - chosungIndex * chosungBase) / jungsungBase
+    );
     const jongsungIndex = parseInt(subCode % jungsungBase);
 
     result.push({
@@ -107,11 +109,12 @@ const LiveReadWordHint = () => {
   const splittedText = splitKorean(word.word);
 
   return (
-    <div>
+    <div className={styles.situation}>
       <h1>✔ 아래 단어를 소리내어 읽어봅시다.</h1>
       {splittedText.map((char, index) => (
-        <div key={index}>
-          {char.chosung} + {char.jungsung} {char.jongsung && "+"} {char.jongsung} = {char.original}
+        <div key={index} className={styles.text}>
+          {char.chosung} + {char.jungsung} {char.jongsung && "+"}{" "}
+          {char.jongsung} = {char.original}
         </div>
       ))}
     </div>
