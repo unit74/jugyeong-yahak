@@ -27,23 +27,23 @@ const StudentReviewTheme = () => {
   // fade 효과
   const [fade, setFade] = useState(false);
 
-  // const navigateToRecordDictation = useCallback(() => {
-  //   setFade(true);
-  //   setTimeout(() => {
-  //     navigate(moveToNextPage());
-  //   }, 1000); // fadeout 후 이동
-  // }, [navigate]);
+  const navigateToRecordDictation = useCallback(() => {
+    setFade(true);
+    setTimeout(() => {
+      navigate(moveToNextPage());
+    }, 1500); // fadeout 후 이동
+  }, [navigate]);
 
   // 이동할 다음 페이지 결정
-  // const moveToNextPage = () => {
-  //   const daysPassed = (timeNow - lastVisited) / (1000 * 60 * 60 * 24); // 초를 일 단위로 변환
-  //   if (daysPassed >= 7) {
-  //     localStorage.setItem("lastVisitedSpeakingVideo", timeNow.toISOString());
-  //     return "/speaking-video";
-  //   } else {
-  //     return "/situation";
-  //   }
-  // };
+  const moveToNextPage = () => {
+    const daysPassed = (timeNow - lastVisited) / (1000 * 60 * 60 * 24); // 초를 일 단위로 변환
+    if (daysPassed >= 7) {
+      localStorage.setItem("lastVisitedSpeakingVideo", timeNow.toISOString());
+      return "/speaking-video";
+    } else {
+      return "/situation";
+    }
+  };
 
   // API요청 결과를 담을 변수
   // const [themeTitle, setThemeTitle] = useState(null);
@@ -87,7 +87,7 @@ const StudentReviewTheme = () => {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      // navigateToRecordDictation();
+      navigateToRecordDictation();
     }
 
     if (themeSituation !== null) {

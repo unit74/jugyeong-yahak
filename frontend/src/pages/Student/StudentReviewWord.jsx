@@ -5,6 +5,7 @@ import styles from "./StudentReviewWord.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 import TTS from "../Common/TTS";
+import CLOVA from "../Common/CLOVA";
 
 export default function StudentReviewWord() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ export default function StudentReviewWord() {
           </h1>
           <div>
             {wordsList[wordIndex].word && (
-              <TTS repeat={repeatValue} message={wordsList[wordIndex].word} />
+              <CLOVA repeat={repeatValue} message={wordsList[wordIndex].word} />
             )}
           </div>
         </div>

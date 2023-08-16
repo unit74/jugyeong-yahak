@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styles from "./StudentTalking.module.css";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
@@ -92,7 +94,9 @@ export default function StudentTalking() {
 
     const generatedMessage = response.data.choices[0].message.content;
     setGeneratedText(generatedMessage);
-    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
+    setallConversations(
+      allConversations + message + ".\n" + generatedMessage + ".\n"
+    );
     setCount(count + 1);
     console.log("gpt : " + generatedMessage);
   };
@@ -142,7 +146,7 @@ export default function StudentTalking() {
         {
           role: "system",
           content:
-            "영어로 번역하는데 총 띄어 쓰기 포함해서 글자수가 200개가 안되게 축약해서 번역해줘",
+            "Translate this into English. Please keep your response under 200 characters.",
         },
         {
           role: "user",
@@ -151,8 +155,12 @@ export default function StudentTalking() {
       ],
     });
 
-    const translatedDiary = response.data.choices[0].message.content;
-    const prompt = "drawing done with a pencil, only scenery, in color" + translatedDiary;
+    let translatedDiary = response.data.choices[0].message.content;
+    if (translatedDiary.length > 200) {
+      translatedDiary = translatedDiary.substring(0, 200) + "...";
+    }
+    const prompt =
+      "drawing done with a pencil, only scenery, in color" + translatedDiary;
     createImage(prompt);
   };
 
@@ -204,18 +212,15 @@ export default function StudentTalking() {
           <div className={styles.microphone}>
             <h1 className={styles.generatedMessage}>오늘 하루는 어떠셨나요?</h1>
 
-            {allConversations.split(".\n").map((conversation, index) => (
-              index % 2 === 1 && (
-                <div
-                key={index}
-                className={styles.generatedMessage}
-                >
-                  {conversation}
-                </div>
-              )
-              ))}
+            {allConversations.split(".\n").map(
+              (conversation, index) =>
+                index % 2 === 1 && (
+                  <div key={index} className={styles.generatedMessage}>
+                    {conversation}
+                  </div>
+                )
+            )}
 
-                          
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
             <p className={styles.userMessage}>{transcript}</p>
             {/* {img && <img src={img}></img>} */}
