@@ -10,16 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ThemeDetailResponse {
+public class ThemeNameResponse {
 
-    private long id;
-    private String theme;
-    private String themeImageUrl;
+  private String themeName;
 
-    public void of(ThemeEntity themeEntity) {
-        this.id = themeEntity.getId();
-        this.theme = themeEntity.getTheme();
-        this.themeImageUrl = themeEntity.getThemeImageUrl();
-    }
+  public void of(ThemeEntity themeEntity) {
+    this.themeName = themeEntity.getTheme();
+  }
 
 }
