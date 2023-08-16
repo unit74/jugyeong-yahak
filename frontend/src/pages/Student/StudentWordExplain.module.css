@@ -14,7 +14,8 @@
 
 .square {
   display: flex;
-  flex-direction: column;
+  position: relative; /* 기존 위치를 기준으로 자식 요소들을 절대적 위치로 배치할 수 있게 합니다 */
+  flex-direction: row; /* 변경된 부분 */
   justify-content: center;
   align-items: center;
   position: absolute;
@@ -58,6 +59,8 @@
   font-family: KoPubWorld Batang Bold;
 }
 .situationText {
+  position: absolute; /* .situationText를 절대적 위치로 만듭니다 */
+  transform: translateY( -200%); /* .square의 상단 위로 이동시킵니다 */
   text-align: center;
   font-family: "KoPubWorld Batang Bold";
   font-weight: bolder;
@@ -65,6 +68,10 @@
   white-space: nowrap;
   color: #333; /* Change the text color as desired */
   margin-bottom: 40px;
+}
+
+.maging{
+  margin: 0 20px;  /* 상하 0px, 좌우 20px 마진 추가 */
 }
 
 .wordComponent {
