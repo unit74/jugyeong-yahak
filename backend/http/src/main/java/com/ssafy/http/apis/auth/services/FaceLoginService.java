@@ -28,9 +28,11 @@ public class FaceLoginService {
     File uploadFile = null;
     try {
       uploadFile = convert(faceImage)
-          .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+          .orElseThrow(() ->
+              new IllegalArgumentException("MultipartFile -> File 전환 실패"));
     } catch (IOException e) {
-      new RegisterIdentificationException(
+
+      throw new RegisterIdentificationException(
           ErrorCode.IO_ERROR);
     }
 
@@ -54,15 +56,15 @@ public class FaceLoginService {
     //ByteArray 대신 서버의 이미지 주소를 보내는 로직으로 변경
     //rest.getMessageConverters().add(new ByteArrayHttpMessageConverter());
 
-    ResponseEntity<JsonNode> postForEntity
-        = rest.postForEntity(nodeUrl, request, JsonNode.class);
-
-    removeNewFile(uploadFile);
-
-    System.out.println(postForEntity.getBody().get("result").get(0).get("_label").asText());
-    System.out.println(postForEntity.getBody().get("result").get(0).get("_distance").asDouble());
-
-    return postForEntity.getBody().get("result").get(0).get("_label").asText();
+    try {
+      ResponseEntity<JsonNode> postForEntity
+          = rest.postForEntity(nodeUrl, request, JsonNode.class);
+      return postForEntity.getBody().get("result").get(0).get("_label").asText();
+    } catch (Exception e) {
+      throw new IllegalArgumentException("face-login 서버 연결 오류입니다.");
+    } finally {
+      removeNewFile(uploadFile);
+    }
 
   }
 

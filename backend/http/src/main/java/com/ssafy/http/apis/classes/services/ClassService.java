@@ -2,39 +2,126 @@ package com.ssafy.http.apis.classes.services;
 
 import com.ssafy.http.apis.classes.entities.ClassEntity;
 import com.ssafy.http.apis.classes.repositories.ClassRepository;
+import com.ssafy.http.apis.classes.request.ClassRegisterRequest;
+import com.ssafy.http.apis.classes.request.ClassUpdateRequest;
 import com.ssafy.http.apis.classes.responses.ClassDetailResponse;
 import com.ssafy.http.apis.members.entities.MemberEntity;
 import com.ssafy.http.apis.members.repositories.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import com.ssafy.http.apis.roles.Role;
+import com.ssafy.http.apis.roles.entities.RoleEntity;
+import com.ssafy.http.exception.CustomException;
+import com.ssafy.http.support.codes.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ClassService {
 
-    private final ClassRepository classRepository;
+  private final ClassRepository classRepository;
+  private final MemberRepository memberRepository;
 
-    public List<ClassDetailResponse> getClassList(Long governmentId) {
+  @Transactional
+  public List<ClassDetailResponse> getUnassignedClassList(Long loginUserId) {
 
-        List<ClassDetailResponse> classDetailResponses = new ArrayList<>();
+    List<ClassDetailResponse> classDetailResponses = new ArrayList<>();
 
-        List<ClassEntity> classes = classRepository.findAllByGovernmentId(governmentId);
+    MemberEntity memberEntity = memberRepository.findMemberEntityById(loginUserId).orElseThrow(() ->
+        new CustomException(ErrorCode.ID_NOTFOUND)
+    );
 
-        for(ClassEntity class_ : classes ) {
-            ClassDetailResponse classDetailResponse = new ClassDetailResponse();
+    List<ClassEntity> classEntities = classRepository.findUnassignedClassList(
+        memberEntity.getGovernmentId(),
+        RoleEntity.builder()
+            .role(Role.TEACHER)
+            .build());
 
-            classDetailResponse.of(class_);
+    for (ClassEntity classEntity : classEntities) {
+      ClassDetailResponse classDetailResponse = new ClassDetailResponse();
 
-            classDetailResponses.add(classDetailResponse);
-        }
+      classDetailResponse.of(classEntity);
 
-        return classDetailResponses;
+      classDetailResponses.add(classDetailResponse);
     }
 
+    return classDetailResponses;
+  }
 
+  @Transactional
+  public ClassDetailResponse selectOne(Long classId) {
+
+    ClassEntity classEntity = classRepository.findById(classId).orElseThrow(
+        () -> new CustomException(ErrorCode.ID_NOTFOUND)
+    );
+
+    ClassDetailResponse classDetailResponse = new ClassDetailResponse();
+    classDetailResponse.of(classEntity);
+
+    return classDetailResponse;
+  }
+
+  @Transactional
+  public void updateClass(ClassUpdateRequest classUpdateRequest, Long governmentId) {
+
+    ClassEntity classEntity = classRepository.findById(classUpdateRequest.getId()).orElseThrow(
+        () -> new CustomException(ErrorCode.ID_NOTFOUND)
+    );
+
+    //update 요청 정보 기준으로 update 시킴
+    classEntity = ClassEntity.builder()
+        .id(classUpdateRequest.getId())
+        .governmentId(governmentId)
+        .commonCode(classEntity.getCommonCode())
+        .className(classUpdateRequest.getName())
+        .lectureTime(classUpdateRequest.toLocalTime(classUpdateRequest.getHour(),
+            classUpdateRequest.getMinute()))
+        .build();
+
+    classRepository.save(classEntity);
+  }
+
+  @Transactional
+  public void registClass(ClassRegisterRequest classRegisterRequest, Long governmentId) {
+
+    ClassEntity classEntity = classRegisterRequest.toEntity(governmentId);
+
+    classRepository.save(classEntity);
+
+  }
+
+  @Transactional
+  public List<ClassDetailResponse> getClassList(Long governmentId, Role loginUserRole) {
+
+    List<ClassDetailResponse> classDetailResponses = new ArrayList<>();
+
+    if (loginUserRole == Role.TEACHER) {
+      governmentId = memberRepository.findById(governmentId).get().getGovernmentId();
+    }
+
+    List<ClassEntity> classes = classRepository.findAllByGovernmentId(governmentId);
+
+    for (ClassEntity class_ : classes) {
+      ClassDetailResponse classDetailResponse = new ClassDetailResponse();
+
+      classDetailResponse.of(class_);
+
+      classDetailResponses.add(classDetailResponse);
+    }
+
+    return classDetailResponses;
+  }
+
+  public void deleteOne(Long id) {
+
+    try {
+      classRepository.deleteById(id);
+    } catch (Exception e) {
+      throw new CustomException(ErrorCode.IO_ERROR);
+    }
+
+  }
 
 }
