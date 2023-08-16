@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import StreamComponent from "../../components/StreamComponent";
 import UserModel from "../../models/user-model";
 
-import axios from "axios";
+import axios from "../Common/api/authAxios";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
@@ -15,8 +15,8 @@ export default function StudentLive() {
   const navigate = useNavigate();
 
   const clazz = {
-    no: 1,
-    name: "새싹반",
+    no: 206,
+    name: "신호동햇님반",
   };
   // 태그 생성부분
   return (
@@ -48,6 +48,7 @@ class OpenViduSession extends Component {
       mouse: { x: null, y: null },
       page: 0,
       theme: null,
+      curriculum: null,
       word: null,
       choseong: null,
       timer: 0,
@@ -101,11 +102,7 @@ class OpenViduSession extends Component {
       console.log("Token : " + token);
       this.connect(token);
     } catch (error) {
-      console.error(
-        "There was an error getting the token:",
-        error.code,
-        error.message
-      );
+      console.error("There was an error getting the token:", error.code, error.message);
       if (this.props.error) {
         this.props.error({
           error: error.error,
@@ -134,11 +131,7 @@ class OpenViduSession extends Component {
           });
         }
         alert("There was an error connecting to the session:", error.message);
-        console.log(
-          "There was an error connecting to the session:",
-          error.code,
-          error.message
-        );
+        console.log("There was an error connecting to the session:", error.code, error.message);
       });
   }
 
@@ -232,9 +225,7 @@ class OpenViduSession extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter(
-      (user) => user.getStreamManager().stream === stream
-    )[0];
+    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -286,7 +277,10 @@ class OpenViduSession extends Component {
         subscribers: remoteUsers,
         page: data.page,
         theme: data.theme,
+        curriculum: data.curriculum,
         word: data.word,
+        choseong: data.choseong,
+        timer: data.timer,
       });
     });
   }
@@ -317,8 +311,7 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:mic", (event) => {
       const data = JSON.parse(event.data);
 
-      if (localUser && localUser.getConnectionId() === data.target)
-        this.micStatusChanged();
+      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
     });
   }
 
@@ -333,14 +326,14 @@ class OpenViduSession extends Component {
   }
 
   subscribeToExit() {
-    this.state.session.on('signal:exit', (event) => {
+    this.state.session.on("signal:exit", (event) => {
       this.leaveSession();
-      this.navigate('/');
+      this.navigate("/");
     });
   }
 
   subscribeToInfo() {
-    this.state.session.on('signal:info', (event) => {
+    this.state.session.on("signal:info", (event) => {
       const data = JSON.parse(event.data);
 
       if (data.page !== undefined) {
@@ -358,16 +351,26 @@ class OpenViduSession extends Component {
           word: data.word,
         });
       }
+      if (data.curriculum !== undefined) {
+        this.setState({
+          curriculum: data.curriculum,
+        });
+      }
       if (data.choseong !== undefined) {
         this.setState({
           choseong: data.choseong,
+        });
+      }
+      if (data.quiz !== undefined) {
+        this.setState({
+          quiz: data.quiz,
         });
       }
     });
   }
 
   subscribeToTimer() {
-    this.state.session.on('signal:timer', (event) => {
+    this.state.session.on("signal:timer", (event) => {
       const data = JSON.parse(event.data);
 
       this.setState({
@@ -475,34 +478,32 @@ class OpenViduSession extends Component {
     return (
       <div className="container" id="container">
         <div>
-          {mainStreamUser !== undefined &&
-            mainStreamUser.getStreamManager() !== undefined && (
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "300px",
-                  height: "300px",
-                }}
-                id="mainStreamUser"
-              >
-                <div>포커스 중인 사람</div>
-                <StreamComponent user={mainStreamUser} />
-              </div>
-            )}
-          {localUser !== undefined &&
-            localUser.getStreamManager() !== undefined && (
-              <div
-                style={{
-                  display: "inline-block",
-                  width: "300px",
-                  height: "300px",
-                }}
-                id="localUser"
-              >
-                <div>본인</div>
-                <StreamComponent user={localUser} />
-              </div>
-            )}
+          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: "inline-block",
+                width: "300px",
+                height: "300px",
+              }}
+              id="mainStreamUser"
+            >
+              <div>포커스 중인 사람</div>
+              <StreamComponent user={mainStreamUser} />
+            </div>
+          )}
+          {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+            <div
+              style={{
+                display: "inline-block",
+                width: "300px",
+                height: "300px",
+              }}
+              id="localUser"
+            >
+              <div>본인</div>
+              <StreamComponent user={localUser} />
+            </div>
+          )}
           {this.state.subscribers.map((sub, i) => (
             <div
               key={i}
@@ -518,31 +519,26 @@ class OpenViduSession extends Component {
                   this.handleMainVideoStream(sub);
                 }}
               >
-                <StreamComponent
-                  user={sub}
-                  streamId={sub.streamManager.stream.streamId}
-                />
+                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
               </div>
             </div>
           ))}
         </div>
-        {this.state.mouse &&
-          this.state.mouse.x !== null &&
-          this.state.mouse.y != null && (
-            <div
-              style={{
-                position: "absolute",
-                left: `${this.state.mouse.x - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
-                top: `${this.state.mouse.y - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
-                height: "20px",
-                width: "20px",
-                borderRadius: "50%",
-                backgroundColor: "#FF6363", // 빨간색의 톤 다운 버전
-                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)", // 약간의 그림자 효과
-                border: "2px solid white", // 테두리 효과
-              }}
-            />
-          )}
+        {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y != null && (
+          <div
+            style={{
+              position: "absolute",
+              left: `${this.state.mouse.x - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
+              top: `${this.state.mouse.y - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
+              height: "20px",
+              width: "20px",
+              borderRadius: "50%",
+              backgroundColor: "#FF6363", // 빨간색의 톤 다운 버전
+              boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)", // 약간의 그림자 효과
+              border: "2px solid white", // 테두리 효과
+            }}
+          />
+        )}
       </div>
     );
   }

@@ -12,6 +12,7 @@ export default function CanvasTest() {
   const [studentAns, setStudentAns] = useState(""); //인식한 텍스트
   const wordsList = useSelector((state) => state.themeState.wordsList) || []; // 단어 목록
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex); // 현재 차례
+  const [drawData, setDrawData] = useState(null);
 
   // 함수
   // 1. 그림 전체 지우기
@@ -27,6 +28,7 @@ export default function CanvasTest() {
     if (canvasRef.current) {
       const canvas = await html2canvas(canvasRef.current.canvasContainer);
       const base64Image = canvas.toDataURL("image/png");
+      setDrawData(canvasRef.current.getSaveData());
 
       // OCR (백으로 axios보내는 로직으로 수정 필)
       const vision = require("react-cloud-vision-api");
@@ -63,6 +65,7 @@ export default function CanvasTest() {
     dispatch(fetchTheme());
 
     // 2. OCR 결과가 들어오면, 정답과 비교하여 피드백해줌
+    console.log(studentAns);
     if (studentAns) {
       if (studentAns === wordsList[wordIndex]?.word) {
         navigate("/good-feedback", { state: { course: "writing" } });
@@ -70,8 +73,9 @@ export default function CanvasTest() {
         navigate("/dictation-feedback", {
           state: {
             course: "writing",
-            studentAnswer: studentAns,
+            // studentAnswer: studentAns,
             correctAnswer: wordsList[wordIndex]?.word,
+            canvasData: drawData,
           },
         });
       }
@@ -98,7 +102,7 @@ export default function CanvasTest() {
         <button className={styles.downloadButton} onClick={handleDownload}>
           다 적었어요
         </button>
-        <h1 className={styles.situationText}>{studentAns}</h1>
+        {/* <h1 className={styles.situationText}>{studentAns}</h1> */}
       </div>
     </div>
   );

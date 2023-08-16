@@ -1,0 +1,353 @@
+/* 모달창을 화면 중앙. 최상단에 노출 */
+.container {
+  /* 모달창 크기 */
+  width: 300px;
+  height: 200px;
+  overflow: auto;
+  /* 최상단 위치 */
+  z-index: 999;
+
+  /* 중앙 배치 */
+  /* top, bottom, left, right 는 브라우저 기준으로 작동한다. */
+  /* translate는 본인의 크기 기준으로 작동한다. */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* 모달창 디자인 */
+  background-color: gray;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
+/* 모달창 내부 X버튼 */
+.close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+@font-face {
+  font-family: "KimjungchulGothic-Bold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Kimjungchul";
+  src: url("../../../assets//fonts//KimjungchulGothic-Regular.ttf");
+}
+
+.main {
+  background-image: url(../../../assets/images/backback.jpeg);
+  /* opacity: 0.5; */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-black);
+  font-family: "KimjungchulGothic-Bold";
+  user-select: none; /* 클릭금지 */
+}
+.back {
+  overflow: hidden;
+  padding-top: 5%;
+  padding-left: 7%;
+  padding-right: 1%;
+}
+
+.options {
+  /* margin-top: 10px; */
+  font-family: "KimjungchulGothic-Bold";
+  position: absolute;
+  /* top: 10%; */
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 80%;
+  left: 50%;
+  overflow-y: auto;
+  max-height: calc(100vh - 30vh);
+}
+
+.option {
+  font-family: "KimjungchulGothic-Bold";
+  width: 20vw;
+  height: 20vw;
+  position: relative;
+  border-radius: var(--br-16xl);
+  background-color: rgba(159, 159, 160, 0.093);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.optionText p {
+  margin: 10px; /* margin을 0으로 설정하여 기본 마진을 제거합니다. */
+}
+
+.optionText p:not(:last-child) {
+  margin-bottom: 4px; /* 마지막 <p>를 제외한 모든 <p> 태그의 아래쪽 마진 값을 설정합니다. */
+}
+
+.option:hover {
+  background-image: linear-gradient(
+    to bottom,
+    #4070e9,
+    #88a7e3
+  ); /* 그라데이션 */
+  transform: translateY(-10px);
+
+  border-radius: var(--br-16xl);
+  border: none;
+}
+
+.optionImage {
+  width: 100%;
+  height: 100%;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: var(--br-16xl);
+}
+
+.option:hover .optionText {
+  color: #fff;
+}
+.option:nth-child(1):hover {
+  background-color: rgba(235, 245, 255, 0);
+}
+
+.option:nth-child(2):hover {
+  background-color: rgba(235, 245, 255, 0);
+}
+
+.option:nth-child(3):hover {
+  background-color: rgba(235, 245, 255, 0);
+}
+p {
+  font-family: "KimjungchulGothic-Bold";
+}
+
+.optionText {
+  font-family: "KimjungchulGothic-Bold";
+  position: absolute;
+  font-weight: 600;
+  top: 50%;
+  left: 9%;
+  text-align: left;
+  width: 100%;
+  font-size: 2vw;
+  font-weight: bolder;
+}
+
+.welcome {
+  position: absolute;
+  top: 16vh;
+  left: 50%;
+  font-size: 4vw;
+  font-family: var(--font-roboto);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.typing1 {
+  line-height: 2.75vh;
+  font-size: 4vw;
+  font-family: "KimjungchulGothic-Bold";
+  animation: bounce 1s infinite;
+  display: block;
+}
+
+.typing2 {
+  line-height: 19.75vh;
+  font-size: 4vw;
+  display: block;
+  font-family: "KimjungchulGothic-Bold";
+  animation: bounce 1s infinite;
+}
+
+.welcome span {
+  display: block;
+  font-size: 25%;
+  line-height: 0vh;
+  font-family: "KimjungchulGothic-Bold";
+}
+
+.logout {
+  background-image: linear-gradient(
+    to bottom,
+    #3668eb,
+    #6f97e7
+  ); /* 그라데이션 */
+  position: absolute; /* 로그아웃 버튼의 위치를 조정합니다. */
+  top: 50px; /* 최상단에서의 위치를 정합니다. */
+  left: -15px; /* 왼쪽에서의 위치를 정합니다. */
+
+  /* border-radius: var(--br-16xl); */
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  /* 크기 설정 */
+  padding: 14px 30px;
+  font-size: calc(0.6vw + 1.5vh);
+}
+
+.logout:hover {
+  transform: scale(1.1);
+}
+
+.optionIcon {
+  position: absolute;
+  top: 20%;
+  left: 64.65%;
+  width: 8.25%;
+  height: 12.5%;
+  overflow: hidden;
+  width: 100%;
+  max-width: 60px;
+  height: auto;
+  object-fit: contain;
+  margin-left: 5%;
+  margin-top: 0;
+}
+
+.goback {
+  background-image: linear-gradient(to bottom, #3668eb, #6f97e7);
+  position: relative;
+  top: 90vw;
+  left: 0;
+
+  /* Make it a perfect circle */
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  /* font-weight: 900; */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 10px;
+  font-size: calc(1vw + 1.5vh);
+}
+
+.goback:hover {
+  transform: scale(1.1);
+}
+
+.bb {
+  font-size: calc(2vw + 1.5vh);
+  font-family: "KimjungchulGothic-Bold";
+}
+
+.options {
+  margin-left: 0;
+  left: 10%;
+  top: 30%;
+}
+
+table {
+  font-family: "Kimjungchul";
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.4vw + 1.5vh);
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+td {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.4vw + 1.5vh);
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #ddd;
+}
+
+.modal {
+  position: fixed;
+  /* top: 50%;
+  left: 50%; */
+  width: 800px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.623);
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  /* overflow: hidden;  */
+}
+
+.studentImage {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  padding-left: 3%;
+  margin-right: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: rgba(255, 0, 0, 0.7);
+}
+
+.modalText {
+  font-family: "Kimjungchul";
+  font-weight: bold;
+  font-size: calc(0.7vw + 1.5vh);
+  padding-left: 3%;
+  white-space: nowrap;
+  padding-bottom: 5%;
+}
+
+.studentInfo {
+  display: flex;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.modalNav {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+}
+
+.prevButton,
+.nextButton {
+  font-family: "KimjungchulGothic-Bold";
+  border: none;
+  background: none;
+  font-size: 2rem;
+  font-weight: bolder;
+  cursor: pointer;
+  color: #3668eb;
+  /* background-image: linear-gradient(to bottom, #3668eb, #6f97e7); */
+}
