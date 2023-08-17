@@ -26,11 +26,15 @@
 }
 
 .container.sidebar-open {
-  margin-left: 300px;
+  margin-left: 180px;
 }
 
 .container.sidebar-open .contentContainer {
-  width: calc(100vw - 300px);
+  width: calc(100vw - 150px);
+}
+
+.container.sidebar .contentContainer {
+  width: calc(100vw - 150px);
 }
 
 .contentContainer {
@@ -48,13 +52,17 @@
 }
 
 .contentLeft {
-  flex: 1;
-  padding: 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+  /* position: relative; */
+  height: 100%;
+  width: 60%;
 }
 
 .contentRight {
-  flex: 1;
-  padding: 20px;
+  width: 80%;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .toolbar {
@@ -73,7 +81,7 @@
 button {
   border: none;
   border-radius: 5px;
-  color: #fff;
+  color: #000000;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
@@ -98,8 +106,7 @@ button {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  left: 70%;
   overflow-y: auto;
 }
 
@@ -135,4 +142,26 @@ h1 {
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.containerClass {
+  background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
+  overflow: hidden;
+}
+
+.remoteUser {
+  display: inline-block;
+  width: 300px;
+  position: relative;
+  right: 0%;
+  top: 50%;
+  margin-right: 0%;
+
+  /* mar */
+}
+
+.iconButtonsGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }

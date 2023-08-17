@@ -38,7 +38,7 @@ class OpenViduSession extends Component {
     this.navigate = props.navigate;
     this.clazz = props.clazz;
     this.mySessionId = props.clazz.id;
-    this.myUserName = localStorage.getItem("userInfo").name;
+    this.myUserName = JSON.parse(localStorage.getItem("userInfo")).name;
     this.remotes = [];
 
     this.state = {
@@ -47,7 +47,7 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       trace: false,
-      page: 0,
+      page: null,
       theme: null,
       curriculum: null,
       word: null,
@@ -58,6 +58,7 @@ class OpenViduSession extends Component {
       isOpen: false,
       pages: [],
       words: [],
+      quizAction: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
@@ -75,8 +76,9 @@ class OpenViduSession extends Component {
     this.changeMenus = this.changeMenus.bind(this);
     this.sendSignal = this.sendSignal.bind(this);
 
-    this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
+    this.subscribeToStreamCreated = this.subscribeToStreamCreated.bind(this);
     this.subscribeToStreamDestroyed = this.subscribeToStreamDestroyed.bind(this);
+    this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToMic = this.subscribeToMic.bind(this);
     this.subscribeToExit = this.subscribeToExit.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
@@ -104,14 +106,29 @@ class OpenViduSession extends Component {
     this.changeMenus(pages, []);
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     window.removeEventListener("mousemove", this.updateMousePosition);
     window.removeEventListener("beforeunload", this.onbeforeunload);
+
+    await axios
+      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .then(function (response) {})
+      .catch(function (error) {
+        console.error(error);
+      });
+
     this.leaveSession();
   }
 
-  onbeforeunload(event) {
+  async onbeforeunload(event) {
     this.leaveSession();
+
+    await axios
+      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .then(function (response) {})
+      .catch(function (error) {
+        console.error(error);
+      });
   }
 
   joinSession() {
@@ -125,11 +142,9 @@ class OpenViduSession extends Component {
         this.subscribeToStreamCreated();
         await this.connectToSession();
 
-        // await axios.post(`${BASE_URL}/sse/v1/convert/page`, {
-        //   classId: this.state.mySessionId,
-        //   streamId: 0,
-        //   number: 0,
-        // });
+        await axios.post(`${BASE_URL}/api/v1/private/lecture/convert/page`, {
+          classId: this.props.clazz.id,
+        });
       }
     );
   }
@@ -150,7 +165,7 @@ class OpenViduSession extends Component {
         });
       }
       alert("There was an error getting the token:", error.message);
-      this.navigate("/teacher-main");
+      this.navigate("/", { replace: true });
     }
   }
 
@@ -233,35 +248,26 @@ class OpenViduSession extends Component {
 
     if (mySession) {
       this.OV = null;
-      this.setState(
-        {
-          mainStreamUser: undefined,
-          session: undefined,
-          localUser: undefined,
-          subscribers: [],
-          trace: false,
-          page: 0,
-          theme: null,
-          word: null,
-          choseong: null,
-          timer: 0,
-          quiz: false,
-          count: 0,
-          isOpen: false,
-          pages: [],
-          words: [],
-        },
-        async () => {
-          await axios
-            .delete(`${BASE_URL}/api/v1/private/openvidu`)
-            .then(function (response) {
-              mySession.disconnect();
-            })
-            .catch(function (error) {
-              console.error(error);
-            });
-        }
-      );
+      this.setState({
+        mainStreamUser: undefined,
+        session: undefined,
+        localUser: undefined,
+        subscribers: [],
+        trace: false,
+        page: null,
+        theme: null,
+        word: null,
+        choseong: null,
+        timer: 0,
+        quiz: false,
+        count: 0,
+        isOpen: false,
+        pages: [],
+        words: [],
+        quizAction: false,
+      });
+
+      mySession.disconnect();
     }
   }
 
@@ -372,7 +378,7 @@ class OpenViduSession extends Component {
   subscribeToExit() {
     this.state.session.on("signal:exit", (event) => {
       this.leaveSession();
-      this.navigate("/");
+      this.navigate("/", { replace: true });
     });
   }
 
@@ -383,7 +389,9 @@ class OpenViduSession extends Component {
       if (!this.state.quiz) data.timer = 0;
 
       this.setState({ timer: data.timer }, () => {
-        if (this.state.timer > 0 && this.state.quiz) {
+        if (this.state.timer === 0 && this.state.quiz) {
+          this.sendSignal({ quiz: false }, "quiz");
+        } else if (this.state.timer > 0 && this.state.quiz) {
           const sendData = {
             timer: this.state.timer - 1,
           };
@@ -400,16 +408,37 @@ class OpenViduSession extends Component {
 
       if (this.state.quiz && !data.quiz) {
         // 게임 종료
-        if (this.state.timer > 0) this.sendSignal({ page: "" }, "page");
-        else this.sendSignal({ page: "" }, "page");
+        if (this.state.timer > 0) this.sendSignal({ page: "good" }, "page");
+        else this.sendSignal({ page: "bad" }, "page");
 
         this.sendSignal({ timer: 0 }, "timer");
         this.setState({ quiz: data.quiz });
+
+        if (this.state.choseong === null) {
+          const pages = [
+            {
+              name: "초성 퀴즈",
+              path: "choseong",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        } else {
+          const pages = [
+            {
+              name: "종례",
+              path: "end",
+            },
+          ];
+
+          this.changeMenus(pages, []);
+        }
       } else if (!this.state.quiz && data.quiz) {
         // 게임 시작
         this.correctStatusChanged(false);
-        this.setState({ quiz: data.quiz, count: 0 }, () => {
-          this.sendSignal({ timer: 900 }, "timer");
+        this.setState({ quiz: data.quiz, count: 0, quizAction: false }, () => {
+          this.sendSignal({ timer: 10 }, "timer");
+          this.closeSidebar();
         });
       }
     });
@@ -499,7 +528,7 @@ class OpenViduSession extends Component {
       if (data.page === "journal") {
         const pages = [
           {
-            name: "초성 퀴즈",
+            name: "추리 퀴즈",
             path: "guess",
           },
         ];
@@ -515,6 +544,16 @@ class OpenViduSession extends Component {
       if (this.state.page === data.page) return;
 
       if (data.page === "theme") {
+        this.closeSidebar();
+      } else if (data.page === "guess") {
+        this.setState({ quizAction: true }, () => {
+          this.changeMenus([], []);
+        });
+      } else if (data.page === "choseong") {
+        this.setState({ quizAction: true }, () => {
+          this.changeMenus([], []);
+        });
+      } else if (data.page === "end") {
         this.closeSidebar();
       }
 
@@ -617,13 +656,14 @@ class OpenViduSession extends Component {
     const pages = this.state.pages;
     const words = this.state.words;
     const quiz = this.state.quiz;
+    const quizAction = this.state.quizAction;
     const containerClass = this.state.isOpen
       ? `${styles.container} ${styles["sidebar-open"]}`
       : styles.container;
 
     // 리턴
     return (
-      <div className={containerClass} id="container">
+      <div className={containerClass} id="container" style={{ overflow: "hidden" }}>
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
@@ -632,6 +672,7 @@ class OpenViduSession extends Component {
           isOpen={isOpen}
           pages={pages}
           words={words}
+          quizAction={quizAction}
           micStatusChanged={this.micStatusChanged}
           traceStatusChanged={this.traceStatusChanged}
           openSidebar={this.openSidebar}
@@ -651,22 +692,27 @@ class OpenViduSession extends Component {
                   theme: this.state.theme,
                   curriculum: this.state.curriculum,
                   word: this.state.word,
+                  timer: this.state.timer,
+                  choseong: this.state.choseong,
                 }}
               />
             </OpenViduSessionContext.Provider>
           </div>
           <div className={styles.contentRight}>
-            <div className={styles.video}>
+            <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
               {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                 <div
                   style={{
                     display: "inline-block",
                     width: "300px",
-                    height: "300px",
+                    height: "200px",
+                    position: "relative",
+
+                    paddingTop: "3%",
                   }}
                   id="localUser"
                 >
-                  <div>본인</div>
+                  {/* <div>본인</div> */}
                   <StreamComponent user={localUser} />
                 </div>
               )}
@@ -674,50 +720,60 @@ class OpenViduSession extends Component {
                 <div
                   style={{
                     display: "inline-block",
-                    width: "50%",
-                    height: "50%",
+                    width: "300px",
+                    height: "200px",
+                    // botton: "-10px",
+                    position: "relative",
+
+                    paddingTop: "3%",
                   }}
                   id="mainStreamUser"
                 >
-                  <div>포커스 중인 사람</div>
+                  {/* <div>포커스 중인 사람</div> */}
                   <StreamComponent user={mainStreamUser} />
                 </div>
               )}
               {this.state.subscribers.map((sub, i) => (
                 <div
-                  key={i}
+                  key={sub.getConnectionId()}
+                  className={styles.remoteUser}
+                  id="remoteUsers"
                   style={{
                     display: "inline-block",
                     width: "300px",
-                    height: "300px",
+                    height: "250px",
+                    // botton: "-10px",
+                    position: "relative",
+                    paddingTop: "2%",
                   }}
-                  id="remoteUsers"
                 >
-                  <IconButton
-                    onClick={() => {
-                      this.sendSignal({ target: sub.getConnectionId() }, "mic");
-                    }}
-                  >
-                    {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
-                  </IconButton>
-                  {quiz && !sub.isCorrect() && (
+                  <div className={styles.iconButtonsGroup}>
                     <IconButton
                       onClick={() => {
-                        this.sendSignal(
-                          { target: sub.getConnectionId(), correct: true },
-                          "correct"
-                        );
-
-                        this.setState({ count: this.state.count + 1 }, () => {
-                          if (this.state.count === this.state.subscribers.length) {
-                            this.sendSignal({ quiz: false }, "quiz");
-                          }
-                        });
+                        this.sendSignal({ target: sub.getConnectionId() }, "mic");
                       }}
                     >
-                      <Check />
+                      {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
                     </IconButton>
-                  )}
+                    {quiz && !sub.isCorrect() && (
+                      <IconButton
+                        onClick={() => {
+                          this.sendSignal(
+                            { target: sub.getConnectionId(), correct: true },
+                            "correct"
+                          );
+
+                          this.setState({ count: this.state.count + 1 }, () => {
+                            if (this.state.count === this.state.subscribers.length) {
+                              this.sendSignal({ quiz: false }, "quiz");
+                            }
+                          });
+                        }}
+                      >
+                        <Check />
+                      </IconButton>
+                    )}
+                  </div>
                   <div
                     onClick={() => {
                       this.handleMainVideoStream(sub);

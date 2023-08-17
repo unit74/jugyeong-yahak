@@ -104,13 +104,18 @@ function splitKorean(text) {
 
 const LiveReadWordHint = () => {
   const word = useOutletContext().word;
+
+  if (!word) {
+    return <div>Loading...</div>;
+  }
+
   const splittedText = splitKorean(word.word);
 
   return (
-    <div>
+    <div className={styles.situation}>
       <h1>✔ 아래 단어를 소리내어 읽어봅시다.</h1>
       {splittedText.map((char, index) => (
-        <div key={index}>
+        <div key={index} className={styles.text}>
           {char.chosung} + {char.jungsung} {char.jongsung && "+"} {char.jongsung} = {char.original}
         </div>
       ))}

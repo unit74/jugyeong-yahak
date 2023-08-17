@@ -148,9 +148,9 @@ p {
 
 .welcome span {
   display: block;
-  font-size: 25%;
+  font-size: 1.2vw;
   line-height: 0vh;
-  font-family: "KimjungchulGothic-Bold";
+  font-family: "Kimjungchul";
 }
 
 .logout {
