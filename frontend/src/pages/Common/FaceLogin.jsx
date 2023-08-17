@@ -206,6 +206,7 @@ export default function FaceLogin(props) {
             await axios
               .get(`${BASE_URL}/api/v1/classes/in-class/${response.data.data.info.classId}`)
               .then(function (response) {
+                console.log(response.data.message);
                 navigate("/student-live", { replace: true });
               })
               .catch(function (error) {
