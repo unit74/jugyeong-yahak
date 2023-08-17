@@ -54,7 +54,7 @@ const TeacherCurriculum = (props) => {
 
   return (
     <div className={styles.main}>
-      <div>
+      <div className={styles.containers}>
         <div className={styles.curriculumBtnContainer}>
           {curriculums.map((curriculum, i) => (
             <div
@@ -62,8 +62,17 @@ const TeacherCurriculum = (props) => {
               key={i}
               onClick={() => chooseCurriculum(curriculum)}
             >
-              <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
-              <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
+              <img
+                src={curriculum.curriculumImage}
+                alt=""
+                height="100"
+                width="100"
+              />
+              <button
+                className={`${styles.curriculumBtn} ${
+                  styles[`curriculum-${i + 1}`]
+                }`}
+              >
                 {curriculum.curriculumName}
               </button>
             </div>

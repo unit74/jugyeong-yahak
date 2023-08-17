@@ -118,18 +118,22 @@ const StudyClassPage = () => {
 
   const applyRegist = async () => {
     const formData = new FormData();
+    console.log(img);
 
     formData.append("faceImage", img);
-    formData.append("studentRegisterRequest", {
-      address: address,
-      classId: classId,
-      firstResponder: firstResponder,
-      gender: gender,
-      name: name,
-      phone: phone,
-      statusCode: statusCode,
-      tabletNo: tabletNo,
-    });
+    formData.append(
+      "studentRegisterRequest",
+      JSON.stringify({
+        address: address,
+        classId: classId,
+        firstResponder: firstResponder,
+        gender: gender,
+        name: name,
+        phone: phone,
+        statusCode: statusCode,
+        tabletNo: tabletNo,
+      })
+    );
 
     // formData.append(
     //   "studentRegisterRequest",
@@ -153,7 +157,9 @@ const StudyClassPage = () => {
     // );
 
     await axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, formData)
+      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(() => {
         modifyChange();
         setRegist(false);
@@ -200,7 +206,7 @@ const StudyClassPage = () => {
         <button className={styles.goback} onClick={() => navigate("/governmentmain")}>
           ↩
         </button>
-        <button onClick={() => registStudent()}>학생 등록</button>
+        <button className={styles.register} onClick={() => registStudent()}>학생 등록</button>
         <div className={styles.options}>
           {students && (
             <table>
@@ -241,6 +247,7 @@ const StudyClassPage = () => {
                     type="text"
                     id="name"
                     name="name"
+                    className={styles.custom_input}
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     readOnly={!modify}
@@ -251,6 +258,7 @@ const StudyClassPage = () => {
                   <input
                     type="text"
                     id="address"
+                    className={styles.custom_input}
                     name="address"
                     value={address}
                     onChange={(event) => setAddress(event.target.value)}
@@ -262,6 +270,7 @@ const StudyClassPage = () => {
                   <input
                     type="text"
                     id="phone"
+                    className={styles.custom_input}
                     name="phone"
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
@@ -320,8 +329,11 @@ const StudyClassPage = () => {
                       id="face"
                       name="face"
                       accept="image/*"
-                      value={img}
-                      onChange={(event) => setImg(event.target.value)}
+                      // value={img}
+                      onChange={(event) => {
+                        // console.log(event.target.files[0]);
+                        setImg(event.target.files[0]);
+                      }}
                     />
                   </div>
                 )}
@@ -342,17 +354,17 @@ const StudyClassPage = () => {
             </div>
             {regist ? (
               <div>
-                <button onClick={applyRegist}>등록</button>
+                <button className={styles.motify} onClick={applyRegist}>등록</button>
               </div>
             ) : !modify ? (
-              <div>
-                <button onClick={modifyChange}>수정</button>
-                <button onClick={deleteStudent}>상태변경</button>
+              <div className={styles.btnset}>
+                <button className={styles.motify} onClick={modifyChange}>수정</button>
+                <button className={styles.cancle} onClick={deleteStudent}>삭제</button>
               </div>
             ) : (
-              <div>
-                <button onClick={applyModify}>수정하기</button>
-                <button onClick={cancelModify}>취소</button>
+              <div className={styles.btnset}>
+                <button className={styles.motify} onClick={applyModify}>수정하기</button>
+                <button className={styles.cancle} onClick={cancelModify}>취소</button>
               </div>
             )}
 

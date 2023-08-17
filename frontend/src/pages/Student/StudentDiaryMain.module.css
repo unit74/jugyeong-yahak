@@ -3,7 +3,6 @@
   src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
 }
 
-
 @keyframes pulsate {
   0% {
     transform: scale(1);
@@ -23,8 +22,6 @@
   animation: pulsate 1.5s infinite;
 }
 
-
-
 .main {
   background-image: url(/src/assets/images/real_background.png);
   background-size: cover;
@@ -36,6 +33,8 @@
 
 .square {
   position: absolute;
+  flex-direction: column; /* 세로 정렬을 위해 추가 */
+  align-items: center; /* 가운데 정렬을 위해 추가 */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -49,11 +48,21 @@
   justify-content: space-between; /* 요소들 사이의 공간을 균등하게 분배 */
   padding: 0 10px; /* 좌우 패딩 추가 (선택적) */
 }
+
+.imagesContainer {
+  display: flex;
+  justify-content: space-between; /* 이미지들 사이에 동일한 공간을 둡니다. */
+  width: 100%; /* 컨테이너의 너비를 최대로 확장합니다. */
+  max-width: 100%; /* 너비의 최대 값을 제한합니다. */
+  overflow: hidden; /* 이미지가 컨테이너를 벗어나지 않게 합니다. */
+  flex: 1; /* .greeting 이후의 공간을 모두 차지하도록 설정 */
+  align-items: center; /* 세로 방향으로 중앙 정렬 */
+}
+
 /*  */
 
-
 .greeting {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   position: absolute;
   top: 15%;
   left: 50%;
@@ -74,13 +83,10 @@
   font-size: calc(2.5vw + 1.5vh); /* 반응형 */
 }
 
-.imageSituationContainer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 5%;
+.responsive_image {
+  max-width: 100%; /* 이미지의 최대 너비를 제한합니다. */
+  height: auto; /* 이미지의 높이는 원본 비율을 유지하도록 설정합니다. */
 }
-
 
 .time {
   display: flex;
@@ -92,8 +98,8 @@
   margin: 10px; /* 좌우 마진 추가 (선택적) */
   text-align: center; /* 이미지와 버튼이 중앙에 위치하도록 */
   margin-top: 8%;
+  width: 80%; /* .square의 너비에 대한 비율로 크기를 조절. 필요에 따라 조정하세요. */
 }
-
 
 .responsive_image {
   /* max-width: 80%; */
@@ -120,30 +126,8 @@
   text-align: center; /* 텍스트를 가로 중앙에 배치 */
   padding: 0; /* 패딩을 0으로 설정하여 버튼 내의 텍스트 위치 조절 */
   font-family: "KoPubWorld Batang Bold";
-}
-
-
-.situationText {
-  margin-left: 12px;
-  font-family: KoPubWorld Batang Bold;
-  font-weight: bolder;
-  font-size: calc(3.5vw + 2vh); /* 반응형 */
-  /* 밑줄 */
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-}
-
-.situationText::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 10px;
-  left: -100%; /* 처음에 밑줄을 숨김 */
-  bottom: 0;
-  background-color: #fff100;
-  animation: revealUnderline 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) 1.5s
-    forwards; /* 애니메이션 추가 */
+  width: 90%; /* .square의 너비에 대해 90%를 최대로 설정 */
+  font-size: calc(1.5vw + 1vh); /* 반응형 폰트 크기 */
 }
 
 @keyframes revealUnderline {
@@ -153,15 +137,6 @@
   100% {
     left: 0; /* 끝 위치 */
   }
-}
-
-.imageContainer {
-  margin-right: 12px;
-  margin-left: 8px;
-}
-
-.imageContainer img {
-  width: 30vw;
 }
 
 /* fade */

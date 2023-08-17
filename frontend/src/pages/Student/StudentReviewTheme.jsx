@@ -12,27 +12,28 @@ const StudentReviewTheme = () => {
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
   const lastVisited = lastVisitedString
-    ? new Date(lastVisitedString)
-    : new Date(0);
+  ? new Date(lastVisitedString)
+  : new Date(0);
   const [msg, setMsg] = useState(null);
+  // fade 효과
+  const [fade, setFade] = useState(false);
+  
+  const ttsMaker = async (msg, timer) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        setMsg(msg);
+        resolve();
+      }, timer);
+    });
+  };
 
   // DB에 저장된 단어 가져오기
   const themeSituation =
-    useSelector((state) => state.themeState.themeData.situation) || [];
+  useSelector((state) => state.themeState.themeData.situation) || [];
   const themeImg =
     useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
   const themeTitle =
     useSelector((state) => state.themeState.themeData.theme) || [];
-
-  // fade 효과
-  const [fade, setFade] = useState(false);
-
-  // const navigateToRecordDictation = useCallback(() => {
-  //   setFade(true);
-  //   setTimeout(() => {
-  //     navigate(moveToNextPage());
-  //   }, 1000); // fadeout 후 이동
-  // }, [navigate]);
 
   // 이동할 다음 페이지 결정
   // const moveToNextPage = () => {
@@ -50,14 +51,6 @@ const StudentReviewTheme = () => {
   // const [themeImg, setThemeImg] = useState(null);
   // const [themeSituation, setThemeSituation] = useState(null);
 
-  const ttsMaker = async (msg, timer) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setMsg(msg);
-        resolve();
-      }, timer);
-    });
-  };
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -87,7 +80,13 @@ const StudentReviewTheme = () => {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      // navigateToRecordDictation();
+      setFade(true);
+      navigateToRecordDictation();
+    }
+
+    async function navigateToRecordDictation() {
+        await delay(1500);
+        navigate("/situation");
     }
 
     if (themeSituation !== null) {
@@ -97,7 +96,7 @@ const StudentReviewTheme = () => {
   // }, [themeSituation]);
 
   return (
-    <div className={`${styles.main} ${fade ? styles.fadeIn : ""}`}>
+    <div className={`${styles.main} ${fade ? styles.fadeOut : ""}`}>
       {/* {themeSituation && <TTS message={themeSituation} />} */}
       <div className={styles.square}>
         <div className={styles.theme}>

@@ -1,43 +1,59 @@
-import React, { Component } from "react";
-import styles from "./StudentLive.module.css";
 import { OpenVidu } from "openvidu-browser";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
+
+import axios from "../Common/api/authAxios";
+import React, { Component, createContext, useState, useEffect } from "react";
 import StreamComponent from "../../components/StreamComponent";
 import UserModel from "../../models/user-model";
 
-import axios from "../Common/api/authAxios";
+import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
+
+import styles from "./StudentLive.module.css";
 
 var localUser = new UserModel();
 const BASE_URL = "https://i9e206.p.ssafy.io";
-// 학생 라이브
-// 근데 오픈비두 이식하면 또 바뀔듯....
+export const OpenViduSessionContext = createContext();
+
 export default function StudentLive() {
   const navigate = useNavigate();
+  const classId = JSON.parse(localStorage.getItem("userInfo")).classId;
 
-  const clazz = {
-    no: 206,
-    name: "신호동햇님반",
-  };
-  // 태그 생성부분
-  return (
-    <div className={styles.main}>
-      <div className={styles.square}>
-        <div className={styles.time}>
-          <OpenViduSession clazz={clazz} navigate={navigate} />
-        </div>
-      </div>
-    </div>
-  );
+  const [clazz, setClazz] = useState(undefined);
+
+  useEffect(() => {
+    async function getClass() {
+      await axios
+        .get(`${BASE_URL}/api/v1/classes/${classId}`)
+        .then(function (response) {
+          const data = response.data.data;
+
+          setClazz(data);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+
+    getClass();
+    return () => {
+      setClazz(undefined);
+    };
+  }, [classId]);
+
+  if (!clazz) {
+    return <div>Loading...</div>;
+  }
+
+  return <OpenViduSession clazz={clazz} navigate={navigate} />;
 }
 
 class OpenViduSession extends Component {
   constructor(props) {
     super(props);
-
     this.navigate = props.navigate;
     this.clazz = props.clazz;
-    this.mySessionId = props.clazz.no;
-    this.myUserName = "학생" + Math.floor(Math.random() * 100);
+    this.mySessionId = props.clazz.id;
+    this.myUserName = JSON.parse(localStorage.getItem("userInfo")).name;
     this.remotes = [];
 
     this.state = {
@@ -46,26 +62,40 @@ class OpenViduSession extends Component {
       localUser: undefined,
       subscribers: [],
       mouse: { x: null, y: null },
-      page: 0,
+      page: null,
       theme: null,
       curriculum: null,
       word: null,
       choseong: null,
       timer: 0,
+      quiz: false,
     };
 
     this.joinSession = this.joinSession.bind(this);
-    this.connectWebCam = this.connectWebCam.bind(this);
-    this.updateSubscribers = this.updateSubscribers.bind(this);
     this.leaveSession = this.leaveSession.bind(this);
-    this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.connectWebCam = this.connectWebCam.bind(this);
     this.handleMainVideoStream = this.handleMainVideoStream.bind(this);
+    this.updateSubscribers = this.updateSubscribers.bind(this);
     this.deleteSubscriber = this.deleteSubscriber.bind(this);
-    this.subscribeToInit = this.subscribeToInit.bind(this);
+    this.micStatusChanged = this.micStatusChanged.bind(this);
+    this.correctStatusChanged = this.correctStatusChanged.bind(this);
+    this.sendSignal = this.sendSignal.bind(this);
+
+    this.subscribeToStreamCreated = this.subscribeToStreamCreated.bind(this);
+    this.subscribeToStreamDestroyed = this.subscribeToStreamDestroyed.bind(this);
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
-    this.subscribeToMouse = this.subscribeToMouse.bind(this);
-    this.subscribeToInfo = this.subscribeToInfo.bind(this);
+    this.subscribeToMic = this.subscribeToMic.bind(this);
+    this.subscribeToExit = this.subscribeToExit.bind(this);
     this.subscribeToTimer = this.subscribeToTimer.bind(this);
+    this.subscribeToCorrect = this.subscribeToCorrect.bind(this);
+    this.subscribeToQuiz = this.subscribeToQuiz.bind(this);
+    this.subscribeToTheme = this.subscribeToTheme.bind(this);
+    this.subscribeToWord = this.subscribeToWord.bind(this);
+    this.subscribeToCurriculum = this.subscribeToCurriculum.bind(this);
+    this.subscribeToChoseong = this.subscribeToChoseong.bind(this);
+    this.subscribeToPage = this.subscribeToPage.bind(this);
+    this.subscribeToMouse = this.subscribeToMouse.bind(this);
+    this.subscribeToInit = this.subscribeToInit.bind(this);
   }
 
   componentDidMount() {
@@ -112,6 +142,8 @@ class OpenViduSession extends Component {
         });
       }
       alert("There was an error getting the token:", error.message);
+
+      this.navigate("/", { replace: true });
     }
   }
 
@@ -157,11 +189,17 @@ class OpenViduSession extends Component {
     this.subscribeToUserChanged();
     this.subscribeToStreamDestroyed();
     this.subscribeToMic();
+    this.subscribeToExit();
+    this.subscribeToTimer();
+    this.subscribeToCorrect();
+    this.subscribeToQuiz();
+    this.subscribeToTheme();
+    this.subscribeToWord();
+    this.subscribeToCurriculum();
+    this.subscribeToChoseong();
+    this.subscribeToPage();
     this.subscribeToInit();
     this.subscribeToMouse();
-    this.subscribeToExit();
-    this.subscribeToInfo();
-    this.subscribeToTimer();
 
     this.setState({
       mainStreamUser: localUser,
@@ -171,47 +209,53 @@ class OpenViduSession extends Component {
 
   updateSubscribers() {
     var subscribers = this.remotes;
-    this.setState(
-      {
-        subscribers: subscribers,
-      },
-      () => {
-        if (this.state.localUser) {
-          this.sendSignalUserChanged({
+    this.setState({ subscribers: subscribers }, () => {
+      if (this.state.localUser) {
+        this.sendSignal(
+          {
             isAudioActive: this.state.localUser.isAudioActive(),
             nickname: this.state.localUser.getNickname(),
-          });
-        }
+            isCorrect: this.state.localUser.isCorrect(),
+          },
+          "userChanged"
+        );
       }
-    );
+    });
   }
 
-  leaveSession() {
+  async leaveSession() {
     const mySession = this.state.session;
 
     if (mySession) {
+      this.OV = null;
       mySession.disconnect();
-    }
 
-    this.OV = null;
-    this.setState({
-      mainStreamUser: undefined,
-      session: undefined,
-      localUser: undefined,
-      subscribers: [],
-      mouse: { x: null, y: null },
-      page: 0,
-      theme: null,
-      word: null,
-      choseong: null,
-      timer: 0,
-    });
+      this.setState({
+        mainStreamUser: undefined,
+        session: undefined,
+        localUser: undefined,
+        subscribers: [],
+        mouse: { x: null, y: null },
+        page: null,
+        theme: null,
+        curriculum: null,
+        word: null,
+        choseong: null,
+        timer: 0,
+      });
+    }
   }
 
   micStatusChanged() {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignalUserChanged({ isAudioActive: localUser.isAudioActive() });
+    this.sendSignal({ isAudioActive: localUser.isAudioActive() }, "userChanged");
+    this.setState({ localUser: localUser });
+  }
+
+  correctStatusChanged(correct) {
+    localUser.setCorrect(correct);
+    this.sendSignal({ isCorrect: localUser.isCorrect() }, "userChanged");
     this.setState({ localUser: localUser });
   }
 
@@ -273,15 +317,21 @@ class OpenViduSession extends Component {
         (user) => user.getConnectionId() !== event.from.connectionId
       );
 
-      this.setState({
-        subscribers: remoteUsers,
-        page: data.page,
-        theme: data.theme,
-        curriculum: data.curriculum,
-        word: data.word,
-        choseong: data.choseong,
-        timer: data.timer,
-      });
+      this.setState(
+        {
+          subscribers: remoteUsers,
+          quiz: data.quiz,
+          timer: data.timer,
+          theme: data.theme,
+          word: data.word,
+          curriculum: data.curriculum,
+          choseong: data.choseong,
+          page: data.page,
+        },
+        () => {
+          if (this.state.page !== null) this.navigate(`/student-live/${this.state.page}`);
+        }
+      );
     });
   }
 
@@ -292,12 +342,9 @@ class OpenViduSession extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("EVENTO REMOTE: ", event.data);
-          if (data.isAudioActive !== undefined) {
-            user.setAudioActive(data.isAudioActive);
-          }
-          if (data.nickname !== undefined) {
-            user.setNickname(data.nickname);
-          }
+          if (data.isAudioActive !== undefined) user.setAudioActive(data.isAudioActive);
+          if (data.nickname !== undefined) user.setNickname(data.nickname);
+          if (data.isCorrect !== undefined) user.setCorrect(data.isCorrect);
         }
       });
 
@@ -325,47 +372,19 @@ class OpenViduSession extends Component {
     });
   }
 
-  subscribeToExit() {
-    this.state.session.on("signal:exit", (event) => {
-      this.leaveSession();
-      this.navigate("/");
+  subscribeToCorrect() {
+    this.state.session.on("signal:correct", (event) => {
+      const data = JSON.parse(event.data);
+
+      if (localUser && localUser.getConnectionId() === data.target)
+        this.correctStatusChanged(data.correct);
     });
   }
 
-  subscribeToInfo() {
-    this.state.session.on("signal:info", (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.page !== undefined) {
-        this.setState({
-          page: data.page,
-        });
-      }
-      if (data.theme !== undefined) {
-        this.setState({
-          theme: data.theme,
-        });
-      }
-      if (data.word !== undefined) {
-        this.setState({
-          word: data.word,
-        });
-      }
-      if (data.curriculum !== undefined) {
-        this.setState({
-          curriculum: data.curriculum,
-        });
-      }
-      if (data.choseong !== undefined) {
-        this.setState({
-          choseong: data.choseong,
-        });
-      }
-      if (data.quiz !== undefined) {
-        this.setState({
-          quiz: data.quiz,
-        });
-      }
+  subscribeToExit() {
+    this.state.session.on("signal:exit", (event) => {
+      this.leaveSession();
+      this.navigate("/", { replace: true });
     });
   }
 
@@ -373,18 +392,62 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:timer", (event) => {
       const data = JSON.parse(event.data);
 
+      this.setState({ timer: data.timer });
+    });
+  }
+
+  subscribeToQuiz() {
+    this.state.session.on("signal:quiz", (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({ quiz: data.quiz });
+    });
+  }
+
+  subscribeToTheme() {
+    this.state.session.on("signal:theme", (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({ theme: data.theme });
+    });
+  }
+
+  subscribeToWord() {
+    this.state.session.on("signal:word", (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({ word: data.word });
+    });
+  }
+
+  subscribeToCurriculum() {
+    this.state.session.on("signal:curriculum", (event) => {
+      const data = JSON.parse(event.data);
+
       this.setState({
-        timer: data.timer - 1,
+        curriculum: data.curriculum,
       });
     });
   }
 
-  sendSignalUserChanged(data) {
-    this.sendSignal(data, "userChanged");
+  subscribeToChoseong() {
+    this.state.session.on("signal:choseong", (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({
+        choseong: data.choseong,
+      });
+    });
   }
 
-  sendSignalMic(data) {
-    this.sendSignal(data, "mic");
+  subscribeToPage() {
+    this.state.session.on("signal:page", (event) => {
+      const data = JSON.parse(event.data);
+
+      this.setState({ page: data.page }, () => {
+        this.navigate(`/student-live/${this.state.page}`);
+      });
+    });
   }
 
   sendSignal(data, page) {
@@ -395,31 +458,13 @@ class OpenViduSession extends Component {
     this.state.session.signal(signalOptions);
   }
 
-  async login() {
-    await axios
-      .post(`${BASE_URL}/api/v1/auth/governments/login`, {
-        // 지자체 로그인으로 우선 테스트
-        identification: "string", // 아이디 비밀번호가 실제로 string/string임..
-        password: "string",
-      })
-      .then(function (response) {
-        const data = response.data.data;
-
-        localStorage.setItem("token", data.token);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }
-
   async getToken() {
-    const sessionId = await this.createSession(this.state.mySessionId);
-    return await this.createToken(sessionId);
+    return await this.createToken(this.mySessionId);
   }
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/sessions",
+      BASE_URL + "/api/v1/private/openvidu/sessions",
       { customSessionId: sessionId + "" },
       {
         headers: { "Content-Type": "application/json" },
@@ -429,8 +474,9 @@ class OpenViduSession extends Component {
   }
 
   async createToken(sessionId) {
+    console.log(sessionId);
     const response = await axios.post(
-      BASE_URL + "/api/v1/openvidu/" + sessionId + "/connections",
+      BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
       {},
       {
         headers: { "Content-Type": "application/json" },
@@ -439,106 +485,108 @@ class OpenViduSession extends Component {
     return response.data;
   }
 
-  renderComponent() {
-    if (this.state.page === 0) {
-      return (
-        <div>
-          <h1>수업 대기하는 페이지</h1>
-        </div>
-      );
-    } else if (this.state.page === 1) {
-      // 화면 구성에 따라 많을듯?
-      return (
-        <div>
-          <h1>수업하는 페이지</h1>
-          <span>테마 : {this.state.theme}</span>
-          <span>단어 : {this.state.word}</span>
-        </div>
-      );
-    } else if (this.state.page === 11) {
-      return (
-        <div>
-          <h1>게임 1 페이지</h1>
-          {this.state.timer !== 0 && <span>{this.state.timer}</span>}
-        </div>
-      );
-    } else if (this.state.page === 21) {
-      return (
-        <div>
-          <h1>게임 2 페이지</h1>
-        </div>
-      );
-    }
-  }
-
   render() {
+    const mySessionId = this.mySessionId;
+    const clazz = this.clazz;
     const localUser = this.state.localUser;
     const mainStreamUser = this.state.mainStreamUser;
+    const quiz = this.state.quiz;
+    const containerClass = this.state.isOpen
+      ? `${styles.container} ${styles["sidebar-open"]}`
+      : styles.container;
 
+    // 리턴
     return (
-      <div className="container" id="container">
-        <div>
-          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
-            <div
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="mainStreamUser"
-            >
-              <div>포커스 중인 사람</div>
-              <StreamComponent user={mainStreamUser} />
-            </div>
-          )}
-          {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-            <div
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="localUser"
-            >
-              <div>본인</div>
-              <StreamComponent user={localUser} />
-            </div>
-          )}
-          {this.state.subscribers.map((sub, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="remoteUsers"
-            >
-              <div
-                onClick={() => {
-                  this.handleMainVideoStream(sub);
+      <div className={containerClass} id="container" style={{ overflow: "hidden" }}>
+        <div className={styles.contentContainer}>
+          <div className={styles.contentLeft}>
+            <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
+              <Outlet
+                context={{
+                  theme: this.state.theme,
+                  curriculum: this.state.curriculum,
+                  word: this.state.word,
+                  timer: this.state.timer,
+                  choseong: this.state.choseong,
                 }}
-              >
-                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-              </div>
+              />
+            </OpenViduSessionContext.Provider>
+          </div>
+          <div className={styles.contentRight}>
+            <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
+              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "200px",
+                    position: "relative",
+
+                    paddingTop: "3%",
+                  }}
+                  id="localUser"
+                >
+                  {/* <div>본인</div> */}
+                  <StreamComponent user={localUser} />
+                </div>
+              )}
+              {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "200px",
+                    // botton: "-10px",
+                    position: "relative",
+
+                    paddingTop: "3%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  {/* <div>포커스 중인 사람</div> */}
+                  <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
+              {this.state.subscribers.map((sub, i) => (
+                <div
+                  key={sub.getConnectionId()}
+                  className={styles.remoteUser}
+                  id="remoteUsers"
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "250px",
+                    // botton: "-10px",
+                    position: "relative",
+                    paddingTop: "2%",
+                  }}
+                >
+                  <div className={styles.iconButtonsGroup}>
+                    {quiz && sub.isCorrect() && <ThumbUpAlt />}
+                  </div>
+                  <div>
+                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+          {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y !== null && (
+            <div
+              style={{
+                position: "absolute",
+                left: `${this.state.mouse.x - 10}px`,
+                top: `${this.state.mouse.y - 10}px`,
+                height: "50px",
+                width: "50px",
+                borderRadius: "50%",
+                backgroundColor: "#FF6363",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                border: "2px solid white",
+              }}
+            />
+          )}
         </div>
-        {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y != null && (
-          <div
-            style={{
-              position: "absolute",
-              left: `${this.state.mouse.x - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
-              top: `${this.state.mouse.y - 10}px`, // 원 중앙을 정확한 포인트에 위치시키기 위해 조정
-              height: "20px",
-              width: "20px",
-              borderRadius: "50%",
-              backgroundColor: "#FF6363", // 빨간색의 톤 다운 버전
-              boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)", // 약간의 그림자 효과
-              border: "2px solid white", // 테두리 효과
-            }}
-          />
-        )}
       </div>
     );
   }

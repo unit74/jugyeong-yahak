@@ -33,7 +33,9 @@ export default function GoodFeedback() {
   // 7일에 한번씩만 보여줘
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedDictationVideo");
-  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
+  const lastVisited = lastVisitedString
+    ? new Date(lastVisitedString)
+    : new Date(0);
 
   // // 이동할 다음 페이지 결정
   // const moveToNextPage = () => {
@@ -64,7 +66,7 @@ export default function GoodFeedback() {
         ttsMaker(text, 0);
         dispatch(setWordIndex());
         await delay(text.length * 300);
-        navigate("/record-word");
+        navigate("/word-explain");
       } else if (course === "writing" && wordIndex === 4) {
         let text = "이제 일기를 써볼까요?";
         ttsMaker(text, 0);

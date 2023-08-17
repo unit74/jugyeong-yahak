@@ -6,6 +6,7 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
 import { setNote } from "../../store/actions/setNoteAction";
 import { fetchTheme } from "../../store/actions/themeAction";
+import CLOVA from "../Common/CLOVA";
 
 export default function StudentNote() {
   const [fade, setFade] = useState(false);
@@ -37,7 +38,7 @@ export default function StudentNote() {
       <div className={styles.square}>
         <div className={styles.greeting}>
           <b className={styles.b}>공책이 있으신가요?</b>
-          <TTSsentence message="공책이 있으신가요?" />
+          <CLOVA message="공책이 있으신가요?" />
           <div className={styles.buttonContainer}>
             <button className={styles.clearButton} onClick={handleNoteYes}>
               있어요
