@@ -1,7 +1,8 @@
 import "./App.css";
-import React from "react";
-import { Route, Routes, BrowserRouter, useLocation } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import { Provider } from "react-redux";
 import store from "./store"; // Redux Store를 import 해야 함
 
 // pages
@@ -35,8 +36,6 @@ import StudentRecordWord from "./pages/Student/StudentRecordWord";
 import GoodFeedback from "./pages/Student/GoodFeedback";
 import BadFeedback from "./pages/Student/BadFeedback";
 import DictaionFeedback from "./pages/Student/DictationFeedback";
-import WritingCamTest from "./pages/Student/WritingCamTest";
-import TeachableMachineTest from "./pages/Student/TeachableMachineTest";
 
 import StudentDictationVideo from "./pages/Student/StudentDictationVideo";
 import StudentDictationQuestion from "./pages/Student/StudentDictationQuestion";
@@ -47,8 +46,6 @@ import StudentTalking from "./pages/Student/StudentTalking";
 
 import StudentDone from "./pages/Student/StudentDone";
 import CanvasTest from "./pages/Student/CanvasTest";
-import KarloTest from "./pages/Student/KarloTest";
-import SSETest from "./pages/Student/SSETest";
 
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
@@ -81,6 +78,20 @@ import LiveStudentChoseongQuiz from "./pages/Live/LiveStudentChoseongQuiz";
 import FaceLogin from "./pages/Common/FaceLogin";
 
 function App() {
+  useEffect(() => {
+    // 이벤트 핸들러 함수 정의
+    const handleBeforeUnload = (event) => {
+      localStorage.removeItem("userInfo");
+      localStorage.removeItem("accessToken");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <Provider store={store}>
       <Routes>
@@ -165,8 +176,6 @@ function App() {
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
         <Route path="/facetest" element={<FaceLogin />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/karlo-test" element={<KarloTest />} />
-        <Route path="/sse-test" element={<SSETest />} />
 
         {/* Common */}
         <Route path="*" element={<NotFound />} />
