@@ -36,10 +36,7 @@ export default function TeachableMachine() {
 
   // Teachable Machine init 함수
   const initTeachableMachine = async () => {
-    const loadmodel = await tmImage.load(
-      modelURL + "model.json",
-      modelMetadataURL
-    ); // model에서 const loadmodel로 바꾸고
+    const loadmodel = await tmImage.load(modelURL + "model.json", modelMetadataURL); // model에서 const loadmodel로 바꾸고
     setModel(loadmodel); // 스테이트 저장
     // maxPredictions = model.getTotalClasses();
 
@@ -114,7 +111,7 @@ export default function TeachableMachine() {
         // '가시' 여기다가 문제
         navigate("/good-feedback", { state: { course: "writing" } }); // navigate로 이동 정답 페이지 이동
       } else {
-        navigate("/bad-feedback", { state: { course: "writing" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
+        // navigate("/bad-feedback", { state: { course: "writing" } }); // navigate로 이동 오답 페이지 이동   오답 페이지에서 다시 문제 읽기로 넘어가야함
       }
     }
   }, [studentAns, navigate]);
@@ -145,10 +142,7 @@ export default function TeachableMachine() {
         <div>Loading...</div> // 로딩컴포넌트 보여줄게
       )}
 
-      <canvas
-        ref={photoRef}
-        style={{ width: "100%", maxWidth: "90%" }}
-      ></canvas>
+      <canvas ref={photoRef} style={{ width: "0%", maxWidth: "90%" }}></canvas>
     </div>
   );
 }
