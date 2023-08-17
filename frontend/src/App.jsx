@@ -46,8 +46,6 @@ import StudentTalking from "./pages/Student/StudentTalking";
 
 import StudentDone from "./pages/Student/StudentDone";
 import CanvasTest from "./pages/Student/CanvasTest";
-import KarloTest from "./pages/Student/KarloTest";
-import SSETest from "./pages/Student/SSETest";
 
 // Student_실시간 강의
 import StudentLive from "./pages/Student/StudentLive";
@@ -79,38 +77,7 @@ import LiveStudentChoseongQuiz from "./pages/Live/LiveStudentChoseongQuiz";
 
 import FaceLogin from "./pages/Common/FaceLogin";
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
-
 function App() {
-  const [userInfo, setUserInfo] = useState(localStorage.getItem("userInfo"));
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (userInfo && userInfo.role === "ROLE_STUDENT") handleConnect();
-    return () => {};
-  }, [userInfo]);
-
-  const handleConnect = () => {
-    const eventSourceInitDict = {
-      heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
-    };
-
-    const sse = new EventSourcePolyfill(
-      `${BASE_URL}/sse/v1/subscribe?streamId=${userInfo.id}&classId=${userInfo.classId}`,
-      eventSourceInitDict
-    );
-
-    sse.addEventListener("connect", (e) => {
-      const { data: receivedConnectData } = e;
-
-      console.log("Connected! ", receivedConnectData);
-    });
-
-    sse.addEventListener("page", (e) => {
-      navigate("/student-live");
-    });
-  };
-
   return (
     <Provider store={store}>
       <Routes>
@@ -193,10 +160,8 @@ function App() {
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
         <Route path="/TeachableMachineTest" element={<TeachableMachineTest />} /> */}
-        <Route path="/facetest" element={<FaceLogin setUserInfo={setUserInfo} />} />
+        <Route path="/facetest" element={<FaceLogin />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/karlo-test" element={<KarloTest />} />
-        <Route path="/sse-test" element={<SSETest />} />
 
         {/* Common */}
         <Route path="*" element={<NotFound />} />
