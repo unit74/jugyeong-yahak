@@ -14,14 +14,10 @@ export default function LiveGood() {
 
   return (
     <div className={styles.main}>
-      <div className={styles.square}>
-        <div className={styles.theme}>
-          {" "}
-          <div className={styles.feedback}>
-            <img src={good} alt="good_img" />
-            <b className={styles.b}>잘하셨어요!</b>
-          </div>
-        </div>
+      {" "}
+      <div className={styles.feedback}>
+        <img src={good} alt="good_img" />
+        <b className={styles.b}>잘하셨어요!</b>
       </div>
     </div>
   );
