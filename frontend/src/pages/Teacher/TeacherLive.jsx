@@ -663,11 +663,7 @@ class OpenViduSession extends Component {
 
     // 리턴
     return (
-      <div
-        className={containerClass}
-        id="container"
-        // style={{ overflow: "hidden" }}
-      >
+      <div className={containerClass} id="container" style={{ overflow: "hidden" }}>
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
