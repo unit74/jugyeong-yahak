@@ -89,7 +89,7 @@ export default function StudentMain() {
 
   // 강의 시작 시간
   // const lectureTime = userInfo && userInfo.lectureTime;
-  const lectureTime = "11:00:00";
+  const lectureTime = userInfo ? userInfo.lectureTime : "10:00:00";
   const lectureTimeParts = userInfo && lectureTime.split(":");
   const lectureStartMinutes =
     userInfo && parseInt(lectureTimeParts[0], 10) * 60 + parseInt(lectureTimeParts[1], 10);
