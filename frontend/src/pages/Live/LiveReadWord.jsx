@@ -5,6 +5,10 @@ import { useOutletContext } from "react-router-dom";
 const LiveReadWord = () => {
   const word = useOutletContext().word;
 
+  if (!word) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.situation}>
       <h1>✔ 아래 단어를 소리내어 읽어봅시다.</h1>

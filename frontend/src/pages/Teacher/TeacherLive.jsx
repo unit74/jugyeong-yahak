@@ -120,8 +120,15 @@ class OpenViduSession extends Component {
     this.leaveSession();
   }
 
-  onbeforeunload(event) {
+  async onbeforeunload(event) {
     this.leaveSession();
+
+    await axios
+      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .then(function (response) {})
+      .catch(function (error) {
+        console.error(error);
+      });
   }
 
   joinSession() {
@@ -135,11 +142,9 @@ class OpenViduSession extends Component {
         this.subscribeToStreamCreated();
         await this.connectToSession();
 
-        // await axios.post(`${BASE_URL}/sse/v1/convert/page`, {
-        //   classId: this.state.mySessionId,
-        //   streamId: 0,
-        //   number: 0,
-        // });
+        await axios.post(`${BASE_URL}/api/v1/private/lecture/convert/page`, {
+          classId: this.props.clazz.id,
+        });
       }
     );
   }
@@ -658,11 +663,7 @@ class OpenViduSession extends Component {
 
     // 리턴
     return (
-      <div
-        className={containerClass}
-        id="container"
-        // style={{ overflow: "hidden" }}
-      >
+      <div className={containerClass} id="container" style={{ overflow: "hidden" }}>
         <ToolbarComponent
           sessionId={mySessionId}
           clazz={clazz}
@@ -698,16 +699,16 @@ class OpenViduSession extends Component {
             </OpenViduSessionContext.Provider>
           </div>
           <div className={styles.contentRight}>
-            <div className={styles.video} style={{ display: "flex", gap: "20px" }}>
+            <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
               {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                 <div
                   style={{
                     display: "inline-block",
-                    width: "100px",
-                    height: "100px",
+                    width: "300px",
+                    height: "200px",
                     position: "relative",
-                    margin: "30px",
-                    paddingTop: "10%",
+
+                    paddingTop: "3%",
                   }}
                   id="localUser"
                 >
@@ -719,11 +720,12 @@ class OpenViduSession extends Component {
                 <div
                   style={{
                     display: "inline-block",
-                    width: "50%",
-                    height: "50%",
-                    botton: "-10px",
+                    width: "300px",
+                    height: "200px",
+                    // botton: "-10px",
                     position: "relative",
-                    margin: "30px",
+
+                    paddingTop: "3%",
                   }}
                   id="mainStreamUser"
                 >
@@ -731,43 +733,47 @@ class OpenViduSession extends Component {
                   <StreamComponent user={mainStreamUser} />
                 </div>
               )}
-              {this.state.subscribers.slice(0, 6).map((sub, i) => (
+              {this.state.subscribers.map((sub, i) => (
                 <div
-                  key={i}
+                  key={sub.getConnectionId()}
+                  className={styles.remoteUser}
+                  id="remoteUsers"
                   style={{
                     display: "inline-block",
-                    width: "100px",
-                    height: "100px",
+                    width: "300px",
+                    height: "250px",
+                    // botton: "-10px",
                     position: "relative",
-                    margin: "30px",
+                    paddingTop: "2%",
                   }}
-                  id="remoteUsers"
                 >
-                  <IconButton
-                    onClick={() => {
-                      this.sendSignal({ target: sub.getConnectionId() }, "mic");
-                    }}
-                  >
-                    {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
-                  </IconButton>
-                  {quiz && !sub.isCorrect() && (
+                  <div className={styles.iconButtonsGroup}>
                     <IconButton
                       onClick={() => {
-                        this.sendSignal(
-                          { target: sub.getConnectionId(), correct: true },
-                          "correct"
-                        );
-
-                        this.setState({ count: this.state.count + 1 }, () => {
-                          if (this.state.count === this.state.subscribers.length) {
-                            this.sendSignal({ quiz: false }, "quiz");
-                          }
-                        });
+                        this.sendSignal({ target: sub.getConnectionId() }, "mic");
                       }}
                     >
-                      <Check />
+                      {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
                     </IconButton>
-                  )}
+                    {quiz && !sub.isCorrect() && (
+                      <IconButton
+                        onClick={() => {
+                          this.sendSignal(
+                            { target: sub.getConnectionId(), correct: true },
+                            "correct"
+                          );
+
+                          this.setState({ count: this.state.count + 1 }, () => {
+                            if (this.state.count === this.state.subscribers.length) {
+                              this.sendSignal({ quiz: false }, "quiz");
+                            }
+                          });
+                        }}
+                      >
+                        <Check />
+                      </IconButton>
+                    )}
+                  </div>
                   <div
                     onClick={() => {
                       this.handleMainVideoStream(sub);

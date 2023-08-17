@@ -228,6 +228,8 @@ class OpenViduSession extends Component {
 
     if (mySession) {
       this.OV = null;
+      mySession.disconnect();
+
       this.setState({
         mainStreamUser: undefined,
         session: undefined,
@@ -315,16 +317,21 @@ class OpenViduSession extends Component {
         (user) => user.getConnectionId() !== event.from.connectionId
       );
 
-      this.setState({
-        subscribers: remoteUsers,
-        quiz: data.quiz,
-        timer: data.timer,
-        theme: data.theme,
-        word: data.word,
-        curriculum: data.curriculum,
-        choseong: data.choseong,
-        page: data.page,
-      });
+      this.setState(
+        {
+          subscribers: remoteUsers,
+          quiz: data.quiz,
+          timer: data.timer,
+          theme: data.theme,
+          word: data.word,
+          curriculum: data.curriculum,
+          choseong: data.choseong,
+          page: data.page,
+        },
+        () => {
+          if (this.state.page !== null) this.navigate(`/student-live/${this.state.page}`);
+        }
+      );
     });
   }
 
@@ -452,9 +459,7 @@ class OpenViduSession extends Component {
   }
 
   async getToken() {
-    console.log(this.mySessionId);
-    const sessionId = await this.createSession(this.mySessionId);
-    return await this.createToken(sessionId);
+    return await this.createToken(this.mySessionId);
   }
 
   async createSession(sessionId) {
@@ -469,6 +474,7 @@ class OpenViduSession extends Component {
   }
 
   async createToken(sessionId) {
+    console.log(sessionId);
     const response = await axios.post(
       BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
       {},
@@ -480,91 +486,107 @@ class OpenViduSession extends Component {
   }
 
   render() {
+    const mySessionId = this.mySessionId;
+    const clazz = this.clazz;
     const localUser = this.state.localUser;
     const mainStreamUser = this.state.mainStreamUser;
     const quiz = this.state.quiz;
+    const containerClass = this.state.isOpen
+      ? `${styles.container} ${styles["sidebar-open"]}`
+      : styles.container;
 
+    // 리턴
     return (
-      <div>
-        <div className={styles.top}>
-          {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+      <div className={containerClass} id="container" style={{ overflow: "hidden" }}>
+        <div className={styles.contentContainer}>
+          <div className={styles.contentLeft}>
+            <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
+              <Outlet
+                context={{
+                  theme: this.state.theme,
+                  curriculum: this.state.curriculum,
+                  word: this.state.word,
+                  timer: this.state.timer,
+                  choseong: this.state.choseong,
+                }}
+              />
+            </OpenViduSessionContext.Provider>
+          </div>
+          <div className={styles.contentRight}>
+            <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
+              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "200px",
+                    position: "relative",
+
+                    paddingTop: "3%",
+                  }}
+                  id="localUser"
+                >
+                  {/* <div>본인</div> */}
+                  <StreamComponent user={localUser} />
+                </div>
+              )}
+              {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "200px",
+                    // botton: "-10px",
+                    position: "relative",
+
+                    paddingTop: "3%",
+                  }}
+                  id="mainStreamUser"
+                >
+                  {/* <div>포커스 중인 사람</div> */}
+                  <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
+              {this.state.subscribers.map((sub, i) => (
+                <div
+                  key={sub.getConnectionId()}
+                  className={styles.remoteUser}
+                  id="remoteUsers"
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "250px",
+                    // botton: "-10px",
+                    position: "relative",
+                    paddingTop: "2%",
+                  }}
+                >
+                  <div className={styles.iconButtonsGroup}>
+                    {quiz && sub.isCorrect() && <ThumbUpAlt />}
+                  </div>
+                  <div>
+                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y !== null && (
             <div
               style={{
-                display: "inline-block",
-                width: "50%",
-                height: "50%",
-              }}
-              id="mainStreamUser"
-            >
-              <div>교사</div>
-              <StreamComponent user={mainStreamUser} />
-            </div>
-          )}
-
-          <OpenViduSessionContext.Provider value={this.sendSignal.bind(this)}>
-            <Outlet
-              context={{
-                theme: this.state.theme,
-                curriculum: this.state.curriculum,
-                word: this.state.word,
-                timer: this.state.timer,
-                choseong: this.state.choseong,
+                position: "absolute",
+                left: `${this.state.mouse.x - 10}px`,
+                top: `${this.state.mouse.y - 10}px`,
+                height: "50px",
+                width: "50px",
+                borderRadius: "50%",
+                backgroundColor: "#FF6363",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                border: "2px solid white",
               }}
             />
-          </OpenViduSessionContext.Provider>
+          )}
         </div>
-
-        {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-          <div
-            style={{
-              display: "inline-block",
-              width: "300px",
-              height: "300px",
-            }}
-            id="localUser"
-          >
-            <div>본인</div>
-            <StreamComponent user={localUser} />
-          </div>
-        )}
-        <div className="bottom-container">
-          {this.state.subscribers.map((sub, i) => (
-            <div
-              key={i}
-              style={{
-                display: "inline-block",
-                width: "300px",
-                height: "300px",
-              }}
-              id="remoteUsers"
-            >
-              {quiz && sub.isCorrect() && <ThumbUpAlt />}
-              <div
-                onClick={() => {
-                  this.handleMainVideoStream(sub);
-                }}
-              >
-                <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y != null && (
-          <div
-            style={{
-              position: "absolute",
-              left: `${this.state.mouse.x - 10}px`,
-              top: `${this.state.mouse.y - 10}px`,
-              height: "20px",
-              width: "20px",
-              borderRadius: "50%",
-              backgroundColor: "#FF6363",
-              boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-              border: "2px solid white",
-            }}
-          />
-        )}
       </div>
     );
   }
