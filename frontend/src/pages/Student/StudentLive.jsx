@@ -315,16 +315,21 @@ class OpenViduSession extends Component {
         (user) => user.getConnectionId() !== event.from.connectionId
       );
 
-      this.setState({
-        subscribers: remoteUsers,
-        quiz: data.quiz,
-        timer: data.timer,
-        theme: data.theme,
-        word: data.word,
-        curriculum: data.curriculum,
-        choseong: data.choseong,
-        page: data.page,
-      });
+      this.setState(
+        {
+          subscribers: remoteUsers,
+          quiz: data.quiz,
+          timer: data.timer,
+          theme: data.theme,
+          word: data.word,
+          curriculum: data.curriculum,
+          choseong: data.choseong,
+          page: data.page,
+        },
+        () => {
+          this.navigate(`/student-live/${this.state.page}`);
+        }
+      );
     });
   }
 
