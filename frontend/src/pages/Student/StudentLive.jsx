@@ -401,6 +401,7 @@ class OpenViduSession extends Component {
       const data = JSON.parse(event.data);
 
       this.setState({ quiz: data.quiz });
+      this.correctStatusChanged(false);
     });
   }
 
