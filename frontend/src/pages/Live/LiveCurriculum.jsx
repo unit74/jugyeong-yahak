@@ -63,21 +63,11 @@ const TeacherCurriculum = () => {
               className={styles.curriculumBtnEach}
               key={i}
               onClick={() => {
-                if (window.confirm("강의를 시작하시겠습니까?"))
-                  chooseCurriculum(curriculum);
+                if (window.confirm("강의를 시작하시겠습니까?")) chooseCurriculum(curriculum);
               }}
             >
-              <img
-                src={curriculum.curriculumImage}
-                alt=""
-                height="100"
-                width="100"
-              />
-              <button
-                className={`${styles.curriculumBtn} ${
-                  styles[`curriculum-${i + 1}`]
-                }`}
-              >
+              <img src={curriculum.curriculumImage} alt="" height="100" width="100" />
+              <button className={`${styles.curriculumBtn} ${styles[`curriculum-${i + 1}`]}`}>
                 {curriculum.curriculumName}
               </button>
             </div>

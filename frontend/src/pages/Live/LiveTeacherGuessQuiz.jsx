@@ -17,8 +17,8 @@ const LiveTeacherGuessQuiz = () => {
       <h1>✔ 추리 게임 (교사 페이지)</h1>
       {timer > 0 && <div>{timer}</div>}
       <div>
-        <div>오늘의 단어 : {wordList[randomIdx].word}</div>
-        <div>예시 설명 : {wordList[randomIdx].wordExplanation}</div>
+        <div>오늘의 단어 : {wordList.length > 0 ? wordList[randomIdx].word : null}</div>
+        <div>예시 설명 : {wordList.length > 0 ? wordList[randomIdx].wordExplanation : null}</div>
         <div>선생님의 설명을 듣고 단어를 받아쓰기를 통해 알아맞혀 봅시다.</div>
         <div>오늘 배운 단어 중에 문제가 나옵니다.</div>
       </div>

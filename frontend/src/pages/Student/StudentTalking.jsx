@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styles from "./StudentTalking.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
@@ -95,9 +93,7 @@ export default function StudentTalking() {
 
     const generatedMessage = response.data.choices[0].message.content;
     setGeneratedText(generatedMessage);
-    setallConversations(
-      allConversations + message + ".\n" + generatedMessage + ".\n"
-    );
+    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
     console.log(allConversations);
     setCount(count + 1);
     console.log("gpt : " + generatedMessage);
@@ -147,8 +143,7 @@ export default function StudentTalking() {
       messages: [
         {
           role: "system",
-          content:
-            "Translate this into English. Please keep your response under 200 characters.",
+          content: "Translate this into English. Please keep your response under 200 characters.",
         },
         {
           role: "user",
@@ -161,8 +156,7 @@ export default function StudentTalking() {
     if (translatedDiary.length > 200) {
       translatedDiary = translatedDiary.substring(0, 200) + "...";
     }
-    const prompt =
-      "drawing done with a pencil, only scenery, in color " + translatedDiary;
+    const prompt = "drawing done with a pencil, only scenery, in color " + translatedDiary;
     createImage(prompt);
   };
 
@@ -183,7 +177,7 @@ export default function StudentTalking() {
       .then((data) => {
         console.log(data);
         setImg(data.images[0].image);
-        navigate("/diary", { state: { diaryEntry, img } });
+        // navigate("/diary", { state: { diaryEntry, img } });
       })
       .catch((error) => {
         console.error(error);
@@ -228,9 +222,7 @@ export default function StudentTalking() {
             {allConversations.split(".\n").map((conversation, index) => (
               <div
                 key={index}
-                className={
-                  index % 2 === 0 ? styles.userMessage : styles.generatedMessage
-                }
+                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
               >
                 {conversation}
               </div>
