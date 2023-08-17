@@ -40,11 +40,11 @@ export default function StudentTalking() {
       await delay(1000);
 
       ttsMaker(data, 0);
-      await delay(data.length * 225);
+      await delay(data.length * 210);
       ttsMaker("", 0);
 
       SpeechRecognition.startListening({ continuous: true });
-      await delay(15000);
+      await delay(7500); // 7.5초
       SpeechRecognition.stopListening();
 
       setCount(count + 1);
@@ -198,7 +198,7 @@ export default function StudentTalking() {
           imageUrl: img,
         })
         .then(() => {
-          // navigate("/diary", { state: { diaryEntry, img } }); asdfhkjasdfjaslkdflk;ajsdl;fkja;lsdkfjl;aksjdflk
+          navigate("/diary", { state: { diaryEntry, img } });
         });
     }
 
