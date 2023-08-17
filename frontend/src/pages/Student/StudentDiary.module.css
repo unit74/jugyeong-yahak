@@ -33,20 +33,6 @@
   width: 100%;
 }
 
-.diarytext {
-  /* position: absolute; */
-  /* transform: translate(-50%, 38%); */
-  line-height: calc(2vw + 2vh);
-  display: inline-block;
-  color: var(--color-black);
-  font-family: KoPubWorld Batang Bold;
-  font-weight: bolder;
-  font-size: calc(1vw + 1vh);
-  line-height: 2;
-  width: 100%;
-  white-space: pre-wrap;
-}
-
 .square * {
   user-select: none;
 }
@@ -70,4 +56,30 @@
   margin-inline-start: 0px;
   margin-inline-end: 0px;
   font-weight: bold;
+}
+
+.diarytext {
+  line-height: calc(2vw + 2vh);
+  display: inline-block;
+  color: var(--color-black);
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+  line-height: 2;
+  white-space: pre-wrap;
+  opacity: 0.5; /* 텍스트 투명도 설정 */
+  /* color: #ff403c; */
+}
+
+.activeDiaryText {
+  opacity: 1; /* 텍스트 투명도 설정 */
+  line-height: calc(2vw + 2vh);
+  display: inline-block;
+  color: var(--color-black);
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+  line-height: 2;
+  white-space: pre-wrap;
+  /* color: #ff403c; */
 }

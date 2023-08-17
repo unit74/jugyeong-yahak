@@ -13,8 +13,10 @@ export default function StudentDiaryMain() {
 
   const [msg, setMsg] = useState(null);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem("userInfo")));
-  const [activeEffect, setActiveEffect] = useState(null); 
+  const [userInfo, setUserInfo] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
+  const [activeEffect, setActiveEffect] = useState(null);
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -34,22 +36,22 @@ export default function StudentDiaryMain() {
       // 이름 -> 나중에 성별로 바꾸기
       let gender = userInfo.gender === 0 ? "어머님" : "아버님";
       let listenText = "질문을 듣고,";
-      setActiveEffect('listening')
+      setActiveEffect("listening");
       ttsMaker(listenText, 0);
       await delay(3000);
-      
+
       let speakText = `${gender}의 이야기를 들려주세요!`;
-      setActiveEffect('speaking')
+      setActiveEffect("speaking");
       ttsMaker(speakText, 0);
       await delay(6000);
-      
+
       let resultText = "대화를 모두 마치고, 완성된 일기를 읽어요!";
-      setActiveEffect('result')
+      setActiveEffect("result");
       ttsMaker(resultText, 0);
       await delay(7000);
-      
+
       let nextText = "자, 그럼 이제 이야기를 나눠봐요!";
-      setActiveEffect(null)
+      setActiveEffect(null);
       ttsMaker(nextText, 0);
       await delay(nextText.length * 250);
       navigate("/student-talking");
@@ -65,21 +67,45 @@ export default function StudentDiaryMain() {
           <b className={styles.b}>오늘의 일기쓰기</b>
           {msg && <TTSsentence message={msg} />}
         </div>
-        
-        <div className={`${activeEffect === 'listening' ? styles.pulsatingDiv : ''} ${styles.time}`}>
-          <img className={styles.responsive_image} src={listenImg} alt="listenImg" />
-          <p className={styles.info}>질문듣기</p>
-        </div>
-        <div className={`${activeEffect === 'speaking' ? styles.pulsatingDiv : ''} ${styles.time}`}>
-          <img className={styles.responsive_image} src={speakImg} alt="speakImg" />
-          <p className={styles.info}>답하기</p>
-        </div>
-        <div className={`${activeEffect === 'result' ? styles.pulsatingDiv : ''} ${styles.time}`}>
-          <img className={styles.responsive_image} src={resultImg} alt="resultImg" />
-          <p className={styles.info}>완성된 일기 읽기</p>
-        </div>
-
+        <div className={styles.imagesContainer}>
+          <div
+            className={`${
+              activeEffect === "listening" ? styles.pulsatingDiv : ""
+            } ${styles.time}`}
+          >
+            <img
+              className={styles.responsive_image}
+              src={listenImg}
+              alt="listenImg"
+            />
+            <p className={styles.info}>질문듣기</p>
           </div>
+          <div
+            className={`${
+              activeEffect === "speaking" ? styles.pulsatingDiv : ""
+            } ${styles.time}`}
+          >
+            <img
+              className={styles.responsive_image}
+              src={speakImg}
+              alt="speakImg"
+            />
+            <p className={styles.info}>답하기</p>
+          </div>
+          <div
+            className={`${
+              activeEffect === "result" ? styles.pulsatingDiv : ""
+            } ${styles.time}`}
+          >
+            <img
+              className={styles.responsive_image}
+              src={resultImg}
+              alt="resultImg"
+            />
+            <p className={styles.info}>완성된 일기 읽기</p>
+          </div>
+        </div>
       </div>
+    </div>
   );
 }

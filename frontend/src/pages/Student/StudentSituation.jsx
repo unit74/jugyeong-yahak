@@ -54,17 +54,11 @@ export default function StudentSituation() {
     async function makeRequest(data) {
       await delay(5000);
 
-      ttsMaker(data[0], 0, 0);
-      await delay(data[0].length * 500);
-
-      ttsMaker(data[1], 1, 0);
-      await delay(data[1].length * 500);
-
-      ttsMaker(data[2], 2, 0);
-      await delay(data[2].length * 500);
-
-      ttsMaker(data[3], 3, 0);
-      await delay(data[3].length * 500);
+      // 데이터 길이 만큼 반복
+      for (let i = 0; i < data.length; i++) {
+        ttsMaker(data[i], i, 0);
+        await delay(data[i].length * 500);
+      }
 
       navigate("/reading-main");
     }

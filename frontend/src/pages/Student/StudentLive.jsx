@@ -237,6 +237,8 @@ class OpenViduSession extends Component {
 
     if (mySession) {
       this.OV = null;
+      mySession.disconnect();
+
       this.setState({
         mainStreamUser: undefined,
         session: undefined,
@@ -329,16 +331,21 @@ class OpenViduSession extends Component {
         (user) => user.getConnectionId() !== event.from.connectionId
       );
 
-      this.setState({
-        subscribers: remoteUsers,
-        quiz: data.quiz,
-        timer: data.timer,
-        theme: data.theme,
-        word: data.word,
-        curriculum: data.curriculum,
-        choseong: data.choseong,
-        page: data.page,
-      });
+      this.setState(
+        {
+          subscribers: remoteUsers,
+          quiz: data.quiz,
+          timer: data.timer,
+          theme: data.theme,
+          word: data.word,
+          curriculum: data.curriculum,
+          choseong: data.choseong,
+          page: data.page,
+        },
+        () => {
+          if (this.state.page !== null) this.navigate(`/student-live/${this.state.page}`);
+        }
+      );
     });
   }
 

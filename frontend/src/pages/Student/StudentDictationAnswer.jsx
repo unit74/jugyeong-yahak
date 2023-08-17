@@ -13,14 +13,14 @@ export default function StudentDictationAnswer() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [repeatValue, setRepeatValue] = useState(0);
- // 로컬 스토리지에서 'state'를 가져오기
-  const storedStateString = localStorage.getItem('state');
+  // 로컬 스토리지에서 'state'를 가져오기
+  const storedStateString = localStorage.getItem("state");
   // 가져온 문자열을 객체로 변환
   const storedStateObject = storedStateString ? JSON.parse(storedStateString) : {};
   // 객체에서 'note' 값을 추출
   const note = storedStateObject.note;
 
-  console.log(note)
+  console.log(note);
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
   const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
 
@@ -34,7 +34,7 @@ export default function StudentDictationAnswer() {
     });
 
     dispatch(fetchTheme());
-    
+
     // 언마운트 시 타이머 초기화
     return () => {
       [...timersForRepeat].forEach((timer) => clearTimeout(timer));

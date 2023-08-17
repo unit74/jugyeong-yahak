@@ -12,8 +12,8 @@ export default function GovernmentLogin() {
   const handleLogin = async () => {
     await axios
       .post("https://i9e206.p.ssafy.io/api/v1/auth/governments/login", {
-        identification: identification,
-        password: password,
+        identification: "E206",
+        password: "E206",
       })
       .then((response) => {
         localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
@@ -37,7 +37,11 @@ export default function GovernmentLogin() {
         <div>
           <label>
             비밀번호:
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
         </div>
         <button onClick={handleLogin}>로그인</button>

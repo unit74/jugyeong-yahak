@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styles from "./StudentTalking.module.css";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
@@ -40,18 +38,18 @@ export default function StudentTalking() {
       await delay(1000);
 
       ttsMaker(data, 0);
-      await delay(data.length * 250);
+      await delay(data.length * 225);
       ttsMaker("", 0);
 
-      SpeechRecognition.startListening();
-      await delay(4000);
+      SpeechRecognition.startListening({ continuous: true });
+      await delay(15000);
       SpeechRecognition.stopListening();
 
       setCount(count + 1);
     }
 
     if (count === 0) {
-      makeRequest("오늘 하루는 어떠셨나요?");
+      makeRequest("오늘은 무엇을 하셨나요?");
     } else if (count === 1) {
       helpGpt(transcript);
     } else if (count === 2) {
@@ -63,6 +61,7 @@ export default function StudentTalking() {
     } else if (count === 5) {
       generateDiary(transcript);
     } else {
+      ttsMaker("일기를 생성중입니다.", 0);
       makeImg();
     }
   }, [count]);
@@ -94,9 +93,8 @@ export default function StudentTalking() {
 
     const generatedMessage = response.data.choices[0].message.content;
     setGeneratedText(generatedMessage);
-    setallConversations(
-      allConversations + message + ".\n" + generatedMessage + ".\n"
-    );
+    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
+    console.log(allConversations);
     setCount(count + 1);
     console.log("gpt : " + generatedMessage);
   };
@@ -145,8 +143,7 @@ export default function StudentTalking() {
       messages: [
         {
           role: "system",
-          content:
-            "Translate this into English. Please keep your response under 200 characters.",
+          content: "Translate this into English. Please keep your response under 200 characters.",
         },
         {
           role: "user",
@@ -159,8 +156,7 @@ export default function StudentTalking() {
     if (translatedDiary.length > 200) {
       translatedDiary = translatedDiary.substring(0, 200) + "...";
     }
-    const prompt =
-      "drawing done with a pencil, only scenery, in color" + translatedDiary;
+    const prompt = "drawing done with a pencil, only scenery, in color " + translatedDiary;
     createImage(prompt);
   };
 
@@ -210,7 +206,7 @@ export default function StudentTalking() {
       <div className={styles.square}>
         <div className={styles.theme}>
           <div className={styles.microphone}>
-            <h1 className={styles.generatedMessage}>오늘 하루는 어떠셨나요?</h1>
+            <h1 className={styles.generatedMessage}>오늘은 무엇을 하셨나요?</h1>
             {/* 
             {allConversations.split(".\n").map((conversation, index) => (
               index % 2 === 1 && (
@@ -226,17 +222,18 @@ export default function StudentTalking() {
             {allConversations.split(".\n").map((conversation, index) => (
               <div
                 key={index}
-                className={
-                  index % 2 === 0 ? styles.userMessage : styles.generatedMessage
-                }
+                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
               >
                 {conversation}
               </div>
             ))}
 
             <p className={styles.volume}>{listening ? "🔊" : "🔇"}</p>
-            <p className={styles.userMessage}>{transcript}</p>
+            {/* <p className={styles.userMessage}>{transcript}</p> */}
             {/* {img && <img src={img}></img>} */}
+            {allConversations.split(".\n").length === 6 && (
+              <div className={styles.diaryMessage}>"일기를 생성중입니다."</div>
+            )}
 
             {msg && <TTSsentence message={msg} />}
 
