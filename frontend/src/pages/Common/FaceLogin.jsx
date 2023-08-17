@@ -17,7 +17,7 @@ export default function FaceLogin(props) {
   const [onTarget, setOnTarget] = useState(false);
 
   const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
-  const BASE_URL = "https://19e206.p.ssafy.io/";
+  const BASE_URL = "https://i9e206.p.ssafy.io";
 
   const navigate = useNavigate();
 
@@ -160,7 +160,7 @@ export default function FaceLogin(props) {
     const governmentId = 4;
 
     axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/auth/${governmentId}/login`, data, {
+      .post(`${BASE_URL}/api/v1/auth/${governmentId}/login`, data, {
         headers: {
           accept: "*/*",
           "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
@@ -208,10 +208,10 @@ export default function FaceLogin(props) {
               .then(function (response) {
                 navigate("/student-live", { replace: true });
               })
-              .catch(function (error) {});
-          }
-
-          navigate(role === "ROLE_STUDENT" ? "/" : "/teacher-main");
+              .catch(function (error) {
+                navigate("/");
+              });
+          } else navigate("/teacher-main");
         }, 1000); // fadeout 후 이동
       })
       .catch((error) => {
