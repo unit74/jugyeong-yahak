@@ -538,11 +538,7 @@ class OpenViduSession extends Component {
               id="remoteUsers"
             >
               {quiz && sub.isCorrect() && <ThumbUpAlt />}
-              <div
-                onClick={() => {
-                  this.handleMainVideoStream(sub);
-                }}
-              >
+              <div>
                 <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
               </div>
             </div>
