@@ -3,7 +3,7 @@
 <br/>
 
 <center>
-<img src="./contents/forReadme/logo.png" style="width:30%">
+<img src="./contents/forReadme/logo.png" width="30%">
 </center>
 
 <div align="center">
