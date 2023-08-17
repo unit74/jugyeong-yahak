@@ -35,7 +35,7 @@ export default function StudentWordExplain() {
 
     async function makeRequest(result) {
       await delay(2000);
-      let text = "단어 설명 해줘요!!";
+      let text = "단어를 설명해드려요!!";
       ttsMaker(text);
       await delay(text.length * 200);
       const middleMapping = {
@@ -75,7 +75,7 @@ export default function StudentWordExplain() {
         if (result[i].jongsung !== "") {
           tts += ", " + result[i].jongsung;
         }
-        tts += "가 결합되어 " + result[i].original;
+        tts += "가 결합되어 " + result[i].original + "!";
         console.log(tts);
         ttsMaker(tts, i, 0);
         await delay(tts.length * 500);
