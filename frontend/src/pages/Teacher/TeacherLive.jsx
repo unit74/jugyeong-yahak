@@ -765,37 +765,42 @@ class OpenViduSession extends Component {
                     paddingTop: "2%",
                   }}
                 >
-                  <IconButton
-                    onClick={() => {
-                      this.sendSignal({ target: sub.getConnectionId() }, "mic");
-                    }}
-                  >
-                    {sub.isAudioActive() ? (
-                      <Mic />
-                    ) : (
-                      <MicOff color="secondary" />
-                    )}
-                  </IconButton>
-                  {quiz && !sub.isCorrect() && (
+                  <div className={styles.iconButtonsGroup}>
                     <IconButton
                       onClick={() => {
                         this.sendSignal(
-                          { target: sub.getConnectionId(), correct: true },
-                          "correct"
+                          { target: sub.getConnectionId() },
+                          "mic"
                         );
-
-                        this.setState({ count: this.state.count + 1 }, () => {
-                          if (
-                            this.state.count === this.state.subscribers.length
-                          ) {
-                            this.sendSignal({ quiz: false }, "quiz");
-                          }
-                        });
                       }}
                     >
-                      <Check />
+                      {sub.isAudioActive() ? (
+                        <Mic />
+                      ) : (
+                        <MicOff color="secondary" />
+                      )}
                     </IconButton>
-                  )}
+                    {quiz && !sub.isCorrect() && (
+                      <IconButton
+                        onClick={() => {
+                          this.sendSignal(
+                            { target: sub.getConnectionId(), correct: true },
+                            "correct"
+                          );
+
+                          this.setState({ count: this.state.count + 1 }, () => {
+                            if (
+                              this.state.count === this.state.subscribers.length
+                            ) {
+                              this.sendSignal({ quiz: false }, "quiz");
+                            }
+                          });
+                        }}
+                      >
+                        <Check />
+                      </IconButton>
+                    )}
+                  </div>
                   <div
                     onClick={() => {
                       this.handleMainVideoStream(sub);
