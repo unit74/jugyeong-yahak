@@ -343,7 +343,8 @@ class OpenViduSession extends Component {
           page: data.page,
         },
         () => {
-          if (this.state.page !== null) this.navigate(`/student-live/${this.state.page}`);
+          if (this.state.page !== null)
+            this.navigate(`/student-live/${this.state.page}`);
         }
       );
     });
@@ -542,8 +543,10 @@ class OpenViduSession extends Component {
                 <div
                   style={{
                     display: "inline-block",
-                    width: "150px",
-                    height: "100px",
+                    width: "250px",
+                    height: "200px",
+                    paddingLeft: "15%",
+                    paddingBottom: "10%",
                   }}
                   id="localUser"
                 >
@@ -551,26 +554,28 @@ class OpenViduSession extends Component {
                   <StreamComponent user={localUser} />
                 </div>
               )}
-            {this.state.subscribers.map((sub, i) => (
-              <div key={i} className={styles.remoteUserVideo} id="remoteUsers">
-                {quiz && sub.isCorrect() && <ThumbUpAlt />}
+            <div className={styles.remoteUsersContainer} id="remoteUsers">
+              {this.state.subscribers.map((sub, i) => (
                 <div
-                  onClick={() => {
-                    this.handleMainVideoStream(sub);
-                  }}
+                  key={i}
+                  className={styles.remoteUserVideo}
+                  id="remoteUsers"
                 >
-                  <StreamComponent
-                    user={sub}
-                    streamId={sub.streamManager.stream.streamId}
-                  />
+                  {quiz && sub.isCorrect() && <ThumbUpAlt />}
+                  <div>
+                    <StreamComponent
+                      user={sub}
+                      streamId={sub.streamManager.stream.streamId}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {this.state.mouse &&
             this.state.mouse.x !== null &&
-            this.state.mouse.y != null && (
+            this.state.mouse.y !== null && (
               <div
                 style={{
                   position: "absolute",
