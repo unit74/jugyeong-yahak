@@ -21,7 +21,9 @@ public enum ErrorCode {
   NOT_FOUND_ERROR(404, "Not Found Exception"),
   NULL_POINT_ERROR(404, "Null Point Exception"),
   INTERNAL_SERVER_ERROR(500, "Internal Server Error Exception"),
-  ID_NOTFOUND(400, "ID not founded");
+  ID_NOTFOUND(400, "ID not founded"), NOT_LIVE_ERROR(400,
+      "The class is not in session"), DUPLICATE_CLASSID_ERROR(
+      400, "Teacher classId is duplicated");
 
   private final int status;
   private final String message;
