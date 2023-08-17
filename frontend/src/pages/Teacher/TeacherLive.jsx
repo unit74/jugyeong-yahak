@@ -721,11 +721,11 @@ class OpenViduSession extends Component {
                   <div
                     style={{
                       display: "inline-block",
-                      width: "150px",
-                      height: "150px",
+                      width: "300px",
+                      height: "200px",
                       position: "relative",
-                      margin: "10px",
-                      paddingTop: "10%",
+
+                      paddingTop: "3%",
                     }}
                     id="localUser"
                   >
@@ -738,11 +738,12 @@ class OpenViduSession extends Component {
                   <div
                     style={{
                       display: "inline-block",
-                      width: "50%",
-                      height: "50%",
-                      botton: "-10px",
+                      width: "300px",
+                      height: "200px",
+                      // botton: "-10px",
                       position: "relative",
-                      margin: "30px",
+
+                      paddingTop: "3%",
                     }}
                     id="mainStreamUser"
                   >
@@ -750,11 +751,19 @@ class OpenViduSession extends Component {
                     <StreamComponent user={mainStreamUser} />
                   </div>
                 )}
-              {this.state.subscribers.slice(0, 6).map((sub, i) => (
+              {this.state.subscribers.map((sub, i) => (
                 <div
                   key={sub.getConnectionId()}
                   className={styles.remoteUser}
                   id="remoteUsers"
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "250px",
+                    // botton: "-10px",
+                    position: "relative",
+                    paddingTop: "2%",
+                  }}
                 >
                   <IconButton
                     onClick={() => {
