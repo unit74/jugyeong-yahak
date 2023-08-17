@@ -149,7 +149,7 @@ p {
   position: absolute; /* 로그아웃 버튼의 위치를 조정합니다. */
   top: 50px; /* 최상단에서의 위치를 정합니다. */
   left: -15px; /* 왼쪽에서의 위치를 정합니다. */
-
+  color: white;
   /* border-radius: var(--br-16xl); */
   font-weight: 600;
   cursor: pointer;
