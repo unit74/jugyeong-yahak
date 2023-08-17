@@ -452,9 +452,7 @@ class OpenViduSession extends Component {
   }
 
   async getToken() {
-    console.log(this.mySessionId);
-    const sessionId = await this.createSession(this.mySessionId);
-    return await this.createToken(sessionId);
+    return await this.createToken(this.mySessionId);
   }
 
   async createSession(sessionId) {
@@ -469,6 +467,7 @@ class OpenViduSession extends Component {
   }
 
   async createToken(sessionId) {
+    console.log(sessionId);
     const response = await axios.post(
       BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
       {},
