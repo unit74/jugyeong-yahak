@@ -39,28 +39,27 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;     /* .situationText에 absolute positioning 적용을 위함 */
+  position: relative; /* .situationText에 absolute positioning 적용을 위함 */
   height: 100%;
   width: 100%;
   padding: 16px;
 }
 
-.listenImg{
+.listenImg {
   position: absolute;
   top: 150px; /* 상단으로부터 10px 이동 */
   left: 100px; /* 좌측으로부터 10px 이동 */
 }
 
-
-.transcriptText{
+.transcriptText {
   margin-top: 200px;
-  color :rgb(106, 106, 106);
+  color: rgb(106, 106, 106);
   font-size: calc(2.5vw + 1vh);
   font-family: KoPubWorld Batang Bold;
 }
 .situationText {
   position: absolute; /* .situationText를 절대적 위치로 만듭니다 */
-  transform: translateY( -200%); /* .square의 상단 위로 이동시킵니다 */
+  transform: translateY(-200%); /* .square의 상단 위로 이동시킵니다 */
   text-align: center;
   font-family: "KoPubWorld Batang Bold";
   font-weight: bolder;
@@ -70,8 +69,8 @@
   margin-bottom: 40px;
 }
 
-.maging{
-  margin: 0 20px;  /* 상하 0px, 좌우 20px 마진 추가 */
+.maging {
+  margin: 0 20px; /* 상하 0px, 좌우 20px 마진 추가 */
 }
 
 .wordComponent {
