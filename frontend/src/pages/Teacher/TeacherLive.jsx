@@ -77,7 +77,8 @@ class OpenViduSession extends Component {
     this.sendSignal = this.sendSignal.bind(this);
 
     this.subscribeToStreamCreated = this.subscribeToStreamCreated.bind(this);
-    this.subscribeToStreamDestroyed = this.subscribeToStreamDestroyed.bind(this);
+    this.subscribeToStreamDestroyed =
+      this.subscribeToStreamDestroyed.bind(this);
     this.subscribeToUserChanged = this.subscribeToUserChanged.bind(this);
     this.subscribeToMic = this.subscribeToMic.bind(this);
     this.subscribeToExit = this.subscribeToExit.bind(this);
@@ -148,7 +149,11 @@ class OpenViduSession extends Component {
       console.log("Token : " + token);
       this.connect(token);
     } catch (error) {
-      console.error("There was an error getting the token:", error.code, error.message);
+      console.error(
+        "There was an error getting the token:",
+        error.code,
+        error.message
+      );
       if (this.props.error) {
         this.props.error({
           error: error.error,
@@ -178,7 +183,11 @@ class OpenViduSession extends Component {
           });
         }
         alert("There was an error connecting to the session:", error.message);
-        console.log("There was an error connecting to the session:", error.code, error.message);
+        console.log(
+          "There was an error connecting to the session:",
+          error.code,
+          error.message
+        );
       });
   }
 
@@ -267,7 +276,10 @@ class OpenViduSession extends Component {
   micStatusChanged() {
     localUser.setAudioActive(!localUser.isAudioActive());
     localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-    this.sendSignal({ isAudioActive: localUser.isAudioActive() }, "userChanged");
+    this.sendSignal(
+      { isAudioActive: localUser.isAudioActive() },
+      "userChanged"
+    );
     this.setState({ localUser: localUser });
   }
 
@@ -287,7 +299,9 @@ class OpenViduSession extends Component {
 
   deleteSubscriber(stream) {
     const remoteUsers = this.state.subscribers;
-    const userStream = remoteUsers.filter((user) => user.getStreamManager().stream === stream)[0];
+    const userStream = remoteUsers.filter(
+      (user) => user.getStreamManager().stream === stream
+    )[0];
     let index = remoteUsers.indexOf(userStream, 0);
     if (index > -1) {
       remoteUsers.splice(index, 1);
@@ -339,7 +353,8 @@ class OpenViduSession extends Component {
         if (user.getConnectionId() === event.from.connectionId) {
           const data = JSON.parse(event.data);
           console.log("EVENTO REMOTE: ", event.data);
-          if (data.isAudioActive !== undefined) user.setAudioActive(data.isAudioActive);
+          if (data.isAudioActive !== undefined)
+            user.setAudioActive(data.isAudioActive);
           if (data.nickname !== undefined) user.setNickname(data.nickname);
           if (data.isCorrect !== undefined) user.setCorrect(data.isCorrect);
         }
@@ -355,7 +370,8 @@ class OpenViduSession extends Component {
     this.state.session.on("signal:mic", (event) => {
       const data = JSON.parse(event.data);
 
-      if (localUser && localUser.getConnectionId() === data.target) this.micStatusChanged();
+      if (localUser && localUser.getConnectionId() === data.target)
+        this.micStatusChanged();
     });
   }
 
@@ -696,49 +712,48 @@ class OpenViduSession extends Component {
             </OpenViduSessionContext.Provider>
           </div>
           <div className={styles.contentRight}>
-            <div className={styles.video} style={{ display: "flex", gap: "20px" }}>
-              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    width: "100px",
-                    height: "100px",
-                    position: "relative",
-                    margin: "30px",
-                    paddingTop: "10%",
-                  }}
-                  id="localUser"
-                >
-                  {/* <div>본인</div> */}
-                  <StreamComponent user={localUser} />
-                </div>
-              )}
-              {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    width: "50%",
-                    height: "50%",
-                    botton: "-10px",
-                    position: "relative",
-                    margin: "30px",
-                  }}
-                  id="mainStreamUser"
-                >
-                  {/* <div>포커스 중인 사람</div> */}
-                  <StreamComponent user={mainStreamUser} />
-                </div>
-              )}
+            <div
+              className={styles.video}
+              style={{ display: "flex", gap: "5px" }}
+            >
+              {localUser !== undefined &&
+                localUser.getStreamManager() !== undefined && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "150px",
+                      height: "150px",
+                      position: "relative",
+                      margin: "10px",
+                      paddingTop: "10%",
+                    }}
+                    id="localUser"
+                  >
+                    {/* <div>본인</div> */}
+                    <StreamComponent user={localUser} />
+                  </div>
+                )}
+              {mainStreamUser !== undefined &&
+                mainStreamUser.getStreamManager() !== undefined && (
+                  <div
+                    style={{
+                      display: "inline-block",
+                      width: "50%",
+                      height: "50%",
+                      botton: "-10px",
+                      position: "relative",
+                      margin: "30px",
+                    }}
+                    id="mainStreamUser"
+                  >
+                    {/* <div>포커스 중인 사람</div> */}
+                    <StreamComponent user={mainStreamUser} />
+                  </div>
+                )}
               {this.state.subscribers.slice(0, 6).map((sub, i) => (
                 <div
                   key={sub.getConnectionId()}
-                  style={{
-                    display: "inline-block",
-                    width: "100px",
-                    height: "100px",
-                    position: "relative",
-                    margin: "30px",
-                  }}
+                  className={styles.remoteUser}
                   id="remoteUsers"
                 >
                   <IconButton
@@ -746,7 +761,11 @@ class OpenViduSession extends Component {
                       this.sendSignal({ target: sub.getConnectionId() }, "mic");
                     }}
                   >
-                    {sub.isAudioActive() ? <Mic /> : <MicOff color="secondary" />}
+                    {sub.isAudioActive() ? (
+                      <Mic />
+                    ) : (
+                      <MicOff color="secondary" />
+                    )}
                   </IconButton>
                   {quiz && !sub.isCorrect() && (
                     <IconButton
@@ -757,7 +776,9 @@ class OpenViduSession extends Component {
                         );
 
                         this.setState({ count: this.state.count + 1 }, () => {
-                          if (this.state.count === this.state.subscribers.length) {
+                          if (
+                            this.state.count === this.state.subscribers.length
+                          ) {
                             this.sendSignal({ quiz: false }, "quiz");
                           }
                         });
@@ -771,7 +792,10 @@ class OpenViduSession extends Component {
                       this.handleMainVideoStream(sub);
                     }}
                   >
-                    <StreamComponent user={sub} streamId={sub.streamManager.stream.streamId} />
+                    <StreamComponent
+                      user={sub}
+                      streamId={sub.streamManager.stream.streamId}
+                    />
                   </div>
                 </div>
               ))}
