@@ -24,6 +24,9 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
   List<MemberEntity> findAllByRoleAndClassId(RoleEntity role, Long classId);
 
+  //Optional<MemberEntity> findTeacherByRoleAndClassId(RoleEntity role, Long classId);
+  List<MemberEntity> findTeacherByRoleAndClassId(RoleEntity role, Long classId);
+
   @Query("SELECT m FROM MemberEntity m WHERE m.classId = :classId And m.role.id = 4")
   Optional<MemberEntity> findClassIdByRole(@Param("classId") Long classId);
 
