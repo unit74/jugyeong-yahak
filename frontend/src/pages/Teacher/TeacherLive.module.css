@@ -56,7 +56,7 @@
 }
 
 .contentRight {
-  width: 60%;
+  width: 80%;
   height: 100%;
   overflow-y: scroll;
 }
@@ -142,4 +142,18 @@ h1 {
 
 .containerClass {
   background-image: linear-gradient(to bottom, #4070e9, #88a7e3);
+  overflow: hidden;
+}
+
+.remoteUser {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  position: relative;
+  right: 9%;
+  /* margin: 100px; */
+  margin: 110px;
+
+  /* margin-right: 5%; */
+  /* mar */
 }
