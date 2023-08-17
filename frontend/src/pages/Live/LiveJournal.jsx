@@ -5,6 +5,10 @@ import styles from "./LiveJournal.module.css";
 const LiveJournal = () => {
   const curriculum = useOutletContext().curriculum;
 
+  if (!curriculum) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className={styles.situation}>
       <h1>{curriculum.situation}</h1>
