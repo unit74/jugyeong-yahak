@@ -92,7 +92,7 @@ public class ClassPrivateController {
 
   @GetMapping("/{classId}")
   public ResponseEntity<?> getClassDetails(@PathVariable Long classId) {
-    
+
     if (classId == null) {
       return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
     }
@@ -102,6 +102,18 @@ public class ClassPrivateController {
     return createSuccessResponse(SuccessCode.SELECT_SUCCESS,
         classDetailResponse.getId() + " 반을 상세 조회하였습니다.",
         classDetailResponse);
+  }
+
+  // /api/v1/classes
+  @GetMapping("/in-class/{classId}")
+  public ResponseEntity<?> getLectureLive(@PathVariable Long classId) {
+    if (classId == null) {
+      return createErrorResponse(ErrorCode.REQUEST_BODY_MISSING_ERROR, "방의 id 값을 포함하지 않았습니다");
+    }
+
+    classService.checkLive(classId);
+
+    return createSuccessResponse(SuccessCode.REQUEST_SUCCESS);
   }
 
 }
