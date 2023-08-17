@@ -7,14 +7,14 @@ plugins {
 group = 'com.ssafy'
 version = '0.0.1-SNAPSHOT'
 
-java {
-    sourceCompatibility = 'VERSION_11'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    java {
+        sourceCompatibility = 'VERSION_11'
     }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
 }
 
 repositories {
