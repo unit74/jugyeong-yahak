@@ -31,12 +31,18 @@ public class LectureService {
         sendToClients(classId, "connect", "EventStream Created. [class=" + classId + "]");
         return emitter;
     }
+
     public void convertPage(Long classId, Object event) {
-        sendToClients(classId,"page", event);
+        sendToClients(classId, "page", event);
     }
 
     private void sendToClients(Long classId, String name, Object data) {
         Map<String, SseEmitter> emitters = emitterRepository.get(classId);
+
+        if (emitters == null) {
+            return;
+        }
+
         emitters.forEach((id, emitter) -> {
             try {
                 emitter.send(SseEmitter.event()
