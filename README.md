@@ -61,7 +61,7 @@
 ### 실시간 수업
 - 실시간 수업은 이렇습니다
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -71,7 +71,7 @@
 
 <img src="./contents/forReadme/architecture.png">
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -118,7 +118,7 @@
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -648,7 +648,7 @@
 
 </details>
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -659,7 +659,7 @@
 
 <img src="./contents/forReadme/erd.png">
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -681,7 +681,7 @@
 ### 5. 실시간 수업
 
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
@@ -696,4 +696,4 @@
 |   **Git**    | [GitHub](https://github.com/unit74) | [GitHub](https://github.com/JeongHuiKim) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/nayeonxkim) | [GitHub](https://github.com/yelunar) | [GitHub](https://github.com/HyeonBhinKim) |
 
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
