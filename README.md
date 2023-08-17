@@ -2,9 +2,9 @@
 
 <br/>
 
-<center>
+<div align=center>
 <img src="./contents/forReadme/logo.png" width="30%">
-</center>
+</div>
 
 <div align="center">
   <h3>기초교육을 받지 못한 어르신들을 위한 온라인 문해교실 서비스</h3>
