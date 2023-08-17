@@ -228,6 +228,8 @@ class OpenViduSession extends Component {
 
     if (mySession) {
       this.OV = null;
+      mySession.disconnect();
+
       this.setState({
         mainStreamUser: undefined,
         session: undefined,
@@ -327,7 +329,7 @@ class OpenViduSession extends Component {
           page: data.page,
         },
         () => {
-          this.navigate(`/student-live/${this.state.page}`);
+          if (this.state.page !== null) this.navigate(`/student-live/${this.state.page}`);
         }
       );
     });
