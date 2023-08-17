@@ -25,7 +25,7 @@ public class LectureController {
 
     @PostMapping("/convert/page")
     public void convertPage(@RequestBody ConvertPageRequest convertPageRequest) {
-        lectureService.convertPage(convertPageRequest.getClassId(), null);
+        lectureService.convertPage(convertPageRequest.getClassId(), "send");
     }
 
 }
