@@ -19,7 +19,6 @@ export default class StreamComponent extends Component {
           <span
             style={{
               background: 'rgba(58, 64, 74, 0.651)',
-              padding: '5px',
               position: 'absolute',
               zIndex: 999,
               color: '#ffffff',
