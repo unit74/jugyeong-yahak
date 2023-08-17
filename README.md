@@ -1,6 +1,8 @@
 # 🏫 주경야학 (SSAFY 9기 부울경 E206 Hot6)
 
-<img src="./contents/forReadme/logo.png" style="display:block; width:70%; margin:auto">
+<br/>
+
+<img src="./contents/forReadme/logo.png" style="display:block; width:30%; margin:auto">
 
 <div align="center">
   <h3>기초교육을 받지 못한 어르신들을 위한 온라인 문해교실 서비스</h3>
