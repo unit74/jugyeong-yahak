@@ -46,7 +46,7 @@
 - 개별 학습 지원
 - 대화를 통한 일기 쓰기 학습
 
-<p align="right"><a href="#tableContents">목차로 이동</a></p>
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
