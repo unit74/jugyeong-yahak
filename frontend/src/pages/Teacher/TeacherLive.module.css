@@ -26,10 +26,14 @@
 }
 
 .container.sidebar-open {
-  margin-left: 150px;
+  margin-left: 180px;
 }
 
 .container.sidebar-open .contentContainer {
+  width: calc(100vw - 150px);
+}
+
+.container.sidebar .contentContainer {
   width: calc(100vw - 150px);
 }
 
@@ -52,7 +56,7 @@
   overflow-y: auto;
   /* position: relative; */
   height: 100%;
-  width: 50%;
+  width: 60%;
 }
 
 .contentRight {
@@ -77,7 +81,7 @@
 button {
   border: none;
   border-radius: 5px;
-  color: #fff;
+  color: #000000;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
@@ -130,14 +134,13 @@ h1 {
 .pageButtons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  /* gap: 20px; */
 }
 
 .controlsContainer {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
 }
 
 .containerClass {
@@ -147,10 +150,11 @@ h1 {
 
 .remoteUser {
   display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 300px;
   position: relative;
-  right: 9%;
-  /* margin: 100px; */
-  margin: 110px;
+  right: 0%;
+  top: 50%;
+  margin-right: 0%;
+
+  /* mar */
 }
