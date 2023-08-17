@@ -17,6 +17,7 @@ export default function FaceLogin(props) {
   const [onTarget, setOnTarget] = useState(false);
 
   const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
+  const BASE_URL = "https://19e206.p.ssafy.io/";
 
   const navigate = useNavigate();
 
@@ -172,34 +173,43 @@ export default function FaceLogin(props) {
 
         closeWebcam();
 
-        setTimeout(() => {
+        setTimeout(async () => {
           setFade(true);
-
-          props.setUserInfo(response.data.data.info);
 
           localStorage.setItem("userInfo", JSON.stringify(response.data.data.info)); // userInfo 저장
           localStorage.setItem("accessToken", response.data.data.token); //토큰 저장
 
-          const eventSourceInitDict = {
-            heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
-          };
+          if (role === "ROLE_STUDENT") {
+            const eventSourceInitDict = {
+              heartbeatTimeout: 60000 * 60, // 타임아웃을 60분으로 설정
+            };
 
-          const sse = new EventSourcePolyfill(
-            `${BASE_URL_SSE}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
-            eventSourceInitDict
-          );
+            const sse = new EventSourcePolyfill(
+              `${BASE_URL_SSE}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
+              eventSourceInitDict
+            );
 
-          sse.addEventListener("connect", (e) => {
-            // connect라는 이벤트를 받았을 때, connect data 출력
-            const { data: receivedConnectData } = e;
+            sse.addEventListener("connect", (e) => {
+              // connect라는 이벤트를 받았을 때, connect data 출력
+              const { data: receivedConnectData } = e;
 
-            console.log("Connected! ", receivedConnectData);
-          });
+              console.log("Connected! ", receivedConnectData);
+            });
 
-          sse.addEventListener("page", () => {
-            console.log("navigate");
-            navigate("/student-live");
-          });
+            sse.addEventListener("page", (e) => {
+              const { data: receivedData } = e;
+
+              console.log("navigate : " + receivedData);
+              navigate("/student-live", { replace: true });
+            });
+
+            await axios
+              .get(`${BASE_URL}/api/v1/classes/in-class/${response.data.data.info.classId}`)
+              .then(function (response) {
+                navigate("/student-live", { replace: true });
+              })
+              .catch(function (error) {});
+          }
 
           navigate(role === "ROLE_STUDENT" ? "/" : "/teacher-main");
         }, 1000); // fadeout 후 이동
