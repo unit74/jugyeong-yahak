@@ -124,4 +124,25 @@ public class ClassService {
 
   }
 
+  public void checkLive(Long classId) {
+
+    //테스트용
+    List<MemberEntity> teachers = memberRepository.findTeacherByRoleAndClassId(
+        RoleEntity.builder().role(Role.TEACHER).build(),
+        classId);
+
+    if (teachers.size() == 0) {
+      throw new CustomException(ErrorCode.NOT_LIVE_ERROR);
+    }
+
+    if (teachers.size() > 1) {
+      throw new CustomException(ErrorCode.DUPLICATE_CLASSID_ERROR);
+    }
+
+    //실제 서비스 코드
+//    memberRepository.findTeacherByRoleAndClassId(RoleEntity.builder().role(Role.TEACHER).build(),
+//        classId).orElseThrow(
+//        () -> new CustomException(ErrorCode.NOT_LIVE_ERROR)
+//    );
+  }
 }
