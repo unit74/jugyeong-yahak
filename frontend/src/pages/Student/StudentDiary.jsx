@@ -23,21 +23,30 @@ export default function StudentDiary() {
   // const [generatedText, setGeneratedText] = useState("");
 
   const [msg, setMsg] = useState(null);
+  const [currentReadingIndex, setCurrentReadingIndex] = useState(-1); // 처음에는 아무 문장도 선택되지 않도록 -1을 초기값으로 설정
 
   // 온점일 때 줄 띄우기
 
   const formattedText =
     (diaryEntry &&
-      diaryEntry.split(". ").join(".\n").split("! ").join("!\n").split("? ").join("?\n")) ||
+      diaryEntry
+        .split(". ")
+        .join(".\n")
+        .split("! ")
+        .join("!\n")
+        .split("? ")
+        .join("?\n")) ||
     "";
 
   // const navigateToRecordDictation = useCallback((navigate) => {
   //   navigate("/good-feedback", { state: { course: "diary" } });
   // }, []);
 
-  const ttsMaker = async (msg, timer) => {
+  const ttsMaker = async (msg, index, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
+        setCurrentReadingIndex(index); // 현재 읽는 문장의 인덱스 설정
+        console.log("Current Reading Index:", currentReadingIndex);
         setMsg(msg);
         resolve();
       }, timer);
@@ -55,11 +64,12 @@ export default function StudentDiary() {
   }, []);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const data = formattedText.split(".\n");
+  console.log("data:", data);
 
+  // 임시로 막아둠
   useEffect(() => {
     console.log(formattedText);
-
-    const data = formattedText.split(".\n");
 
     async function makeRequest(data) {
       await delay(5000);
@@ -67,19 +77,13 @@ export default function StudentDiary() {
       ttsMaker(text);
       await delay(text.length * 200);
 
-      ttsMaker(data[0], 0);
-      await delay(data[0].length * 500);
+      // 일기 데이터 길이 만큼 반복
+      for (let i = 0; i < data.length; i++) {
+        ttsMaker(data[i], i, 0);
+        await delay(data[i].length * 500);
+      }
 
-      ttsMaker(data[1], 0);
-      await delay(data[1].length * 500);
-
-      ttsMaker(data[2], 0);
-      await delay(data[2].length * 500);
-
-      ttsMaker(data[3], 0);
-      await delay(data[3].length * 500);
-
-      // navigate("/good-feedback", { state: { course: "diary" } });
+      navigate("/good-feedback", { state: { course: "diary" } });
     }
 
     if (data[0] !== "") {
@@ -87,55 +91,31 @@ export default function StudentDiary() {
     }
 
     return () => {};
-  }, [formattedText]);
+  }, [formattedText, setCurrentReadingIndex, setMsg]);
 
   // useEffect(() => {
-  //   ttsMaker("일기가 완성될 때까지 잠시만 기다려주세요.", 0);
+  //   ttsMaker("일기가 완성될 때까지 잠시만 기다려주세요.", -1, 0);
   // }, []);
-
-  //함수
-  // 1. API요청 함수
-  // const generateText = async () => {
-  //   if (!isGenerating) {
-  //     setIsGenerating(true);
-
-  //     try {
-  //       const apiKey = "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";
-
-  //       const configuration = new Configuration({
-  //         apiKey: apiKey,
-  //       });
-  //       const openai = new OpenAIApi(configuration);
-
-  //       const response = await openai.createChatCompletion({
-  //         model: "gpt-3.5-turbo",
-  //         messages: [
-  //           { role: "system", content: "70대가 쓴 일기처럼 작성해줘." },
-  //           {
-  //             role: "user",
-  //             content: `다음 내용을 짧은 4개의 문장으로 일기처럼 작성해줘 : ${generatedDiary}`,
-  //           },
-  //         ],
-  //       });
-
-  //       const generatedMessage = response.data.choices[0].message.content;
-  //       setGeneratedText(generatedMessage);
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     } finally {
-  //       setIsGenerating(false);
-  //     }
-  //   }
-  // };
 
   return (
     <div className={styles.main}>
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
-          <img src={img} alt="" height={500} />
+          <img src={img} alt="" height={300} />
           <div>
-            <b className={styles.diarytext}>{formattedText}</b>
+            {data.map((sentence, index) => (
+              <b
+                key={index}
+                className={
+                  index === currentReadingIndex
+                    ? `${styles.activeDiaryText} ${styles.diarytext}`
+                    : styles.diarytext
+                }
+              >
+                {sentence}
+              </b>
+            ))}
           </div>
           {msg && <TTS message={msg} />}
         </div>

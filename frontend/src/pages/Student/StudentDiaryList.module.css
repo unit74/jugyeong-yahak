@@ -1,0 +1,196 @@
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
+
+.main {
+  background-image: url(/src/assets/images/real_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.square {
+  position: absolute; /* 상대적 위치 설정 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100px;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(100px);
+  width: 85%;
+  height: 90%;
+  --diary-container-width: 100%;
+}
+
+.greeting {
+  position: relative; /* 절대 위치 설정 */
+  display: flex;
+  flex-direction: row; /* 자식 요소들을 세로 방향으로 정렬 */
+  align-items: center; /* 자식 요소들을 가로 방향에서 중앙에 정렬 */
+  justify-content: center; /* 자식 요소들을 세로 방향에서 중앙에 정렬 */
+  z-index: 2;
+  top: 5%; /* 상단에서 10%만큼 떨어진 위치에 배치 */
+  left: 50%; /* 왼쪽에서 50%만큼 떨어진 위치에 배치 (가운데 정렬을 위한 기준값) */
+  padding-bottom: 1%;
+  transform: translateX(-50%); /* 좌우 가운데 정렬을 위한 좌표 조정 */
+  /* ... 필요한 다른 스타일들 ... */
+}
+
+/* 여기까지 공통 */
+
+.mainButton {
+  background-color: red; /* 버튼의 배경색을 빨간색으로 설정 */
+  color: white; /* 글자색을 흰색으로 설정 */
+  border: none; /* 기본적인 테두리 제거 */
+  padding: 10px 20px; /* 안쪽 패딩 추가 */
+  border-radius: 5px; /* 버튼 모서리 둥글게 설정 */
+  cursor: pointer; /* 마우스 오버 시 손가락 모양으로 변경 */
+  transition: 0.3s; /* 부드러운 효과를 위한 전환 시간 설정 */
+}
+
+.mainButton:hover {
+  background-color: darkred; /* 마우스 오버시 버튼의 배경색을 진한 빨간색으로 변경 */
+}
+/* 이렇게 하면 버튼의 배경색이 빨간색으로 변경되고, 글자색은 흰색으로 설정됩니다. 마우스를 버튼 위에 올리면 진한 빨간색으로 변경됩니다. */
+
+.theme {
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.diarytext {
+  /* position: absolute; */
+  /* transform: translate(-50%, 38%); */
+  line-height: calc(2vw + 2vh);
+  display: inline-block;
+  color: var(--color-black);
+  font-family: KoPubWorld Batang Bold;
+  font-weight: bolder;
+  font-size: calc(1vw + 1vh);
+  line-height: 2;
+  width: 100%;
+  white-space: pre-wrap;
+}
+
+/* ------slider-------- */
+
+.slider {
+  position: relative;
+  top: 5%;
+}
+
+.slider__arrow__left {
+  background-clip: content-box;
+  padding: 20px 0;
+  box-sizing: border-box;
+  transform: 400ms all ease-in-out;
+  cursor: pointer;
+  width: 80px;
+  z-index: 1000;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+}
+
+.slider__arrow__right {
+  background-clip: content-box;
+  padding: 20px 0;
+  box-sizing: border-box;
+  transform: 400ms all ease-in-out;
+  cursor: pointer;
+  width: 80px;
+  z-index: 1000;
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: visible;
+}
+
+.arrow {
+  color: red; /* 텍스트 색상을 검은색으로 지정 */
+  font-size: 2em; /* 폰트 크기를 늘립니다. 원하는 크기로 조절 가능 */
+  transition: 400ms all ease-in-out;
+}
+
+.arrow:hover {
+  transition: 400ms all ease-in-out;
+  transform: scale(1.5);
+}
+
+.slider:hover .slider__arrow-left {
+  transition: 400ms all ease-in-out;
+  visibility: visible;
+}
+
+.slider:hover .slider__arrow-right {
+  transition: 400ms all ease-in-out;
+  visibility: visible;
+}
+
+.slider__arrow__left:hover {
+  background: rgba(20, 20, 20, 0.3);
+  transition: 400ms all ease-in-out;
+}
+
+.slider__arrow__right:hover {
+  background: rgba(20, 20, 20, 0.3);
+  transition: 400ms all ease-in-out;
+}
+
+.row__diarys {
+  display: flex;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+}
+
+/* 웹킷 스크롤바 안보이게끔 해줌 */
+.row__diarys::-webkit-scrollbar {
+  display: none;
+}
+
+.diaryContainer {
+  width: var(--diary-container-width);
+  display: flex;
+  /* width: 85vw; */
+  flex-direction: row;
+  position: relative;
+}
+
+.row__diary {
+  object-fit: cover; /* 이미지의 비율을 유지하면서 지정된 박스 안에 맞게 이미지를 조정합니다. */
+  width: 35vw;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.row__diary:hover {
+  transform: scale(1.03);
+}
+
+.diaryContent {
+  color: #000;
+  width: 50vw;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  font-family: KoPubWorld Batang Bold;
+  font-size: calc(1.2vw + 1.2vh);
+  padding: 0 30px;
+  padding-top: 5vw;
+}
