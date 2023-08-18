@@ -4,13 +4,14 @@
 
 <div align=center>
 <br/>
-  <img src="./contents/forReadme/logo.png" width="60%">
+  <img src="./contents/forReadme/logo.png" width="80%">
 </div>
 
 <div align="center">
   <h3>기초교육을 받지 못한 어르신들을 위한 온라인 문해교실 서비스</h3>
 </div>
 
+<div align="right"><a href="https://www.youtube.com/watch?v=TiaQBOIdMIw">🎥 UCC 보러 가기</a></div>
 <br/>
 
 ## ⌨️ 기간
@@ -69,9 +70,17 @@
 
 ### 실시간 수업
 
-  - 실시간 수업은 
-    - 실시간 교사 학생 입장시키기
-  - 실시간 학생 입장
+<h4>실시간 교육 기능을 통해 학생들에게 더욱 활발하고 직접적인 교육 경험을 제공합니다.</h4>
+<h4>선생님이 반을 선택하여 강의를 생성합니다.</h4>
+
+- 현재 접속 중인 학생들은 SSE 통신을 통해 실시간 알림을 받아 강의 페이지로 자동 이동합니다.
+- 앞으로 로그인하는 학생들은 실시간 강의 여부에 따라 강의 페이지로 자동 이동합니다.
+
+<h4>실시간 강의에서는 단순한 화상 통화를 넘어, 다양한 보조 기능들을 통해 효과적인 교육을 지원합니다.</h4>
+
+- 선생님의 마우스 포인터 위치를 실시간으로 학생들에게 보여주는 마우스 트레이싱 기능이 탑재되어 있어, 학생들이 선생님의 지시를 쉽게 파악할 수 있습니다.
+- 선생님이 학생의 페이지를 원격으로 제어하거나, 자신의 페이지 이동을 학생에게도 동기화시켜 수업의 질을 높입니다.
+- 선생님이 학생들의 마이크를 제어하여 수업이 원활하게 진행 될 수 있습니다.
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
@@ -341,16 +350,18 @@
 ## 🖥️ 화면 소개
 
 ### 1. 로그인 페이지
-<img src="./contents/forReadme/UI/gifs/로그인.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/로그인.gif" width="90%">
+</div>
 
   - face-api.js를 활용해 얼굴 로그인을 진행합니다.
   - 로그인은 박스 영역에 들어와야 로그인 진행이 됩니다.
   - 사용자가 박스 영역에 잘 들어올 수 있도록 TTS로 얼굴 이동을 안내합니다.
 
 ### 2. 교사 메인 페이지
-
-<img src="./contents/forReadme/UI/선생님메인.png" width="80%">
-
+<div align=center>
+<img src="./contents/forReadme/UI/선생님메인.png" width="90%">
+</div>
 
 <h3>기능</h3>
 
@@ -360,27 +371,39 @@
 
 ### 3. 교사 실시간 페이지
 <h3>실시간 수업 시작</h3>
-<img src="./contents/forReadme/UI/gifs/강사실시간입장.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/강사실시간입장.gif" width="90%">
+</div>
 
   - 수업을 시작을 누르면, 학생들은 실시간 수업으로 들어올 수 있습니다.
 
 
 <h3>수업</h3>
-<img src="./contents/forReadme/UI/gifs/강사수업.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/강사수업.gif" width="90%">
+</div>
 
   - 수업을 위해 교사는 커리큘럼과 강의 자료를 선택합니다.
   - 강의자료 선택 후, 단어 읽기, 단어 받아쓰기 등의 수업을 진행합니다.
 
 <h4>단어 읽기</h4>
-<img src="./contents/forReadme/UI/단어읽기-강사.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/단어읽기-강사.png" width="80%">
+</div>
 <h4>단어 힌트 - 단어 읽기 힘들어 할 경우</h4>
-<img src="./contents/forReadme/UI/읽기힌트 페이지-강사.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/읽기힌트 페이지-강사.png" width="80%">
+</div>
 <h4>단어 받아쓰기</h4>
-<img src="./contents/forReadme/UI/단어받아쓰기-강사.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/단어받아쓰기-강사.png" width="80%">
+</div>
 
 ### 4. 학생 메인 페이지
 
-<img src="./contents/forReadme/UI/학생메인.png" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/학생메인.png" width="90%">
+</div>
 
 <h3>기능</h3>
   
@@ -391,34 +414,49 @@
 
 ### 5. 학생 실시간 페이지
 <h3>실시간 수업 입장</h3>
-<img src="./contents/forReadme/UI/gifs/학생실시간입장.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/학생실시간입장.gif" width="90%">
+</div>
 
 ---
-
-<img src="./contents/forReadme/UI/gifs/학생실시간커리.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/학생실시간커리.gif" width="90%">
+</div>
 
   - 강사가 커리큘럼을 선택한다면 학생들의 화면에 교재가 띄워집니다.
   - 강사의 마우스가 학생들에게 포인터로 보이게 됩니다.
 
 <h3>수업</h3>
-<img src="./contents/forReadme/UI/gifs/학생실시간수업.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/학생실시간수업.gif" width="90%">
+</div>
 
   - 학생들은 강사가 공유하는 교재를 보며 실시간 수업을 받습니다.
   - 단어 읽기, 받아쓰기 등의 수업이 진행됩니다.
 
 <h4>단어 읽기</h4>
-<img src="./contents/forReadme/UI/단어읽기-학생.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/단어읽기-학생.png" width="80%">
+</div>
 <h4>단어 힌트 - 단어 읽기 힘들어 할 경우</h4>
-<img src="./contents/forReadme/UI/읽기힌트-학생.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/읽기힌트-학생.png" width="80%">
+</div>
 <h4>단어 받아쓰기</h4>
-<img src="./contents/forReadme/UI/받아쓰기-학생.png" width="60%">
+<div align=center>
+<img src="./contents/forReadme/UI/받아쓰기-학생.png" width="80%">
+</div>
 
 ### 6. 혼자 공부하기
-<img src="./contents/forReadme/UI/혼자학습1.png" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/혼자학습1.png" width="90%">
+</div>
 
 ---
 
-<img src="./contents/forReadme/UI/혼자학습2.png" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/혼자학습2.png" width="90%">
+</div>
 
 <h3>기능</h3>
 
@@ -428,19 +466,29 @@
 ---
 
 <h4>단어 읽기</h4>
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/혼자단어읽기.gif" width="90%">
+</div>
+
+- 학생의 음성을 통해 정답 판별을 합니다.
 
 <h4>공책 선택</h4>
-<img src="./contents/forReadme/UI/gifs/공책선택.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/공책선택.gif" width="90%">
+</div>
 
 
 <h4>받아쓰기 - 공책 없음</h4>
-<img src="./contents/forReadme/UI/gifs/공책없음.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/공책없음.gif" width="90%">
+</div>
 
 - 공책이 없는 경우, 캔버스를 통해서 받아쓰기를 할 수 있습니다.
 
 <h4>받아쓰기 - 공책 있음</h4>
-
-<img src="./contents/forReadme/UI/gifs/혼자학습공책.gif" width="80%">
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/혼자학습공책.gif" width="90%">
+</div>
 
 - OCR을 통해 사진에 있는 text를 인식해 정답을 비교합니다.
 
