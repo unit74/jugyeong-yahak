@@ -4,6 +4,10 @@
     format("woff2");
   font-style: normal;
 }
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
 
 @font-face {
   font-family: "Kimjungchul";

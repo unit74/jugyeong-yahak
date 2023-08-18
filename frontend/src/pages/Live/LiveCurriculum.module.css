@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
 .main {
   position: relative;
   width: 100%;
@@ -71,7 +75,7 @@
 
 .curriculumBtn {
   margin: 10px;
-  font-family: "Kimjungchul";
+  font-family: "KoPubWorld Batang Bold";
   font-size: calc(1vw + 1vh); /* 반응형 */
   padding: 15px;
   font-size: 18px;
