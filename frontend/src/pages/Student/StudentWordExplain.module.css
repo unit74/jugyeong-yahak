@@ -60,7 +60,7 @@
 .situationText {
   position: absolute; /* .situationText를 절대적 위치로 만듭니다 */
   transform: translateY(-200%); /* .square의 상단 위로 이동시킵니다 */
-  text-align: center;
+  align-items: center;
   font-family: "KoPubWorld Batang Bold";
   font-weight: bolder;
   font-size: calc(3.5vw + 2vh);
