@@ -36,7 +36,10 @@ export default function TeachableMachine() {
 
   // Teachable Machine init 함수
   const initTeachableMachine = async () => {
-    const loadmodel = await tmImage.load(modelURL + "model.json", modelMetadataURL); // model에서 const loadmodel로 바꾸고
+    const loadmodel = await tmImage.load(
+      modelURL + "model.json",
+      modelMetadataURL
+    ); // model에서 const loadmodel로 바꾸고
     setModel(loadmodel); // 스테이트 저장
     // maxPredictions = model.getTotalClasses();
 
@@ -102,7 +105,8 @@ export default function TeachableMachine() {
 
   const dispatch = useDispatch();
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   useEffect(() => {
     if (studentAns) {

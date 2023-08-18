@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 export default function StudentWordExplain() {
   // DB에 저장된 단어 가져오기
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   const [msg, setMsg] = useState(null);
   const [currentReadingIndex, setCurrentReadingIndex] = useState(-1); // 처음에는 아무 문장도 선택되지 않도록 -1을 초기값으로 설정
