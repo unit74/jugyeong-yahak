@@ -495,10 +495,28 @@
 ---
 
 <h4>일기 생성</h4>
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/그림일기생성전.gif" width="90%">
+</div>
+
+- 사용자와의 대화를 기반으로 일기를 생성합니다.
 
 <h4>생성된 일기로 읽기</h4>
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/그림일기생성.gif" width="90%">
+</div>
+
+- 일기 완성 후 생성된 일기 내용으로 학습을 이어갑니다.
+- 일기 내용을 기반으로 그림일기도 제공합니다.
 
 ### 7. 일기
+
+<div align=center>
+<img src="./contents/forReadme/UI/gifs/일기장보기.gif" width="90%">
+</div>
+
+- 혼자 공부를 통해 생성된 일기들을 볼 수 있습니다.
+
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
