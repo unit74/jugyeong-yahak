@@ -54,12 +54,12 @@
 ## ⭐️ 주요 기능
 <a name="mainContents"></a>
 
-### 얼굴 로그인
-- 얼굴 로그인 합니다. face-api.js 사용해요.
 ### 혼자 학습
 - 혼자학습은 이렇고 저렇고 합니다
 ### 실시간 수업
-- 실시간 수업은 이렇습니다
+- 실시간 수업은 
+- 실시간 교사 학생 입장시키기
+- 실시간 학생 입장
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
@@ -328,16 +328,84 @@
 
 ## 🖥️ 화면 소개
 
-**페이지별 GIF나 이미지**
 ### 1. 로그인 페이지
-### 2. 학생 메인 페이지
-### 3. 교사 메인 페이지
-### 4. 혼자 학습
+<img src="./contents/forReadme/UI/gifs/로그인.gif" width="80%">
+
+  - face-api.js를 활용해 얼굴 로그인을 진행합니다.
+  - 로그인은 박스 영역에 들어와야 로그인 진행이 됩니다.
+  - 사용자가 박스 영역에 잘 들어올 수 있도록 TTS로 얼굴 이동을 안내합니다.
+
+### 2. 교사 메인 페이지
+
+<img src="./contents/forReadme/UI/선생님메인.png" width="80%">
+
+
+<h3>기능</h3>
+
+  - 실시간 수업 시작
+  - 야학 단체에 등록된 학생 확인
+  - 학습 교재 확인
+
+### 3. 교사 실시간 페이지
+<h3>실시간 수업 시작</h3>
+<img src="./contents/forReadme/UI/gifs/강사실시간입장.gif" width="80%">
+
+  - 수업을 시작을 누르면, 학생들은 실시간 수업으로 들어올 수 있습니다.
+
+
+<h3>수업</h3>
+<img src="./contents/forReadme/UI/gifs/강사수업.gif" width="80%">
+
+  - 수업을 위해 교사는 커리큘럼과 강의 자료를 선택합니다.
+  - 강의자료 선택 후, 단어 읽기, 단어 받아쓰기 등의 수업을 진행합니다.
+
+<h4>단어 읽기</h4>
+<img src="./contents/forReadme/UI/단어읽기-강사.png" width="60%">
+<h4>단어 힌트 - 단어 읽기 힘들어 할 경우</h4>
+<img src="./contents/forReadme/UI/읽기힌트 페이지-강사.png" width="60%">
+<h4>단어 받아쓰기</h4>
+<img src="./contents/forReadme/UI/단어받아쓰기-강사.png" width="60%">
+
+### 4. 학생 메인 페이지
+
+<img src="./contents/forReadme/UI/학생메인.png" width="80%">
+
+<h3>기능</h3>
+  
+  - 실시간 수업 -> 강사가 방을 열었을 경우 자동 참여
+  - 혼자 공부하기
+  - 일기장 보기
+  
+
+### 5. 학생 실시간 페이지
+<h3>실시간 수업 입장</h3>
+<img src="./contents/forReadme/UI/gifs/학생실시간입장.gif" width="80%">
+
+---
+
+<img src="./contents/forReadme/UI/gifs/학생실시간커리.gif" width="80%">
+
+  - 강사가 커리큘럼을 선택한다면 학생들의 화면에 교재가 띄워집니다.
+  - 강사의 마우스가 학생들에게 포인터로 보이게 됩니다.
+
+<h3>수업</h3>
+<img src="./contents/forReadme/UI/gifs/학생실시간수업.gif" width="80%">
+
+  - 학생들은 강사가 공유하는 교재를 보며 실시간 수업을 받습니다.
+  - 단어 읽기, 받아쓰기 등의 수업이 진행됩니다.
+
+<h4>단어 읽기</h4>
+<img src="./contents/forReadme/UI/단어읽기-학생.png" width="60%">
+<h4>단어 힌트 - 단어 읽기 힘들어 할 경우</h4>
+<img src="./contents/forReadme/UI/읽기힌트-학생.png" width="60%">
+<h4>단어 받아쓰기</h4>
+<img src="./contents/forReadme/UI/받아쓰기-학생.png" width="60%">
+
+### 6. 혼자 학습
   - 4-1 혼자 학습 상황 설명
   - 4-2 등등
 
-### 5. 실시간 수업
-
+### 7. 일기
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
