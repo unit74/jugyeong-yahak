@@ -13,7 +13,8 @@ import CLOVA from "../Common/CLOVA";
 export default function StudentRecordWord() {
   // DB에 저장된 단어 가져오기
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   // 음성인식 관련
   const { transcript, listening } = useSpeechRecognition();
