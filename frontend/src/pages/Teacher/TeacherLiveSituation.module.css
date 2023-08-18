@@ -9,6 +9,10 @@
   font-family: "Kimjungchul";
   src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
 }
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
 
 .main {
   position: relative;
