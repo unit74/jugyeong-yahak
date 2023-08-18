@@ -1,18 +1,10 @@
 @font-face {
-  font-family: "KimjungchulGothic-Bold";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
-    format("woff2");
-  font-style: normal;
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
 }
-
-@font-face {
-  font-family: "Kimjungchul";
-  src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
-}
-
 .topic {
   color: var(--color-orange);
-  font-family: "KimjungchulGothic-Bold";
+  font-family: "KoPubWorld Batang Bold";
 }
 
 .topicsContainer {
@@ -61,7 +53,7 @@
 }
 
 .themeBtn {
-  font-family: "Kimjungchul";
+  font-family: "KoPubWorld Batang Bold";
   font-size: calc(1vw + 1vh); /* 반응형 */
   border-radius: 20%;
   padding: 15px 25px;

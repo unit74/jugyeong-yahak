@@ -9,6 +9,7 @@
 }
 
 .container {
+  font-family: "KoPubWorld Batang Bold";
   flex-direction: column;
   /* background-color: rgba(255, 249, 230, 0.534); */
   /* background-image: url("../../assets/images/teacherback.jpg"); */
@@ -24,6 +25,7 @@
 }
 
 .contentContainer {
+  font-family: "KoPubWorld Batang Bold";
   padding-left: 4%;
   padding-right: 1%;
   background-image: url(/src/assets/images/real_background.png);
@@ -38,6 +40,7 @@
 }
 
 .contentLeft {
+  font-family: "KoPubWorld Batang Bold";
   flex-grow: 1;
   overflow-y: auto;
   /* position: relative; */
@@ -46,16 +49,19 @@
 }
 
 .contentRight {
+  font-family: "KoPubWorld Batang Bold";
   width: 80%;
   height: 100%;
   overflow-y: scroll;
 }
 
 .toolbar {
+  font-family: "KoPubWorld Batang Bold";
   flex-shrink: 0;
 }
 
 .BtnContainer {
+  font-family: "KoPubWorld Batang Bold";
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -65,6 +71,7 @@
 }
 
 button {
+  font-family: "KoPubWorld Batang Bold";
   border: none;
   border-radius: 5px;
   color: #000000;
@@ -77,17 +84,20 @@ button {
 }
 
 .container2 {
+  font-family: "KoPubWorld Batang Bold";
   flex: 1;
   overflow: auto;
   padding-bottom: 2%;
 }
 
 .button-wrapper {
+  font-family: "KoPubWorld Batang Bold";
   display: flex;
   justify-content: center;
 }
 
 .video {
+  font-family: "KoPubWorld Batang Bold";
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -100,6 +110,7 @@ html,
 body,
 #root,
 .App {
+  font-family: "KoPubWorld Batang Bold";
   width: 100%;
   height: 100%;
   margin: 0;
