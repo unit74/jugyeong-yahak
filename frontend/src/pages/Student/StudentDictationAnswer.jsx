@@ -12,17 +12,20 @@ import TeachableMachineTest from "./TeachableMachineTest";
 export default function StudentDictationAnswer() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [repeatValue, setRepeatValue] = useState(0);
+  const [repeatValue, setRepeatValue] = useState(3);
   // 로컬 스토리지에서 'state'를 가져오기
   const storedStateString = localStorage.getItem("state");
   // 가져온 문자열을 객체로 변환
-  const storedStateObject = storedStateString ? JSON.parse(storedStateString) : {};
+  const storedStateObject = storedStateString
+    ? JSON.parse(storedStateString)
+    : {};
   // 객체에서 'note' 값을 추출
   const note = storedStateObject.note;
 
   console.log(note);
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   useEffect(() => {
     const intervalsForRepeat = [4000, 8000]; // 처음은 word 불러오고 나면 실행 되니까 두번만 적어도 3번말하는거임

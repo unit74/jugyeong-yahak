@@ -17,7 +17,8 @@ export default function DictaionFeedback() {
   const [msg, setMsg] = useState(null);
   const [loadedCanvasData, setLoadedCanvasData] = useState(canvasData);
 
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   // 함수
   // 1. 그림 전체 지우기

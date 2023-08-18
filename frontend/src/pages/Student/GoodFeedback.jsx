@@ -17,7 +17,8 @@ export default function GoodFeedback() {
 
   const [msg, setMsg] = useState(null);
 
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -74,7 +75,11 @@ export default function GoodFeedback() {
         await delay(text.length * 300);
         navigate("/diary-main");
       } else if (course === "diary") {
-        navigate("/student-done");
+        let text = "오늘의 공부를 모두 마쳤어요!";
+        ttsMaker(text, 0);
+        dispatch(setWordIndex());
+        await delay(text.length * 300);
+        navigate("/");
       }
     }
 
