@@ -9,7 +9,8 @@ import WordNameComponent from "../Common/WordNameComponent";
 //단어정보 표시 컴포넌트
 export default function WordsListComponent() {
   const [wordsList, setWordsList] = useState(null);
-  const wordIndex = useSelector((state) => state.wordIndexState);
+  // const wordIndex = useSelector((state) => state.wordIndexState);
+  const wordIndex = 4;
 
   useEffect(() => {
     axios

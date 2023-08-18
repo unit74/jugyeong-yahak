@@ -11,7 +11,8 @@ export default function CanvasTest() {
   const canvasRef = useRef(null); //캔버스
   const [studentAns, setStudentAns] = useState(""); //인식한 텍스트
   const wordsList = useSelector((state) => state.themeState.wordsList) || []; // 단어 목록
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex); // 현재 차례
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex); // 현재 차례
+  const wordIndex = 4;
   const [drawData, setDrawData] = useState(null);
 
   // 함수

@@ -13,7 +13,8 @@ export default function StudentDictationQuestion() {
   const navigate = useNavigate();
 
   const wordsList = useSelector((state) => state.themeState.wordsList) || [];
-  const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  // const wordIndex = useSelector((state) => state.wordIndexState.wordIndex);
+  const wordIndex = 4;
 
   const [repeatValue, setRepeatValue] = useState(0);
 
