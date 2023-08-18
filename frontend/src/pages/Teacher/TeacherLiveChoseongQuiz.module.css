@@ -10,6 +10,10 @@
   src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
 }
 
+@font-face {
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
+}
 .main {
   position: relative;
   width: 100%;
@@ -25,8 +29,8 @@
 }
 
 h1 {
-  margin-left: 3%;
   font-family: "Kimjungchul";
+  margin-left: 3%;
 }
 
 .button {
