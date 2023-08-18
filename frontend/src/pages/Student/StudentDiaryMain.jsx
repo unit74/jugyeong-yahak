@@ -6,6 +6,7 @@ import TTSsentence from "../Common/TTSsentence";
 import listenImg from "../../assets/images/listening.png";
 import speakImg from "../../assets/images/speaking.png";
 import resultImg from "../../assets/images/result_writing.png";
+import { useDispatch, useSelector } from "react-redux";
 
 // 받아쓰기 안내 -> 공책이 있는지 물어보기
 export default function StudentDiaryMain() {
@@ -13,10 +14,12 @@ export default function StudentDiaryMain() {
 
   const [msg, setMsg] = useState(null);
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const [userInfo, setUserInfo] = useState(
-    JSON.parse(localStorage.getItem("userInfo"))
-  );
+  // const [userInfo, setUserInfo] = useState(
+  //   JSON.parse(localStorage.getItem("userInfo"))
+  // );
   const [activeEffect, setActiveEffect] = useState(null);
+
+  const gender = useSelector((state) => state.genderReducer);
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -34,13 +37,13 @@ export default function StudentDiaryMain() {
       await delay(text.length * 300);
 
       // 이름 -> 나중에 성별로 바꾸기
-      let gender = userInfo.gender === 0 ? "어머님" : "아버님";
+      let genderCall = gender === 0 ? "어머님" : "아버님";
       let listenText = "질문을 듣고,";
       setActiveEffect("listening");
       ttsMaker(listenText, 0);
       await delay(3000);
 
-      let speakText = `${gender}의 이야기를 들려주세요!`;
+      let speakText = `${genderCall}의 이야기를 들려주세요!`;
       setActiveEffect("speaking");
       ttsMaker(speakText, 0);
       await delay(6000);
