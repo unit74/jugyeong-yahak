@@ -7,6 +7,7 @@ import setSelectedThemeReducer from "./setSelectedThemeReducer";
 import setWordIndexReducer from "./setWordIndexReducer";
 import messageReducer from "./messageReducer";
 import noteReducer from "./noteReducer";
+import genderReducer from "./setGenderReducer";
 import liveClassReducer from "./liveClassReducer";
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   wordIndexState: setWordIndexReducer,
   message: messageReducer,
   note: noteReducer,
+  gender: genderReducer,
 });
 
 export default rootReducer;
