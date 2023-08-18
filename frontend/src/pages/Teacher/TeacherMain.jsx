@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./TeacherMain.module.css";
 import TeacherHeader from "./TeacherHeader";
 
@@ -9,6 +9,14 @@ const TeacherMain = () => {
   // const [userName, setUserName] = useState(""); // userName state 추가
 
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/facetest", { replace: true });
+    }
+
+    return () => {};
+  }, [userInfo]);
 
   const handleClick_1 = () => {
     navigate("/teacher-class");
@@ -35,7 +43,7 @@ const TeacherMain = () => {
         </button>
         <div className={styles.bannerContainer}>
           <section className={styles.welcome}>
-            <b className={styles.typing}>👋🏻 {userInfo.name} 님, 안녕하세요! </b>
+            <b className={styles.typing}>👋🏻 {userInfo ? userInfo.name : null} 님, 안녕하세요! </b>
             <span style={{ display: "block", textAlign: "center" }}>
               주경야학과 함께라면, 언제 어디서든 야학 봉사가 가능합니다!
             </span>
