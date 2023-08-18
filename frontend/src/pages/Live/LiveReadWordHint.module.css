@@ -1,15 +1,7 @@
 @font-face {
-  font-family: "KimjungchulGothic-Bold";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302_01@1.0/KimjungchulGothic-Bold.woff2")
-    format("woff2");
-  font-style: normal;
+  font-family: "KoPubWorld Batang Bold";
+  src: url("/src/assets/fonts/KoPubWorld\ Batang\ Bold.ttf") format("truetype");
 }
-
-@font-face {
-  font-family: "Kimjungchul";
-  src: url("../../assets//fonts//KimjungchulGothic-Regular.ttf");
-}
-
 .situation {
   position: relative;
   /* width: 50%; */
@@ -47,7 +39,7 @@
 }
 
 .text {
-  font-family: "KimjungchulGothic-Bold";
+  font-family: "KoPubWorld Batang Bold";
   word-break: break-all;
   white-space: pre-wrap;
   white-space: pre-line;
@@ -56,7 +48,7 @@
 }
 
 h1 {
-  font-family: "KimjungchulGothic-Bold";
+  font-family: "KoPubWorld Batang Bold";
   font-size: calc(2.5vw + 1vh);
   margin-left: 3%;
   align-items: center;
