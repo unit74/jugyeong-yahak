@@ -78,19 +78,19 @@ import LiveStudentChoseongQuiz from "./pages/Live/LiveStudentChoseongQuiz";
 import FaceLogin from "./pages/Common/FaceLogin";
 
 function App() {
-  useEffect(() => {
-    // 이벤트 핸들러 함수 정의
-    const handleBeforeUnload = (event) => {
-      localStorage.removeItem("userInfo");
-      localStorage.removeItem("accessToken");
-    };
+  // useEffect(() => {
+  //   // 이벤트 핸들러 함수 정의
+  //   const handleBeforeUnload = (event) => {
+  //     localStorage.removeItem("userInfo");
+  //     localStorage.removeItem("accessToken");
+  //   };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   return (
     <Provider store={store}>
