@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import styles from "./StudentTalking.module.css";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import { Configuration, OpenAIApi } from "openai";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
 
 export default function StudentTalking() {
   // 음성인식 관련
-  const { transcript, listening } = useSpeechRecognition();
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
   const [generatedText, setGeneratedText] = useState("");
   const [allConversations, setallConversations] = useState("");
   const [diaryEntry, setDiaryEntry] = useState("");
@@ -41,9 +43,11 @@ export default function StudentTalking() {
       await delay(data.length * 210);
       ttsMaker("", 0);
 
-      SpeechRecognition.startListening({ continuous: true });
-      await delay(7500); // 7.5초
+      SpeechRecognition.startListening();
+      // SpeechRecognition.startListening({ continuous: true });
+      await delay(6000); // 7.5초 -> 6초로 줄임
       SpeechRecognition.stopListening();
+      // resetTranscript();
 
       setCount(count + 1);
     }
@@ -93,7 +97,9 @@ export default function StudentTalking() {
 
     const generatedMessage = response.data.choices[0].message.content;
     setGeneratedText(generatedMessage);
-    setallConversations(allConversations + message + ".\n" + generatedMessage + ".\n");
+    setallConversations(
+      allConversations + message + ".\n" + generatedMessage + ".\n"
+    );
     console.log(allConversations);
     setCount(count + 1);
     console.log("gpt : " + generatedMessage);
@@ -143,7 +149,8 @@ export default function StudentTalking() {
       messages: [
         {
           role: "system",
-          content: "Translate this into English. Please keep your response under 200 characters.",
+          content:
+            "Translate the following into English and summarize it in under 200 characters.",
         },
         {
           role: "user",
@@ -154,9 +161,10 @@ export default function StudentTalking() {
 
     let translatedDiary = response.data.choices[0].message.content;
     if (translatedDiary.length > 200) {
-      translatedDiary = translatedDiary.substring(0, 200) + "...";
+      translatedDiary = translatedDiary.substring(0, 201) + "...";
     }
-    const prompt = "drawing done with a pencil, only scenery, in color " + translatedDiary;
+    const prompt =
+      "drawing done with a pencil, only scenery, in color " + translatedDiary;
     createImage(prompt);
   };
 
@@ -177,7 +185,6 @@ export default function StudentTalking() {
       .then((data) => {
         console.log(data);
         setImg(data.images[0].image);
-        // navigate("/diary", { state: { diaryEntry, img } });
       })
       .catch((error) => {
         console.error(error);
@@ -222,7 +229,9 @@ export default function StudentTalking() {
             {allConversations.split(".\n").map((conversation, index) => (
               <div
                 key={index}
-                className={index % 2 === 0 ? styles.userMessage : styles.generatedMessage}
+                className={
+                  index % 2 === 0 ? styles.userMessage : styles.generatedMessage
+                }
               >
                 {conversation}
               </div>

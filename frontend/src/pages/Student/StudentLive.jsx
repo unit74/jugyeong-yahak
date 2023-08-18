@@ -515,22 +515,6 @@ class OpenViduSession extends Component {
           </div>
           <div className={styles.contentRight}>
             <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
-              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
-                <div
-                  style={{
-                    display: "inline-block",
-                    width: "300px",
-                    height: "200px",
-                    position: "relative",
-
-                    paddingTop: "3%",
-                  }}
-                  id="localUser"
-                >
-                  {/* <div>본인</div> */}
-                  <StreamComponent user={localUser} />
-                </div>
-              )}
               {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
                 <div
                   style={{
@@ -546,6 +530,22 @@ class OpenViduSession extends Component {
                 >
                   {/* <div>포커스 중인 사람</div> */}
                   <StreamComponent user={mainStreamUser} />
+                </div>
+              )}
+              {localUser !== undefined && localUser.getStreamManager() !== undefined && (
+                <div
+                  style={{
+                    display: "inline-block",
+                    width: "300px",
+                    height: "200px",
+                    position: "relative",
+
+                    paddingTop: "3%",
+                  }}
+                  id="localUser"
+                >
+                  {/* <div>본인</div> */}
+                  <StreamComponent user={localUser} />
                 </div>
               )}
               {this.state.subscribers.map((sub, i) => (
