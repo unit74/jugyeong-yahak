@@ -20,8 +20,10 @@ app.use(
 );
 
 // 환경 변수에서 정보를 불러옵니다.
-const client_id = 'vrwxvtxait'; 
-const client_secret ='koDQjISgnhMa33W2QFE58k8kxt4wkunZ455bI6QL'; 
+//ozqv0jog2b
+//EJZGktV7CmtqvadH6HeUUzrqsn0nXug3DeoV4eeJ
+const client_id = 'ozqv0jog2b'; 
+const client_secret ='EJZGktV7CmtqvadH6HeUUzrqsn0nXug3DeoV4eeJ'; 
 
 function handleTTSRequest(req, res) {
   console.log('Received request on /tts');
