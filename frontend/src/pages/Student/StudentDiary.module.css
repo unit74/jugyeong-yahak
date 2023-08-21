@@ -59,6 +59,8 @@
 }
 
 .diarytext {
+  width: 50vw;
+  text-align: center;
   line-height: calc(2vw + 2vh);
   display: inline-block;
   color: var(--color-black);
@@ -72,6 +74,8 @@
 }
 
 .activeDiaryText {
+  width: 50vw;
+  text-align: center;
   opacity: 1; /* 텍스트 투명도 설정 */
   line-height: calc(2vw + 2vh);
   display: inline-block;
@@ -82,4 +86,32 @@
   line-height: 2;
   white-space: pre-wrap;
   /* color: #ff403c; */
+}
+
+.diaryContainer {
+  width: var(--diary-container-width);
+  display: flex;
+  /* width: 85vw; */
+  flex-direction: row;
+  position: relative;
+}
+
+.row__diary {
+  object-fit: cover; /* 이미지의 비율을 유지하면서 지정된 박스 안에 맞게 이미지를 조정합니다. */
+  width: 35vw;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.diaryContent {
+  color: #000;
+  width: 50vw;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  font-family: KoPubWorld Batang Bold;
+  font-size: calc(1.2vw + 1.2vh);
+  padding: 0 30px;
+  padding-top: 5vw;
 }
