@@ -23,6 +23,7 @@
   backdrop-filter: blur(100px);
   width: 85%;
   height: 90%;
+  --diary-container-width: 100%;
 }
 
 /* 여기까지 공통 */
@@ -66,7 +67,7 @@
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
-  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+  font-size: calc(1.3vw + 1.3vh); /* 반응형 */
   line-height: 2;
   white-space: pre-wrap;
   opacity: 0.5; /* 텍스트 투명도 설정 */
@@ -82,7 +83,7 @@
   color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
   font-weight: bolder;
-  font-size: calc(1.5vw + 1.5vh); /* 반응형 */
+  font-size: calc(1.3vw + 1.3vh); /* 반응형 */
   line-height: 2;
   white-space: pre-wrap;
   /* color: #ff403c; */
@@ -94,6 +95,7 @@
   /* width: 85vw; */
   flex-direction: row;
   position: relative;
+  padding: 50px 0;
 }
 
 .row__diary {
