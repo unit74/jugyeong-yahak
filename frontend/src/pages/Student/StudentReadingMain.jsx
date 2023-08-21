@@ -57,7 +57,7 @@ export default function StudentReadingMain() {
       await delay(nextText.length * 200);
 
       setFade(true);
-      navigate("/word-explain");
+      navigate("/record-word");
     }
 
     makeRequest();

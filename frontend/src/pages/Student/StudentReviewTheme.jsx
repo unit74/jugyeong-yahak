@@ -85,7 +85,7 @@ const StudentReviewTheme = () => {
 
     async function navigateToRecordDictation() {
       await delay(1500);
-      navigate("/situation");
+      navigate("/reading-main");
     }
 
     if (themeSituation !== null) {
