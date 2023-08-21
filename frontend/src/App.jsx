@@ -121,7 +121,10 @@ function App() {
         <Route path="/bad-feedback" element={<BadFeedback />} />
         <Route path="/dictation-feedback" element={<DictaionFeedback />} />
         <Route path="/dictation-video" element={<StudentDictationVideo />} />
-        <Route path="/dictation-question" element={<StudentDictationQuestion />} />
+        <Route
+          path="/dictation-question"
+          element={<StudentDictationQuestion />}
+        />
         <Route path="/dictation-answer" element={<StudentDictationAnswer />} />
         <Route path="/diary" element={<StudentDiary />} />
         <Route path="/student-done" element={<StudentDone />} />
@@ -148,7 +151,10 @@ function App() {
         <Route path="/teacher-main" element={<TeacherMain />} />
         <Route path="/teacher-studentinfo" element={<TeacherStudentInfo />} />
         <Route path="/teacher-class" element={<TeacherClass />} />
-        <Route path="/teacher-studentprogress" element={<TeacherStudentProgress />} />
+        <Route
+          path="/teacher-studentprogress"
+          element={<TeacherStudentProgress />}
+        />
         {/* 교사 실시간 강의 */}
         <Route path="/teacher-live" element={<TeacherLive />}>
           <Route path="theme" element={<LiveTheme />} />
@@ -167,9 +173,18 @@ function App() {
         {/* 지자체 */}
         <Route path="government-login" element={<GovernmentLogin />} />
         <Route path="governmentmain" element={<GovernmentMainPage />} />
-        <Route path="governmentmain/studyclasspage" element={<StudyClassPage />} />
-        <Route path="governmentmain/studystudentpage" element={<StudyStudentPage />} />
-        <Route path="governmentmain/studyteacherpage" element={<StudyTeacherPage />} />
+        <Route
+          path="governmentmain/studyclasspage"
+          element={<StudyClassPage />}
+        />
+        <Route
+          path="governmentmain/studystudentpage"
+          element={<StudyStudentPage />}
+        />
+        <Route
+          path="governmentmain/studyteacherpage"
+          element={<StudyTeacherPage />}
+        />
 
         {/* 테스트 컴포넌트 */}
         {/* <Route path="/writing-cam-test" element={<WritingCamTest />} />
