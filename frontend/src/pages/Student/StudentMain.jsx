@@ -50,7 +50,7 @@ export default function StudentMain() {
         // text = `${userInfo.name} 어머님, 안녕하세요!`;
         text = `${userInfo.name} ${gender}, 안녕하세요!`;
         ttsMaker(text, 0);
-        await delay(text.length * 300);
+        await delay(text.length * 200);
       }
 
       text = "지금은 혼자 학습 시간입니다.";
