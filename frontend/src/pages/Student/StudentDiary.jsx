@@ -80,7 +80,7 @@ export default function StudentDiary() {
       // 일기 데이터 길이 만큼 반복
       for (let i = 0; i < data.length; i++) {
         ttsMaker(data[i], i, 0);
-        await delay(data[i].length * 500);
+        await delay(data[i].length * 300);
       }
 
       navigate("/good-feedback", { state: { course: "diary" } });
@@ -102,20 +102,22 @@ export default function StudentDiary() {
       <div className={styles.square}>
         <div className={styles.theme}>
           {/* <img src={friends} alt="friends_img" /> */}
-          <img src={img} alt="" height={300} />
-          <div>
-            {data.map((sentence, index) => (
-              <b
-                key={index}
-                className={
-                  index === currentReadingIndex
-                    ? `${styles.activeDiaryText} ${styles.diarytext}`
-                    : styles.diarytext
-                }
-              >
-                {sentence}
-              </b>
-            ))}
+          <div className={styles.diaryContainer}>
+            <img className={styles.row__diary} src={img} alt="" />
+            <div>
+              {data.map((sentence, index) => (
+                <b
+                  key={index}
+                  className={
+                    index === currentReadingIndex
+                      ? `${styles.activeDiaryText} ${styles.diarytext}`
+                      : styles.diarytext
+                  }
+                >
+                  {sentence}
+                </b>
+              ))}
+            </div>
           </div>
           {msg && <TTS message={msg} />}
         </div>

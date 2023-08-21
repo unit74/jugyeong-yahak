@@ -50,7 +50,7 @@ export default function StudentMain() {
         // text = `${userInfo.name} 어머님, 안녕하세요!`;
         text = `${userInfo.name} ${gender}, 안녕하세요!`;
         ttsMaker(text, 0);
-        await delay(text.length * 300);
+        await delay(text.length * 200);
       }
 
       text = "지금은 혼자 학습 시간입니다.";
@@ -58,9 +58,9 @@ export default function StudentMain() {
       ttsMaker(text, 0);
       await delay(text.length * 300);
 
-      text = "복습을 진행하시려면 아래의 빨간 버튼을 누르세요.";
+      // text = "복습을 진행하시려면 아래의 빨간 버튼을 누르세요.";
 
-      ttsMaker(text, 0);
+      // ttsMaker(text, 0);
     }
 
     makeRequest();
@@ -95,7 +95,9 @@ export default function StudentMain() {
   // 강의 시작 시간
   // const lectureTime = userInfo && userInfo.lectureTime;
   const lectureTime =
-    userInfo && userInfo.role === "ROLE_STUDENT" ? userInfo.lectureTime : "10:00:00";
+    userInfo && userInfo.role === "ROLE_STUDENT"
+      ? userInfo.lectureTime
+      : "10:00:00";
   const lectureTimeParts = userInfo && lectureTime.split(":");
   const lectureStartMinutes =
     userInfo &&
