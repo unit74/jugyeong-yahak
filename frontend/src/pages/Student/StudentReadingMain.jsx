@@ -39,22 +39,22 @@ export default function StudentReadingMain() {
     async function makeRequest() {
       let text = "자, 이제 단어를 배워볼까요? 총 5개의 단어를 공부해요.";
       ttsMaker(text, 0);
-      await delay(text.length * 300);
+      await delay(text.length * 200);
 
-      let readingText = `먼저, 단어의 올바른 발음을 공부해요`;
+      let readingText = `먼저, 올바른 발음을 공부해요`;
       setActiveEffect("reading");
       ttsMaker(readingText, 0);
-      await delay(readingText.length * 300);
+      await delay(readingText.length * 200);
 
       let writingText = "다음으로 받아쓰기를 해요";
       setActiveEffect("writing");
       ttsMaker(writingText, 0);
-      await delay(writingText.length * 500);
+      await delay(writingText.length * 200);
 
       let nextText = "자, 첫 번째 단어부터 공부해볼까요?";
       setActiveEffect(null);
       ttsMaker(nextText, 0);
-      await delay(nextText.length * 500);
+      await delay(nextText.length * 200);
 
       setFade(true);
       navigate("/word-explain");

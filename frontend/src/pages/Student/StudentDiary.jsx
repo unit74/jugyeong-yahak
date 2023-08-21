@@ -80,7 +80,7 @@ export default function StudentDiary() {
       // 일기 데이터 길이 만큼 반복
       for (let i = 0; i < data.length; i++) {
         ttsMaker(data[i], i, 0);
-        await delay(data[i].length * 500);
+        await delay(data[i].length * 300);
       }
 
       navigate("/good-feedback", { state: { course: "diary" } });
