@@ -64,7 +64,7 @@ export default function StudentDiary() {
   }, []);
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  const data = formattedText.split(".\n");
+  const data = formattedText.split("\n");
   console.log("data:", data);
 
   // 임시로 막아둠
