@@ -123,7 +123,7 @@ export default function StudentTalking() {
         {
           role: "system",
           content:
-            "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
+            "You are a helpful assistant. Based on the provided user statements, generate a diary in Korean entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
         },
         {
           role: "user",
