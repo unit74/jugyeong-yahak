@@ -6,7 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@OpenAPIDefinition(servers = {@Server(url = "https://i9e206.p.ssafy.io", description = "Server URL")})
 public class HttpApplication {
 
     public static void main(String[] args) {
