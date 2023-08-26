@@ -513,55 +513,68 @@ class OpenViduSession extends Component {
               />
             </OpenViduSessionContext.Provider>
           </div>
+          
+          {/* 오른쪽 영역 시작 */}
           <div className={styles.contentRight}>
-            <div className={styles.video} style={{ display: "flex", gap: "5px" }}>
+            {/* 비디오 영역 시작 */}
+            <div className={styles.video}>
+
+              {/* main streamer 시작 */}
               {mainStreamUser !== undefined && mainStreamUser.getStreamManager() !== undefined && (
                 <div
                   style={{
-                    display: "inline-block",
-                    width: "300px",
-                    height: "200px",
+                    width: "400px",
+                    height: "300px",
                     // botton: "-10px",
                     position: "relative",
-
+                    
                     paddingTop: "3%",
                   }}
                   id="mainStreamUser"
+                  className={styles.studentBox}
                 >
                   {/* <div>포커스 중인 사람</div> */}
                   <StreamComponent user={mainStreamUser} />
                 </div>
               )}
+
+              {/* 학생들 전체로 묶을 것임 */}
+              <div className={styles.studentBox}>
+              {/* 학생 자신 시작 */}
               {localUser !== undefined && localUser.getStreamManager() !== undefined && (
                 <div
                   style={{
                     display: "inline-block",
-                    width: "300px",
-                    height: "200px",
+                    height: "100%",
                     position: "relative",
-
-                    paddingTop: "3%",
+                    boxSizing: "border-box",
+                    paddingTop: "2%",
                   }}
                   id="localUser"
+                  className={styles.studentItem}
                 >
                   {/* <div>본인</div> */}
                   <StreamComponent user={localUser} />
                 </div>
               )}
+
+              {/* 다른 학생들 */}
               {this.state.subscribers.map((sub, i) => (
                 <div
                   key={sub.getConnectionId()}
-                  className={styles.remoteUser}
+                  className={`${styles.remoteUser} ${styles.studentItem}`}
                   id="remoteUsers"
                   style={{
                     display: "inline-block",
                     width: "300px",
-                    height: "250px",
+                     height: "100%",
+                     boxSizing: "border-box",
                     // botton: "-10px",
                     position: "relative",
                     paddingTop: "2%",
                   }}
                 >
+                  
                   <div className={styles.iconButtonsGroup}>
                     {quiz && sub.isCorrect() && <ThumbUpAlt />}
                   </div>
@@ -570,6 +583,9 @@ class OpenViduSession extends Component {
                   </div>
                 </div>
               ))}
+              </div>
+              {/* 학생들은 전체로 묶어줄 예정 */}
+
             </div>
           </div>
           {this.state.mouse && this.state.mouse.x !== null && this.state.mouse.y !== null && (
