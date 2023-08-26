@@ -2,6 +2,7 @@ package com.ssafy.http.swagger.configs;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -17,10 +18,13 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
 
+    @Value("${aws.server.url}")
+    private String SERVER_URL;
+
     @Bean
     public Docket api() {
         Server serverLocal = new Server("local", "http://localhost:8080", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server testServer = new Server("server", "https://i9e206.p.ssafy.io", "for server usages", Collections.emptyList(), Collections.emptyList());
+        Server testServer = new Server("server", SERVER_URL, "for server usages", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverLocal, testServer)
             .consumes(getConsumeContentTypes())
