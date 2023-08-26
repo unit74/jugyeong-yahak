@@ -36,8 +36,8 @@ export default function StudentWordExplain() {
 
     async function makeRequest(result) {
       await delay(2000);
-      let text = "단어를 설명해드려요!!";
-      ttsMaker(text);
+      let text = result;
+      ttsMaker(result);
       await delay(text.length * 200);
       const middleMapping = {
         ㅏ: "아",
@@ -79,7 +79,7 @@ export default function StudentWordExplain() {
         tts += "가 결합되어 " + result[i].original + "!";
         console.log(tts);
         ttsMaker(tts, i, 0);
-        await delay(tts.length * 500);
+        await delay(tts.length * 300);
       }
 
       navigate("/record-word");

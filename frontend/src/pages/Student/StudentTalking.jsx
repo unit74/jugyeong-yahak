@@ -22,7 +22,7 @@ export default function StudentTalking() {
 
   const navigate = useNavigate();
 
-  const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
+  const REST_API_KY = "89ae5201fafea456b3499642e2253100";
 
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
@@ -123,7 +123,7 @@ export default function StudentTalking() {
         {
           role: "system",
           content:
-            "You are a helpful assistant. Based on the provided user statements, generate a diary entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
+            "You are a helpful assistant. Based on the provided user statements, generate a diary in Korean entry in 4 sentences and within 150 characters, written as if by a 70-year-old elderly person. The tone should remain positive and optimistic.",
         },
         {
           role: "user",
