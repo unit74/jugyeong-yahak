@@ -13,6 +13,10 @@
 }
 
 .square {
+  background-image: url(/src/assets/images/pictureDiary_original.PNG);
+  background-size: 95% 95%;
+  background-repeat: no-repeat;
+  background-position: center;
   position: absolute; /* 상대적 위치 설정 */
   top: 50%;
   left: 50%;
@@ -33,7 +37,6 @@
   align-items: center; /* 자식 요소들을 가로 방향에서 중앙에 정렬 */
   justify-content: center; /* 자식 요소들을 세로 방향에서 중앙에 정렬 */
   z-index: 2;
-  top: 5%; /* 상단에서 10%만큼 떨어진 위치에 배치 */
   left: 50%; /* 왼쪽에서 50%만큼 떨어진 위치에 배치 (가운데 정렬을 위한 기준값) */
   padding-bottom: 1%;
   transform: translateX(-50%); /* 좌우 가운데 정렬을 위한 좌표 조정 */
@@ -80,6 +83,8 @@
 /* ------slider-------- */
 
 .slider {
+  max-height: 70vh;
+  overflow: hidden;
   position: relative;
   top: 5%;
 }
@@ -173,10 +178,12 @@
 
 .row__diary {
   object-fit: cover; /* 이미지의 비율을 유지하면서 지정된 박스 안에 맞게 이미지를 조정합니다. */
-  width: 35vw;
-  border-radius: 100px;
+  border-radius: 75px;
+  height: 65vh;
+  width: 30vw;
+  margin-left: 7.25vw;
+  margin-right: 5.25vw;
   margin-bottom: 10px;
-  padding-left: 20px;
 }
 
 .row__diary:hover {
@@ -184,13 +191,17 @@
 }
 
 .diaryContent {
-  color: #000;
-  width: 50vw;
-  text-align: center;
-  word-wrap: break-word;
-  overflow: hidden;
+  width: 35vw;
+  margin-left: 3.5vw;
+  margin-right: 4vw;
+  text-align: left; /* 좌측정렬 */
+  opacity: 1; /* 텍스트 투명도 설정 */
+  line-height: calc(1.75vw + 3vh);
+  display: inline-block;
+  color: var(--color-black);
   font-family: KoPubWorld Batang Bold;
-  font-size: calc(1.2vw + 1.2vh);
-  padding: 0 30px;
-  padding-top: 5vw;
+  font-weight: bolder;
+  font-size: calc(1.75vw + 3vh); /* 반응형 */
+  white-space: pre-wrap;
+  /* color: #ff403c; */
 }

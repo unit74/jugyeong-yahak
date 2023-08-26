@@ -12,12 +12,12 @@ const StudentReviewTheme = () => {
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
   const lastVisited = lastVisitedString
-  ? new Date(lastVisitedString)
-  : new Date(0);
+    ? new Date(lastVisitedString)
+    : new Date(0);
   const [msg, setMsg] = useState(null);
   // fade 효과
   const [fade, setFade] = useState(false);
-  
+
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -29,7 +29,7 @@ const StudentReviewTheme = () => {
 
   // DB에 저장된 단어 가져오기
   const themeSituation =
-  useSelector((state) => state.themeState.themeData.situation) || [];
+    useSelector((state) => state.themeState.themeData.situation) || [];
   const themeImg =
     useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
   const themeTitle =
@@ -50,7 +50,6 @@ const StudentReviewTheme = () => {
   // const [themeTitle, setThemeTitle] = useState(null);
   // const [themeImg, setThemeImg] = useState(null);
   // const [themeSituation, setThemeSituation] = useState(null);
-
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -73,20 +72,20 @@ const StudentReviewTheme = () => {
 
       text = `이번 시간은 ${themeTitle}에 대해 공부해요!`;
       ttsMaker(text, 0);
-      await delay(text.length * 300);
+      await delay(text.length * 200);
 
       text = `${themeSituation}`;
 
       ttsMaker(text, 0);
-      await delay(text.length * 300);
+      await delay(text.length * 200);
 
       setFade(true);
       navigateToRecordDictation();
     }
 
     async function navigateToRecordDictation() {
-        await delay(1500);
-        navigate("/situation");
+      await delay(1500);
+      navigate("/reading-main");
     }
 
     if (themeSituation !== null) {
