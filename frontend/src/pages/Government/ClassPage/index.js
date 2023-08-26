@@ -7,7 +7,9 @@ import styles from "./gov_class.module.css";
 import AbsMember from "../components/AbsMember";
 import { useNavigate } from "react-router-dom";
 
-const PER_PAGE = 1; // 한 페이지당 보여줄 학생 수 
+const PER_PAGE = 1; // 한 페이지당 보여줄 학생 수
+
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
 
 const StudyClassPage = () => {
   const [classes, setClasses] = useState([]); // 반은 여러개니까 배열로 받기위해서 State안에 [] 배열로 적어줌
@@ -34,7 +36,7 @@ const StudyClassPage = () => {
   const navigate = useNavigate();
 
   const getClasses = async () => {
-    await axios.get("https://i9e206.p.ssafy.io/api/v1/classes").then((response) => {
+    await axios.get(`${BASE_HTTP_URL}/classes`).then((response) => {
       console.log(response);
       setClasses(response.data.data);
     });
@@ -51,14 +53,12 @@ const StudyClassPage = () => {
   };
 
   const getStudents = async (id) => {
-    await axios
-      .get(`https://i9e206.p.ssafy.io/api/v1/private/members/students/classes/${id}`)
-      .then((response) => {
-        console.log(response);
-        setStudents(response.data.data);
-        showModal();
-        setClassSelected(null);
-      });
+    await axios.get(`${BASE_HTTP_URL}/private/members/students/classes/${id}`).then((response) => {
+      console.log(response);
+      setStudents(response.data.data);
+      showModal();
+      setClassSelected(null);
+    });
   };
 
   useEffect(() => {
@@ -81,9 +81,10 @@ const StudyClassPage = () => {
     <div className={styles.main}>
       <div className={styles.back}>
         <b className={styles.bb}>✔ 확인하실 교실을 선택해주세요</b>
-        <button className={styles.goback} onClick={() => navigate("/governmentmain")}>↩</button>
+        <button className={styles.goback} onClick={() => navigate("/governmentmain")}>
+          ↩
+        </button>
         <div className={styles.options}>
-
           <table>
             <thead>
               <tr>
@@ -109,27 +110,30 @@ const StudyClassPage = () => {
             <button className={styles.close} onClick={closeModal}>
               X
             </button>
-            {students.slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE).map((student, index) => (
-              <div className={styles.studentInfo}>
-                <img className={styles.studentImage} src={student.faceImageUrl}></img>
-                <div className={styles.textContainer}>
-                  <div className={`${styles.modalText}`}>이름: {student.name}</div>
-                  <div className={`${styles.modalText}`}>주소: {student.address}</div>
-                  <div className={`${styles.modalText}`}>전화번호: {student.phone}</div>
+            {students
+              .slice(currentPage * PER_PAGE, (currentPage + 1) * PER_PAGE)
+              .map((student, index) => (
+                <div className={styles.studentInfo}>
+                  <img className={styles.studentImage} src={student.faceImageUrl}></img>
+                  <div className={styles.textContainer}>
+                    <div className={`${styles.modalText}`}>이름: {student.name}</div>
+                    <div className={`${styles.modalText}`}>주소: {student.address}</div>
+                    <div className={`${styles.modalText}`}>전화번호: {student.phone}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             <div className={styles.modalNav}>
               <button className={styles.prevButton} onClick={prevPage}>
                 ◁
               </button>
               <button className={styles.nextButton} onClick={nextPage}>
                 ▷
-              </button> </div>
+              </button>{" "}
+            </div>
           </div>
         )}
-
-      </div> </div>
+      </div>{" "}
+    </div>
   );
 };
 

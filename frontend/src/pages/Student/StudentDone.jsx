@@ -6,6 +6,8 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import axios from "axios";
 import { FETCH_THEME_SUCCESS } from "../../store/actions/types";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 export default function StudentMain() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
@@ -38,7 +40,7 @@ export default function StudentMain() {
   // 복습완료 후 상태 변경해줘야됨
   useEffect(() => {
     async function makeRequest(data) {
-      await axios.post(`https://i9e206.p.ssafy.io/api/v1/themes/review/${data}`);
+      await axios.post(`${BASE_HTTP_URL}/themes/review/${data}`);
 
       await delay(1000);
 

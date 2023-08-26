@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { Howl, Howler } from "howler";
 
+const BASE_TTS_URL = process.env.REACT_APP_BASE_TTS_URL;
+
 export default function CLOVA({ reapeat, message }) {
   // 이놈이 제일 중요했네......
   // navigator.mediaDevices.getUserMedia 요청을 처리하는 useEffect
@@ -37,7 +39,7 @@ export default function CLOVA({ reapeat, message }) {
   const fetchTTSMessage = async (msg) => {
     console.log("Trying to fetch TTS message with text:", msg);
     try {
-      const response = await fetch("https://i9e206.p.ssafy.io/tts", {
+      const response = await fetch(`${BASE_TTS_URL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

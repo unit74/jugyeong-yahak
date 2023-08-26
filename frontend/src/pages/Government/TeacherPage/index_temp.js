@@ -8,6 +8,8 @@ import styles from "./gov_teacher.module.css";
 import AbsMember from "../components/AbsMember";
 import { useNavigate } from "react-router-dom";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 const StudyClassPage = () => {
   const [students, setStudents] = useState(null);
   const [studentSelected, setstudentSelected] = useState(null);
@@ -16,11 +18,9 @@ const StudyClassPage = () => {
   const navigate = useNavigate();
 
   const getStudents = async (id) => {
-    await axios
-      .get(`https://i9e206.p.ssafy.io/api/v1/private/members/teachers`)
-      .then((response) => {
-        setStudents(response.data.data);
-      });
+    await axios.get(`${BASE_HTTP_URL}/private/members/teachers`).then((response) => {
+      setStudents(response.data.data);
+    });
   };
 
   useEffect(() => {

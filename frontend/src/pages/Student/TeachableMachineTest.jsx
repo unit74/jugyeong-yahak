@@ -15,8 +15,8 @@ export default function TeachableMachine() {
   let photoRef = useRef(null);
 
   // Teachable Machine 모델 불러오기
-  const modelURL = "https://teachablemachine.withgoogle.com/models/bMosIyCjm/";
-  const modelMetadataURL = modelURL + "metadata.json";
+  const modelURL = process.env.REACT_APP_TEACHABLE_URL;
+  const modelMetadataURL = `${modelURL}/metadata.json`;
 
   let maxPredictions;
 
@@ -36,10 +36,7 @@ export default function TeachableMachine() {
 
   // Teachable Machine init 함수
   const initTeachableMachine = async () => {
-    const loadmodel = await tmImage.load(
-      modelURL + "model.json",
-      modelMetadataURL
-    ); // model에서 const loadmodel로 바꾸고
+    const loadmodel = await tmImage.load(`${modelURL}/model.json`, modelMetadataURL); // model에서 const loadmodel로 바꾸고
     setModel(loadmodel); // 스테이트 저장
     // maxPredictions = model.getTotalClasses();
 

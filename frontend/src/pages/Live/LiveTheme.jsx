@@ -3,7 +3,7 @@ import styles from "./LiveTheme.module.css";
 import axios from "../Common/api/authAxios";
 import { OpenViduSessionContext } from "../Teacher/TeacherLive";
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
 
 const LiveTheme = () => {
   const sendSignal = useContext(OpenViduSessionContext);
@@ -16,7 +16,7 @@ const LiveTheme = () => {
   useEffect(() => {
     async function getThemes() {
       await axios
-        .get(`${BASE_URL}/api/v1/themes`)
+        .get(`${BASE_HTTP_URL}/themes`)
         .then(function (response) {
           const data = response.data.data;
 

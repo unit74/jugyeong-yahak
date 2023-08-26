@@ -8,6 +8,8 @@ import styles from "./gov_student.module.css";
 import AbsMember from "../components/AbsMember";
 import { useNavigate } from "react-router-dom";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 const StudyClassPage = () => {
   const [students, setStudents] = useState(null);
   const [modalOpen, setModalOpen] = useState(false); // 모달 오픈을 위해 열리기 전에는 false
@@ -29,11 +31,9 @@ const StudyClassPage = () => {
   const navigate = useNavigate();
 
   const getStudents = async (id) => {
-    await axios
-      .get(`https://i9e206.p.ssafy.io/api/v1/private/members/students`)
-      .then((response) => {
-        setStudents(response.data.data);
-      });
+    await axios.get(`${BASE_HTTP_URL}/private/members/students`).then((response) => {
+      setStudents(response.data.data);
+    });
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const StudyClassPage = () => {
       code = "A01";
     }
     await axios
-      .put(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, {
+      .put(`${BASE_HTTP_URL}/private/members/students`, {
         address: address,
         classId: classId,
         firstResponder: firstResponder,
@@ -99,7 +99,7 @@ const StudyClassPage = () => {
 
   const applyModify = async () => {
     await axios
-      .put(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, {
+      .put(`${BASE_HTTP_URL}/private/members/students`, {
         address: address,
         classId: classId,
         firstResponder: firstResponder,
@@ -157,7 +157,7 @@ const StudyClassPage = () => {
     // );
 
     await axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/students`, formData, {
+      .post(`${BASE_HTTP_URL}/private/members/students`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {
@@ -206,7 +206,9 @@ const StudyClassPage = () => {
         <button className={styles.goback} onClick={() => navigate("/governmentmain")}>
           ↩
         </button>
-        <button className={styles.register} onClick={() => registStudent()}>학생 등록</button>
+        <button className={styles.register} onClick={() => registStudent()}>
+          학생 등록
+        </button>
         <div className={styles.options}>
           {students && (
             <table>
@@ -354,17 +356,27 @@ const StudyClassPage = () => {
             </div>
             {regist ? (
               <div>
-                <button className={styles.motify} onClick={applyRegist}>등록</button>
+                <button className={styles.motify} onClick={applyRegist}>
+                  등록
+                </button>
               </div>
             ) : !modify ? (
               <div className={styles.btnset}>
-                <button className={styles.motify} onClick={modifyChange}>수정</button>
-                <button className={styles.cancle} onClick={deleteStudent}>삭제</button>
+                <button className={styles.motify} onClick={modifyChange}>
+                  수정
+                </button>
+                <button className={styles.cancle} onClick={deleteStudent}>
+                  삭제
+                </button>
               </div>
             ) : (
               <div className={styles.btnset}>
-                <button className={styles.motify} onClick={applyModify}>수정하기</button>
-                <button className={styles.cancle} onClick={cancelModify}>취소</button>
+                <button className={styles.motify} onClick={applyModify}>
+                  수정하기
+                </button>
+                <button className={styles.cancle} onClick={cancelModify}>
+                  취소
+                </button>
               </div>
             )}
 

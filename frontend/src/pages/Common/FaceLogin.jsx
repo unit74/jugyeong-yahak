@@ -16,8 +16,8 @@ export default function FaceLogin(props) {
   const [msg, setMsg] = useState(null);
   const [onTarget, setOnTarget] = useState(false);
 
-  const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
-  const BASE_URL = "https://i9e206.p.ssafy.io";
+  const BASE_SSE_URL = process.env.REACT_APP_BASE_SSE_URL;
+  const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
 
   const navigate = useNavigate();
 
@@ -160,7 +160,7 @@ export default function FaceLogin(props) {
     const governmentId = 4;
 
     axios
-      .post(`${BASE_URL}/api/v1/auth/${governmentId}/login`, data, {
+      .post(`${BASE_HTTP_URL}/auth/${governmentId}/login`, data, {
         headers: {
           accept: "*/*",
           "Content-Type": `multipart/form-data; boundary=${data._boundary}`,
@@ -185,7 +185,7 @@ export default function FaceLogin(props) {
             };
 
             const sse = new EventSourcePolyfill(
-              `${BASE_URL_SSE}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
+              `${BASE_SSE_URL}/subscribe?streamId=${response.data.data.info.id}&classId=${response.data.data.info.classId}`,
               eventSourceInitDict
             );
 
@@ -204,7 +204,7 @@ export default function FaceLogin(props) {
             });
 
             await axios
-              .get(`${BASE_URL}/api/v1/classes/in-class/${response.data.data.info.classId}`)
+              .get(`${BASE_HTTP_URL}/classes/in-class/${response.data.data.info.classId}`)
               .then(function (response) {
                 console.log(response.data.message);
                 navigate("/student-live", { replace: true });

@@ -2,9 +2,11 @@
 import axios from "axios";
 import { FETCH_THEME_SUCCESS } from "./types";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 export const fetchTheme = () => async (dispatch) => {
   try {
-    const response = await axios.get(`https://i9e206.p.ssafy.io/api/v1/themes/review`);
+    const response = await axios.get(`${BASE_HTTP_URL}/themes/review`);
 
     const themeData = response.data.data; // 테마정보
     const wordsList = response.data.data.wordList; // 단어 5개 정

@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 
 //단어읽기 문제 표시 페이지
+const BASE_KARLO_URL = process.env.REACT_APP_BASE_KARLO_URL;
+
 export default function KarloTest() {
-  const REST_API_KY = "e111e75cff4a0c7a2db44a44e924b89c";
+  const REST_API_KY = process.env.REACT_APP_KARLO_API_KEY;
   const prompt = "draw a tiger";
   const [img, setImg] = useState(null);
 
   const createImage = () => {
-    fetch("https://api.kakaobrain.com/v2/inference/karlo/t2i", {
+    fetch(`${BASE_KARLO_URL}/t2i`, {
       method: "POST",
       headers: {
         Authorization: `KakaoAK ${REST_API_KY}`,
