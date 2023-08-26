@@ -5,6 +5,8 @@ import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 export default function StudentDiaryList() {
   const navigate = useNavigate();
   const [fade, setFade] = useState(false);
@@ -14,11 +16,9 @@ export default function StudentDiaryList() {
 
   useEffect(() => {
     async function getDiaries() {
-      await axios
-        .get(`https://i9e206.p.ssafy.io/api/v1/diaries`)
-        .then((response) => {
-          setDiaries(response.data.data);
-        });
+      await axios.get(`${BASE_HTTP_URL}/diaries`).then((response) => {
+        setDiaries(response.data.data);
+      });
     }
     getDiaries();
   }, []);
@@ -45,13 +45,7 @@ export default function StudentDiaryList() {
 
   function formatDiaryContent(content) {
     if (!content) return "";
-    return content
-      .split(". ")
-      .join(".\n")
-      .split("! ")
-      .join("!\n")
-      .split("? ")
-      .join("?\n");
+    return content.split(". ").join(".\n").split("! ").join("!\n").split("? ").join("?\n");
   }
 
   return (

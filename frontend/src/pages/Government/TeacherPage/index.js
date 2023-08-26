@@ -8,6 +8,8 @@ import styles from "./gov_teacher.module.css";
 import AbsMember from "../components/AbsMember";
 import { useNavigate } from "react-router-dom";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 const StudyClassPage = () => {
   const [teachers, setTeachers] = useState(null);
   const [modalOpen, setModalOpen] = useState(false); // 모달 오픈을 위해 열리기 전에는 false
@@ -29,11 +31,9 @@ const StudyClassPage = () => {
   const navigate = useNavigate();
 
   const getTeachers = async (id) => {
-    await axios
-      .get(`https://i9e206.p.ssafy.io/api/v1/private/members/teachers`)
-      .then((response) => {
-        setTeachers(response.data.data);
-      });
+    await axios.get(`${BASE_HTTP_URL}/private/members/teachers`).then((response) => {
+      setTeachers(response.data.data);
+    });
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const StudyClassPage = () => {
       code = "A01";
     }
     await axios
-      .put(`https://i9e206.p.ssafy.io/api/v1/private/members/teachers`, {
+      .put(`${BASE_HTTP_URL}/private/members/teachers`, {
         address: address,
         classId: classId,
         firstResponder: firstResponder,
@@ -99,7 +99,7 @@ const StudyClassPage = () => {
 
   const applyModify = async () => {
     await axios
-      .put(`https://i9e206.p.ssafy.io/api/v1/private/members/teachers`, {
+      .put(`${BASE_HTTP_URL}/private/members/teachers`, {
         address: address,
         classId: classId,
         firstResponder: firstResponder,
@@ -157,7 +157,7 @@ const StudyClassPage = () => {
     // );
 
     await axios
-      .post(`https://i9e206.p.ssafy.io/api/v1/private/members/teachers`, formData, {
+      .post(`${BASE_HTTP_URL}/private/members/teachers`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(() => {

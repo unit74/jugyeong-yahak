@@ -3,7 +3,7 @@ import axios from "../Common/api/authAxios";
 import { OpenViduSessionContext } from "../Teacher/TeacherLive";
 import { useOutletContext } from "react-router-dom";
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
 
 const LiveChoseongQuiz = () => {
   const sendSignal = useContext(OpenViduSessionContext);
@@ -13,7 +13,7 @@ const LiveChoseongQuiz = () => {
   useEffect(() => {
     async function getChoseong() {
       await axios
-        .get(`${BASE_URL}/api/v1/themes/choseong`)
+        .get(`${BASE_HTTP_URL}/themes/choseong`)
         .then(function (response) {
           const data = response.data.data;
 

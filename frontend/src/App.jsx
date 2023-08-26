@@ -1,7 +1,6 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { EventSourcePolyfill } from "event-source-polyfill";
+import React, { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store"; // Redux Store를 import 해야 함
 
@@ -21,7 +20,6 @@ import GovernmentLogin from "./pages/Government/GovernmentLogin";
 //Student
 // Student_혼자학습
 import StudentMain from "./pages/Student/StudentMain";
-import StudentBook from "./pages/Student/StudentBook";
 import StudentNote from "./pages/Student/StudentNote";
 import StudentDiaryList from "./pages/Student/StudentDiaryList";
 import StudentReviewTheme from "./pages/Student/StudentReviewTheme";
@@ -106,7 +104,6 @@ function App() {
           }
         />
         <Route path="/student-note" element={<StudentNote />} />
-        <Route path="/book" element={<StudentBook />} />
         <Route path="/review-theme" element={<StudentReviewTheme />} />
         <Route path="/diary-list" element={<StudentDiaryList />} />
         <Route path="/situation" element={<StudentSituation />} />

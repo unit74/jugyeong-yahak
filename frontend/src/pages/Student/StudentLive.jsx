@@ -11,7 +11,8 @@ import ThumbUpAlt from "@mui/icons-material/ThumbUpAlt";
 import styles from "./StudentLive.module.css";
 
 var localUser = new UserModel();
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 export const OpenViduSessionContext = createContext();
 
 export default function StudentLive() {
@@ -23,7 +24,7 @@ export default function StudentLive() {
   useEffect(() => {
     async function getClass() {
       await axios
-        .get(`${BASE_URL}/api/v1/classes/${classId}`)
+        .get(`${BASE_HTTP_URL}/classes/${classId}`)
         .then(function (response) {
           const data = response.data.data;
 
@@ -465,7 +466,7 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/private/openvidu/sessions",
+      `${BASE_HTTP_URL}/private/openvidu/sessions`,
       { customSessionId: sessionId + "" },
       {
         headers: { "Content-Type": "application/json" },
@@ -477,7 +478,7 @@ class OpenViduSession extends Component {
   async createToken(sessionId) {
     console.log(sessionId);
     const response = await axios.post(
-      BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
+      `${BASE_HTTP_URL}/private/openvidu/${sessionId}/connections`,
       {},
       {
         headers: { "Content-Type": "application/json" },

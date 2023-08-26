@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 axios.interceptors.request.use(
   (request) => {
     const accessToken = localStorage.getItem("accessToken");
@@ -23,7 +25,7 @@ axios.interceptors.response.use(
 
     // 응답 받은 상태 코드가 401이라면
     if (response.status === 401) {
-      const { data } = await axios.post("https://i9e206.p.ssafy.io/api/v1/private/auth/reissue", {
+      const { data } = await axios.post(`${BASE_HTTP_URL}/private/auth/reissue`, {
         // baseURL: 'http://localhost:8080',
         params: {
           // refresh 토큰으로 재발급 요청

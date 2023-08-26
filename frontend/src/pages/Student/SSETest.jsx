@@ -7,7 +7,7 @@ import axios from "axios";
 export default function SSETest() {
   const navigate = useNavigate();
 
-  const BASE_URL_SSE = "https://i9e206.p.ssafy.io/sse/v1";
+  const BASE_SSE_URL = process.env.REACT_APP_BASE_SSE_URL;
 
   const handleConnect = () => {
     const eventSourceInitDict = {
@@ -15,7 +15,7 @@ export default function SSETest() {
     };
 
     const sse = new EventSourcePolyfill(
-      `${BASE_URL_SSE}/subscribe?streamId=${26}&classId=${5}`,
+      `${BASE_SSE_URL}/subscribe?streamId=${26}&classId=${5}`,
       eventSourceInitDict
     );
 
@@ -35,7 +35,7 @@ export default function SSETest() {
   };
 
   const pageEvent = async () => {
-    await axios.post(`${BASE_URL_SSE}/convert/page`, {
+    await axios.post(`${BASE_SSE_URL}/convert/page`, {
       classId: 5,
       streamId: 26,
       number: 0,

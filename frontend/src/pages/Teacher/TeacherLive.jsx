@@ -18,7 +18,8 @@ import styles from "./TeacherLive.module.css";
 import { useSelector } from "react-redux";
 
 var localUser = new UserModel();
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 export const OpenViduSessionContext = createContext();
 
 export default function TeacherLive() {
@@ -111,7 +112,7 @@ class OpenViduSession extends Component {
     window.removeEventListener("beforeunload", this.onbeforeunload);
 
     await axios
-      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .delete(`${BASE_HTTP_URL}/private/openvidu`)
       .then(function (response) {})
       .catch(function (error) {
         console.error(error);
@@ -124,7 +125,7 @@ class OpenViduSession extends Component {
     this.leaveSession();
 
     await axios
-      .delete(`${BASE_URL}/api/v1/private/openvidu`)
+      .delete(`${BASE_HTTP_URL}/private/openvidu`)
       .then(function (response) {})
       .catch(function (error) {
         console.error(error);
@@ -142,7 +143,7 @@ class OpenViduSession extends Component {
         this.subscribeToStreamCreated();
         await this.connectToSession();
 
-        await axios.post(`${BASE_URL}/api/v1/private/lecture/convert/page`, {
+        await axios.post(`${BASE_HTTP_URL}/private/lecture/convert/page`, {
           classId: this.props.clazz.id,
         });
       }
@@ -626,7 +627,7 @@ class OpenViduSession extends Component {
 
   async createSession(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/private/openvidu/sessions",
+      `${BASE_HTTP_URL}/private/openvidu/sessions`,
       { customSessionId: sessionId + "" },
       {
         headers: { "Content-Type": "application/json" },
@@ -637,7 +638,7 @@ class OpenViduSession extends Component {
 
   async createToken(sessionId) {
     const response = await axios.post(
-      BASE_URL + "/api/v1/private/openvidu/" + sessionId + "/connections",
+      `${BASE_HTTP_URL}/private/openvidu/${sessionId}/connections`,
       {},
       {
         headers: { "Content-Type": "application/json" },

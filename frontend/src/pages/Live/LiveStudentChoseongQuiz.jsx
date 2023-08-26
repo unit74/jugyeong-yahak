@@ -1,8 +1,6 @@
 import React from "react";
 import { useOutletContext } from "react-router-dom";
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
-
 const LiveStudentChoseongQuiz = () => {
   const choseong = useOutletContext().choseong;
 

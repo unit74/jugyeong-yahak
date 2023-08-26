@@ -4,9 +4,9 @@ import axios from "../Common/api/authAxios";
 import { OpenViduSessionContext } from "../Teacher/TeacherLive";
 import { useOutletContext } from "react-router-dom";
 
-const BASE_URL = "https://i9e206.p.ssafy.io";
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
 
-const TeacherCurriculum = () => {
+const LiveCurriculum = () => {
   const sendSignal = useContext(OpenViduSessionContext);
   const theme = useOutletContext().theme;
   const [curriculums, setCurriculums] = useState([]);
@@ -18,7 +18,7 @@ const TeacherCurriculum = () => {
   useEffect(() => {
     async function getCurriculums() {
       await axios
-        .get(`${BASE_URL}/api/v1/themes/stages/${theme}`)
+        .get(`${BASE_HTTP_URL}/themes/stages/${theme}`)
         .then(function (response) {
           const data = response.data.data;
 
@@ -42,7 +42,7 @@ const TeacherCurriculum = () => {
   const chooseCurriculum = async (curriculum) => {
     console.log(curriculum);
     await axios
-      .get(`${BASE_URL}/api/v1/themes/${curriculum.curriculumnId}`)
+      .get(`${BASE_HTTP_URL}/themes/${curriculum.curriculumnId}`)
       .then(function (response) {
         const data = response.data.data;
 
@@ -78,4 +78,4 @@ const TeacherCurriculum = () => {
   );
 };
 
-export default TeacherCurriculum;
+export default LiveCurriculum;

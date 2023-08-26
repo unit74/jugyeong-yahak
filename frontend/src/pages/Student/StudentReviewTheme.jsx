@@ -11,13 +11,11 @@ const StudentReviewTheme = () => {
   const navigate = useNavigate();
   const timeNow = new Date();
   const lastVisitedString = localStorage.getItem("lastVisitedSpeakingVideo");
-  const lastVisited = lastVisitedString
-  ? new Date(lastVisitedString)
-  : new Date(0);
+  const lastVisited = lastVisitedString ? new Date(lastVisitedString) : new Date(0);
   const [msg, setMsg] = useState(null);
   // fade 효과
   const [fade, setFade] = useState(false);
-  
+
   const ttsMaker = async (msg, timer) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -28,12 +26,9 @@ const StudentReviewTheme = () => {
   };
 
   // DB에 저장된 단어 가져오기
-  const themeSituation =
-  useSelector((state) => state.themeState.themeData.situation) || [];
-  const themeImg =
-    useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
-  const themeTitle =
-    useSelector((state) => state.themeState.themeData.theme) || [];
+  const themeSituation = useSelector((state) => state.themeState.themeData.situation) || [];
+  const themeImg = useSelector((state) => state.themeState.themeData.themeImageUrl) || [];
+  const themeTitle = useSelector((state) => state.themeState.themeData.theme) || [];
 
   // 이동할 다음 페이지 결정
   // const moveToNextPage = () => {
@@ -51,19 +46,7 @@ const StudentReviewTheme = () => {
   // const [themeImg, setThemeImg] = useState(null);
   // const [themeSituation, setThemeSituation] = useState(null);
 
-
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  // useEffect(() => {
-  //   axios
-  //     .get("https://i9e206.p.ssafy.io/api/v1/themes/review")
-  //     .then((response) => {
-  //       setThemeTitle(response.data.data.theme);
-  //       setThemeImg(response.data.data.themeImageUrl);
-  //       setThemeSituation(response.data.data.situation);
-  //     })
-  //     .catch((error) => console.error(`Error: ${error}`));
-  // }, []);
 
   useEffect(() => {
     async function makeRequest() {
@@ -85,8 +68,8 @@ const StudentReviewTheme = () => {
     }
 
     async function navigateToRecordDictation() {
-        await delay(1500);
-        navigate("/situation");
+      await delay(1500);
+      navigate("/situation");
     }
 
     if (themeSituation !== null) {

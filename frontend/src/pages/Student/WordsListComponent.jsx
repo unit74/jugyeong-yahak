@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import WordImgComponent from "../Common/WordImgComponent";
 import WordNameComponent from "../Common/WordNameComponent";
 
+const BASE_HTTP_URL = process.env.REACT_APP_BASE_HTTP_URL;
+
 //단어정보 표시 컴포넌트
 export default function WordsListComponent() {
   const [wordsList, setWordsList] = useState(null);
@@ -14,7 +16,7 @@ export default function WordsListComponent() {
 
   useEffect(() => {
     axios
-      .get("https://i9e206.p.ssafy.io/api/v1/themes/8")
+      .get(`${BASE_HTTP_URL}/themes/8`)
       .then((response) => {
         // 바꾸기
         setWordsList(response.data.data.wordList);
