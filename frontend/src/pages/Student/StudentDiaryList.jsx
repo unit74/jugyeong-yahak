@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useTimeoutCallback from "../Common/hooks/useTimeoutCallback";
 import TTSsentence from "../Common/TTSsentence";
 import axios from "axios";
+import moment from "moment";
 
 export default function StudentDiaryList() {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ export default function StudentDiaryList() {
           setDiaries(response.data.data);
         });
     }
+
+    moment.locale("ko");
     getDiaries();
   }, []);
 
@@ -30,6 +33,14 @@ export default function StudentDiaryList() {
       console.log(diaries);
       console.log(diaries[0].imageUrl);
       console.log(diaries[0].content);
+
+      const date = moment(diaries[0].updatedAt);
+      const year = date.format("YYYY");
+      const month = date.format("MM");
+      const day = date.format("DD");
+      const weekday = date.format("dddd");
+
+      console.log(year, month, day, weekday);
     }
     // else {
     //   setMsg("일기장이 없어요, 혼자학습을 시작해요");
