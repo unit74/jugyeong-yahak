@@ -1,4 +1,4 @@
-# 🏫 주경야학 (SSAFY 9기 부울경 E206 Hot6)
+# 🏫 주경야학 (SSAFY 9기 부울경 E206 Hot6) 우수상 수상작 (2등)
 
 <br/>
 
@@ -15,6 +15,7 @@
 <br/>
 
 ## ⌨️ 기간
+
 - **2023.07.04 ~ 2023.08.18(7주)**
 
 <a name="tableContents"></a>
@@ -35,14 +36,17 @@
 <br/>
 
 <!------- 주제 시작 -------->
+
 ## 🎯 주제
+
 <a name="subject"></a>
 
 **주경 야학**은 몸이 불편하거나 근처에 야학이 없어서 기존 야학에 참여하지 못하는 어르신들을 위한 편리한 교육 플랫폼입니다.
 
 공간적 제약을 해소함으로써 더 많은 어르신에게 교육의 기회를 제공하고, 봉사자의 진입 장벽을 낮추는 것을 목표로 합니다.
 
-**주요 기능:**
+**주요 기능**
+
 - 실시간 수업
 - 개별 학습 지원
 - 대화를 통한 일기 쓰기 학습
@@ -52,7 +56,9 @@
 <br/>
 
 <!------- 주요 기능 시작 -------->
+
 ## ⭐️ 주요 기능
+
 <a name="mainContents"></a>
 
 ### 혼자 공부
@@ -68,7 +74,7 @@
 - Optimal Character Recognition(OCR)로 이미지에 있는 글자를 판별해 받아쓰기 정답을 체크합니다.
 - Kakao의 Karlo를 활용해, 학생이 생성한 일기를 그림으로 변환해서 그림일기를 제공합니다.
 
---- 
+---
 
 ### 실시간 수업
 
@@ -88,8 +94,34 @@
 
 <br/>
 
+## 🌟 주요 차별점
+
+### 노인을 위한 서비스란?
+
+<h4>저희 생각에는 단순히 글자가 크고, 심플한 디자인이 노인을 위한 서비스라 생각하였습니다.</h4>
+<h4>하지만, 그게 정말 노인을 위한 서비스일까요?</h4>
+<h4>저희는 이에 대한 답을 찾기 위해 여러 논문 자료를 참고하여 제작하였습니다.</h4>
+
+- 노인은 눈동자의 황변으로 하위범주 (파랑, 초록)보다 상위범주(노랑, 빨강)에서 잘 식별한다.
+  - 김응철, 김후성.(2020), 치매 예방을 위한 교구재 디자인 색상 적용 연구
+- 백색 바탕에 검정 문자에서 높은 가독성을 보였다.
+  - 정신해, 손정식, 곽호원, 유동식.(2014), 노안 연령에서 배경색에 따른 한글서체의 가독성 평가
+- 서체 선호도 및 가독성 2차 설문 조사 결과 ➡️ Kopub 바탕체
+- 노인은 필요없는 정보를 식별하는 시각 판별력이 떨어진다.
+  - 미국 브라운대 인식언어 및 심리학과 타케오 와타나베 교수, 노인 시간 판별력 실험
+- 반응속도가 늦어지고, 정보처리과정에서 저장된 정보를 적시에 이용하지 못하는 등 기억력 감퇴의 학습 장애의 요인을 갖고 있다. ➡️ 반복 학습 필요성
+  - 최예식.(2020), 언택트 시대 노인 학습자 일상 변화의 연구: 복지관 이용자를 중심으로
+- 교육에 대해 만족도가 높았으나, 교육의 활용도에 만족도가 낮은 것으로 나타나 실생활과 연계된 교육프로그램을 강화할 필요가... ➡️ 실생활과 관련된 커리큘럼 구성
+  - 김정엽, 이재모.(2010), 노인 교육에 관한 노인의 욕구분석 -노인의 연령별 차이를 중심으로-
+
+<div align="right"><a href="#tableContents">목차로 이동</a></div>
+
+<br/>
+
 <!------- 시스템 아키텍쳐 시작 -------->
+
 ## ⚙ 시스템 아키텍쳐
+
 <a name="systemArchitecture"></a>
 
 <img src="./contents/forReadme/architecture.png">
@@ -99,10 +131,13 @@
 <br/>
 
 <!------- 기술 스택 시작 -------->
+
 ## 🛠️ 기술 스택
+
 <a name="skills"></a>
 
 ### 프론트
+
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
@@ -119,6 +154,7 @@
 ---
 
 ### 백엔드
+
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
@@ -135,21 +171,24 @@
 ---
 
 ### 협업
+
 ![GitLab](https://img.shields.io/badge/gitlab-FC6D26.svg?style=for-the-badge&logo=gitlab&logoColor=white)
 ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white)
 ![Mattermost](https://img.shields.io/badge/mattermost-0058CC.svg?style=for-the-badge&logo=mattermost&logoColor=white)
 ![Notion](https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=notion&logoColor=white)
-
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
 <!------- 파일 구조 시작 -------->
+
 ## 🗂️ 파일 구조
+
 <a name="directories"></a>
 
 ### 프론트
+
 <details>
   <summary>
     자세히
@@ -193,9 +232,11 @@
  ┣ 📜package.json
  ┗ 📜README.md
 ```
+
 </details>
 
 ### 백엔드 서버 - 메인 서버
+
 <details>
   <summary>
     자세히
@@ -336,6 +377,7 @@
 <!------- ERD 시작 -------->
 
 ## 💾 ERD
+
 <a name="erd"></a>
 
 <img src="./contents/forReadme/erd.png">
@@ -345,6 +387,7 @@
 <br/>
 
 <!------- 화면 소개 시작 -------->
+
 <a name="contents"></a>
 
 <br/>
@@ -352,41 +395,43 @@
 ## 🖥️ 화면 소개
 
 ### 1. 로그인 페이지
+
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/로그인.gif" width="90%">
 </div>
 
-  - face-api.js를 활용해 얼굴 로그인을 진행합니다.
-  - 로그인은 박스 영역에 들어와야 로그인 진행이 됩니다.
-  - 사용자가 박스 영역에 잘 들어올 수 있도록 TTS로 얼굴 이동을 안내합니다.
+- face-api.js를 활용해 얼굴 로그인을 진행합니다.
+- 로그인은 박스 영역에 들어와야 로그인 진행이 됩니다.
+- 사용자가 박스 영역에 잘 들어올 수 있도록 TTS로 얼굴 이동을 안내합니다.
 
 ### 2. 교사 메인 페이지
+
 <div align=center>
 <img src="./contents/forReadme/UI/선생님메인.png" width="90%">
 </div>
 
 <h3>기능</h3>
 
-  - 실시간 수업 시작
-  - 야학 단체에 등록된 학생 확인
-  - 학습 교재 확인
+- 실시간 수업 시작
+- 야학 단체에 등록된 학생 확인
+- 학습 교재 확인
 
 ### 3. 교사 실시간 페이지
+
 <h3>실시간 수업 시작</h3>
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/강사실시간입장.gif" width="90%">
 </div>
 
-  - 수업을 시작을 누르면, 학생들은 실시간 수업으로 들어올 수 있습니다.
-
+- 수업을 시작을 누르면, 학생들은 실시간 수업으로 들어올 수 있습니다.
 
 <h3>수업</h3>
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/강사수업.gif" width="90%">
 </div>
 
-  - 수업을 위해 교사는 커리큘럼과 강의 자료를 선택합니다.
-  - 강의자료 선택 후, 단어 읽기, 단어 받아쓰기 등의 수업을 진행합니다.
+- 수업을 위해 교사는 커리큘럼과 강의 자료를 선택합니다.
+- 강의자료 선택 후, 단어 읽기, 단어 받아쓰기 등의 수업을 진행합니다.
 
 <h4>단어 읽기</h4>
 <div align=center>
@@ -412,29 +457,30 @@
   - 실시간 수업 : 강사가 방을 열었을 경우 자동 참여
   - 혼자 공부하기
   - 일기장 보기
-  
 
 ### 5. 학생 실시간 페이지
+
 <h3>실시간 수업 입장</h3>
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/학생실시간입장.gif" width="90%">
 </div>
 
 ---
+
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/학생실시간커리.gif" width="90%">
 </div>
 
-  - 강사가 커리큘럼을 선택한다면 학생들의 화면에 교재가 띄워집니다.
-  - 강사의 마우스가 학생들에게 포인터로 보이게 됩니다.
+- 강사가 커리큘럼을 선택한다면 학생들의 화면에 교재가 띄워집니다.
+- 강사의 마우스가 학생들에게 포인터로 보이게 됩니다.
 
 <h3>수업</h3>
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/학생실시간수업.gif" width="90%">
 </div>
 
-  - 학생들은 강사가 공유하는 교재를 보며 실시간 수업을 받습니다.
-  - 단어 읽기, 받아쓰기 등의 수업이 진행됩니다.
+- 학생들은 강사가 공유하는 교재를 보며 실시간 수업을 받습니다.
+- 단어 읽기, 받아쓰기 등의 수업이 진행됩니다.
 
 <h4>단어 읽기</h4>
 <div align=center>
@@ -450,6 +496,7 @@
 </div>
 
 ### 6. 혼자 공부하기
+
 <div align=center>
 <img src="./contents/forReadme/UI/혼자학습1.png" width="90%">
 </div>
@@ -462,8 +509,8 @@
 
 <h3>기능</h3>
 
-  - 단어 읽고, 받아쓰기
-  - 오늘의 일기 생성 및 읽기
+- 단어 읽고, 받아쓰기
+- 오늘의 일기 생성 및 읽기
 
 ---
 
@@ -478,7 +525,6 @@
 <div align=center>
 <img src="./contents/forReadme/UI/gifs/공책선택.gif" width="90%">
 </div>
-
 
 <h4>받아쓰기 - 공책 없음</h4>
 <div align=center>
@@ -519,20 +565,20 @@
 
 - 혼자 공부를 통해 생성된 일기들을 볼 수 있습니다.
 
-
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
 
 <br/>
 
 <!------- 팀원 소개 시작 -------->
+
 ## 👥 팀원 소개
+
 <a name="developers"></a>
 
-| **Name** | 이동규 | 김정희 | 하성호 | 김나연 | 김예진 | 김현빈 |
-| :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: |
-| **Profile**  | ![image](./contents/forReadme/profiles/이동규.png) | ![image](./contents/forReadme/profiles/김정희.png)  |    ![image](./contents/forReadme/profiles/하성호.png)     | ![image](./contents/forReadme/profiles/김나연.png)  |   ![image](./contents/forReadme/profiles/김예진.png)    | ![image](./contents/forReadme/profiles/김현빈.png)  |
-| **Position** |          Backend   <br/> Leader     |          Backend           |           Backend           |        Frontend         |            Frontend             |         Frontend         |
-|   **Git**    | [GitHub](https://github.com/unit74) | [GitHub](https://github.com/JeongHuiKim) | [GitHub](https://github.com/seongho-98) | [GitHub](https://github.com/nayeonxkim) | [GitHub](https://github.com/yelunar) | [GitHub](https://github.com/HyeonBhinKim) |
-
+|   **Name**   |                       이동규                       |                       김정희                       |                       하성호                       |                       김나연                       |                       김예진                       |                       김현빈                       |
+| :----------: | :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: | :------------------------------------------------: |
+| **Profile**  | ![image](./contents/forReadme/profiles/이동규.png) | ![image](./contents/forReadme/profiles/김정희.png) | ![image](./contents/forReadme/profiles/하성호.png) | ![image](./contents/forReadme/profiles/김나연.png) | ![image](./contents/forReadme/profiles/김예진.png) | ![image](./contents/forReadme/profiles/김현빈.png) |
+| **Position** |                Backend <br/> Leader                |                      Backend                       |                      Backend                       |                      Frontend                      |                      Frontend                      |                      Frontend                      |
+|   **Git**    |        [GitHub](https://github.com/unit74)         |      [GitHub](https://github.com/JeongHuiKim)      |      [GitHub](https://github.com/seongho-98)       |      [GitHub](https://github.com/nayeonxkim)       |        [GitHub](https://github.com/yelunar)        |     [GitHub](https://github.com/HyeonBhinKim)      |
 
 <div align="right"><a href="#tableContents">목차로 이동</a></div>
