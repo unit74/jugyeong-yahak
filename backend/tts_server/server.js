@@ -21,7 +21,9 @@ app.use(
 
 // 환경 변수에서 정보를 불러옵니다.
 const client_id = process.env.CLIENT_ID;
+const client_id_key = process.env.CLIENT_ID_KEY;
 const client_secret = process.env.CLIENT_SECRET;
+const client_secret_key = process.env.CLIENT_SECRET_KEY;
 
 function handleTTSRequest(req, res) {
   console.log("Received request on /tts");
@@ -32,7 +34,7 @@ function handleTTSRequest(req, res) {
   const options = {
     url: api_url,
     form: { speaker: "nyejin", volume: "-5", speed: "0", pitch: "0", text: text, format: "mp3" },
-    headers: { "X-NCP-APIGW-API-KEY-ID": client_id, "X-NCP-APIGW-API-KEY": client_secret },
+    headers: { client_id_key: client_id, client_secret_key: client_secret },
   };
 
   // const writeStream = fs.createWriteStream('./tts1.mp3');
