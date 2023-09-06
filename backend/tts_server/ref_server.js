@@ -14,8 +14,10 @@ app.use(
 app.use("/media", mediaRouter);
 app.use(bodyParser.json());
 
-const client_id = "vrwxvtxait";
-const client_secret = "koDQjISgnhMa33W2QFE58k8kxt4wkunZ455bI6QL";
+const client_id = process.env.CLIENT_ID;
+const client_id_key = process.env.CLIENT_ID_KEY;
+const client_secret = process.env.CLIENT_SECRET;
+const client_secret_key = process.env.CLIENT_SECRET_KEY;
 
 const fs = require("fs");
 
@@ -36,7 +38,7 @@ app.post("/getVoice", async (req, res) => {
       text: inputValue,
       format: "mp3",
     },
-    headers: { "X-NCP-APIGW-API-KEY-ID": client_id, "X-NCP-APIGW-API-KEY": client_secret },
+    headers: { client_id_key: client_id, client_secret_key: client_secret },
   };
 
   var writeStream = fs.createWriteStream(`./tts${userName}.mp3`);

@@ -33,8 +33,6 @@ public class JwtTokenProvider implements InitializingBean {
 
   private final UserDetailsService userDetailsService;
   private final RedisService redisService;
-  private static final String ID_KEY = "identification";
-  private static final String AUTHORITIES_KEY = "role";
 
   @Value("${jwt.secret.key}")
   private String secretKey;
@@ -64,8 +62,8 @@ public class JwtTokenProvider implements InitializingBean {
         .setHeaderParam("alg", "HS512")
         .setExpiration(new Date(now + accessTokenValidTime))
         .setSubject("access-token")
-        .claim(ID_KEY, identification)
-        .claim(AUTHORITIES_KEY, authorities)
+        .claim("identification", identification)
+        .claim("role", authorities)
         .signWith(signingKey, SignatureAlgorithm.HS512)
         .compact();
 
@@ -94,14 +92,14 @@ public class JwtTokenProvider implements InitializingBean {
 
   public Authentication getAuthentication(String token) {
     
-    String identification = getClaims(token).get(ID_KEY)
+    String identification = getClaims(token).get("identification")
         .toString();
 
     System.out.println(" ============> getAuth에서 identification : " + identification);
 
     String st = " ";
 
-    String role = getClaims(token).get(AUTHORITIES_KEY).toString();
+    String role = getClaims(token).get("role").toString();
     System.out.println(" ============> getAuth에서 role : " + role);
 
     String res = identification + st + role;
