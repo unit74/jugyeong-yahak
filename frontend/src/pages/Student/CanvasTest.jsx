@@ -6,6 +6,8 @@ import styles from "./CanvasTest.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+
 export default function CanvasTest() {
   // 변수
   const canvasRef = useRef(null); //캔버스
@@ -33,7 +35,7 @@ export default function CanvasTest() {
 
       // OCR (백으로 axios보내는 로직으로 수정 필)
       const vision = require("react-cloud-vision-api");
-      vision.init({ auth: "AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4" });
+      vision.init({ auth: GOOGLE_API_KEY });
       const req = new vision.Request({
         image: new vision.Image({
           base64: base64Image,

@@ -5,6 +5,8 @@ import Predictor from "../Common/Predictor";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTheme } from "../../store/actions/themeAction";
 
+const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+
 export default function TeachableMachine() {
   const [shouldTakePicture, setShouldTakePicture] = useState(true); // 캡쳐 여부를 나타내는 상태 변수
   const [webcam, setWebcam] = useState(null); // Predictor에서 초기화 안된 상태로 넘어가서 Predictor 자체는 렌더링 되지만,
@@ -68,7 +70,7 @@ export default function TeachableMachine() {
     // 변경예정) 백에 capturedImageBase64담아서 axios요청 -> 변환된 단어 받아서 StudentAns에 저장
     // react-cloud-vision-api를 사용해 구글 visionAPI에 요청보냄
     const vision = require("react-cloud-vision-api");
-    vision.init({ auth: "AIzaSyBuQAtfVF_9ojcI4iKLqg_lml4Am4fLat4" });
+    vision.init({ auth: GOOGLE_API_KEY });
     const req = new vision.Request({
       image: new vision.Image({
         base64: capturedImageBase64,
